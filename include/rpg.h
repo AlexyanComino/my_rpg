@@ -25,18 +25,7 @@ typedef struct rpg_s {
     sfEvent event;
 } rpg_t;
 
-/////////////////////////INIT/////////////////////////
-// InitRpg
-rpg_t *init_rpg(void);
-
-/////////////////////////EVENT/////////////////////////
-// Event
-void event(rpg_t *rpg);
-
-/////////////////////////DRAW/////////////////////////
-// Draw
-void draw(rpg_t *rpg);
-
-/////////////////////////DESTROY/////////////////////////
-// DestroyRpg
-void destroy_rpg(rpg_t *rpg);
+#include "../src/Init/init.h"
+#include "../src/Display/display.h"
+#include "../src/Event/event.h"
+#include "../src/Destroy/destroy.h"

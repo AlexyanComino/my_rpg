@@ -2,10 +2,10 @@
 ** EPITECH PROJECT, 2024
 ** my_rpg
 ** File description:
-** destroy
+** destroyRpg
 */
 
-#include "my.h"
+#include "rpg.h"
 
 void destroy_rpg(rpg_t *rpg)
 {

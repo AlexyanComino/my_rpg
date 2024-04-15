@@ -2,12 +2,12 @@
 ** EPITECH PROJECT, 2024
 ** my_rpg
 ** File description:
-** draw
+** displayAll
 */
 
-#include "my.h"
+#include "rpg.h"
 
-void draw(rpg_t *rpg)
+void display_all(rpg_t *rpg)
 {
     sfRenderWindow_clear(rpg->win->window, sfBlack);
     sfRenderWindow_display(rpg->win->window);

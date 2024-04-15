@@ -5,7 +5,7 @@
 ** event
 */
 
-#include "my.h"
+#include "rpg.h"
 
 void event(rpg_t *rpg)
 {

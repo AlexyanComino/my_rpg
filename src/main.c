@@ -5,7 +5,7 @@
 ** main
 */
 
-#include "my.h"
+#include "rpg.h"
 
 int main(void)
 {
@@ -13,7 +13,7 @@ int main(void)
 
     while (sfRenderWindow_isOpen(rpg->win->window)) {
         event(rpg);
-        draw(rpg);
+        display_all(rpg);
     }
     destroy_rpg(rpg);
     return 0;

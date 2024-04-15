@@ -5,7 +5,7 @@
 ** init_rpg
 */
 
-#include "my.h"
+#include "rpg.h"
 
 win_t *create_window(unsigned int width, unsigned int height)
 {
