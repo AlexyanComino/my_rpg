@@ -11,7 +11,7 @@ NAME_TESTS	=	unit_tests
 
 SRCS	=	main.c
 
-SRCS_TESTS	=	
+SRCS_TESTS	=
 
 OBJS	=	$(SRCS:.c=.o)
 
