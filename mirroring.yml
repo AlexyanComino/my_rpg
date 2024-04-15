@@ -1,0 +1,91 @@
+name: chocolatine
+run-name: ${{github.actor}} check
+on:
+  push:
+    branches-ignore:
+      - " ga-ignore-"
+  pull_request:
+    branches-ignore:
+      - " ga-ignore-"
+jobs:
+  check_coding_style:
+    runs-on: ubuntu-latest
+    container: ghcr.io/epitech/coding-style-checker:latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@master
+        with:
+          repository: ''
+
+      - name: Run epitech coding-style checker
+        run: check.sh . /tmp
+
+      - name: Create annotation for coding-style errors
+        run: |
+          input=/tmp/coding-style-reports.log
+          while IFS= read -r -a line; do
+            fields=($(printf "%s" "$line"|cut -d':' --output-delimiter=' ' -f1-))
+            echo "::error title=${fields[2]} coding style error,file=${fields[0]},line=${fields[1]}::${fields[3]}"
+          done < $input
+
+      - name: Report coding-style errors
+        run: |
+          NB_ERROR=$(cat /tmp/coding-style-reports.log | wc -l)
+          if [ $NB_ERROR -gt 0 ]; then
+            exit 1
+          fi
+
+  check_program_compilation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    container: epitechcontent/epitest-docker:latest
+    needs: check_coding_style
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@master
+        with:
+          repository: ''
+
+      - name: Compile repository
+        run: make
+
+      - name: Clean repository
+        run: make clean
+
+      - name: Check executables
+        run: |
+          for file in ${{ vars.EXECUTABLES }};do
+            if [ ! -x "$file" ]; then
+              echo "File $file does not exist or is not executable"
+              exit 1
+            fi
+          done
+
+  run_tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    container: epitechcontent/epitest-docker:latest
+    needs:  check_program_compilation
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@master
+        with:
+          repository: ''
+
+      - name: Compile tests binaries
+        run: make tests_run
+
+  push_to_mirror:
+    runs-on: ubuntu-latest
+    needs:  run_tests
+    if: github.event_name == 'push' && github.repository_owner == vars.REPO_OWNER
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 0
+      - uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url:
+            ${{ vars.MIRROR_URL }}
+          ssh_private_key:
+            ${{ secrets.GIT_SSH_PRIVATE_KEY }}
