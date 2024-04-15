@@ -1,4 +1,4 @@
-name: chocolatine
+name: my_rpg
 run-name: ${{github.actor}} check
 on:
   push:
