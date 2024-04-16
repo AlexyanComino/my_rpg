@@ -10,22 +10,105 @@
 #include <SFML/Graphics.h>
 #include <SFML/Window.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
 
 #define WIDTH 1920
 #define HEIGHT 1080
+#define WARRIOR_WIDTH 192
+#define DEAD_WIDTH 128
+#define WARRIOR_OFFSET WARRIOR_WIDTH * 5
+#define PLAYER_SPEED 300
+typedef enum warrior_color {
+    BLUE = 0,
+    PURPLE,
+    RED,
+    YELLOW,
+} color_warrior_t;
+
+typedef enum warrior_x {
+    RIGHT = 0,
+    LEFT,
+} x_warrior_t;
+
+typedef enum warrior_y {
+    NONE = 0,
+    DOWN,
+    UP,
+} y_warrior_t;
+
+typedef enum warrior_state {
+    IDLE = 0,
+    WALK,
+    ATTACK,
+    DEAD,
+    RIEN,
+} state_warrior_t;
+
+typedef struct attributes_s {
+    unsigned int max_health;
+    unsigned int health;
+    unsigned int attack;
+    unsigned int defense;
+    unsigned int speed;
+} attributes_t;
+
+typedef struct my_clock_s {
+    sfClock *clock;
+    sfTime time;
+    float seconds;
+} my_clock_t;
+
+typedef struct warrior_s {
+    sfTexture *texture;
+    sfSprite *sprite;
+    my_clock_t *myclock;
+    sfIntRect rect;
+    sfVector2f pos;
+    color_warrior_t color;
+    x_warrior_t x;
+    y_warrior_t y;
+    state_warrior_t state;
+    int line_attack;
+    int max_line_attack;
+    sfIntRect hitbox;
+    sfRectangleShape *rect_hitbox;
+    sfIntRect hitbox_attack;
+    sfRectangleShape *rect_hitbox_attack;
+    unsigned int health;
+    attributes_t *attributes;
+    sfTexture *texture_dead;
+    sfSprite *sprite_dead;
+    sfIntRect rect_dead;
+    my_clock_t *clock_dead;
+    int number_dead;
+} warrior_t;
+
+typedef struct lwarrior_s {
+    warrior_t *warrior;
+    struct lwarrior_s *next;
+} lwarrior_t;
 
 typedef struct win_s {
     sfRenderWindow *window;
+    sfView *view;
     unsigned int width;
     unsigned int height;
+    unsigned int framerate;
+    sfClock *clock;
 } win_t;
 
 typedef struct rpg_s {
     win_t *win;
     sfEvent event;
+    lwarrior_t *lwarrior;
+    warrior_t *player;
+    bool debug;
 } rpg_t;
 
 #include "../src/Init/init.h"
 #include "../src/Display/display.h"
 #include "../src/Event/event.h"
 #include "../src/Destroy/destroy.h"
+#include "../src/Update/update.h"
+#include "../src/Lib/lib.h"
