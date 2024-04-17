@@ -12,6 +12,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
+#include <math.h>
 
 #define WIDTH 1920
 #define HEIGHT 1080
@@ -19,6 +21,18 @@
 #define DEAD_WIDTH 128
 #define WARRIOR_OFFSET WARRIOR_WIDTH * 5
 #define PLAYER_SPEED 300
+
+// Marks
+#define EXCLAM_WIDTH 91
+#define EXCLAM_HEIGHT 147
+#define INTER_WIDTH 1015 / 14
+#define INTER_HEIGHT 399 / 3
+
+//
+#define IS_ALIVE(warrior) (warrior->state != DEAD && warrior->state != RIEN)
+
+// Cooldowns
+#define DEAD_COOLDOWN 10.0
 typedef enum warrior_color {
     BLUE = 0,
     PURPLE,
@@ -47,7 +61,7 @@ typedef enum warrior_state {
 
 typedef struct attributes_s {
     unsigned int max_health;
-    unsigned int health;
+    int health;
     unsigned int attack;
     unsigned int defense;
     unsigned int speed;
@@ -58,6 +72,38 @@ typedef struct my_clock_s {
     sfTime time;
     float seconds;
 } my_clock_t;
+
+typedef struct anim_death_s {
+    sfTexture *texture_dead;
+    sfSprite *sprite_dead;
+    sfIntRect rect_dead;
+    my_clock_t *clock_dead;
+    int number_dead;
+    sfVector2f dead_pos;
+} anim_death_t;
+
+typedef struct zones_warrior_s {
+    sfIntRect hitbox;
+    sfRectangleShape *rect_hitbox;
+    sfIntRect hitbox_attack;
+    sfRectangleShape *rect_hitbox_attack;
+    unsigned int radius_reset;
+    sfCircleShape *circle_reset;
+    sfVector2f circle_reset_pos;
+} zones_warrior_t;
+
+typedef struct mark_s {
+    sfTexture *texture;
+    sfSprite *sprite;
+    sfVector2f pos;
+    my_clock_t *myclock;
+    sfIntRect rect;
+    int is_display;
+    bool is_detecting;
+    sfCircleShape *circle;
+    sfVector2f circle_pos;
+    unsigned int radius;
+} mark_t;
 
 typedef struct warrior_s {
     sfTexture *texture;
@@ -71,17 +117,11 @@ typedef struct warrior_s {
     state_warrior_t state;
     int line_attack;
     int max_line_attack;
-    sfIntRect hitbox;
-    sfRectangleShape *rect_hitbox;
-    sfIntRect hitbox_attack;
-    sfRectangleShape *rect_hitbox_attack;
-    unsigned int health;
+    zones_warrior_t *zones;
     attributes_t *attributes;
-    sfTexture *texture_dead;
-    sfSprite *sprite_dead;
-    sfIntRect rect_dead;
-    my_clock_t *clock_dead;
-    int number_dead;
+    anim_death_t *death;
+    mark_t *exclam;
+    mark_t *inter;
 } warrior_t;
 
 typedef struct lwarrior_s {
@@ -112,3 +152,4 @@ typedef struct rpg_s {
 #include "../src/Destroy/destroy.h"
 #include "../src/Update/update.h"
 #include "../src/Lib/lib.h"
+#include "../src/Animation/anim.h"

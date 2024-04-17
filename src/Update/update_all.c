@@ -9,10 +9,5 @@
 
 void update_all(rpg_t *rpg)
 {
-    lwarrior_t *tmp = rpg->lwarrior;
-
-    while (tmp) {
-        anim_warrior(tmp->warrior);
-        tmp = tmp->next;
-    }
+    update_warriors(rpg);
 }

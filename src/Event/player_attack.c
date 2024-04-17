@@ -20,12 +20,23 @@ static void update_attack_rect(warrior_t *warrior)
 
 static void start_dead(warrior_t *warrior)
 {
-    sfVector2f pos = {warrior->pos.x + WARRIOR_WIDTH / 2 - DEAD_WIDTH / 2,
-        warrior->pos.y + WARRIOR_WIDTH / 2 - DEAD_WIDTH / 2};
-
+    printf("Warrior is dead\n");
     warrior->state = DEAD;
-    sfSprite_setPosition(warrior->sprite_dead, pos);
-    sfClock_restart(warrior->clock_dead->clock);
+    warrior->death->dead_pos = (sfVector2f) {warrior->pos.x + WARRIOR_WIDTH / 2
+        - DEAD_WIDTH / 2, warrior->pos.y + WARRIOR_WIDTH / 2 - DEAD_WIDTH / 2};
+    sfClock_restart(warrior->death->clock_dead->clock);
+}
+
+static void decrease_health(warrior_t *player, warrior_t *warrior)
+{
+    unsigned int max_attack = (player->attributes->attack -
+        warrior->attributes->defense);
+    unsigned int attack = rand() % max_attack;
+
+    warrior->attributes->health -= attack;
+    printf("Health -%d --> %d\n", attack, warrior->attributes->health);
+    if (warrior->attributes->health <= 0)
+        start_dead(warrior);
 }
 
 static void check_attack_collide(rpg_t *rpg, warrior_t *player)
@@ -35,14 +46,23 @@ static void check_attack_collide(rpg_t *rpg, warrior_t *player)
     while (tmp != NULL) {
         if (tmp->warrior != player && tmp->warrior->state != DEAD &&
             is_warrior_in_view(rpg, tmp->warrior) &&
-        is_warrior_attack_collide(tmp->warrior, player->hitbox_attack)) {
-            start_dead(tmp->warrior);
+        is_warrior_attack_collide(tmp->warrior,
+            player->zones->hitbox_attack)) {
+            decrease_health(player, tmp->warrior);
         }
         tmp = tmp->next;
     }
 }
 
 void player_attack(rpg_t *rpg)
+{
+    warrior_t *player = rpg->lwarrior->warrior;
+
+    update_attack_rect(player);
+    check_attack_collide(rpg, player);
+}
+
+void event_player_attack(rpg_t *rpg)
 {
     warrior_t *player = rpg->lwarrior->warrior;
 
@@ -56,8 +76,7 @@ void player_attack(rpg_t *rpg)
             player->state = ATTACK;
             player->line_attack = 0;
             player->max_line_attack = 0;
-            update_attack_rect(player);
-            check_attack_collide(rpg, player);
+            player_attack(rpg);
             sfClock_restart(player->myclock->clock);
         }
     }

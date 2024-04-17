@@ -26,6 +26,9 @@ static void set_player_attribute(warrior_t *warrior)
 {
     warrior->attributes->max_health = 200;
     warrior->attributes->health = warrior->attributes->max_health;
+    warrior->attributes->speed = PLAYER_SPEED;
+    warrior->attributes->attack = 50;
+    warrior->attributes->defense = 10;
 }
 
 lwarrior_t *init_lwarrior(void)
@@ -33,10 +36,10 @@ lwarrior_t *init_lwarrior(void)
     lwarrior_t *lwarrior = NULL;
     warrior_t *warrior = NULL;
 
-    warrior = init_warrior(BLUE, (sfVector2f){53, 100});
+    warrior = init_warrior(BLUE, (sfVector2f){400, 100});
     set_player_attribute(warrior);
     add_warrior(&lwarrior, warrior);
-    warrior = init_warrior(PURPLE, (sfVector2f){200, 200});
+    warrior = init_warrior(PURPLE, (sfVector2f){1200, 600});
     add_warrior(&lwarrior, warrior);
     return lwarrior;
 }

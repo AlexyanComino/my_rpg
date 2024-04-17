@@ -73,8 +73,9 @@ bool is_warrior_hitbox_collide(rpg_t *rpg, warrior_t *warrior,
     lwarrior_t *tmp = rpg->lwarrior;
 
     while (tmp) {
-        if (tmp->warrior != warrior &&
-            sfIntRect_intersects(&hitbox, &tmp->warrior->hitbox, NULL))
+        if (tmp->warrior != warrior && tmp->warrior->state != DEAD &&
+            tmp->warrior->state != RIEN &&
+            sfIntRect_intersects(&hitbox, &tmp->warrior->zones->hitbox, NULL))
             return (true);
         tmp = tmp->next;
     }
@@ -84,9 +85,31 @@ bool is_warrior_hitbox_collide(rpg_t *rpg, warrior_t *warrior,
 // Vérifie si l'attaque d'un guerrier touche un autre guerrier
 bool is_warrior_attack_collide(warrior_t *target, sfIntRect attack)
 {
-    sfIntRect hitbox = target->hitbox;
+    sfIntRect hitbox = target->zones->hitbox;
 
     if (sfIntRect_intersects(&attack, &hitbox, NULL))
         return (true);
     return (false);
+}
+
+// Vérifie si un cercle est en collision avec une hitbox
+bool hitbox_in_detection(sfIntRect hitbox, unsigned int radius,
+    sfVector2f circle_pos)
+{
+    float cx = circle_pos.x;
+    float cy = circle_pos.y;
+    float r = radius;
+    float rx = hitbox.left;
+    float ry = hitbox.top;
+    float w = hitbox.width;
+    float h = hitbox.height;
+    float closestX = fmaxf(rx, fminf(cx, rx + w));
+    float closestY = fmaxf(ry, fminf(cy, ry + h));
+    float distance = sqrtf((cx - closestX) * (cx - closestX) + (cy - closestY)
+        * (cy - closestY));
+
+    if (distance <= r)
+        return true;
+    else
+        return false;
 }

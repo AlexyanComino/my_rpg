@@ -16,7 +16,7 @@ void event(rpg_t *rpg)
     while (sfRenderWindow_pollEvent(rpg->win->window, &rpg->event)) {
         if (rpg->event.type == sfEvtClosed)
             sfRenderWindow_close(rpg->win->window);
-        player_attack(rpg);
+        event_player_attack(rpg);
     }
     if (get_player_state(rpg) != ATTACK)
         player_move(rpg, dt);

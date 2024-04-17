@@ -9,5 +9,8 @@
 // Update_all
 void update_all(rpg_t *rpg);
 
-// Anim warrior
-void anim_warrior(warrior_t *warrior);
+// Update warriors
+void update_warriors(rpg_t *rpg);
+
+// Update all warriors
+void update_all_warriors(rpg_t *rpg, warrior_t *tmp);
