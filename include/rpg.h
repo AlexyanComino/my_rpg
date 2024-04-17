@@ -34,6 +34,9 @@
 
 // Cooldowns
 #define DEAD_COOLDOWN 10.0
+
+#define PLAYER_NAME "Pablorigo"
+
 typedef enum warrior_color {
     BLUE = 0,
     PURPLE,
@@ -107,6 +110,7 @@ typedef struct mark_s {
 } mark_t;
 
 typedef struct warrior_s {
+    char *name;
     sfTexture *texture;
     sfSprite *sprite;
     my_clock_t *myclock;

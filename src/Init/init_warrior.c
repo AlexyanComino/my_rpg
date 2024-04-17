@@ -118,10 +118,11 @@ void init_warrior2(warrior_t *warrior)
     warrior->inter = init_inter(warrior);
 }
 
-warrior_t *init_warrior(color_warrior_t color, sfVector2f pos)
+warrior_t *init_warrior(color_warrior_t color, sfVector2f pos, char *name)
 {
     warrior_t *warrior = malloc(sizeof(warrior_t));
 
+    warrior->name = strdup(name);
     warrior->texture = get_warrior_texture(color);
     warrior->sprite = sfSprite_create();
     sfSprite_setTexture(warrior->sprite, warrior->texture, sfTrue);
@@ -132,7 +133,7 @@ warrior_t *init_warrior(color_warrior_t color, sfVector2f pos)
     warrior->state = IDLE;
     warrior->max_line_attack = 0;
     warrior->line_attack = 0;
-    warrior->x = RIGHT;
+    warrior->x = (rand() % 2 == 0) ? RIGHT : LEFT;
     warrior->y = NONE;
     init_warrior2(warrior);
     return warrior;

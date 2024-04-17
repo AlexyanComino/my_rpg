@@ -43,8 +43,11 @@ static void display_warrior(rpg_t *rpg, warrior_t *warrior)
     if (warrior->state == DEAD)
         sfRenderWindow_drawSprite(rpg->win->window,
         warrior->death->sprite_dead, NULL);
-    else
+    else {
+        sfRenderWindow_drawSprite(rpg->win->window,
+        warrior->death->sprite_dead, NULL);
         display_alive_warrior(rpg, warrior);
+    }
 }
 
 static void display_warriors(rpg_t *rpg)
