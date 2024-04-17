@@ -62,6 +62,8 @@ typedef struct rpg_s {
     win_t *win;
     sfEvent event;
     menu_t *main_menu;
+    menu_t *settings;
+    state_t gamestate;
 } rpg_t;
 
 #include "../src/Init/init.h"

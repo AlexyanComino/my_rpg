@@ -7,7 +7,22 @@
 
 #include "rpg.h"
 
+void start(rpg_t *rpg)
+{
+    rpg->gamestate = GAME;
+}
+
+void settings(rpg_t *rpg)
+{
+    rpg->gamestate = SETTINGS;
+}
+
 void quit(rpg_t *rpg)
 {
     sfRenderWindow_close(rpg->win->window);
+}
+
+void back_to_menu(rpg_t *rpg)
+{
+    rpg->gamestate = MAIN_MENU;
 }

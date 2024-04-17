@@ -25,5 +25,7 @@ rpg_t *init_rpg(void)
     rpg->win = create_window(WIDTH, HEIGHT);
     rpg->event = (sfEvent){0};
     rpg->main_menu = init_menu();
+    rpg->settings = init_settings();
+    rpg->gamestate = MAIN_MENU;
     return rpg;
 }
