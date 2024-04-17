@@ -74,10 +74,45 @@ static void update_sprite_scale(warrior_t *warrior)
         sfSprite_setScale(warrior->sprite, (sfVector2f){-1, 1});
 }
 
+static sfVector2f get_death_pos(warrior_t *warrior)
+{
+    if (warrior->x == RIGHT)
+        return (sfVector2f) {warrior->pos.x + WARRIOR_WIDTH / 2 -
+        DEAD_WIDTH / 2, warrior->pos.y + WARRIOR_WIDTH / 2 - DEAD_WIDTH / 2};
+    else
+        return (sfVector2f){warrior->pos.x + WARRIOR_WIDTH / 2 -
+        DEAD_WIDTH / 2 - WARRIOR_WIDTH / 3, warrior->pos.y + WARRIOR_WIDTH / 2
+        - DEAD_WIDTH / 2};
+}
+
+static void update_dead_sprite(warrior_t *warrior)
+{
+    sfVector2f scale = sfSprite_getScale(warrior->death->sprite_dead);
+    sfVector2f pos = sfSprite_getPosition(warrior->death->sprite_dead);
+
+    warrior->death->dead_pos = get_death_pos(warrior);
+    if (warrior->x == RIGHT && scale.x != 1) {
+        sfSprite_setPosition(warrior->death->sprite_dead,
+            warrior->death->dead_pos);
+        sfSprite_setScale(warrior->death->sprite_dead, (sfVector2f){1, 1});
+    }
+    if (warrior->x == LEFT && scale.x != -1) {
+        warrior->death->dead_pos = get_death_pos(warrior);
+        sfSprite_setPosition(warrior->death->sprite_dead,
+            warrior->death->dead_pos);
+        sfSprite_setScale(warrior->death->sprite_dead, (sfVector2f){-1, 1});
+    }
+    if (warrior->death->dead_pos.x != pos.x || warrior->death->dead_pos.y !=
+        pos.y)
+        sfSprite_setPosition(warrior->death->sprite_dead,
+            warrior->death->dead_pos);
+}
+
 void update_all_warriors(rpg_t *rpg, warrior_t *tmp)
 {
     anim_warrior(rpg, tmp);
     update_warrior_pos(tmp);
     update_zones_pos(tmp);
     update_sprite_scale(tmp);
+    update_dead_sprite(tmp);
 }

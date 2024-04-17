@@ -100,7 +100,6 @@ static void animation_dead2(warrior_t *warrior)
         warrior->death->number_dead = 1;
         sfClock_restart(warrior->death->clock_dead->clock);
     } else if (warrior->death->number_dead == 1 && !time_elapsed) {
-        printf("Time elapsed = %f\n", warrior->death->clock_dead->seconds);
         warrior->death->rect_dead.left = DEAD_WIDTH * 6;
     } else
         animation_dead3(warrior, time_elapsed);
