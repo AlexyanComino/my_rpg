@@ -13,6 +13,7 @@ int main(void)
 
     while (sfRenderWindow_isOpen(rpg->win->window)) {
         event(rpg);
+        update_all(rpg);
         display_all(rpg);
     }
     destroy_rpg(rpg);
