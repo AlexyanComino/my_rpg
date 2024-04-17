@@ -7,6 +7,16 @@
 
 #include "rpg.h"
 
+void event_states(rpg_t *rpg)
+{
+    if (rpg->gamestate == MAIN_MENU) {
+            menu_button_event(rpg, rpg->main_menu->buttons);
+    } else if (rpg->gamestate == SETTINGS)
+        menu_button_event(rpg, rpg->settings->buttons);
+    if (rpg->gamestate == GAME)
+        event_player_attack(rpg);
+}
+
 void event(rpg_t *rpg)
 {
     sfTime elapsed_time = sfClock_getElapsedTime(rpg->win->clock);
@@ -17,16 +27,9 @@ void event(rpg_t *rpg)
         if (rpg->event.type == sfEvtClosed ||
             rpg->event.key.code == sfKeyEscape)
             sfRenderWindow_close(rpg->win->window);
-        event_player_attack(rpg);
-        if (rpg->gamestate == MAIN_MENU) {
-            menu_button_event(rpg, rpg->main_menu->buttons);
-            break;
-        }
-        if (rpg->gamestate == SETTINGS) {
-            menu_button_event(rpg, rpg->settings->buttons);
-            break;
-        }
+        event_states(rpg);
     }
-    if (get_player_state(rpg) != ATTACK)
-        player_move(rpg, dt);
+    if (rpg->gamestate == GAME)
+        if (get_player_state(rpg) != ATTACK)
+            player_move(rpg, dt);
 }

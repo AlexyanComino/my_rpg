@@ -22,4 +22,3 @@ void back_to_menu(rpg_t *rpg);
 
 // menu_event
 void menu_button_event(rpg_t *rpg, button_t *buttons);
-void settings_button_event(rpg_t *rpg, button_t *buttons);

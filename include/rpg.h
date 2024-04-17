@@ -142,7 +142,7 @@ typedef enum button_state {
     HOVERED,
     CLICKED,
     RELEASED,
-    NONE
+    NOTHING
 } button_state_t;
 
 typedef struct button_s {

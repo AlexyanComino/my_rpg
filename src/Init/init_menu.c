@@ -34,7 +34,7 @@ static button_t *new_button(char *txt)
     new->texture = sfTexture_createFromFile(
         "assets/menu/gold_button.png", NULL);
     new->font = sfFont_createFromFile("assets/fonts/m6x11plus.ttf");
-    new->state = NONE;
+    new->state = NOTHING;
     new->action = get_action(txt);
     new->rect = (sfIntRect){0, 0, 48, 16};
     new->next = NULL;

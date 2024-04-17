@@ -9,5 +9,6 @@
 
 void update_all(rpg_t *rpg)
 {
-    update_warriors(rpg);
+    if (rpg->gamestate == GAME)
+        update_warriors(rpg);
 }

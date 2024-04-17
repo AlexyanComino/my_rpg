@@ -18,7 +18,7 @@ bool is_button_clicked(struct button_s *button, sfMouseButtonEvent *event)
             return true;
         }
     }
-    button->state = NONE;
+    button->state = NOTHING;
     return false;
 }
 
@@ -34,7 +34,7 @@ bool is_button_hovered(struct button_s *button, sfMouseMoveEvent *event)
         button->state = HOVERED;
         return true;
     } else {
-        button->state = NONE;
+        button->state = NOTHING;
         return false;
     }
 }
@@ -50,6 +50,6 @@ bool is_button_released(struct button_s *button, sfMouseButtonEvent *event)
             return true;
         }
     }
-    button->state = NONE;
+    button->state = NOTHING;
     return false;
 }

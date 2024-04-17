@@ -57,6 +57,7 @@ static void display_warriors(rpg_t *rpg)
         tmp = tmp->next;
     }
     display_warrior(rpg, rpg->lwarrior->warrior);
+}
 
 void display_main_menu(rpg_t *rpg)
 {
@@ -89,10 +90,11 @@ void display_settings(rpg_t *rpg)
 void display_all(rpg_t *rpg)
 {
     sfRenderWindow_clear(rpg->win->window, sfBlack);
-    display_warriors(rpg);
     if (rpg->gamestate == MAIN_MENU)
         display_main_menu(rpg);
     if (rpg->gamestate == SETTINGS)
         display_settings(rpg);
+    if (rpg->gamestate == GAME)
+        display_warriors(rpg);
     sfRenderWindow_display(rpg->win->window);
 }
