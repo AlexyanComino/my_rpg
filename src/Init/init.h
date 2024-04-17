@@ -10,3 +10,7 @@
 
 // InitRpg
 rpg_t *init_rpg(void);
+
+// InitMenu
+menu_t *init_menu(void);
+menu_t *init_settings(void);

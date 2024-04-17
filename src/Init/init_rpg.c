@@ -12,7 +12,7 @@ win_t *create_window(unsigned int width, unsigned int height)
     win_t *win = malloc(sizeof(win_t));
     sfVideoMode mode = {width, height, 32};
 
-    win->window = sfRenderWindow_create(mode, "My_RPG", sfClose, NULL);
+    win->window = sfRenderWindow_create(mode, "My_RPG", sfDefaultStyle, NULL);
     win->width = width;
     win->height = height;
     return win;
@@ -24,5 +24,8 @@ rpg_t *init_rpg(void)
 
     rpg->win = create_window(WIDTH, HEIGHT);
     rpg->event = (sfEvent){0};
+    rpg->main_menu = init_menu();
+    rpg->settings = init_settings();
+    rpg->gamestate = MAIN_MENU;
     return rpg;
 }
