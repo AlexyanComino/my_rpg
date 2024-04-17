@@ -21,3 +21,7 @@ warrior_t *init_warrior(color_warrior_t color, sfVector2f pos);
 // Init warrior marks
 mark_t *init_exclam(warrior_t *warrior);
 mark_t *init_inter(warrior_t *warrior);
+
+// InitMenu
+menu_t *init_menu(void);
+menu_t *init_settings(void);
