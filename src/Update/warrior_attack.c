@@ -33,8 +33,6 @@ static void decrease_health(rpg_t *rpg, warrior_t *warrior, warrior_t *target)
 
     target->attributes->health -= attack;
     add_damage_text(rpg, target, attack);
-    // printf("Warrior %s attack %s with -%d --> %d\n", warrior->name, target->name,
-    //     attack, target->attributes->health);
     if (target->attributes->health <= 0)
         warrior_is_dead(target);
 }

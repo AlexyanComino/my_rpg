@@ -28,7 +28,7 @@ static void check_player_in_base(rpg_t *rpg, restricted_t *restricted)
 static void appear_the_text(restricted_t *restricted, sfColor color)
 {
     int alpha = color.a;
-    
+
     if (alpha + 10 > 255)
         color.a = 255;
     else

@@ -24,14 +24,16 @@ void update_side_y(warrior_t *warrior, sfVector2f movement)
             warrior->y = DOWN;
         else
             warrior->y = NONE;
-    } else if (movement.y < 0) {
+        return;
+    }
+    if (movement.y < 0) {
         if (y_is_sup)
             warrior->y = UP;
         else
             warrior->y = NONE;
-    } else {
-        warrior->y = NONE;
+        return;
     }
+    warrior->y = NONE;
 }
 
 static void get_new_pos_x(warrior_t *warrior, sfVector2f *newPos,

@@ -9,18 +9,12 @@
 
 static sfVector2f get_damage_text_pos(warrior_t *warrior)
 {
-    // Renvoie la position du texte de dégâts en fonction de la position du guerrier
-    // Il faut que le texte soit au dessus du guerrier et une position aléatoire en x pour que le texte ne soit pas superposé entre -25 et 25 pixels
-    // On renvoie la position du texte
-
-    return (sfVector2f){warrior->pos.x + rand() % 50 - 25, warrior->pos.y - 50};
+    return (sfVector2f){warrior->pos.x + rand() % 50 - 25,
+        warrior->pos.y - 50};
 }
 
 static float get_damage_text_size(int attack)
 {
-    // Renvoie la taille du texte de dégâts en fonction de la quantité de dégâts subis
-    // On renvoie la taille du texte
-
     if (attack < 10)
         return 20;
     if (attack < 20)
@@ -30,12 +24,29 @@ static float get_damage_text_size(int attack)
     return 40;
 }
 
+static void init_text_shadow(damage_text_t *new, char *damage_text)
+{
+    sfFloatRect rect;
+
+    new->text_shadow = sfText_create();
+    sfText_setString(new->text_shadow, damage_text);
+    sfText_setFont(new->text_shadow, new->font);
+    sfText_setCharacterSize(new->text_shadow, new->size);
+    sfText_setPosition(new->text_shadow, (sfVector2f){new->pos.x + 2,
+        new->pos.y + 2});
+    sfText_setColor(new->text_shadow, sfBlack);
+    rect = sfText_getGlobalBounds(new->text_shadow);
+    sfText_setOrigin(new->text_shadow, (sfVector2f){rect.width / 2,
+        rect.height / 2});
+}
+
 static damage_text_t *init_damage_text(rpg_t *rpg, warrior_t *warrior,
     char *damage_text, int attack)
 {
     damage_text_t *new = malloc(sizeof(damage_text_t));
     sfFloatRect rect;
-    sfColor color = WARRIOR_IS_PLAYER(rpg, warrior) ? DAMAGE_COLOR_PLAYER : get_color_from_faction(warrior);
+    sfColor color = WARRIOR_IS_PLAYER(rpg, warrior) ? DAMAGE_COLOR_PLAYER :
+        get_color_from_faction(warrior);
 
     new->text = sfText_create();
     new->font = sfFont_createFromFile("assets/fonts/Say Comic.ttf");
@@ -48,14 +59,7 @@ static damage_text_t *init_damage_text(rpg_t *rpg, warrior_t *warrior,
     sfText_setColor(new->text, color);
     rect = sfText_getGlobalBounds(new->text);
     sfText_setOrigin(new->text, (sfVector2f){rect.width / 2, rect.height / 2});
-    new->text_shadow = sfText_create();
-    sfText_setString(new->text_shadow, damage_text);
-    sfText_setFont(new->text_shadow, new->font);
-    sfText_setCharacterSize(new->text_shadow, new->size);
-    sfText_setPosition(new->text_shadow, (sfVector2f){new->pos.x + 2, new->pos.y + 2});
-    sfText_setColor(new->text_shadow, sfBlack);
-    rect = sfText_getGlobalBounds(new->text_shadow);
-    sfText_setOrigin(new->text_shadow, (sfVector2f){rect.width / 2, rect.height / 2});
+    init_text_shadow(new, damage_text);
     new->next = NULL;
     return new;
 }

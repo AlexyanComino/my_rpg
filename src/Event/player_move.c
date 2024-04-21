@@ -10,7 +10,8 @@
 static void get_newpos_and_newx(warrior_t *player, sfVector2f *newPos,
     float dt)
 {
-    float speed = player->state == WALK ? player->attributes->speed / 3: player->attributes->speed;
+    float speed = player->state == WALK ? player->attributes->speed / 3 :
+        player->attributes->speed;
 
     if (sfKeyboard_isKeyPressed(sfKeyQ)) {
         player->x = LEFT;
@@ -25,8 +26,8 @@ static void update_player_x(rpg_t *rpg, warrior_t *player)
 {
     sfVector2f newPos = player->pos;
     sfIntRect newHitbox;
-    get_newpos_and_newx(player, &newPos, rpg->win->dt);
 
+    get_newpos_and_newx(player, &newPos, rpg->win->dt);
     newHitbox = get_hitbox_warrior(newPos);
     if (!is_warrior_hitbox_collide(rpg, player, newHitbox)) {
         player->pos.x = newPos.x;
@@ -38,7 +39,8 @@ static void update_player_x(rpg_t *rpg, warrior_t *player)
 static void get_newpos_and_newy(warrior_t *player, sfVector2f *newPos,
     float dt)
 {
-    float speed = player->state == WALK ? player->attributes->speed / 3: player->attributes->speed;
+    float speed = player->state == WALK ? player->attributes->speed / 3 :
+        player->attributes->speed;
 
     if (sfKeyboard_isKeyPressed(sfKeyZ) && sfKeyboard_isKeyPressed(sfKeyS)) {
         player->y = NONE;
@@ -74,13 +76,13 @@ static void update_player_y(rpg_t *rpg, warrior_t *player)
 void player_move(rpg_t *rpg)
 {
     warrior_t *player = rpg->lwarrior->warrior;
+    bool is_walking = false;
 
-    if (sfKeyboard_isKeyPressed(sfKeyLControl) && (sfKeyboard_isKeyPressed(sfKeyZ) || sfKeyboard_isKeyPressed(sfKeyS) ||
-        sfKeyboard_isKeyPressed(sfKeyQ) || sfKeyboard_isKeyPressed(sfKeyD))) {
-            player->state = WALK;
-    } else if (sfKeyboard_isKeyPressed(sfKeyZ) || sfKeyboard_isKeyPressed(sfKeyS) ||
+    if (sfKeyboard_isKeyPressed(sfKeyLControl))
+            is_walking = true;
+    if (sfKeyboard_isKeyPressed(sfKeyZ) || sfKeyboard_isKeyPressed(sfKeyS) ||
         sfKeyboard_isKeyPressed(sfKeyQ) || sfKeyboard_isKeyPressed(sfKeyD)) {
-            player->state = RUN;
+            player->state = (is_walking) ? WALK : RUN;
     } else if (player->state != ATTACK)
         player->state = IDLE;
     update_player_x(rpg, player);

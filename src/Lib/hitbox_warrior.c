@@ -20,27 +20,33 @@ static sfIntRect get_hitbox_attack_left(sfVector2f pos, y_warrior_t y,
     int hitbox_x, int hitbox_y)
 {
     if (y == UP)
-        return (sfIntRect){pos.x - WARRIOR_WIDTH / 6 - WARRIOR_WIDTH / 3 + (WARRIOR_WIDTH - hitbox_x) / 2, pos.y - WARRIOR_WIDTH / 3,
+        return (sfIntRect){pos.x - WARRIOR_WIDTH / 6 - WARRIOR_WIDTH / 3 +
+            (WARRIOR_WIDTH - hitbox_x) / 2, pos.y - WARRIOR_WIDTH / 3,
         hitbox_x, hitbox_y};
     else if (y == DOWN)
-        return (sfIntRect){pos.x - WARRIOR_WIDTH / 6 - WARRIOR_WIDTH / 3 + (WARRIOR_WIDTH - hitbox_x) / 2, pos.y + WARRIOR_WIDTH / 6,
+        return (sfIntRect){pos.x - WARRIOR_WIDTH / 6 - WARRIOR_WIDTH / 3 +
+            (WARRIOR_WIDTH - hitbox_x) / 2, pos.y + WARRIOR_WIDTH / 6,
         hitbox_x, hitbox_y};
     else
-        return (sfIntRect){pos.x - WARRIOR_WIDTH / 6 - WARRIOR_WIDTH / 3, pos.y - WARRIOR_WIDTH / 6 - WARRIOR_WIDTH / 3 + (WARRIOR_WIDTH - hitbox_y) / 2,
-        hitbox_x, hitbox_y};
+        return (sfIntRect){pos.x - WARRIOR_WIDTH / 6 - WARRIOR_WIDTH / 3,
+        pos.y - WARRIOR_WIDTH / 6 - WARRIOR_WIDTH / 3 +
+        (WARRIOR_WIDTH - hitbox_y) / 2, hitbox_x, hitbox_y};
 }
 
 static sfIntRect get_hitbox_attack_right(sfVector2f pos, y_warrior_t y,
     int hitbox_x, int hitbox_y)
 {
     if (y == UP)
-        return (sfIntRect){pos.x - WARRIOR_WIDTH / 6 - WARRIOR_WIDTH / 3 + (WARRIOR_WIDTH - hitbox_x) / 2, pos.y - WARRIOR_WIDTH / 3,
+        return (sfIntRect){pos.x - WARRIOR_WIDTH / 6 - WARRIOR_WIDTH / 3 +
+            (WARRIOR_WIDTH - hitbox_x) / 2, pos.y - WARRIOR_WIDTH / 3,
         hitbox_x, hitbox_y};
     else if (y == DOWN)
-        return (sfIntRect){pos.x - WARRIOR_WIDTH / 6 - WARRIOR_WIDTH / 3 + (WARRIOR_WIDTH - hitbox_x) / 2, pos.y + WARRIOR_WIDTH / 6,
+        return (sfIntRect){pos.x - WARRIOR_WIDTH / 6 - WARRIOR_WIDTH / 3 +
+            (WARRIOR_WIDTH - hitbox_x) / 2, pos.y + WARRIOR_WIDTH / 6,
         hitbox_x, hitbox_y};
     else
-        return (sfIntRect){pos.x + WARRIOR_WIDTH / 6, pos.y - WARRIOR_WIDTH / 6 - WARRIOR_WIDTH / 3 + (WARRIOR_WIDTH - hitbox_y) / 2,
+        return (sfIntRect){pos.x + WARRIOR_WIDTH / 6, pos.y - WARRIOR_WIDTH
+            / 6 - WARRIOR_WIDTH / 3 + (WARRIOR_WIDTH - hitbox_y) / 2,
         hitbox_x, hitbox_y};
 }
 

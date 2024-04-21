@@ -34,3 +34,7 @@ sfVector2f *get_pattern_pos(warrior_t *warrior, base_t *base);
 
 // Init interface
 interface_t *init_interface(void);
+
+// Init warrior 2
+unsigned int get_max_health(color_warrior_t color);
+faction_t get_faction(warrior_t *warrior);

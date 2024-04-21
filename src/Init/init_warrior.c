@@ -7,6 +7,16 @@
 
 #include "rpg.h"
 
+my_clock_t *init_my_clock(void)
+{
+    my_clock_t *myclock = malloc(sizeof(my_clock_t));
+
+    myclock->clock = sfClock_create();
+    myclock->time = (sfTime){0};
+    myclock->seconds = 0;
+    return myclock;
+}
+
 static sfTexture *get_warrior_texture(color_warrior_t color)
 {
     sfTexture *texture = NULL;
@@ -32,14 +42,6 @@ static sfRectangleShape *init_rect_hitbox(sfIntRect hitbox, sfColor color)
     return rect_hitbox;
 }
 
-static unsigned int get_max_health(color_warrior_t color)
-{
-    if (color == BLUE)
-        return 100;
-    else
-        return 150;
-}
-
 static attributes_t *get_attributes(color_warrior_t color)
 {
     attributes_t *attributes = malloc(sizeof(attributes_t));
@@ -50,16 +52,6 @@ static attributes_t *get_attributes(color_warrior_t color)
     attributes->attack = 25;
     attributes->defense = 0;
     return attributes;
-}
-
-my_clock_t *init_my_clock(void)
-{
-    my_clock_t *myclock = malloc(sizeof(my_clock_t));
-
-    myclock->clock = sfClock_create();
-    myclock->time = (sfTime){0};
-    myclock->seconds = 0;
-    return myclock;
 }
 
 static anim_death_t *init_death(void)
@@ -78,11 +70,12 @@ static anim_death_t *init_death(void)
     return death;
 }
 
-static void init_circle_reset(zones_warrior_t *zones)
+static void init_circle_max_detection(zones_warrior_t *zones)
 {
     zones->circle_max_detection = sfCircleShape_create();
     zones->radius_max_detection = 500;
-    sfCircleShape_setRadius(zones->circle_max_detection, zones->radius_max_detection);
+    sfCircleShape_setRadius(zones->circle_max_detection,
+        zones->radius_max_detection);
     sfCircleShape_setFillColor(zones->circle_max_detection, sfTransparent);
     sfCircleShape_setOutlineColor(zones->circle_max_detection, sfWhite);
     sfCircleShape_setOutlineThickness(zones->circle_max_detection, 1);
@@ -100,21 +93,8 @@ static zones_warrior_t *init_zones(warrior_t *warrior)
         warrior->y);
     zones->rect_hitbox_attack = init_rect_hitbox(zones->hitbox_attack,
         sfRed);
-    init_circle_reset(zones);
+    init_circle_max_detection(zones);
     return zones;
-}
-
-static faction_t get_faction(warrior_t *warrior)
-{
-    if (!strcmp(warrior->name, PLAYER_NAME)) {
-        return BLUE_TEAM;
-    } else if (!strcmp(warrior->name, "Enemy")) {
-        return PURPLE_TEAM;
-    } else if (!strcmp(warrior->name, "Ally")) {
-        return BLUE_TEAM;
-    } else {
-        return RED_TEAM;
-    }
 }
 
 static float get_attack_cooldown(void)
@@ -124,6 +104,8 @@ static float get_attack_cooldown(void)
 
 void init_warrior2(warrior_t *warrior)
 {
+    warrior->x = (rand() % 2 == 0) ? RIGHT : LEFT;
+    warrior->y = NONE;
     warrior->zones = init_zones(warrior);
     warrior->attributes = get_attributes(warrior->color);
     warrior->death = init_death();
@@ -155,8 +137,6 @@ warrior_t *init_warrior(color_warrior_t color, sfVector2f pos, char *name)
     warrior->state = IDLE;
     warrior->max_line_attack = 0;
     warrior->line_attack = 0;
-    warrior->x = (rand() % 2 == 0) ? RIGHT : LEFT;
-    warrior->y = NONE;
     init_warrior2(warrior);
     return warrior;
 }

@@ -34,3 +34,9 @@ void update_side_x(warrior_t *warrior, sfVector2f movement);
 void update_side_y(warrior_t *warrior, sfVector2f movement);
 void update_warrior_x(rpg_t *rpg, warrior_t *warrior, sfVector2f movement);
 void update_warrior_y(rpg_t *rpg, warrior_t *warrior, sfVector2f movement);
+
+// Update warrior detection
+void update_warrior_detection(warrior_t *warrior, warrior_t *enemy);
+
+// Update warrior pos
+void update_warrior_pos(rpg_t *rpg, warrior_t *tmp, warrior_t *enemy);

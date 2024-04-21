@@ -29,7 +29,8 @@ static sfRectangleShape *init_base_shape(base_t *base, sfColor color)
 {
     sfRectangleShape *shape = sfRectangleShape_create();
 
-    sfRectangleShape_setSize(shape, (sfVector2f){base->rect.width, base->rect.height});
+    sfRectangleShape_setSize(shape, (sfVector2f){base->rect.width,
+        base->rect.height});
     sfRectangleShape_setFillColor(shape, sfTransparent);
     sfRectangleShape_setPosition(shape, (sfVector2f){base->rect.left,
         base->rect.top});

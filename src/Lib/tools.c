@@ -36,8 +36,8 @@ warrior_t *get_nearest_warrior(rpg_t *rpg, warrior_t *warrior)
     float distance = 0;
 
     while (tmp != NULL) {
-        if (tmp->warrior == warrior || tmp->warrior->faction == warrior->faction
-            || tmp->warrior->state == DEAD ||
+        if (tmp->warrior == warrior || tmp->warrior->faction ==
+            warrior->faction || tmp->warrior->state == DEAD ||
             !is_warrior_in_view(rpg, tmp->warrior)) {
             tmp = tmp->next;
             continue;
@@ -65,31 +65,4 @@ bool warrior_look_at_enemy(warrior_t *warrior, warrior_t *enemy)
     else if (warrior->x == RIGHT && enemy->pos.x > warrior->pos.x)
         return true;
     return false;
-}
-
-bool warrior_see_enemy(warrior_t *warrior, warrior_t *enemy)
-{
-    if (warrior_look_at_enemy(warrior, enemy))
-        return hitbox_in_detection(enemy->zones->hitbox, warrior->zones->radius_max_detection, warrior->pos);
-    else if (!IS_DISCREET(enemy))
-        return hitbox_in_detection(enemy->zones->hitbox, warrior->inter->radius, warrior->pos);
-    else
-        return false;
-}
-
-sfColor get_color_from_faction(warrior_t *warrior)
-{
-    faction_t faction = warrior->faction;
-
-    if (faction == BLUE_TEAM)
-        return DAMAGE_COLOR_BLUE;
-    else if (faction == PURPLE_TEAM)
-        return DAMAGE_COLOR_PURPLE;
-    else if (faction == YELLOW_TEAM)
-        return DAMAGE_COLOR_YELLOW;
-    else if (faction == RED_TEAM)
-        return DAMAGE_COLOR_RED;
-    else if (faction == GOBLIN_TEAM)
-        return DAMAGE_COLOR_GREEN;
-    return sfWhite;
 }

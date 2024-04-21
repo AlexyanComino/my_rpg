@@ -73,7 +73,6 @@ static void update_sprite_scale(warrior_t *warrior)
 }
 
 //
-
 static void remove_damage_text(warrior_t *warrior, damage_text_t *tmp)
 {
     damage_text_t *prev = warrior->damage_texts;
@@ -87,6 +86,19 @@ static void remove_damage_text(warrior_t *warrior, damage_text_t *tmp)
         prev = prev->next;
     prev->next = tmp->next;
     destroy_damage_text(tmp);
+}
+
+static void change_pos_and_alpha(damage_text_t *tmp, sfColor color,
+    sfColor color_shadow)
+{
+    tmp->pos.y -= 1.5;
+    sfText_setPosition(tmp->text, tmp->pos);
+    sfText_setPosition(tmp->text_shadow, (sfVector2f){tmp->pos.x + 2,
+        tmp->pos.y + 2});
+    color.a -= 5;
+    color_shadow.a -= 5;
+    sfText_setColor(tmp->text, color);
+    sfText_setColor(tmp->text_shadow, color_shadow);
 }
 
 static void update_damage_texts(warrior_t *warrior)
@@ -107,14 +119,7 @@ static void update_damage_texts(warrior_t *warrior)
             tmp = next;
             continue;
         }
-        tmp->pos.y -= 1.5;
-        sfText_setPosition(tmp->text, tmp->pos);
-        sfText_setPosition(tmp->text_shadow, (sfVector2f){tmp->pos.x + 2,
-            tmp->pos.y + 2});
-        color.a -= 5;
-        color_shadow.a -= 5;
-        sfText_setColor(tmp->text, color);
-        sfText_setColor(tmp->text_shadow, color_shadow);
+        change_pos_and_alpha(tmp, color, color_shadow);
         tmp = next;
     }
 }

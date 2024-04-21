@@ -10,9 +10,12 @@
 sfVector2f get_movement(sfVector2f center_target, sfVector2f center_warrior,
     float distance, int speed)
 {
-    sfVector2f direction = {center_target.x - center_warrior.x, center_target.y - center_warrior.y};
+    sfVector2f direction =
+        {center_target.x - center_warrior.x,
+        center_target.y - center_warrior.y};
 
-    return (sfVector2f){direction.x / distance * speed, direction.y / distance * speed};
+    return (sfVector2f)
+        {direction.x / distance * speed, direction.y / distance * speed};
 }
 
 static unsigned int get_warrior_speed(warrior_t *warrior)
@@ -29,9 +32,10 @@ static sfVector2f get_target_pos_and_min_lenght(rpg_t *rpg, warrior_t *warrior,
     warrior_t *target;
 
     if (WARRIOR_HAS_BASE(warrior) && warrior->base->come_back) {
-        target_pos = warrior->base->pattern_pos[warrior->base->pattern_pos_index];
+        target_pos = warrior->base->pattern_pos[warrior->base->
+            pattern_pos_index];
         *min_lenght = 10;
-    } else{
+    } else {
         target = get_nearest_warrior(rpg, warrior);
         target_pos = target->pos;
         *min_lenght = MIN_WARRIOR_LENGTH;
@@ -42,7 +46,8 @@ static sfVector2f get_target_pos_and_min_lenght(rpg_t *rpg, warrior_t *warrior,
 static bool warrior_is_arrived(warrior_t *warrior, float distance,
     float min_lenght, sfVector2f movement)
 {
-    if (distance < min_lenght && WARRIOR_HAS_BASE(warrior) && warrior->base->come_back) {
+    if (distance < min_lenght && WARRIOR_HAS_BASE(warrior) &&
+        warrior->base->come_back) {
         warrior->state = IDLE;
         warrior->base->in_cooldown = true;
         sfClock_restart(warrior->base->myclock->clock);

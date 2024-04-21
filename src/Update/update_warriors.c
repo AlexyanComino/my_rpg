@@ -14,7 +14,8 @@ void update_warriors(rpg_t *rpg)
     warrior_t *player = rpg->lwarrior->warrior;
 
     while (tmp) {
-        if (!is_warrior_in_view(rpg, tmp->warrior) && tmp->warrior->state == RIEN)
+        if (!is_warrior_in_view(rpg, tmp->warrior) &&
+            tmp->warrior->state == RIEN)
             return;
         update_all_warriors(rpg, tmp->warrior);
         if (tmp->warrior != player && IS_ALIVE(tmp->warrior))

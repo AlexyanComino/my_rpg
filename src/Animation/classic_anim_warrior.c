@@ -36,8 +36,9 @@ static void animation_attack2(rpg_t *rpg, warrior_t *warrior)
         warrior_attack(rpg, warrior);
     if (warrior->rect.left >= WARRIOR_OFFSET && warrior->line_attack == 0) {
         if (warrior->line_attack < warrior->max_line_attack ||
-            (IS_PLAYER(rpg, warrior) && sfMouse_isButtonPressed(sfMouseLeft)) ||
-            (!IS_PLAYER(rpg, warrior) && warrior_can_attack_enemy(rpg, warrior))) {
+            (IS_PLAYER(rpg, warrior) && sfMouse_isButtonPressed(sfMouseLeft))
+            || (!IS_PLAYER(rpg, warrior) &&
+            warrior_can_attack_enemy(rpg, warrior))) {
             warrior->line_attack++;
             warrior->rect.left = 0;
             warrior->rect.top += WARRIOR_WIDTH;
