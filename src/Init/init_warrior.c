@@ -22,9 +22,12 @@ static sfTexture *get_warrior_texture(color_warrior_t color)
     sfTexture *texture = NULL;
 
     if (color == BLUE)
-        texture = sfTexture_createFromFile("assets/Warrior_Blue.png", NULL);
+        texture =
+            sfTexture_createFromFile("assets/Warriors/Warrior_Blue.png", NULL);
     else
-        texture = sfTexture_createFromFile("assets/Warrior_Purple.png", NULL);
+        texture =
+            sfTexture_createFromFile("assets/Warriors/Warrior_Purple.png",
+            NULL);
     return texture;
 }
 
@@ -59,7 +62,8 @@ static anim_death_t *init_death(void)
     anim_death_t *death = malloc(sizeof(anim_death_t));
 
     death->clock_dead = init_my_clock();
-    death->texture_dead = sfTexture_createFromFile("assets/Dead.png", NULL);
+    death->texture_dead =
+        sfTexture_createFromFile("assets/Warriors/Dead.png", NULL);
     death->sprite_dead = sfSprite_create();
     sfSprite_setTexture(death->sprite_dead, death->texture_dead, sfTrue);
     death->rect_dead = (sfIntRect){0, 0, DEAD_WIDTH, DEAD_WIDTH};

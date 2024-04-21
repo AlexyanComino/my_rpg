@@ -22,7 +22,8 @@ mark_t *init_exclam(warrior_t *warrior)
 {
     mark_t *exclam = malloc(sizeof(mark_t));
 
-    exclam->texture = sfTexture_createFromFile("assets/exclam_red.png", NULL);
+    exclam->texture =
+        sfTexture_createFromFile("assets/Warriors/exclam_red.png", NULL);
     exclam->sprite = sfSprite_create();
     sfSprite_setTexture(exclam->sprite, exclam->texture, sfTrue);
     sfSprite_setOrigin(exclam->sprite, (sfVector2f){EXCLAM_WIDTH / 2,
@@ -42,7 +43,8 @@ mark_t *init_inter(warrior_t *warrior)
 {
     mark_t *inter = malloc(sizeof(mark_t));
 
-    inter->texture = sfTexture_createFromFile("assets/inter_color.png", NULL);
+    inter->texture =
+        sfTexture_createFromFile("assets/Warriors/inter_color.png", NULL);
     inter->sprite = sfSprite_create();
     sfSprite_setTexture(inter->sprite, inter->texture, sfTrue);
     inter->pos = (sfVector2f){warrior->pos.x, warrior->pos.y};
