@@ -7,9 +7,11 @@
 
 #include "rpg.h"
 
-static void animation_idle_walk(warrior_t *warrior)
+static void animation_idle_walk_run(warrior_t *warrior)
 {
-    if (warrior->myclock->seconds > 0.1) {
+    float interval = warrior->state == WALK ? 0.14 : 0.1;
+
+    if (warrior->myclock->seconds > interval) {
         if (warrior->rect.left >= WARRIOR_OFFSET)
             warrior->rect.left = 0;
         else
@@ -25,19 +27,23 @@ static void reset_attack(warrior_t *warrior)
     warrior->rect.top = 0;
     warrior->rect.left = 0;
     warrior->line_attack = 0;
+    sfClock_restart(warrior->clock_cooldown_attack->clock);
 }
 
 static void animation_attack2(rpg_t *rpg, warrior_t *warrior)
 {
+    if (warrior->rect.left == WARRIOR_WIDTH * 3)
+        warrior_attack(rpg, warrior);
     if (warrior->rect.left >= WARRIOR_OFFSET && warrior->line_attack == 0) {
         if (warrior->line_attack < warrior->max_line_attack ||
-            sfMouse_isButtonPressed(sfMouseLeft)) {
-            player_attack(rpg);
+            (IS_PLAYER(rpg, warrior) && sfMouse_isButtonPressed(sfMouseLeft)) ||
+            (!IS_PLAYER(rpg, warrior) && warrior_can_attack_enemy(rpg, warrior))) {
             warrior->line_attack++;
             warrior->rect.left = 0;
             warrior->rect.top += WARRIOR_WIDTH;
-        } else
+        } else {
             reset_attack(warrior);
+        }
     } else if (warrior->rect.left >= WARRIOR_OFFSET &&
         warrior->line_attack == 1) {
         reset_attack(warrior);
@@ -58,11 +64,11 @@ void animation_alive(rpg_t *rpg, warrior_t *warrior)
 {
     if (warrior->state == IDLE) {
         warrior->rect.top = 0;
-        animation_idle_walk(warrior);
+        animation_idle_walk_run(warrior);
     }
-    if (warrior->state == WALK) {
+    if (warrior->state == WALK || warrior->state == RUN) {
         warrior->rect.top = WARRIOR_WIDTH;
-        animation_idle_walk(warrior);
+        animation_idle_walk_run(warrior);
     }
     if (warrior->state == ATTACK)
         animation_attack(rpg, warrior);
@@ -107,10 +113,7 @@ static void animation_dead2(warrior_t *warrior)
 
 void animation_dead(warrior_t *warrior)
 {
-    warrior->death->clock_dead->time =
-        sfClock_getElapsedTime(warrior->death->clock_dead->clock);
-    warrior->death->clock_dead->seconds =
-        warrior->death->clock_dead->time.microseconds / 1000000.0;
+    update_clock_seconds(warrior->death->clock_dead);
     if (warrior->myclock->seconds > 0.1) {
         animation_dead2(warrior);
         sfSprite_setTextureRect(warrior->death->sprite_dead,

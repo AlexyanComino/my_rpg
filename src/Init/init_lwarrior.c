@@ -41,5 +41,7 @@ lwarrior_t *init_lwarrior(void)
     add_warrior(&lwarrior, warrior);
     warrior = init_warrior(PURPLE, (sfVector2f){1200, 600}, "Enemy");
     add_warrior(&lwarrior, warrior);
+    warrior = init_warrior(BLUE, (sfVector2f){100, 400}, "Ally");
+    add_warrior(&lwarrior, warrior);
     return lwarrior;
 }

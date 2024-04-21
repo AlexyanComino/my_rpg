@@ -10,3 +10,6 @@
 
 // DestroyRpg
 void destroy_rpg(rpg_t *rpg);
+
+// Destroy damage text
+void destroy_damage_text(damage_text_t *damage_text);
