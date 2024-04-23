@@ -16,6 +16,7 @@
 #include <math.h>
 #include <string.h>
 
+
 #define WIDTH 1920
 #define HEIGHT 1080
 #define WARRIOR_WIDTH 192
@@ -139,6 +140,7 @@ typedef enum {
     GAME,
     PAUSE,
     SETTINGS,
+    INVENTORY,
     END
 } state_t;
 

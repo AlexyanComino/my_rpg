@@ -6,6 +6,7 @@
 */
 
 #include "rpg.h"
+#include "inventory.h"
 
 static void draw_circles_hitbox(rpg_t *rpg, warrior_t *warrior)
 {
@@ -97,7 +98,9 @@ void display_all(rpg_t *rpg)
         display_main_menu(rpg);
     if (rpg->gamestate == SETTINGS)
         display_settings(rpg);
-    if (rpg->gamestate == GAME)
+    if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY) {
         display_warriors(rpg);
+        open_inventory(rpg->win->window);
+    }
     sfRenderWindow_display(rpg->win->window);
 }
