@@ -25,3 +25,6 @@ mark_t *init_inter(warrior_t *warrior);
 // InitMenu
 menu_t *init_menu(void);
 menu_t *init_settings(void);
+menu_t *init_save_menu(void);
+sfText *create_text(sfFont *font, char *str, int size, sfVector2f pos);
+void print_quests(quest_t *quest);

@@ -39,7 +39,11 @@ lwarrior_t *init_lwarrior(void)
     warrior = init_warrior(BLUE, (sfVector2f){400, 100}, PLAYER_NAME);
     set_player_attribute(warrior);
     add_warrior(&lwarrior, warrior);
-    warrior = init_warrior(PURPLE, (sfVector2f){1200, 600}, "Enemy");
+    warrior = init_warrior(BLUE, (sfVector2f){800, 400}, "Renaut");
+    add_warrior(&lwarrior, warrior);
+    warrior = init_warrior(BLUE, (sfVector2f){1000, 200}, "Sylvain");
+    add_warrior(&lwarrior, warrior);
+    warrior = init_warrior(PURPLE, (sfVector2f){1200, 600}, "RodrigoVioletto");
     add_warrior(&lwarrior, warrior);
     return lwarrior;
 }

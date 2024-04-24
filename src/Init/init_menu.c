@@ -10,7 +10,7 @@
 void *get_action(char *txt)
 {
     if (strcmp(txt, "PLAY") == 0)
-        return &start;
+        return &save_menu;
     if (strcmp(txt, "OPTIONS") == 0)
         return &settings;
     if (strcmp(txt, "QUIT") == 0)
@@ -21,6 +21,12 @@ void *get_action(char *txt)
         return &settings;
     if (strcmp(txt, "BACK") == 0)
         return &back_to_menu;
+    if (strcmp(txt, "SAVE 1") == 0)
+        return &start;
+    if (strcmp(txt, "SAVE 2") == 0)
+        return &start;
+    if (strcmp(txt, "SAVE 3") == 0)
+        return &start;
     return NULL;
 }
 
@@ -29,32 +35,29 @@ static button_t *new_button(char *txt)
     button_t *new = malloc(sizeof(button_t));
 
     new->name = strdup(txt);
-    new->sprite = sfSprite_create();
     new->text = sfText_create();
-    new->texture = sfTexture_createFromFile(
-        "assets/menu/gold_button.png", NULL);
-    new->font = sfFont_createFromFile("assets/fonts/m6x11plus.ttf");
+    new->font = sfFont_createFromFile("assets/fonts/CompassPro.ttf");
     new->state = NOTHING;
     new->action = get_action(txt);
-    new->rect = (sfIntRect){0, 0, 48, 16};
+    new->rect_shape = sfRectangleShape_create();
+    new->rect = (sfIntRect){0, 0, BUTTON_WIDTH, BUTTON_HEIGHT};
     new->next = NULL;
     return new;
 }
 
-button_t *add_button(button_t *buttons, sfVector2f pos, char *txt)
+static button_t *add_button(button_t *buttons, sfVector2f pos, char *txt)
 {
     button_t *new = new_button(txt);
     button_t *tmp = buttons;
 
-    sfSprite_setTexture(new->sprite, new->texture, sfTrue);
     sfText_setFont(new->text, new->font);
     sfText_setCharacterSize(new->text, 50);
     sfText_setColor(new->text, sfWhite);
     sfText_setString(new->text, txt);
-    sfText_setPosition(new->text,
-    (sfVector2f){pos.x + 10 - (strlen(txt) * 10), pos.y - 5});
-    sfSprite_setPosition(new->sprite, (sfVector2f){pos.x - 90, pos.y});
-    sfSprite_setScale(new->sprite, (sfVector2f){4, 4});
+    sfText_setPosition(new->text, pos);
+    sfRectangleShape_setSize(new->rect_shape, (sfVector2f){500, 150});
+    sfRectangleShape_setPosition(new->rect_shape, (sfVector2f){pos.x - 190, pos.y});
+    sfRectangleShape_setFillColor(new->rect_shape, sfColor_fromRGBA(0, 0, 0, 100));
     if (buttons == NULL)
         return new;
     while (tmp->next != NULL)
@@ -63,23 +66,39 @@ button_t *add_button(button_t *buttons, sfVector2f pos, char *txt)
     return buttons;
 }
 
+sfText *create_text(sfFont *font, char *str, int size, sfVector2f pos)
+{
+    sfText *text = sfText_create();
+
+    sfText_setFont(text, font);
+    sfText_setCharacterSize(text, size);
+    sfText_setColor(text, sfWhite);
+    sfText_setString(text, str);
+    sfText_setPosition(text, pos);
+    return text;
+}
+
 menu_t *init_menu(void)
 {
     menu_t *menu = malloc(sizeof(menu_t));
 
     menu->background_texture = sfTexture_createFromFile(
-        "assets/menu/bg.jpg", NULL);
+        "assets/menu/bg1.png", NULL);
     menu->background = sfSprite_create();
-    menu->rect = (sfIntRect){0, 0, 48, 16};
+    menu->bg_rect = (sfIntRect){0, 0, WIDTH, HEIGHT};
     sfSprite_setTexture(menu->background, menu->background_texture, sfTrue);
-    menu->font = sfFont_createFromFile("assets/fonts/m6x11plus.ttf");
+    sfSprite_setTextureRect(menu->background, (sfIntRect){0, 0, 1920, HEIGHT});
+    menu->myclock = init_my_clock();
+    menu->font = sfFont_createFromFile("assets/fonts/CompassPro.ttf");
+    menu->text = create_text(menu->font, "MY RPG", 100, (sfVector2f)
+    {(WIDTH - (strlen("MY RPG") * 50)) / 2, 100});
     menu->buttons = NULL;
     menu->buttons = add_button(menu->buttons, (sfVector2f)
-    {(WIDTH - (menu->rect.width)) / 2, HEIGHT / 2 - 50}, "PLAY");
+    {200, 400}, "PLAY");
     add_button(menu->buttons, (sfVector2f)
-    {(WIDTH - (menu->rect.width)) / 2, HEIGHT / 2 + 50}, "OPTIONS");
+    {200, 600}, "OPTIONS");
     add_button(menu->buttons, (sfVector2f)
-    {(WIDTH - (menu->rect.width)) / 2, HEIGHT / 2 + 150}, "QUIT");
+    {200, 800}, "QUIT");
     return menu;
 }
 
@@ -90,15 +109,39 @@ menu_t *init_settings(void)
     menu->background_texture = sfTexture_createFromFile(
         "assets/menu/bg.jpg", NULL);
     menu->background = sfSprite_create();
-    menu->rect = (sfIntRect){0, 0, 48, 16};
     sfSprite_setTexture(menu->background, menu->background_texture, sfTrue);
     menu->font = sfFont_createFromFile("assets/fonts/m6x11plus.ttf");
+    menu->myclock = NULL;
+    menu->text = NULL;
     menu->buttons = NULL;
     menu->buttons = add_button(menu->buttons,
-    (sfVector2f){(WIDTH - (menu->rect.width)) / 2, HEIGHT / 2 - 50}, "CACA");
+    (sfVector2f){(WIDTH - 100) / 2 , HEIGHT / 2 - 50}, "CACA");
     add_button(menu->buttons,
-    (sfVector2f){(WIDTH - (menu->rect.width)) / 2, HEIGHT / 2 + 50}, "TEMP");
+    (sfVector2f){(WIDTH - 100) / 2 , HEIGHT / 2 + 50}, "TEMP");
     add_button(menu->buttons,
-    (sfVector2f){(WIDTH - (menu->rect.width)) / 2, HEIGHT / 2 + 150}, "BACK");
+    (sfVector2f){(WIDTH - 100) / 2 , HEIGHT / 2 + 150}, "BACK");
+    return menu;
+}
+
+menu_t *init_save_menu(void)
+{
+    menu_t *menu = malloc(sizeof(menu_t));
+
+    menu->background_texture = sfTexture_createFromFile(
+        "assets/menu/bg.jpg", NULL);
+    menu->background = sfSprite_create();
+    sfSprite_setTexture(menu->background, menu->background_texture, sfTrue);
+    menu->font = sfFont_createFromFile("assets/fonts/m6x11plus.ttf");
+    menu->myclock = NULL;
+    menu->text = NULL;
+    menu->buttons = NULL;
+    menu->buttons = add_button(menu->buttons,
+    (sfVector2f){(WIDTH - 100) / 2 , HEIGHT / 2 - 150}, "SAVE 1");
+    add_button(menu->buttons,
+    (sfVector2f){(WIDTH - 100) / 2 , HEIGHT / 2 + 75}, "SAVE 2");
+    add_button(menu->buttons,
+    (sfVector2f){(WIDTH - 100) / 2 , HEIGHT / 2 + 300}, "SAVE 3");
+    add_button(menu->buttons,
+    (sfVector2f){(WIDTH - 100) / 2 , HEIGHT / 2 + 450}, "BACK");
     return menu;
 }

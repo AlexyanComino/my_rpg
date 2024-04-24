@@ -22,3 +22,14 @@ bool is_warrior_in_view(rpg_t *rpg, warrior_t *warrior)
         return (true);
     return (false);
 }
+
+// Vérifie si un guerrier peut interagir avec le joueur
+bool is_player_interact_warrior(rpg_t *rpg, warrior_t *warrior)
+{
+    warrior_t *player = rpg->lwarrior->warrior;
+    sfIntRect hitbox_attack = player->zones->hitbox_attack;
+
+    if (sfIntRect_intersects(&hitbox_attack, &warrior->zones->hitbox, NULL))
+        return (true);
+    return (false);
+}

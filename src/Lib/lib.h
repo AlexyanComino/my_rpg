@@ -19,3 +19,10 @@ bool hitbox_in_detection(sfIntRect hitbox, unsigned int radius,
 
 // Tools
 bool is_warrior_in_view(rpg_t *rpg, warrior_t *warrior);
+bool is_player_interact_warrior(rpg_t *rpg, warrior_t *warrior);
+
+// My_str_to_word_array
+char **split_string(char *str, char *delim);
+
+// Itoa
+char *my_itoa(int nb);

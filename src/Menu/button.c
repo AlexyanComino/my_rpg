@@ -10,7 +10,7 @@
 bool is_button_clicked(struct button_s *button, sfMouseButtonEvent *event)
 {
     sfVector2f mouse_pos = {(float) event->x, (float) event->y};
-    sfFloatRect rect_bounds = sfSprite_getGlobalBounds(button->sprite);
+    sfFloatRect rect_bounds = sfText_getGlobalBounds(button->text);
 
     if (event->type == sfEvtMouseButtonPressed) {
         if (sfFloatRect_contains(&rect_bounds, mouse_pos.x, mouse_pos.y)) {
@@ -24,8 +24,8 @@ bool is_button_clicked(struct button_s *button, sfMouseButtonEvent *event)
 
 bool is_button_hovered(struct button_s *button, sfMouseMoveEvent *event)
 {
-    sfVector2f mouse_pos = {(float) event->x, (float) event->y};
-    sfFloatRect rect_bounds = sfSprite_getGlobalBounds(button->sprite);
+    sfVector2f mouse_pos = {(float)event->x, (float)event->y};
+    sfFloatRect rect_bounds = sfText_getGlobalBounds(button->text);
 
     if (button->state == CLICKED || button->state == RELEASED) {
         return true;
@@ -42,7 +42,7 @@ bool is_button_hovered(struct button_s *button, sfMouseMoveEvent *event)
 bool is_button_released(struct button_s *button, sfMouseButtonEvent *event)
 {
     sfVector2f mouse_pos = {(float) event->x, (float) event->y};
-    sfFloatRect rect_bounds = sfSprite_getGlobalBounds(button->sprite);
+    sfFloatRect rect_bounds = sfText_getGlobalBounds(button->text);
 
     if (event->type == sfEvtMouseButtonReleased) {
         if (sfFloatRect_contains(&rect_bounds, mouse_pos.x, mouse_pos.y)) {

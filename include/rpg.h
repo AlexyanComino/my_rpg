@@ -18,6 +18,8 @@
 
 #define WIDTH 1920
 #define HEIGHT 1080
+#define BUTTON_WIDTH 640
+#define BUTTON_HEIGHT 338
 #define WARRIOR_WIDTH 192
 #define DEAD_WIDTH 128
 #define WARRIOR_OFFSET WARRIOR_WIDTH * 5
@@ -134,11 +136,39 @@ typedef struct lwarrior_s {
     struct lwarrior_s *next;
 } lwarrior_t;
 
+typedef enum quest_type {
+    KILL,
+    TALK,
+    GATHER,
+    MOVE
+} quest_type_t;
+
+typedef struct quest_s {
+    char *name;
+    char *description;
+    int reward;
+    int xp;
+    char *objective;
+    bool is_done;
+    bool is_active;
+    bool is_displayed;
+    quest_type_t type;
+    struct quest_s *next;
+} quest_t;
+
+typedef struct all_quests_s {
+    char *proprietary;
+    quest_t *quest;
+    warrior_t *warrior;
+    struct all_quests_s *next;
+} all_quests_t;
+
 typedef enum {
     MAIN_MENU,
     GAME,
     PAUSE,
     SETTINGS,
+    SAVE_MENU,
     END
 } state_t;
 
@@ -151,10 +181,10 @@ typedef enum button_state {
 
 typedef struct button_s {
     char *name;
-    sfSprite *sprite;
     sfTexture *texture;
     sfText *text;
     sfFont *font;
+    sfRectangleShape *rect_shape;
     sfIntRect rect;
     button_state_t state;
     void (*action)(void *rpg);
@@ -164,8 +194,10 @@ typedef struct button_s {
 typedef struct menu_s {
     sfSprite *background;
     sfTexture *background_texture;
+    my_clock_t *myclock;
     button_t *buttons;
-    sfIntRect rect;
+    sfIntRect bg_rect;
+    sfText *text;
     sfFont *font;
 } menu_t;
 
@@ -185,8 +217,13 @@ typedef struct rpg_s {
     warrior_t *player;
     bool debug;
     menu_t *main_menu;
+    menu_t *save_menu;
     menu_t *settings;
     state_t gamestate;
+    all_quests_t *quests;
+    sfText *quest_text;
+    sfText *quest_desc;
+    sfText *quest_info;
 } rpg_t;
 
 #include "../src/Init/init.h"
@@ -197,3 +234,4 @@ typedef struct rpg_s {
 #include "../src/Lib/lib.h"
 #include "../src/Animation/anim.h"
 #include "../src/Menu/menu.h"
+#include "../src/Quests/quests.h"
