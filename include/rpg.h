@@ -207,3 +207,4 @@ typedef struct rpg_s {
 #include "../src/Lib/lib.h"
 #include "../src/Animation/anim.h"
 #include "../src/Menu/menu.h"
+#include "singleton.h"

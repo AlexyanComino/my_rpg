@@ -93,5 +93,6 @@ player_status_t *init_player_status(void)
     sfSprite_setPosition(player_status->player, (sfVector2f){137, 225});
     sfSprite_setScale(player_status->pp, (sfVector2f){2, 2});
     sfSprite_setPosition(player_status->pp, (sfVector2f){180, 410});
+    player_status->stuff = NULL;
     return (player_status);
 }

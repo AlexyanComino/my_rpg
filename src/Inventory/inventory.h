@@ -10,7 +10,6 @@
 #include <SFML/Graphics.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "rpg.h"
 
 
 #define WARRIOR_WIDTH 192
@@ -64,6 +63,7 @@ typedef struct player_status_s {
     sfSprite *s_gold;
     sfSprite *player;
     sfSprite *pp;
+    slot_t *stuff;
 } player_status_t;
 
 typedef struct inventory_s {
@@ -76,15 +76,21 @@ typedef struct inventory_s {
 } inventory_t;
 
 int init_inventory(int size);
-inventory_t **inventory(void);
-int remove_item(int id);
+int remove_item(int id, slot_t *tmp);
 int remove_gold(int gold);
 int add_gold(int gold);
 int add_item(void *item, int type);
 int open_inventory(sfRenderWindow *window);
-int highlight_inventory(sfMouseMoveEvent event);
-int click_inventory(sfMouseButtonEvent event);
-int release_inventory(sfMouseButtonEvent event);
+void highlight_inventory(sfMouseMoveEvent event, slot_t *tmp);
+int click_inventory(sfMouseButtonEvent event, slot_t *tmp);
+int release_inventory(sfMouseButtonEvent event, slot_t *tmp);
 player_status_t *init_player_status(void);
 sfSprite *init_sprite_from_file(char *texture);
+int add_stuff(void *item, int type);
+int draw_stuff(sfRenderWindow *window);
+int draw_item(sfRenderWindow *window, slot_t *tmp);
+
+#include "rpg.h"
+
 int manage_evt_inv(sfEvent event, rpg_t *rpg);
+int update_inv(rpg_t *rpg);

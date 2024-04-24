@@ -11,15 +11,6 @@
 #include "item.h"
 #include "rpg.h"
 
-inventory_t **inventory(void)
-{
-    static inventory_t *inventory = NULL;
-
-    if (inventory == NULL)
-        inventory = malloc(sizeof(inventory_t));
-    return (&inventory);
-}
-
 int init_inventory(int size)
 {
     inventory_t *inv = malloc(sizeof(inventory_t));
@@ -33,6 +24,10 @@ int init_inventory(int size)
     sfSprite_setScale(inv->sprite, (sfVector2f){2, 2});
     sfSprite_setPosition(inv->sprite, (sfVector2f){0, 80});
     *inventory() = inv;
+    for (int i = 0; i < 4; i++)
+        add_stuff(create_armor(10, 10, 1, 10), ARMOR);
+    for (int i = 0; i <= 4; i++)
+        remove_item(i, (*inventory())->player_status->stuff);
     return (0);
 }
 
@@ -100,11 +95,8 @@ int add_item(void *item, int type)
     return (0);
 }
 
-int remove_item(int id)
+int remove_item(int id, slot_t *tmp)
 {
-    inventory_t *inv = *inventory();
-    slot_t *tmp = inv->slot;
-
     while (tmp != NULL) {
         if (tmp->id == id) {
             tmp->is_empty = 1;
@@ -136,7 +128,7 @@ static int draw_inventory_ui(sfRenderWindow *window, inventory_t *inv)
     return (0);
 }
 
-static int draw_item(sfRenderWindow *window, slot_t *tmp)
+int draw_item(sfRenderWindow *window, slot_t *tmp)
 {
     if (tmp->is_empty == 0 && tmp->type == WEAPON && tmp->is_moved == 0) {
         sfRenderWindow_drawSprite(window,
@@ -180,6 +172,7 @@ int open_inventory(sfRenderWindow *window)
 {
     if ((*inventory())->is_open == 1) {
         draw_inventory_ui(window, *inventory());
+        draw_stuff(window);
         draw_slot(window);
     }
     if ((*inventory())->is_open == 0) {

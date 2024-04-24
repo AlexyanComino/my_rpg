@@ -6,7 +6,7 @@
 */
 
 #include "rpg.h"
-#include "inventory.h"
+#include "singleton.h"
 
 static void draw_circles_hitbox(rpg_t *rpg, warrior_t *warrior)
 {
@@ -104,7 +104,7 @@ void display_all(rpg_t *rpg)
         display_warriors(rpg);
         sfRenderWindow_drawSprite(rpg->win->window, rpg->map->high_sprite,
             NULL);
-        open_inventory(rpg->win->window);
+        update_inv(rpg);
     }
     sfRenderWindow_display(rpg->win->window);
 }

@@ -6,7 +6,6 @@
 */
 
 #include "rpg.h"
-#include "inventory.h"
 
 void event_states(rpg_t *rpg)
 {

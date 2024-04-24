@@ -6,7 +6,6 @@
 */
 
 #include "rpg.h"
-#include "inventory.h"
 
 int main(void)
 {
@@ -16,7 +15,7 @@ int main(void)
     for (int i = 0; i < 15; i++)
         add_item(create_weapon(10), WEAPON);
     for (int i = 0; i < 15; i++)
-        remove_item(i);
+        remove_item(i, (*inventory())->slot);
     while (sfRenderWindow_isOpen(rpg->win->window)) {
         event(rpg);
         update_all(rpg);
