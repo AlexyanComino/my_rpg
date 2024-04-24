@@ -16,6 +16,7 @@
 #include <math.h>
 #include <string.h>
 
+
 #define WIDTH 1920
 #define HEIGHT 1080
 #define PLAYER_SPEED 300
@@ -218,6 +219,7 @@ typedef enum {
     GAME,
     PAUSE,
     SETTINGS,
+    INVENTORY,
     END
 } state_t;
 
@@ -258,8 +260,16 @@ typedef struct win_s {
     float dt;
 } win_t;
 
+typedef struct map_s {
+    sfTexture *ground_texture;
+    sfSprite *ground_sprite;
+    sfTexture *high_texture;
+    sfSprite *high_sprite;
+} map_t;
+
 typedef struct rpg_s {
     win_t *win;
+    map_t *map;
     sfEvent event;
     lwarrior_t *lwarrior;
     bool debug;
@@ -278,3 +288,4 @@ typedef struct rpg_s {
 #include "../src/Animation/anim.h"
 #include "../src/Menu/menu.h"
 #include "../src/Defines/defines.h"
+#include "singleton.h"

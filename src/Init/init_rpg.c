@@ -24,6 +24,19 @@ static win_t *init_win(unsigned int width, unsigned int height)
     return win;
 }
 
+static map_t *init_map(void)
+{
+    map_t *map = malloc(sizeof(map_t));
+
+    map->ground_texture = sfTexture_createFromFile("assets/ground.png", NULL);
+    map->ground_sprite = sfSprite_create();
+    sfSprite_setTexture(map->ground_sprite, map->ground_texture, sfTrue);
+    map->high_texture = sfTexture_createFromFile("assets/bat.png", NULL);
+    map->high_sprite = sfSprite_create();
+    sfSprite_setTexture(map->high_sprite, map->high_texture, sfTrue);
+    return map;
+}
+
 rpg_t *init_rpg(void)
 {
     rpg_t *rpg = malloc(sizeof(rpg_t));
@@ -31,6 +44,7 @@ rpg_t *init_rpg(void)
     srand(time(NULL));
     rpg->gamestate = GAME;
     rpg->win = init_win(WIDTH, HEIGHT);
+    rpg->map = init_map();
     rpg->lwarrior = init_lwarrior();
     rpg->event = (sfEvent){0};
     rpg->debug = false;

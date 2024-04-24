@@ -6,6 +6,7 @@
 */
 
 #include "rpg.h"
+#include "singleton.h"
 
 void display_main_menu(rpg_t *rpg)
 {
@@ -52,6 +53,13 @@ void display_all(rpg_t *rpg)
     if (rpg->gamestate == GAME) {
         display_warriors(rpg);
         display_restricted_text(rpg);
+    if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY) {
+        sfRenderWindow_drawSprite(rpg->win->window, rpg->map->ground_sprite,
+            NULL);
+        display_warriors(rpg);
+        sfRenderWindow_drawSprite(rpg->win->window, rpg->map->high_sprite,
+            NULL);
+        update_inv(rpg);
     }
     sfRenderWindow_display(rpg->win->window);
 }

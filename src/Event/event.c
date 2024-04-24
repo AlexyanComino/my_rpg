@@ -48,9 +48,15 @@ void event(rpg_t *rpg)
         if (rpg->event.type == sfEvtClosed ||
             rpg->event.key.code == sfKeyEscape)
             sfRenderWindow_close(rpg->win->window);
+        if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY)
+            manage_evt_inv(rpg->event, rpg);
         event_states(rpg);
     }
     if (rpg->gamestate == GAME)
         if (player_is_not_attacking(rpg) && get_player_state(rpg) != DEAD)
             player_move(rpg);
+    if (rpg->gamestate == GAME) {
+        if (get_player_state(rpg) != ATTACK)
+            player_move(rpg, dt);
+    }
 }
