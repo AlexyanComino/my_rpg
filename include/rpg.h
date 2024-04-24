@@ -180,8 +180,16 @@ typedef struct win_s {
     sfClock *clock;
 } win_t;
 
+typedef struct map_s {
+    sfTexture *ground_texture;
+    sfSprite *ground_sprite;
+    sfTexture *high_texture;
+    sfSprite *high_sprite;
+} map_t;
+
 typedef struct rpg_s {
     win_t *win;
+    map_t *map;
     sfEvent event;
     lwarrior_t *lwarrior;
     warrior_t *player;

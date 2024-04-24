@@ -99,7 +99,11 @@ void display_all(rpg_t *rpg)
     if (rpg->gamestate == SETTINGS)
         display_settings(rpg);
     if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY) {
+        sfRenderWindow_drawSprite(rpg->win->window, rpg->map->ground_sprite,
+            NULL);
         display_warriors(rpg);
+        sfRenderWindow_drawSprite(rpg->win->window, rpg->map->high_sprite,
+            NULL);
         open_inventory(rpg->win->window);
     }
     sfRenderWindow_display(rpg->win->window);
