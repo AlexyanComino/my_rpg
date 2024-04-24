@@ -12,7 +12,7 @@ bool warrior_see_enemy(warrior_t *warrior, warrior_t *enemy)
     if (warrior_look_at_enemy(warrior, enemy))
         return hitbox_in_detection(enemy->zones->hitbox,
             warrior->zones->radius_max_detection, warrior->pos);
-    else if (!IS_DISCREET(enemy))
+    else if (!is_discreet(enemy))
         return hitbox_in_detection(enemy->zones->hitbox,
             warrior->inter->radius, warrior->pos);
     else

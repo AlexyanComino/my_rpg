@@ -26,7 +26,7 @@ static void update_sprite_dead(warrior_t *warrior)
 //
 static void update_sprites_warrior_pos(warrior_t *warrior)
 {
-    if (IS_ALIVE(warrior)) {
+    if (is_alive(warrior)) {
         sfSprite_setPosition(warrior->sprite, warrior->pos);
         sfCircleShape_setPosition(warrior->exclam->circle,
             warrior->pos);
@@ -34,7 +34,7 @@ static void update_sprites_warrior_pos(warrior_t *warrior)
             warrior->pos);
         sfCircleShape_setPosition(warrior->zones->circle_max_detection,
             warrior->pos);
-    } else if (IS_DEAD(warrior)) {
+    } else if (is_dead(warrior)) {
         update_sprite_dead(warrior);
     }
 }
@@ -91,10 +91,12 @@ static void remove_damage_text(warrior_t *warrior, damage_text_t *tmp)
 static void change_pos_and_alpha(damage_text_t *tmp, sfColor color,
     sfColor color_shadow)
 {
-    tmp->pos.y -= 1.5;
-    sfText_setPosition(tmp->text, tmp->pos);
-    sfText_setPosition(tmp->text_shadow, (sfVector2f){tmp->pos.x + 2,
-        tmp->pos.y + 2});
+    if (tmp->state != CRITICAL && tmp->state != BAM) {
+        tmp->pos.y -= 1.5;
+        sfText_setPosition(tmp->text, tmp->pos);
+        sfText_setPosition(tmp->text_shadow, (sfVector2f){tmp->pos.x + 2,
+            tmp->pos.y + 2});
+    }
     color.a -= 5;
     color_shadow.a -= 5;
     sfText_setColor(tmp->text, color);
@@ -132,4 +134,5 @@ void update_all_warriors(rpg_t *rpg, warrior_t *tmp)
     update_sprites_hitboxs_pos(tmp);
     update_sprite_scale(tmp);
     update_damage_texts(tmp);
+    update_damage_text_effects(tmp);
 }

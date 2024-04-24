@@ -33,7 +33,7 @@ rpg_t *init_rpg(void)
     rpg->win = init_win(WIDTH, HEIGHT);
     rpg->lwarrior = init_lwarrior();
     rpg->event = (sfEvent){0};
-    rpg->debug = true;
+    rpg->debug = false;
     rpg->main_menu = init_menu();
     rpg->settings = init_settings();
     rpg->interface = init_interface();

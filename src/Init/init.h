@@ -38,3 +38,7 @@ interface_t *init_interface(void);
 // Init warrior 2
 unsigned int get_max_health(color_warrior_t color);
 faction_t get_faction(warrior_t *warrior);
+
+// Init damage texts
+damage_text_t *init_damage_text(rpg_t *rpg, warrior_t *warrior,
+    int attack, damage_text_state_t state);

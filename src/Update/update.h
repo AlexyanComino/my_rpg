@@ -27,7 +27,8 @@ x_warrior_t get_warrior_side(warrior_t *warrior, warrior_t *enemy);
 void update_pnj_warrior(rpg_t *rpg, warrior_t *player);
 
 // damage text
-void add_damage_text(rpg_t *rpg, warrior_t *target, int attack);
+void add_damage_text(rpg_t *rpg, warrior_t *target, int attack,
+    damage_text_state_t state);
 
 // Warrior x y
 void update_side_x(warrior_t *warrior, sfVector2f movement);

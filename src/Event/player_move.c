@@ -10,7 +10,7 @@
 static void get_newpos_and_newx(warrior_t *player, sfVector2f *newPos,
     float dt)
 {
-    float speed = player->state == WALK ? player->attributes->speed / 3 :
+    float speed = player->state == WALK ? player->attributes->speed / 2 :
         player->attributes->speed;
 
     if (sfKeyboard_isKeyPressed(sfKeyQ)) {
@@ -39,7 +39,7 @@ static void update_player_x(rpg_t *rpg, warrior_t *player)
 static void get_newpos_and_newy(warrior_t *player, sfVector2f *newPos,
     float dt)
 {
-    float speed = player->state == WALK ? player->attributes->speed / 3 :
+    float speed = player->state == WALK ? player->attributes->speed / 2 :
         player->attributes->speed;
 
     if (sfKeyboard_isKeyPressed(sfKeyZ) && sfKeyboard_isKeyPressed(sfKeyS)) {
@@ -83,7 +83,7 @@ void player_move(rpg_t *rpg)
     if (sfKeyboard_isKeyPressed(sfKeyZ) || sfKeyboard_isKeyPressed(sfKeyS) ||
         sfKeyboard_isKeyPressed(sfKeyQ) || sfKeyboard_isKeyPressed(sfKeyD)) {
             player->state = (is_walking) ? WALK : RUN;
-    } else if (player->state != ATTACK)
+    } else if (not_attacking(player))
         player->state = IDLE;
     update_player_x(rpg, player);
     update_player_y(rpg, player);

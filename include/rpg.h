@@ -35,10 +35,6 @@
 #define INTER_INTERVAL 3.0
 #define INTER_COOLDOWN 1.5
 //
-#define IS_ALIVE(warrior) (warrior->state != DEAD && warrior->state != RIEN)
-#define IS_PLAYER(rpg, warrior) (rpg->lwarrior->warrior == warrior)
-#define IS_DEAD(warrior) (warrior->state == DEAD)
-#define IS_DISCREET(warrior) (warrior->state == WALK || warrior->state == IDLE)
 
 // Cooldowns
 #define DEAD_COOLDOWN 10.0
@@ -47,7 +43,6 @@
 
 #define BASE_COLOR sfColor_fromRGB(146, 255, 250)
 #define WARRIOR_HAS_BASE(warrior) (warrior->base != NULL)
-#define WARRIOR_IS_PLAYER(rpg, warrior) (rpg->lwarrior->warrior == warrior)
 
 #define DAMAGE_COLOR_PLAYER sfWhite
 #define DAMAGE_COLOR_BLUE sfColor_fromRGB(102, 220, 255)
@@ -55,7 +50,12 @@
 #define DAMAGE_COLOR_YELLOW sfColor_fromRGB(255, 215, 66)
 #define DAMAGE_COLOR_PURPLE sfColor_fromRGB(183, 133, 255)
 #define DAMAGE_COLOR_GREEN sfColor_fromRGB(176, 255, 87)
+#define DAMAGE_COLOR_BAM sfWhite
+#define DAMAGE_COLOR_CRITICAL sfColor_fromRGB(255, 61, 30)
 
+#define CRIT_WIDTH 215
+#define BAM_WIDTH 160
+#define BAM_HEIGHT 200
 typedef enum warrior_color {
     BLUE = 0,
     PURPLE,
@@ -78,6 +78,7 @@ typedef enum warrior_state {
     IDLE = 0,
     WALK,
     RUN,
+    ST_ATT,
     ATTACK,
     DEAD,
     RIEN,
@@ -147,12 +148,27 @@ typedef struct base_s {
     my_clock_t *myclock;
 } base_t;
 
+typedef enum damage_text_state {
+    NORMAL,
+    CRITICAL,
+    BAM,
+    MISS,
+} damage_text_state_t;
+
+typedef struct effect_s {
+    sfTexture *texture;
+    sfSprite *sprite;
+    sfIntRect rect;
+    my_clock_t *myclock;
+} effect_t;
 typedef struct damage_text_s {
     sfText *text;
     sfText *text_shadow;
     sfFont *font;
     float size;
     sfVector2f pos;
+    effect_t *effect;
+    damage_text_state_t state;
     struct damage_text_s *next;
 } damage_text_t;
 
@@ -261,3 +277,4 @@ typedef struct rpg_s {
 #include "../src/Lib/lib.h"
 #include "../src/Animation/anim.h"
 #include "../src/Menu/menu.h"
+#include "../src/Defines/defines.h"

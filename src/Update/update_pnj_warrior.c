@@ -14,7 +14,7 @@ static bool warrior_can_attack(warrior_t *warrior, warrior_t *target)
         if ((warrior->state == IDLE || warrior->state == WALK ||
             warrior->state == RUN) &&
             warrior_can_attack_target(warrior, target) &&
-            IS_ALIVE(target)) {
+            is_alive(target)) {
             return true;
         }
     }
@@ -25,16 +25,16 @@ void update_pnj_warrior(rpg_t *rpg, warrior_t *tmp)
 {
     warrior_t *enemy = get_nearest_warrior(rpg, tmp);
 
-    if (tmp->state != ATTACK)
+    if (not_attacking(tmp))
         update_warrior_pos(rpg, tmp, enemy);
     if (enemy == NULL)
         return;
     update_warrior_detection(tmp, enemy);
     if (warrior_can_attack(tmp, enemy)) {
-        tmp->state = ATTACK;
+        tmp->state = ST_ATT;
         tmp->rect.left = 0;
         update_attack_rect(tmp);
-    } else if (!IS_ALIVE(enemy)) {
+    } else if (!is_alive(enemy)) {
         tmp->state = IDLE;
     }
 }

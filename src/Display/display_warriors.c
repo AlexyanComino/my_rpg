@@ -22,6 +22,10 @@ static void display_damage_texts(rpg_t *rpg, warrior_t *warrior)
     damage_text_t *tmp = warrior->damage_texts;
 
     while (tmp) {
+        if (tmp->effect != NULL) {
+            sfRenderWindow_drawSprite(rpg->win->window,
+                tmp->effect->sprite, NULL);
+        }
         sfRenderWindow_drawText(rpg->win->window, tmp->text_shadow, NULL);
         sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
         tmp = tmp->next;
@@ -67,7 +71,6 @@ static void display_alive_warrior(rpg_t *rpg, warrior_t *warrior)
     if (warrior->inter->is_display)
         sfRenderWindow_drawSprite(rpg->win->window, warrior->inter->sprite,
             NULL);
-    display_damage_texts(rpg, warrior);
     if (rpg->debug)
         display_debug_warrior(rpg, player, warrior);
 }
@@ -92,4 +95,12 @@ void display_warriors(rpg_t *rpg)
         tmp = tmp->next;
     }
     display_warrior(rpg, rpg->lwarrior->warrior);
+    tmp = rpg->lwarrior->next;
+    while (tmp) {
+        if (tmp->warrior->state != RIEN) {
+            display_damage_texts(rpg, tmp->warrior);
+        }
+        tmp = tmp->next;
+    }
+    display_damage_texts(rpg, rpg->lwarrior->warrior);
 }

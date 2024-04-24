@@ -61,7 +61,7 @@ static void come_back_to_next_point(warrior_t *warrior, warrior_t *enemy)
 static void update_warrior_side(warrior_t *warrior, warrior_t *enemy)
 {
     if (warrior_see_enemy(warrior, enemy) && warrior->state != ATTACK &&
-        !IS_DISCREET(enemy))
+        !is_discreet(enemy))
         warrior->x = get_warrior_side(enemy, warrior);
 }
 

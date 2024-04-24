@@ -14,3 +14,6 @@ void anim_warrior(rpg_t *rpg, warrior_t *warrior);
 // Classic anim warrior
 void animation_alive(rpg_t *rpg, warrior_t *warrior);
 void animation_dead(warrior_t *warrior);
+
+// Anim damage text effects
+void update_damage_text_effects(warrior_t *warrior);

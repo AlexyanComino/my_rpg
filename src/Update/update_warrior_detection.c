@@ -44,7 +44,7 @@ static bool enemy_is_in_exclamation_range(warrior_t *warrior, warrior_t *enemy)
 {
     if (enemy == NULL)
         return false;
-    if (!warrior_look_at_enemy(warrior, enemy) && IS_DISCREET(enemy))
+    if (!warrior_look_at_enemy(warrior, enemy) && is_discreet(enemy))
         return false;
     if (hitbox_in_detection(enemy->zones->hitbox, warrior->exclam->radius,
         warrior->pos))
@@ -81,7 +81,8 @@ static void update_inter_detection(warrior_t *warrior, warrior_t *enemy,
     bool in_base)
 {
     update_clock_seconds(warrior->inter->myclock);
-    if (warrior_see_enemy(warrior, enemy)) {
+    if (warrior_see_enemy(warrior, enemy) &&
+        !enemy_is_in_exclamation_range(warrior, enemy)) {
         warrior->inter->is_detecting = true;
         if (warrior->inter->is_display == 0 || (warrior->inter->is_display == 2
             && cooldown_is_over(warrior->inter, INTER_INTERVAL) &&
