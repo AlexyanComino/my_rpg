@@ -37,7 +37,14 @@ void update_warrior_x(rpg_t *rpg, warrior_t *warrior, sfVector2f movement);
 void update_warrior_y(rpg_t *rpg, warrior_t *warrior, sfVector2f movement);
 
 // Update warrior detection
-void update_warrior_detection(warrior_t *warrior, warrior_t *enemy);
+void update_warrior_detection(rpg_t *rpg, warrior_t *warrior,
+    warrior_t *enemy);
 
 // Update warrior pos
 void update_warrior_pos(rpg_t *rpg, warrior_t *tmp, warrior_t *enemy);
+
+// Update interface pos
+void update_interface_pos(rpg_t *rpg, warrior_t *player, sfVector2f oldPos);
+
+// Update game interface
+void update_game_interface(rpg_t *rpg);
