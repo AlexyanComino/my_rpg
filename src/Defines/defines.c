@@ -24,6 +24,8 @@ bool is_dead(warrior_t *warrior)
 
 bool is_discreet(warrior_t *warrior)
 {
+    if (!warrior)
+        return false;
     return warrior->state == WALK || warrior->state == IDLE ||
         warrior->state == ST_ATT;
 }

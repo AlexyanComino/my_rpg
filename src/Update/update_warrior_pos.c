@@ -82,18 +82,22 @@ void update_warrior_pos(rpg_t *rpg, warrior_t *tmp, warrior_t *enemy)
 {
     come_back_to_next_point(rpg, tmp, enemy);
     update_base_cooldown(tmp);
+    if (!enemy && !WARRIOR_HAS_BASE(tmp)) {
+        tmp->state = IDLE;
+        return;
+    }
     if (!enemy && WARRIOR_HAS_BASE(tmp) && tmp->base->come_back) {
         tmp->state = WALK;
         warrior_move(rpg, tmp);
         return;
     }
+    update_warrior_side(rpg, tmp, enemy);
     if ((!enemy_is_in_base(tmp, enemy) && warrior_see_enemy(rpg, tmp, enemy))
         || (enemy_is_in_base(tmp, enemy) && !warrior_see_enemy(rpg, tmp, enemy)
         && !tmp->base->come_back)) {
         tmp->state = IDLE;
         return;
     }
-    update_warrior_side(rpg, tmp, enemy);
     if (warrior_can_move(tmp))
         normal_move(rpg, tmp, enemy);
 }

@@ -44,6 +44,8 @@ void update_clock_seconds(my_clock_t *myclock)
 
 bool warrior_look_at_enemy(warrior_t *warrior, warrior_t *enemy)
 {
+    if (!enemy)
+        return false;
     if (warrior->x == LEFT && enemy->pos.x < warrior->pos.x)
         return true;
     else if (warrior->x == RIGHT && enemy->pos.x > warrior->pos.x)
