@@ -113,7 +113,6 @@ static int draw_inventory_ui(sfRenderWindow *window, inventory_t *inv)
 {
     sfRenderWindow_drawSprite(window, inv->sprite, NULL);
     sfRenderWindow_drawSprite(window, inv->player_status->pp, NULL);
-    sfRenderWindow_drawSprite(window, inv->player_status->player, NULL);
     sfRenderWindow_drawSprite(window, inv->player_status->s_gold, NULL);
     sfRenderWindow_drawSprite(window, inv->player_status->s_hp, NULL);
     sfRenderWindow_drawSprite(window, inv->player_status->s_attack, NULL);
@@ -168,12 +167,13 @@ static int draw_slot(sfRenderWindow *window)
     return (0);
 }
 
-int open_inventory(sfRenderWindow *window)
+int open_inventory(rpg_t *rpg)
 {
     if ((*inventory())->is_open == 1) {
-        draw_inventory_ui(window, *inventory());
-        draw_stuff(window);
-        draw_slot(window);
+        draw_inventory_ui(rpg->win->window, *inventory());
+        draw_stuff(rpg->win->window);
+        draw_slot(rpg->win->window);
+        display_warrior(rpg, (*inventory())->player_status->player);
     }
     if ((*inventory())->is_open == 0) {
         for (slot_t *tmp = (*inventory())->slot; tmp; tmp = tmp->next)

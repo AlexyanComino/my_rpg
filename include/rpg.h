@@ -26,7 +26,9 @@
 #define WARRIOR_OFFSET WARRIOR_WIDTH * 5
 #define DEAD_WIDTH 128
 #define MIN_WARRIOR_LENGTH 90
-
+#define WARRIOR_MAX_DETECTION_RADIUS 600
+#define WARRIOR_INTER_RADIUS 450
+#define WARRIOR_EXCLAM_RADIUS 300
 // Marks
 #define EXCLAM_WIDTH 91
 #define EXCLAM_HEIGHT 147
@@ -57,6 +59,10 @@
 #define CRIT_WIDTH 215
 #define BAM_WIDTH 160
 #define BAM_HEIGHT 200
+
+#define TILE_SCALE 2
+#define TILE_SIZE 32 * TILE_SCALE
+
 typedef enum warrior_color {
     BLUE = 0,
     PURPLE,
@@ -260,6 +266,13 @@ typedef struct win_s {
     float dt;
 } win_t;
 
+typedef struct collision_s {
+    sfIntRect rect;
+    sfVector2f *pos;
+    // bool **coll_map;
+    sfRectangleShape *shape;
+    unsigned int size;
+} collision_t;
 typedef struct map_s {
     sfTexture *ground_texture;
     sfSprite *ground_sprite;
@@ -277,7 +290,70 @@ typedef struct rpg_s {
     menu_t *settings;
     state_t gamestate;
     interface_t *interface;
+    collision_t *collision;
 } rpg_t;
+
+enum item_type {
+    WEAPON,
+    ARMOR,
+    POTION,
+    QUEST,
+    KEY,
+    OTHER
+};
+
+typedef struct slot_s {
+    int is_empty;
+    int id;
+    int type;
+    int is_highlighted;
+    int is_clicked;
+    int is_moved;
+    void *item;
+    struct slot_s *next;
+    sfSprite *highlight;
+    sfSprite *sprite;
+} slot_t;
+
+
+typedef struct player_status_s {
+    int hp;
+    int max_hp;
+    int attack;
+    int attack_max;
+    int defense;
+    int defense_max;
+    int speed;
+    int speed_max;
+    int level;
+    int xp;
+    int max_xp;
+    int gold;
+    sfText *t_hp;
+    sfText *t_attack;
+    sfText *t_defense;
+    sfText *t_speed;
+    sfText *t_level;
+    sfText *t_gold;
+    sfSprite *s_level;
+    sfSprite *s_def;
+    sfSprite *s_speed;
+    sfSprite *s_attack;
+    sfSprite *s_hp;
+    sfSprite *s_gold;
+    warrior_t *player;
+    sfSprite *pp;
+    slot_t *stuff;
+} player_status_t;
+
+typedef struct inventory_s {
+    int gold;
+    int size;
+    int is_open;
+    slot_t *slot;
+    sfSprite *sprite;
+    player_status_t *player_status;
+} inventory_t;
 
 #include "../src/Init/init.h"
 #include "../src/Display/display.h"

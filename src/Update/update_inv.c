@@ -85,8 +85,8 @@ static void update_player_stat(void)
     (sfVector2f){(*view_pos()).x - 755, (*view_pos()).y - 70});
     sfSprite_setPosition(inv->player_status->pp,
     (sfVector2f){(*view_pos()).x - 780, (*view_pos()).y - 105});
-    sfSprite_setPosition(inv->player_status->player,
-    (sfVector2f){(*view_pos()).x - 820, (*view_pos()).y - 300});
+    sfSprite_setPosition(inv->player_status->player->sprite,
+    (sfVector2f){(*view_pos()).x - 702, (*view_pos()).y - 175});
 }
 
 int update_inv(rpg_t *rpg)
@@ -96,7 +96,7 @@ int update_inv(rpg_t *rpg)
         update_stuff();
         update_player_status();
         update_player_stat();
-        open_inventory(rpg->win->window);
+        open_inventory(rpg);
     }
     return 0;
 }
