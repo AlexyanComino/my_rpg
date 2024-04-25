@@ -10,3 +10,7 @@
 
 // Display
 void display_all(rpg_t *rpg);
+
+// Display warriors
+void display_warrior(rpg_t *rpg, warrior_t *warrior);
+void display_warriors(rpg_t *rpg);

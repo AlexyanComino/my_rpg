@@ -6,61 +6,7 @@
 */
 
 #include "rpg.h"
-
-static void draw_circles_hitbox(rpg_t *rpg, warrior_t *warrior)
-{
-    sfRenderWindow_drawCircleShape(rpg->win->window,
-        warrior->exclam->circle, NULL);
-    sfRenderWindow_drawCircleShape(rpg->win->window,
-        warrior->inter->circle, NULL);
-    sfRenderWindow_drawCircleShape(rpg->win->window,
-        warrior->zones->circle_reset, NULL);
-}
-
-static void display_alive_warrior(rpg_t *rpg, warrior_t *warrior)
-{
-    warrior_t *player = rpg->lwarrior->warrior;
-
-    sfRenderWindow_drawSprite(rpg->win->window, warrior->sprite, NULL);
-    if (warrior->exclam->is_display)
-        sfRenderWindow_drawSprite(rpg->win->window, warrior->exclam->sprite,
-            NULL);
-    if (warrior->inter->is_display)
-        sfRenderWindow_drawSprite(rpg->win->window, warrior->inter->sprite,
-            NULL);
-    if (rpg->debug) {
-        sfRenderWindow_drawRectangleShape(rpg->win->window,
-            warrior->zones->rect_hitbox, NULL);
-        sfRenderWindow_drawRectangleShape(rpg->win->window,
-            warrior->zones->rect_hitbox_attack, NULL);
-        if (warrior != player)
-            draw_circles_hitbox(rpg, warrior);
-    }
-}
-
-static void display_warrior(rpg_t *rpg, warrior_t *warrior)
-{
-    if (warrior->state == DEAD)
-        sfRenderWindow_drawSprite(rpg->win->window,
-        warrior->death->sprite_dead, NULL);
-    else {
-        sfRenderWindow_drawSprite(rpg->win->window,
-        warrior->death->sprite_dead, NULL);
-        display_alive_warrior(rpg, warrior);
-    }
-}
-
-static void display_warriors(rpg_t *rpg)
-{
-    lwarrior_t *tmp = rpg->lwarrior->next;
-
-    while (tmp) {
-        if (tmp->warrior->state != RIEN)
-            display_warrior(rpg, tmp->warrior);
-        tmp = tmp->next;
-    }
-    display_warrior(rpg, rpg->lwarrior->warrior);
-}
+#include "singleton.h"
 
 void display_main_menu(rpg_t *rpg)
 {
@@ -119,6 +65,26 @@ void display_quests(rpg_t *rpg)
     }
 }
 
+static void display_restricted_text(rpg_t *rpg)
+{
+    restricted_t *restricted = rpg->interface->restricted;
+
+    if (!is_alive(rpg->lwarrior->warrior))
+        return;
+    sfRenderWindow_drawSprite(rpg->win->window, restricted->sprite, NULL);
+}
+
+static void display_collision(rpg_t *rpg)
+{
+    collision_t *collision = rpg->collision;
+
+    for (unsigned int i = 0; i < collision->size; i++) {
+        sfRectangleShape_setPosition(collision->shape, collision->pos[i]);
+        sfRenderWindow_drawRectangleShape(rpg->win->window, collision->shape,
+            NULL);
+    }
+}
+
 void display_all(rpg_t *rpg)
 {
     sfRenderWindow_clear(rpg->win->window, sfBlack);
@@ -127,10 +93,18 @@ void display_all(rpg_t *rpg)
     if (rpg->gamestate == SAVE_MENU)
         display_save_menu(rpg);
     if (rpg->gamestate == SETTINGS)
-        display_settings(rpg);
-    if (rpg->gamestate == GAME) {
+        display_settings(rpg);  
+    if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY) {
+        sfRenderWindow_drawSprite(rpg->win->window, rpg->map->ground_sprite,
+            NULL);
         display_warriors(rpg);
         display_quests(rpg);
+        sfRenderWindow_drawSprite(rpg->win->window, rpg->map->high_sprite,
+            NULL);
+        if (rpg->debug)
+            display_collision(rpg);
+        update_inv(rpg);
+        display_restricted_text(rpg);
     }
     sfRenderWindow_display(rpg->win->window);
 }

@@ -1,0 +1,35 @@
+/*
+** EPITECH PROJECT, 2024
+** inventory_sys
+** File description:
+** inventory
+*/
+
+#pragma once
+#include "item.h"
+#include <SFML/Graphics.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "rpg.h"
+
+
+#define WARRIOR_WIDTH 192
+
+int init_inventory(int size);
+int remove_item(int id, slot_t *tmp);
+int remove_gold(int gold);
+int add_gold(int gold);
+int add_item(void *item, int type);
+int open_inventory(rpg_t *rpg);
+void highlight_inventory(sfMouseMoveEvent event, slot_t *tmp);
+int click_inventory(sfMouseButtonEvent event, slot_t *tmp);
+int release_inventory(sfMouseButtonEvent event, slot_t *tmp);
+player_status_t *init_player_status(void);
+sfSprite *init_sprite_from_file(char *texture);
+int add_stuff(void *item, int type);
+int draw_stuff(sfRenderWindow *window);
+int draw_item(sfRenderWindow *window, slot_t *tmp);
+
+
+int manage_evt_inv(sfEvent event, rpg_t *rpg);
+int update_inv(rpg_t *rpg);

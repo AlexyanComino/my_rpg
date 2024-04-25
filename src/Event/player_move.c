@@ -7,41 +7,28 @@
 
 #include "rpg.h"
 
-static void check_player_is_right(warrior_t *player, sfVector2f *newPos)
-{
-    if (player->x == RIGHT) {
-        newPos->x += WARRIOR_WIDTH;
-    }
-}
-
-static void check_player_is_left(warrior_t *player, sfVector2f *newPos)
-{
-    if (player->x == LEFT) {
-        newPos->x -= WARRIOR_WIDTH;
-    }
-}
-
 static void get_newpos_and_newx(warrior_t *player, sfVector2f *newPos,
     float dt)
 {
+    float speed = player->state == WALK ? player->attributes->speed / 2 :
+        player->attributes->speed;
+
     if (sfKeyboard_isKeyPressed(sfKeyQ)) {
-        check_player_is_right(player, newPos);
         player->x = LEFT;
-        newPos->x -= player->attributes->speed * dt;
+        newPos->x -= speed * dt;
     } else if (sfKeyboard_isKeyPressed(sfKeyD)) {
-        check_player_is_left(player, newPos);
         player->x = RIGHT;
-        newPos->x += player->attributes->speed * dt;
+        newPos->x += speed * dt;
     }
 }
 
-static void update_player_x(rpg_t *rpg, warrior_t *player, float dt)
+static void update_player_x(rpg_t *rpg, warrior_t *player)
 {
     sfVector2f newPos = player->pos;
-    sfIntRect newHitbox = player->zones->hitbox;
+    sfIntRect newHitbox;
 
-    get_newpos_and_newx(player, &newPos, dt);
-    newHitbox = get_hitbox_warrior(newPos, player->x);
+    get_newpos_and_newx(player, &newPos, rpg->win->dt);
+    newHitbox = get_hitbox_warrior(newPos);
     if (!is_warrior_hitbox_collide(rpg, player, newHitbox)) {
         player->pos.x = newPos.x;
         player->zones->hitbox = newHitbox;
@@ -52,30 +39,33 @@ static void update_player_x(rpg_t *rpg, warrior_t *player, float dt)
 static void get_newpos_and_newy(warrior_t *player, sfVector2f *newPos,
     float dt)
 {
+    float speed = player->state == WALK ? player->attributes->speed / 2 :
+        player->attributes->speed;
+
     if (sfKeyboard_isKeyPressed(sfKeyZ) && sfKeyboard_isKeyPressed(sfKeyS)) {
         player->y = NONE;
         return;
     }
     if (sfKeyboard_isKeyPressed(sfKeyZ)) {
         player->y = UP;
-        newPos->y -= player->attributes->speed * dt;
+        newPos->y -= speed * dt;
         return;
     }
     if (sfKeyboard_isKeyPressed(sfKeyS)) {
         player->y = DOWN;
-        newPos->y += player->attributes->speed * dt;
+        newPos->y += speed * dt;
         return;
     }
     player->y = NONE;
 }
 
-static void update_player_y(rpg_t *rpg, warrior_t *player, float dt)
+static void update_player_y(rpg_t *rpg, warrior_t *player)
 {
     sfVector2f newPos = player->pos;
-    sfIntRect newHitbox = player->zones->hitbox;
+    sfIntRect newHitbox;
 
-    get_newpos_and_newy(player, &newPos, dt);
-    newHitbox = get_hitbox_warrior(newPos, player->x);
+    get_newpos_and_newy(player, &newPos, rpg->win->dt);
+    newHitbox = get_hitbox_warrior(newPos);
     if (!is_warrior_hitbox_collide(rpg, player, newHitbox)) {
         player->pos.y = newPos.y;
         player->zones->hitbox = newHitbox;
@@ -83,15 +73,22 @@ static void update_player_y(rpg_t *rpg, warrior_t *player, float dt)
 }
 
 //
-void player_move(rpg_t *rpg, float dt)
+void player_move(rpg_t *rpg)
 {
     warrior_t *player = rpg->lwarrior->warrior;
+    bool is_walking = false;
+    sfVector2f oldPos = player->pos;
 
+    if (sfKeyboard_isKeyPressed(sfKeyLControl))
+            is_walking = true;
     if (sfKeyboard_isKeyPressed(sfKeyZ) || sfKeyboard_isKeyPressed(sfKeyS) ||
-    sfKeyboard_isKeyPressed(sfKeyQ) || sfKeyboard_isKeyPressed(sfKeyD)) {
-        player->state = WALK;
-    } else if (player->state != ATTACK)
+        sfKeyboard_isKeyPressed(sfKeyQ) || sfKeyboard_isKeyPressed(sfKeyD)) {
+            player->state = (is_walking) ? WALK : RUN;
+    } else if (not_attacking(player))
         player->state = IDLE;
-    update_player_x(rpg, player, dt);
-    update_player_y(rpg, player, dt);
+    update_player_x(rpg, player);
+    update_player_y(rpg, player);
+    if (oldPos.x != player->pos.x || oldPos.y != player->pos.y) {
+        update_interface_pos(rpg, player, oldPos);
+    }
 }
