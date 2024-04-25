@@ -95,8 +95,8 @@ void display_save_menu(rpg_t *rpg)
         rpg->win->window, rpg->main_menu->background, NULL);
     while (tmp != NULL) {
         if (strcmp(tmp->name, "BACK") != 0)
-            sfRenderWindow_drawRectangleShape(rpg->win->window, tmp->rect_shape,
-                NULL);
+            sfRenderWindow_drawRectangleShape(rpg->win->window,
+                tmp->rect_shape, NULL);
         sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
         tmp = tmp->next;
     }
@@ -107,7 +107,8 @@ void display_quests(rpg_t *rpg)
     all_quests_t *tmp = rpg->quests;
 
     while (tmp != NULL) {
-        if (tmp->warrior != NULL && is_player_interact_warrior(rpg, tmp->warrior) == false)
+        if (tmp->warrior != NULL &&
+            is_player_interact_warrior(rpg, tmp->warrior) == false)
             tmp->quest->is_displayed = false;
         if (tmp->quest->is_displayed == true) {
             sfRenderWindow_drawText(rpg->win->window, rpg->quest_text, NULL);
@@ -116,7 +117,6 @@ void display_quests(rpg_t *rpg)
         }
         tmp = tmp->next;
     }
-
 }
 
 void display_all(rpg_t *rpg)

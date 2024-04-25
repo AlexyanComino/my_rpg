@@ -23,6 +23,3 @@ bool is_player_interact_warrior(rpg_t *rpg, warrior_t *warrior);
 
 // My_str_to_word_array
 char **split_string(char *str, char *delim);
-
-// Itoa
-char *my_itoa(int nb);

@@ -8,4 +8,4 @@
 #pragma once
 
 // Quests
-all_quests_t *init_all_quests(void);
+void init_all_quests(rpg_t *rpg);

@@ -24,31 +24,6 @@ static win_t *init_win(unsigned int width, unsigned int height)
     return win;
 }
 
-void print_quests(quest_t *quest)
-{
-    quest_t *tmp = quest;
-
-    while (tmp != NULL) {
-        printf("Name: %s\n", tmp->name);
-        printf("Description: %s\n", tmp->description);
-        printf("Reward: %d\n", tmp->reward);
-        printf("Xp: %d\n", tmp->xp);
-        tmp = tmp->next;
-    }
-}
-
-void print_all_quests(all_quests_t *quests)
-{
-    all_quests_t *tmp = quests;
-
-    while (tmp != NULL) {
-        printf("Proprietary: %s\n", tmp->proprietary);
-        printf("Quests:\n");
-        print_quests(tmp->quest);
-        tmp = tmp->next;
-    }
-}
-
 rpg_t *init_rpg(void)
 {
     rpg_t *rpg = malloc(sizeof(rpg_t));
@@ -62,14 +37,7 @@ rpg_t *init_rpg(void)
     rpg->main_menu = init_menu();
     rpg->save_menu = init_save_menu();
     rpg->settings = init_settings();
-    rpg->quests = init_all_quests();
-    rpg->quest_text = create_text(rpg->settings->font, "", 100,
-        (sfVector2f){200, 700});
-    rpg->quest_desc = create_text(rpg->settings->font, "", 50,
-        (sfVector2f){200, 800});
-    rpg->quest_info = create_text(rpg->settings->font, "Appuie sur Entrée pour accepter", 20,
-        (sfVector2f){200, 900});
-    print_all_quests(rpg->quests);
+    init_all_quests(rpg);
     update_all(rpg);
     return rpg;
 }

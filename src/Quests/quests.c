@@ -114,27 +114,37 @@ all_quests_t *add_quests(all_quests_t *quests, char **infos, bool *end_loop)
     return quests;
 }
 
-all_quests_t *init_all_quests(void)
+static void init_quest_text(rpg_t *rpg)
+{
+    rpg->quest_text = create_text(rpg->settings->font, "", 100,
+        (sfVector2f){200, 700});
+    rpg->quest_desc = create_text(rpg->settings->font, "", 50,
+        (sfVector2f){200, 800});
+    rpg->quest_info = create_text(rpg->settings->font,
+        "Appuie sur Entrée pour accepter", 20, (sfVector2f){200, 900});
+    rpg->quests = NULL;
+}
+
+void init_all_quests(rpg_t *rpg)
 {
     char **lines = file_to_tab(".quests.csv");
     char **infos = NULL;
-    all_quests_t *quests = NULL;
     bool end_loop = false;
 
+    init_quest_text(rpg);
     for (int i = 0; lines[i] != NULL; i++) {
         infos = split_string(lines[i], ";");
-        if (quests == NULL) {
-            quests = malloc(sizeof(all_quests_t));
-            quests->proprietary = strdup(infos[0]);
-            quests->quest = init_quest(infos);
-            quests->warrior = NULL;
-            quests->next = NULL;
+        if (rpg->quests == NULL) {
+            rpg->quests = malloc(sizeof(all_quests_t));
+            rpg->quests->proprietary = strdup(infos[0]);
+            rpg->quests->quest = init_quest(infos);
+            rpg->quests->warrior = NULL;
+            rpg->quests->next = NULL;
         } else
-            add_quests(quests, infos, &end_loop);
+            add_quests(rpg->quests, infos, &end_loop);
         if (end_loop == true)
             continue;
         free_array(infos);
     }
     free_array(lines);
-    return quests;
 }

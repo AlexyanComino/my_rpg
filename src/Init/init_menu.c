@@ -56,8 +56,10 @@ static button_t *add_button(button_t *buttons, sfVector2f pos, char *txt)
     sfText_setString(new->text, txt);
     sfText_setPosition(new->text, pos);
     sfRectangleShape_setSize(new->rect_shape, (sfVector2f){500, 150});
-    sfRectangleShape_setPosition(new->rect_shape, (sfVector2f){pos.x - 190, pos.y});
-    sfRectangleShape_setFillColor(new->rect_shape, sfColor_fromRGBA(0, 0, 0, 100));
+    sfRectangleShape_setPosition(new->rect_shape,
+        (sfVector2f){pos.x - 190, pos.y});
+    sfRectangleShape_setFillColor(new->rect_shape,
+        sfColor_fromRGBA(0, 0, 0, 100));
     if (buttons == NULL)
         return new;
     while (tmp->next != NULL)
@@ -115,11 +117,11 @@ menu_t *init_settings(void)
     menu->text = NULL;
     menu->buttons = NULL;
     menu->buttons = add_button(menu->buttons,
-    (sfVector2f){(WIDTH - 100) / 2 , HEIGHT / 2 - 50}, "CACA");
+    (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 - 50}, "CACA");
     add_button(menu->buttons,
-    (sfVector2f){(WIDTH - 100) / 2 , HEIGHT / 2 + 50}, "TEMP");
+    (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 + 50}, "TEMP");
     add_button(menu->buttons,
-    (sfVector2f){(WIDTH - 100) / 2 , HEIGHT / 2 + 150}, "BACK");
+    (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 + 150}, "BACK");
     return menu;
 }
 
@@ -136,12 +138,12 @@ menu_t *init_save_menu(void)
     menu->text = NULL;
     menu->buttons = NULL;
     menu->buttons = add_button(menu->buttons,
-    (sfVector2f){(WIDTH - 100) / 2 , HEIGHT / 2 - 150}, "SAVE 1");
+    (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 - 150}, "SAVE 1");
     add_button(menu->buttons,
-    (sfVector2f){(WIDTH - 100) / 2 , HEIGHT / 2 + 75}, "SAVE 2");
+    (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 + 75}, "SAVE 2");
     add_button(menu->buttons,
-    (sfVector2f){(WIDTH - 100) / 2 , HEIGHT / 2 + 300}, "SAVE 3");
+    (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 + 300}, "SAVE 3");
     add_button(menu->buttons,
-    (sfVector2f){(WIDTH - 100) / 2 , HEIGHT / 2 + 450}, "BACK");
+    (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 + 450}, "BACK");
     return menu;
 }
