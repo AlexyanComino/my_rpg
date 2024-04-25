@@ -15,4 +15,13 @@ void event(rpg_t *rpg);
 state_warrior_t get_player_state(rpg_t *rpg);
 
 // Player move
-void player_move(rpg_t *rpg);
+
+void player_move(rpg_t *rpg, float dt);
+
+// Player attack
+void player_attack(rpg_t *rpg);
+void event_player_attack(rpg_t *rpg);
+
+// Quest event
+void quest_event(rpg_t *rpg);
+

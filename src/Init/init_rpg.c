@@ -12,7 +12,7 @@ static win_t *init_win(unsigned int width, unsigned int height)
     win_t *win = malloc(sizeof(win_t));
     sfVideoMode mode = {width, height, 32};
 
-    win->window = sfRenderWindow_create(mode, "My_RPG", sfDefaultStyle, NULL);
+    win->window = sfRenderWindow_create(mode, "My_RPG", sfFullscreen, NULL);
     win->view = sfView_createFromRect((sfFloatRect){0, 0, width, height});
     sfView_setViewport(win->view, (sfFloatRect){0, 0, 1, 1});
     sfRenderWindow_setView(win->window, win->view);
@@ -80,13 +80,15 @@ rpg_t *init_rpg(void)
     rpg_t *rpg = malloc(sizeof(rpg_t));
 
     srand(time(NULL));
-    rpg->gamestate = MAIN_MENU;
+    rpg->gamestate = GAME;
     rpg->win = init_win(WIDTH, HEIGHT);
     rpg->lwarrior = init_lwarrior();
     rpg->event = (sfEvent){0};
     rpg->debug = true;
     rpg->main_menu = init_menu();
+    rpg->save_menu = init_save_menu();
     rpg->settings = init_settings();
+    init_all_quests(rpg);
     rpg->interface = init_interface();
     rpg->collision = init_collision();
     rpg->map = init_map();

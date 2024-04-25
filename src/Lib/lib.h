@@ -19,10 +19,14 @@ bool hitbox_in_detection(sfIntRect hitbox, unsigned int radius,
 bool warrior_can_attack_enemy(rpg_t *rpg, warrior_t *warrior);
 
 // Tools
+bool is_player_interact_warrior(rpg_t *rpg, warrior_t *warrior);
 float get_distance_between_pos(sfVector2f center1, sfVector2f center2);
 warrior_t *get_nearest_warrior(rpg_t *rpg, warrior_t *warrior);
 void update_clock_seconds(my_clock_t *myclock);
 bool warrior_look_at_enemy(warrior_t *warrior, warrior_t *enemy);
+
+// My_str_to_word_array
+char **split_string(char *str, char *delim);
 
 // Tools 2
 bool warrior_see_enemy(rpg_t *rpg, warrior_t *warrior, warrior_t *enemy);

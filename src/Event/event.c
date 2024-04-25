@@ -33,12 +33,16 @@ void event_player_attack(rpg_t *rpg)
 
 void event_states(rpg_t *rpg)
 {
-    if (rpg->gamestate == MAIN_MENU) {
-            menu_button_event(rpg, rpg->main_menu->buttons);
-    } else if (rpg->gamestate == SETTINGS)
+    if (rpg->gamestate == MAIN_MENU)
+        menu_button_event(rpg, rpg->main_menu->buttons);
+    if (rpg->gamestate == SETTINGS)
         menu_button_event(rpg, rpg->settings->buttons);
-    if (rpg->gamestate == GAME)
+    if (rpg->gamestate == SAVE_MENU)
+        menu_button_event(rpg, rpg->save_menu->buttons);
+    if (rpg->gamestate == GAME) {
         event_player_attack(rpg);
+        quest_event(rpg);
+    }
 }
 
 void event(rpg_t *rpg)

@@ -15,6 +15,12 @@ void update_warriors(rpg_t *rpg);
 // Update all warriors
 void update_all_warriors(rpg_t *rpg, warrior_t *tmp);
 
+// Update background
+void update_background(rpg_t *rpg);
+
+// Update quests
+void update_quests(rpg_t *rpg);
+
 // Warrior move
 void warrior_move(rpg_t *rpg, warrior_t *warrior);
 

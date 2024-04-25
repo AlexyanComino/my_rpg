@@ -26,3 +26,8 @@ void back_to_menu(rpg_t *rpg)
 {
     rpg->gamestate = MAIN_MENU;
 }
+
+void save_menu(rpg_t *rpg)
+{
+    rpg->gamestate = SAVE_MENU;
+}
