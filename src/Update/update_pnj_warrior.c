@@ -29,7 +29,7 @@ void update_pnj_warrior(rpg_t *rpg, warrior_t *tmp)
         update_warrior_pos(rpg, tmp, enemy);
     if (enemy == NULL)
         return;
-    update_warrior_detection(tmp, enemy);
+    update_warrior_detection(rpg, tmp, enemy);
     if (warrior_can_attack(tmp, enemy)) {
         tmp->state = ST_ATT;
         tmp->rect.left = 0;

@@ -77,6 +77,7 @@ void player_move(rpg_t *rpg)
 {
     warrior_t *player = rpg->lwarrior->warrior;
     bool is_walking = false;
+    sfVector2f oldPos = player->pos;
 
     if (sfKeyboard_isKeyPressed(sfKeyLControl))
             is_walking = true;
@@ -87,4 +88,7 @@ void player_move(rpg_t *rpg)
         player->state = IDLE;
     update_player_x(rpg, player);
     update_player_y(rpg, player);
+    if (oldPos.x != player->pos.x || oldPos.y != player->pos.y) {
+        update_interface_pos(rpg, player, oldPos);
+    }
 }

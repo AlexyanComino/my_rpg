@@ -85,7 +85,8 @@ player_status_t *init_player_status(void)
     setup_value(player_status);
     setup_sprite(player_status);
     setup_text(player_status);
-    player_status->player = init_warrior(BLUE, (sfVector2f){0, 0}, "Inventory");
+    player_status->player = init_warrior(BLUE, (sfVector2f){0, 0},
+        "Inventory");
     sfSprite_setScale(player_status->player->sprite, (sfVector2f){1.3, 1.3});
     player_status->pp = init_sprite_from_file("assets/inventory/19.png");
     sfSprite_setScale(player_status->pp, (sfVector2f){2, 2});

@@ -75,7 +75,7 @@ static void display_alive_warrior(rpg_t *rpg, warrior_t *warrior)
         display_debug_warrior(rpg, player, warrior);
 }
 
-static void display_warrior(rpg_t *rpg, warrior_t *warrior)
+void display_warrior(rpg_t *rpg, warrior_t *warrior)
 {
     if (warrior->state == DEAD)
         sfRenderWindow_drawSprite(rpg->win->window,

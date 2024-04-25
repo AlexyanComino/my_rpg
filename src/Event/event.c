@@ -25,6 +25,9 @@ void event_player_attack(rpg_t *rpg)
             update_attack_rect(player);
             sfClock_restart(player->myclock->clock);
         }
+        if (rpg->event.key.code == sfKeyP) {
+            printf("Player pos: %f, %f\n", player->pos.x, player->pos.y);
+        }
     }
 }
 
@@ -55,8 +58,4 @@ void event(rpg_t *rpg)
     if (rpg->gamestate == GAME)
         if (player_is_not_attacking(rpg) && get_player_state(rpg) != DEAD)
             player_move(rpg);
-    if (rpg->gamestate == GAME) {
-        if (get_player_state(rpg) != ATTACK)
-            player_move(rpg, dt);
-    }
 }

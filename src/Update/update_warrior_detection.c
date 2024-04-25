@@ -77,11 +77,11 @@ static void update_exclam_detection(warrior_t *warrior, warrior_t *enemy,
     }
 }
 
-static void update_inter_detection(warrior_t *warrior, warrior_t *enemy,
-    bool in_base)
+static void update_inter_detection(rpg_t *rpg, warrior_t *warrior,
+    warrior_t *enemy, bool in_base)
 {
     update_clock_seconds(warrior->inter->myclock);
-    if (warrior_see_enemy(warrior, enemy) &&
+    if (warrior_see_enemy(rpg, warrior, enemy) &&
         !enemy_is_in_exclamation_range(warrior, enemy)) {
         warrior->inter->is_detecting = true;
         if (warrior->inter->is_display == 0 || (warrior->inter->is_display == 2
@@ -100,7 +100,7 @@ static void update_inter_detection(warrior_t *warrior, warrior_t *enemy,
     }
 }
 
-void update_warrior_detection(warrior_t *warrior, warrior_t *enemy)
+void update_warrior_detection(rpg_t *rpg, warrior_t *warrior, warrior_t *enemy)
 {
     bool in_base = WARRIOR_HAS_BASE(warrior) &&
         sfIntRect_intersects(&warrior->base->rect, &enemy->zones->hitbox,
@@ -109,5 +109,5 @@ void update_warrior_detection(warrior_t *warrior, warrior_t *enemy)
     if (!in_base && !WARRIOR_HAS_BASE(warrior))
         in_base = true;
     update_exclam_detection(warrior, enemy, in_base);
-    update_inter_detection(warrior, enemy, in_base);
+    update_inter_detection(rpg, warrior, enemy, in_base);
 }

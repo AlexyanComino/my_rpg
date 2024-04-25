@@ -63,23 +63,6 @@ sfIntRect get_hitbox_attack(sfVector2f pos, x_warrior_t x, y_warrior_t y)
         return get_hitbox_attack_left(pos, y, hitbox_x, hitbox_y);
 }
 
-// Vérifie si la hitbox d'un guerrier est en collision avec celle
-// d'un autre guerrier
-bool is_warrior_hitbox_collide(rpg_t *rpg, warrior_t *warrior,
-    sfIntRect hitbox)
-{
-    lwarrior_t *tmp = rpg->lwarrior;
-
-    while (tmp) {
-        if (tmp->warrior != warrior && tmp->warrior->state != DEAD &&
-            tmp->warrior->state != RIEN &&
-            sfIntRect_intersects(&hitbox, &tmp->warrior->zones->hitbox, NULL))
-            return (true);
-        tmp = tmp->next;
-    }
-    return (false);
-}
-
 // Vérifie si l'attaque d'un guerrier touche un autre guerrier
 bool warrior_can_attack_target(warrior_t *attacker, warrior_t *target)
 {

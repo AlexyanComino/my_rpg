@@ -77,7 +77,7 @@ static anim_death_t *init_death(void)
 static void init_circle_max_detection(zones_warrior_t *zones)
 {
     zones->circle_max_detection = sfCircleShape_create();
-    zones->radius_max_detection = 500;
+    zones->radius_max_detection = WARRIOR_MAX_DETECTION_RADIUS;
     sfCircleShape_setRadius(zones->circle_max_detection,
         zones->radius_max_detection);
     sfCircleShape_setFillColor(zones->circle_max_detection, sfTransparent);

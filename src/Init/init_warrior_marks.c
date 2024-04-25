@@ -33,8 +33,8 @@ mark_t *init_exclam(warrior_t *warrior)
     exclam->rect = (sfIntRect){0, 0, EXCLAM_WIDTH, EXCLAM_HEIGHT};
     sfSprite_setTextureRect(exclam->sprite, exclam->rect);
     exclam->is_display = 0;
-    exclam->is_detecting = false;
-    exclam->radius = 200;
+    exclam->is_detecting = 0;
+    exclam->radius = WARRIOR_EXCLAM_RADIUS;
     init_circle_detection(exclam, sfRed);
     return exclam;
 }
@@ -54,8 +54,8 @@ mark_t *init_inter(warrior_t *warrior)
     inter->rect = (sfIntRect){0, 0, INTER_WIDTH, INTER_HEIGHT};
     sfSprite_setTextureRect(inter->sprite, inter->rect);
     inter->is_display = 0;
-    inter->is_detecting = false;
-    inter->radius = 350;
+    inter->is_detecting = 0;
+    inter->radius = WARRIOR_INTER_RADIUS;
     inter->circle = sfCircleShape_create();
     init_circle_detection(inter, sfYellow);
     return inter;

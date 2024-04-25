@@ -355,6 +355,19 @@ typedef struct inventory_s {
     player_status_t *player_status;
 } inventory_t;
 
+typedef struct line_of_sight_data_s {
+    sfVector2f start;
+    sfVector2f end;
+    int dx;
+    int dy;
+    int sx;
+    int sy;
+    int err;
+    int e2;
+    int sample_interval;
+    int sample_counter;
+} line_of_sight_data_t;
+
 #include "../src/Init/init.h"
 #include "../src/Display/display.h"
 #include "../src/Event/event.h"

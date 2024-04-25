@@ -36,12 +36,12 @@ lwarrior_t *init_lwarrior(void)
     lwarrior_t *lwarrior = NULL;
     warrior_t *warrior = NULL;
 
-    warrior = init_warrior(BLUE, (sfVector2f){400, 100}, PLAYER_NAME);
+    warrior = init_warrior(BLUE, (sfVector2f){3120, 3202}, PLAYER_NAME);
     set_player_attribute(warrior);
     add_warrior(&lwarrior, warrior);
-    warrior = init_warrior(PURPLE, (sfVector2f){1200, 600}, "Enemy");
+    warrior = init_warrior(PURPLE, (sfVector2f){2392, 2900}, "Enemy");
     add_warrior(&lwarrior, warrior);
-    warrior = init_warrior(BLUE, (sfVector2f){100, 400}, "Ally");
+    warrior = init_warrior(BLUE, (sfVector2f){1600, 2700}, "Ally");
     add_warrior(&lwarrior, warrior);
     return lwarrior;
 }

@@ -19,9 +19,9 @@ static bool warrior_has_base(warrior_t *warrior)
 static sfIntRect get_base_rect(warrior_t *warrior)
 {
     if (!strcmp(warrior->name, "Enemy"))
-        return (sfIntRect){1100, 500, 800, 500};
+        return (sfIntRect){2250, 2800, 800, 700};
     if (!strcmp(warrior->name, "Ally"))
-        return (sfIntRect){100, 200, 500, 500};
+        return (sfIntRect){1500, 2700, 500, 500};
     return (sfIntRect){0, 0, 0, 0};
 }
 
