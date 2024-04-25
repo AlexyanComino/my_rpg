@@ -92,5 +92,7 @@ rpg_t *init_rpg(void)
     rpg->interface = init_interface();
     rpg->collision = init_collision();
     rpg->map = init_map();
+    init_inventory(15);
+    rpg->inventory = *inventory();
     return rpg;
 }

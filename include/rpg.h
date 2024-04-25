@@ -317,33 +317,6 @@ typedef struct map_s {
     sfSprite *high_sprite;
 } map_t;
 
-typedef struct rpg_s {
-    win_t *win;
-    map_t *map;
-    sfEvent event;
-    lwarrior_t *lwarrior;
-    bool debug;
-    menu_t *main_menu;
-    menu_t *save_menu;
-    menu_t *settings;
-    state_t gamestate;
-    all_quests_t *quests;
-    sfText *quest_text;
-    sfText *quest_desc;
-    sfText *quest_info;
-    interface_t *interface;
-    collision_t *collision;
-} rpg_t;
-
-enum item_type {
-    WEAPON,
-    ARMOR,
-    POTION,
-    QUEST,
-    KEY,
-    OTHER
-};
-
 typedef struct slot_s {
     int is_empty;
     int id;
@@ -396,6 +369,34 @@ typedef struct inventory_s {
     sfSprite *sprite;
     player_status_t *player_status;
 } inventory_t;
+
+typedef struct rpg_s {
+    win_t *win;
+    map_t *map;
+    sfEvent event;
+    lwarrior_t *lwarrior;
+    bool debug;
+    menu_t *main_menu;
+    menu_t *save_menu;
+    menu_t *settings;
+    state_t gamestate;
+    all_quests_t *quests;
+    sfText *quest_text;
+    sfText *quest_desc;
+    sfText *quest_info;
+    interface_t *interface;
+    collision_t *collision;
+    inventory_t *inventory;
+} rpg_t;
+
+enum item_type {
+    WEAPON,
+    ARMOR,
+    POTION,
+    QUEST,
+    KEY,
+    OTHER
+};
 
 typedef struct line_of_sight_data_s {
     sfVector2f start;
