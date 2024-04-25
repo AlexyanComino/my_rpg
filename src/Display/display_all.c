@@ -93,7 +93,7 @@ void display_all(rpg_t *rpg)
     if (rpg->gamestate == SAVE_MENU)
         display_save_menu(rpg);
     if (rpg->gamestate == SETTINGS)
-        display_settings(rpg);  
+        display_settings(rpg);
     if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY) {
         sfRenderWindow_drawSprite(rpg->win->window, rpg->map->ground_sprite,
             NULL);

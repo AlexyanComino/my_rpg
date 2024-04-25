@@ -78,7 +78,7 @@ void destroy_warrior(warrior_t *warrior)
     sfSprite_destroy(warrior->sprite);
     sfRectangleShape_destroy(warrior->zones->rect_hitbox);
     sfRectangleShape_destroy(warrior->zones->rect_hitbox_attack);
-    sfCircleShape_destroy(warrior->zones->circle_reset);
+    sfCircleShape_destroy(warrior->zones->circle_max_detection);
     free(warrior->zones);
     free(warrior->attributes);
     sfTexture_destroy(warrior->death->texture_dead);

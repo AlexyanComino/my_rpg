@@ -412,6 +412,7 @@ typedef struct line_of_sight_data_s {
 
 #include "../src/Init/init.h"
 #include "../src/Display/display.h"
+#include "../src/Menu/menu.h"
 #include "../src/Event/event.h"
 #include "../src/Destroy/destroy.h"
 #include "../src/Update/update.h"

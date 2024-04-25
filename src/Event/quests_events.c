@@ -42,7 +42,7 @@ void accept_quest(rpg_t *rpg, warrior_t *warrior)
 
 void quest_handling(rpg_t *rpg, lwarrior_t *tmp)
 {
-    if (is_warrior_in_view(rpg, tmp->warrior) &&
+    if (warrior_is_in_view(rpg, tmp->warrior) &&
     is_player_interact_warrior(rpg, tmp->warrior)) {
         if (rpg->event.key.code == sfKeyE)
             interact_with_warrior(rpg, tmp->warrior);
