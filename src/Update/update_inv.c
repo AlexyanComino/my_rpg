@@ -96,6 +96,7 @@ int update_inv(rpg_t *rpg)
         update_stuff();
         update_player_status();
         update_player_stat();
+        apply_stuff(rpg);
         open_inventory(rpg);
     }
     return 0;

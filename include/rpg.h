@@ -320,7 +320,9 @@ typedef struct map_s {
 typedef struct slot_s {
     int is_empty;
     int id;
+    int is_active;
     int type;
+    int access;
     int is_highlighted;
     int is_clicked;
     int is_moved;
@@ -395,7 +397,8 @@ enum item_type {
     POTION,
     QUEST,
     KEY,
-    OTHER
+    OTHER,
+    ALL
 };
 
 typedef struct line_of_sight_data_s {
