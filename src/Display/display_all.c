@@ -103,7 +103,7 @@ void display_all(rpg_t *rpg)
             NULL);
         if (rpg->debug)
             display_collision(rpg);
-        update_inv(rpg);
+        display_inv(rpg);
         display_restricted_text(rpg);
     }
     sfRenderWindow_display(rpg->win->window);
