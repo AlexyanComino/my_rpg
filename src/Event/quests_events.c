@@ -15,13 +15,17 @@ void interact_with_warrior(rpg_t *rpg, warrior_t *warrior)
         if (strcmp(tmp->proprietary, warrior->name) != 0 ||
                 tmp->quest->is_active == true)
                     continue;
-        if (tmp->quest->is_displayed == false) {
-            sfText_setString(rpg->quest_text, tmp->quest->name);
-            sfText_setString(rpg->quest_desc, tmp->quest->description);
+        if (rpg->text_box->is_displayed == false) {
+            printf("Interacting with %s\n", warrior->name);
+            sfText_setString(rpg->quest_header->text, tmp->quest->name);
+            sfText_setString(rpg->text_box->npc_name, tmp->proprietary);
+            rpg->text_box->str = strdup(tmp->quest->description);
+            rpg->text_box->displayed_str = malloc(sizeof(char) * (strlen(rpg->text_box->str) + 1));
+            rpg->text_box->displayed_str[0] = '\0';
             tmp->warrior = warrior;
-            tmp->quest->is_displayed = true;
+            rpg->text_box->is_displayed = true;
         } else
-            tmp->quest->is_displayed = false;
+            rpg->text_box->is_displayed = false;
     }
 }
 
@@ -33,7 +37,8 @@ void accept_quest(rpg_t *rpg, warrior_t *warrior)
         if (strcmp(tmp->proprietary, warrior->name) == 0 &&
                 tmp->quest->is_active == false) {
             tmp->quest->is_active = true;
-            tmp->quest->is_displayed = false;
+            rpg->text_box->is_displayed = false;
+            rpg->quest_header->state = Q_START;
             printf("Quest accepted: %s\n", tmp->quest->name);
         }
         tmp = tmp->next;

@@ -20,6 +20,7 @@ void update_background(rpg_t *rpg);
 
 // Update quests
 void update_quests(rpg_t *rpg);
+void update_quest_header(rpg_t *rpg);
 
 // Warrior move
 void warrior_move(rpg_t *rpg, warrior_t *warrior);

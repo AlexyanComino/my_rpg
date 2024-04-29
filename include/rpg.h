@@ -15,6 +15,10 @@
 #include <time.h>
 #include <math.h>
 #include <string.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <sys/mman.h>
+#include <fcntl.h>
 
 
 #define WIDTH 1920
@@ -370,6 +374,40 @@ typedef struct inventory_s {
     player_status_t *player_status;
 } inventory_t;
 
+typedef struct {
+    map_t *map;
+    int loaded;
+} shared_data_t;
+
+typedef enum {
+    Q_START,
+    Q_END,
+    Q_HIDDEN
+} quest_state_t;
+
+typedef struct quest_header_s {
+    sfText *text;
+    sfFont *font;
+    sfText *done;
+    sfRectangleShape *rect;
+    quest_state_t state;
+    my_clock_t *myclock;
+} quest_header_t;
+
+typedef struct text_box_s {
+    sfSprite *box;
+    sfTexture *box_texture;
+    sfText *npc_name;
+    sfText *npc_text;
+    sfFont *font;
+    sfClock *clock;
+    char *str;
+    char *displayed_str;
+    bool is_displayed;
+    bool is_fully_displayed;
+    int len;
+} text_box_t;
+
 typedef struct rpg_s {
     win_t *win;
     map_t *map;
@@ -381,12 +419,14 @@ typedef struct rpg_s {
     menu_t *settings;
     state_t gamestate;
     all_quests_t *quests;
-    sfText *quest_text;
-    sfText *quest_desc;
-    sfText *quest_info;
+    quest_header_t *quest_header;
+    text_box_t *text_box;
     interface_t *interface;
     collision_t *collision;
     inventory_t *inventory;
+    pthread_t thread;
+    shared_data_t *shared_data;
+    int shm_fd;
 } rpg_t;
 
 enum item_type {

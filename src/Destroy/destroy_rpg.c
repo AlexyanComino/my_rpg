@@ -110,13 +110,12 @@ void destroy_rpg(rpg_t *rpg)
 {
     destroy_menus(rpg);
     destroy_quests(rpg);
-    sfText_destroy(rpg->quest_text);
-    sfText_destroy(rpg->quest_desc);
-    sfText_destroy(rpg->quest_info);
     destroy_warriors(rpg->lwarrior);
     sfClock_destroy(rpg->win->clock);
     sfView_destroy(rpg->win->view);
     sfRenderWindow_destroy(rpg->win->window);
+    munmap(rpg->shared_data, sizeof(shared_data_t));
+    shm_unlink("/shared_memory");
     free(rpg->win);
     free(rpg);
 }

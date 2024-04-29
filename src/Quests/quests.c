@@ -114,14 +114,31 @@ all_quests_t *add_quests(all_quests_t *quests, char **infos, bool *end_loop)
     return quests;
 }
 
+static sfRectangleShape *create_rect_shape(sfVector2f size, sfVector2f pos,
+    sfColor color)
+{
+    sfRectangleShape *rect = sfRectangleShape_create();
+
+    sfRectangleShape_setSize(rect, size);
+    sfRectangleShape_setPosition(rect, pos);
+    sfRectangleShape_setFillColor(rect, color);
+    return rect;
+}
+
 static void init_quest_text(rpg_t *rpg)
 {
-    rpg->quest_text = create_text(rpg->settings->font, "", 100,
+    rpg->quest_header = malloc(sizeof(quest_header_t));
+    rpg->quest_header->font = sfFont_createFromFile("assets/fonts/HyliaSerifBeta-Regular.otf");
+    rpg->quest_header->text = create_text(rpg->quest_header->font, "", 75,
         (sfVector2f){200, 700});
-    rpg->quest_desc = create_text(rpg->settings->font, "", 50,
-        (sfVector2f){200, 800});
-    rpg->quest_info = create_text(rpg->settings->font,
-        "Appuie sur Entrée pour accepter", 20, (sfVector2f){200, 900});
+    sfText_setFillColor(rpg->quest_header->text, sfColor_fromRGBA(255, 255, 255, 0));
+    rpg->quest_header->done = create_text(rpg->quest_header->font, "Complete",
+        60, (sfVector2f){300, 750});
+    sfText_setFillColor(rpg->quest_header->done, sfColor_fromRGBA(254, 250, 190, 0));
+    rpg->quest_header->rect = create_rect_shape((sfVector2f){1920, 200},
+        (sfVector2f){0, 700}, sfColor_fromRGBA(0, 0, 0, 0));
+    rpg->quest_header->state = Q_HIDDEN;
+    rpg->quest_header->myclock = init_my_clock();
     rpg->quests = NULL;
 }
 

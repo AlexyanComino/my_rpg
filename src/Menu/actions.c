@@ -10,6 +10,9 @@
 void start(rpg_t *rpg)
 {
     rpg->gamestate = GAME;
+    pthread_join(rpg->thread, NULL);
+    if (rpg->shared_data->loaded)
+        rpg->map = rpg->shared_data->map;
 }
 
 void settings(rpg_t *rpg)
