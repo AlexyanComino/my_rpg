@@ -2,27 +2,15 @@
 ** EPITECH PROJECT, 2024
 ** my_rpg
 ** File description:
-** init_base
+** init_warrior_base
 */
 
 #include "rpg.h"
 
-static bool warrior_has_base(warrior_t *warrior)
+static sfIntRect get_base_rect(char **infos)
 {
-    if (!strcmp(warrior->name, "Enemy"))
-        return true;
-    if (!strcmp(warrior->name, "Ally"))
-        return true;
-    return false;
-}
-
-static sfIntRect get_base_rect(warrior_t *warrior)
-{
-    if (!strcmp(warrior->name, "Enemy"))
-        return (sfIntRect){2250, 2800, 800, 700};
-    if (!strcmp(warrior->name, "Ally"))
-        return (sfIntRect){1500, 2700, 500, 500};
-    return (sfIntRect){0, 0, 0, 0};
+    return (sfIntRect){atoi(infos[13]), atoi(infos[14]), atoi(infos[15]),
+        atoi(infos[16])};
 }
 
 static sfRectangleShape *init_base_shape(base_t *base, sfColor color)
@@ -39,10 +27,34 @@ static sfRectangleShape *init_base_shape(base_t *base, sfColor color)
     return shape;
 }
 
-static sfCircleShape **get_pattern_pos_shapes(warrior_t *warrior, base_t *base)
+static sfVector2f *get_pattern_pos(char **infos, unsigned int *max_pattern_pos)
+{
+    sfVector2f *pattern_pos = malloc(sizeof(sfVector2f) * 1);
+    int i = 17;
+
+    while (infos[i] != NULL) {
+        pattern_pos = realloc(pattern_pos, sizeof(sfVector2f) *
+            (*max_pattern_pos + 1));
+        pattern_pos[*max_pattern_pos].x = atoi(infos[i]);
+        pattern_pos[*max_pattern_pos].y = atoi(infos[i + 1]);
+        (*max_pattern_pos)++;
+        if (infos[i + 1] == NULL) {
+            fprintf(stderr, "Error: missing y value for pattern_pos\n");
+            break;
+        }
+        i += 2;
+    }
+    pattern_pos = realloc(pattern_pos, sizeof(sfVector2f) *
+        (*max_pattern_pos + 1));
+    pattern_pos[*max_pattern_pos].x = -1;
+    pattern_pos[*max_pattern_pos].y = -1;
+    return pattern_pos;
+}
+
+static sfCircleShape **get_pattern_pos_shapes(base_t *base)
 {
     sfCircleShape **pattern_pos_shape;
-    sfColor color = get_color_from_faction(warrior);
+    sfColor color = BASE_COLOR;
     int i = base->max_pos_index;
 
     pattern_pos_shape = malloc(sizeof(sfCircleShape *) * base->max_pos_index);
@@ -56,35 +68,26 @@ static sfCircleShape **get_pattern_pos_shapes(warrior_t *warrior, base_t *base)
     return pattern_pos_shape;
 }
 
-static unsigned int get_max_pos_index(sfVector2f *pattern_pos)
-{
-    unsigned int i = 0;
-
-    while (pattern_pos[i].x != -1 && pattern_pos[i].y != -1)
-        i++;
-    return i;
-}
-
 static float get_come_back_cooldown(void)
 {
     return (float)(rand() % 200 + 300) / 100;
 }
 
-base_t *init_base(warrior_t *warrior)
+base_t *init_warrior_base(char **infos)
 {
     base_t *base = malloc(sizeof(base_t));
 
-    if (!warrior_has_base(warrior)) {
+    if (atoi(infos[12]) == 0) {
         free(base);
         return NULL;
     }
-    base->rect = get_base_rect(warrior);
+    base->rect = get_base_rect(infos);
     base->shape = init_base_shape(base, BASE_COLOR);
-    base->pattern_pos = get_pattern_pos(warrior, base);
-    base->come_back = false;
+    base->max_pos_index = 0;
+    base->pattern_pos = get_pattern_pos(infos, &base->max_pos_index);
     base->pattern_pos_index = 0;
-    base->max_pos_index = get_max_pos_index(base->pattern_pos);
-    base->pattern_pos_shapes = get_pattern_pos_shapes(warrior, base);
+    base->pattern_pos_shapes = get_pattern_pos_shapes(base);
+    base->come_back = false;
     base->cooldown = get_come_back_cooldown();
     base->in_cooldown = false;
     base->myclock = init_my_clock();

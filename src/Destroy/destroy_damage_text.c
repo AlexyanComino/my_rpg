@@ -11,7 +11,6 @@ void destroy_damage_text(damage_text_t *damage_text)
 {
     sfText_destroy(damage_text->text);
     sfFont_destroy(damage_text->font);
-    sfText_destroy(damage_text->text_shadow);
     if (damage_text->effect != NULL) {
         sfSprite_destroy(damage_text->effect->sprite);
         sfTexture_destroy(damage_text->effect->texture);

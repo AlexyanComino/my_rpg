@@ -7,14 +7,14 @@
 
 #include "rpg.h"
 
-static void free_array(char **array)
+void free_array(char **array)
 {
     for (int i = 0; array[i] != NULL; i++)
         free(array[i]);
     free(array);
 }
 
-static char **file_to_tab(char *path)
+char **file_to_tab(char *path)
 {
     FILE *file = fopen(path, "r");
     char *line = NULL;
@@ -86,7 +86,7 @@ all_quests_t *add_node(all_quests_t *quests, char **infos)
 
     new->proprietary = strdup(infos[0]);
     new->quest = init_quest(infos);
-    new->warrior = NULL;
+    new->entity = NULL;
     new->next = NULL;
     while (tmp->next != NULL)
         tmp = tmp->next;
@@ -131,6 +131,7 @@ void init_all_quests(rpg_t *rpg)
     char **infos = NULL;
     bool end_loop = false;
 
+    rpg->quests = NULL;
     init_quest_text(rpg);
     for (int i = 0; lines[i] != NULL; i++) {
         infos = split_string(lines[i], ";");
@@ -138,7 +139,7 @@ void init_all_quests(rpg_t *rpg)
             rpg->quests = malloc(sizeof(all_quests_t));
             rpg->quests->proprietary = strdup(infos[0]);
             rpg->quests->quest = init_quest(infos);
-            rpg->quests->warrior = NULL;
+            rpg->quests->entity = NULL;
             rpg->quests->next = NULL;
         } else
             add_quests(rpg->quests, infos, &end_loop);

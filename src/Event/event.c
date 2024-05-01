@@ -9,25 +9,25 @@
 
 void event_player_attack(rpg_t *rpg)
 {
-    warrior_t *player = rpg->lwarrior->warrior;
+    entity_t *player = rpg->ent[0];
 
     if (rpg->event.type == sfEvtKeyPressed) {
         if (rpg->event.key.code == sfKeySpace &&
-            is_attacking(player)) {
-            player->max_line_attack = 1;
+            is_attacking(player) && player->type == WARRIOR) {
+            player->spe->warrior->max_line_attack = 1;
         }
         if (rpg->event.key.code == sfKeySpace &&
-            not_attacking(player)) {
-            player->state = ST_ATT;
-            player->line_attack = 0;
-            player->max_line_attack = 0;
-            player->rect.left = 0;
-            update_attack_rect(player);
-            sfClock_restart(player->myclock->clock);
+            not_attacking(player) && player->type == WARRIOR) {
+            player->common->state = ST_ATT;
+            player->spe->warrior->line_attack = 0;
+            player->spe->warrior->max_line_attack = 0;
+            player->common->anim->rect.left = 0;
+            update_warrior_attack_rect(player);
+            sfClock_restart(player->common->anim->myclock->clock);
         }
-        if (rpg->event.key.code == sfKeyP) {
-            printf("Player pos: %f, %f\n", player->pos.x, player->pos.y);
-        }
+        if (rpg->event.key.code == sfKeyP)
+            printf("Player pos: %f, %f\n", player->common->pos.x,
+                player->common->pos.y);
     }
 }
 
@@ -60,6 +60,6 @@ void event(rpg_t *rpg)
         event_states(rpg);
     }
     if (rpg->gamestate == GAME)
-        if (player_is_not_attacking(rpg) && get_player_state(rpg) != DEAD)
+        if (player_is_not_attacking(rpg) && player_is_alive(rpg))
             player_move(rpg);
 }
