@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** my_rpg
 ** File description:
-** update_inv
+** display_inv
 */
 
 #include "rpg.h"
@@ -89,13 +89,14 @@ static void update_player_stat(void)
     (sfVector2f){(*view_pos()).x - 702, (*view_pos()).y - 175});
 }
 
-int update_inv(rpg_t *rpg)
+int display_inv(rpg_t *rpg)
 {
     if (rpg->gamestate == INVENTORY) {
         update_slot();
         update_stuff();
         update_player_status();
         update_player_stat();
+        apply_stuff(rpg);
         open_inventory(rpg);
     }
     return 0;

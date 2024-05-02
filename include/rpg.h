@@ -333,25 +333,6 @@ typedef struct map_s {
     sfSprite *high_sprite;
 } map_t;
 
-typedef struct rpg_s {
-    win_t *win;
-    map_t *map;
-    sfEvent event;
-    entity_t **ent;
-    unsigned int ent_size;
-    bool debug;
-    menu_t *main_menu;
-    menu_t *save_menu;
-    menu_t *settings;
-    state_t gamestate;
-    all_quests_t *quests;
-    sfText *quest_text;
-    sfText *quest_desc;
-    sfText *quest_info;
-    interface_t *interface;
-    collision_t *collision;
-} rpg_t;
-
 enum item_type {
     WEAPON,
     ARMOR,
@@ -364,7 +345,9 @@ enum item_type {
 typedef struct slot_s {
     int is_empty;
     int id;
+    int is_active;
     int type;
+    int access;
     int is_highlighted;
     int is_clicked;
     int is_moved;
@@ -414,6 +397,16 @@ typedef struct inventory_s {
     player_status_t *player_status;
 } inventory_t;
 
+enum item_type {
+    WEAPON,
+    ARMOR,
+    POTION,
+    QUEST,
+    KEY,
+    OTHER,
+    ALL
+};
+
 typedef struct line_of_sight_data_s {
     sfVector2f start;
     sfVector2f end;
@@ -426,6 +419,26 @@ typedef struct line_of_sight_data_s {
     int sample_interval;
     int sample_counter;
 } line_of_sight_data_t;
+
+typedef struct rpg_s {
+    win_t *win;
+    map_t *map;
+    sfEvent event;
+    entity_t **ent;
+    unsigned int ent_size;
+    bool debug;
+    menu_t *main_menu;
+    menu_t *save_menu;
+    menu_t *settings;
+    state_t gamestate;
+    all_quests_t *quests;
+    sfText *quest_text;
+    sfText *quest_desc;
+    sfText *quest_info;
+    interface_t *interface;
+    collision_t *collision;
+    inventory_t *inventory;
+} rpg_t;
 
 #include "../src/Init/init.h"
 #include "../src/Display/display.h"

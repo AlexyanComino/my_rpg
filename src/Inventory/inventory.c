@@ -37,6 +37,7 @@ static slot_t *setup_slot(slot_t *slot, sfVector2f pos, int type, void *item)
     slot->is_highlighted = 0;
     slot->is_clicked = 0;
     slot->is_moved = 0;
+    slot->is_active = 0;
     slot->type = type;
     slot->item = item;
     slot->sprite = init_sprite_from_file("assets/inventory/6.png");
@@ -58,6 +59,7 @@ static int manage_slot(slot_t *tmp, void *item, int type, int *id)
     tmp = (*inventory())->slot;
     slot->id = *id;
     slot = setup_slot(slot, pos, type, item);
+    slot->access = ALL;
     slot->next = NULL;
     pos.x = (*id % 5 == 0) ? start : pos.x + 100;
     pos.y += (*id % 5 == 0) ? 100 : 0;
