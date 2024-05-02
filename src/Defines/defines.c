@@ -7,30 +7,30 @@
 
 #include "rpg.h"
 
-bool is_alive(warrior_t *warrior)
+bool is_alive(entity_t *entity)
 {
-    return warrior->state != DEAD && warrior->state != RIEN;
+    return entity->common->state != DEAD && entity->common->state != RIEN;
 }
 
-bool is_player(rpg_t *rpg, warrior_t *mwarrior)
+bool is_player(rpg_t *rpg, entity_t *entity)
 {
-    return rpg->lwarrior->warrior == mwarrior;
+    return rpg->ent[0] == entity;
 }
 
-bool is_dead(warrior_t *warrior)
+bool is_dead(entity_t *entity)
 {
-    return warrior->state == DEAD;
+    return entity->common->state == DEAD;
 }
 
-bool is_discreet(warrior_t *warrior)
+bool is_discreet(entity_t *entity)
 {
-    if (!warrior)
+    if (!entity)
         return false;
-    return warrior->state == WALK || warrior->state == IDLE ||
-        warrior->state == ST_ATT;
+    return entity->common->state == WALK || entity->common->state == IDLE ||
+        entity->common->state == ST_ATT;
 }
 
-bool is_attacking(warrior_t *warrior)
+bool is_attacking(entity_t *entity)
 {
-    return warrior->state == ATTACK || warrior->state == ST_ATT;
+    return entity->common->state == ATTACK || entity->common->state == ST_ATT;
 }

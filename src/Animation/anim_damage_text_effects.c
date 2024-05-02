@@ -57,12 +57,10 @@ static void update_bam_effect(damage_text_t *damage_text)
     }
 }
 
-void update_damage_text_effects(warrior_t *warrior)
+void update_damage_text_effects(damage_text_t **damage_texts)
 {
-    damage_text_t *tmp = warrior->damage_texts;
+    damage_text_t *tmp = *damage_texts;
 
-    if (tmp == NULL)
-        return;
     while (tmp != NULL) {
         if (tmp->effect == NULL) {
             tmp = tmp->next;

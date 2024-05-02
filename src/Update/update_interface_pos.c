@@ -7,10 +7,10 @@
 
 #include "rpg.h"
 
-void update_interface_pos(rpg_t *rpg, warrior_t *player, sfVector2f oldPos)
+void update_interface_pos(rpg_t *rpg, entity_t *player, sfVector2f oldPos)
 {
-    float diff_x = player->pos.x - oldPos.x;
-    float diff_y = player->pos.y - oldPos.y;
+    float diff_x = player->common->pos.x - oldPos.x;
+    float diff_y = player->common->pos.y - oldPos.y;
 
     rpg->interface->restricted->danger_pos.x += diff_x;
     rpg->interface->restricted->danger_pos.y += diff_y;

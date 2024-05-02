@@ -53,8 +53,8 @@ void display_quests(rpg_t *rpg)
     all_quests_t *tmp = rpg->quests;
 
     while (tmp != NULL) {
-        if (tmp->warrior != NULL &&
-            is_player_interact_warrior(rpg, tmp->warrior) == false)
+        if (tmp->entity != NULL &&
+            is_player_interact_entity(rpg, tmp->entity) == false)
             tmp->quest->is_displayed = false;
         if (tmp->quest->is_displayed == true) {
             sfRenderWindow_drawText(rpg->win->window, rpg->quest_text, NULL);
@@ -68,8 +68,9 @@ void display_quests(rpg_t *rpg)
 static void display_restricted_text(rpg_t *rpg)
 {
     restricted_t *restricted = rpg->interface->restricted;
+    entity_t *player = rpg->ent[0];
 
-    if (!is_alive(rpg->lwarrior->warrior))
+    if (!is_alive(player))
         return;
     sfRenderWindow_drawSprite(rpg->win->window, restricted->sprite, NULL);
 }
@@ -97,7 +98,7 @@ void display_all(rpg_t *rpg)
     if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY) {
         sfRenderWindow_drawSprite(rpg->win->window, rpg->map->ground_sprite,
             NULL);
-        display_warriors(rpg);
+        display_entities(rpg);
         display_quests(rpg);
         sfRenderWindow_drawSprite(rpg->win->window, rpg->map->high_sprite,
             NULL);

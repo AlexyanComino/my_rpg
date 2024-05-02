@@ -52,10 +52,9 @@
 #define PLAYER_NAME "Pablodrigo"
 
 #define BASE_COLOR sfColor_fromRGB(146, 255, 250)
-#define WARRIOR_HAS_BASE(warrior) (warrior->base != NULL)
 
 #define DAMAGE_COLOR_PLAYER sfWhite
-#define DAMAGE_COLOR_BLUE sfColor_fromRGB(102, 220, 255)
+#define DAMAGE_COLOR_BLUE sfColor_fromRGB(28, 86, 255)
 #define DAMAGE_COLOR_RED sfColor_fromRGB(255, 88, 65)
 #define DAMAGE_COLOR_YELLOW sfColor_fromRGB(255, 215, 66)
 #define DAMAGE_COLOR_PURPLE sfColor_fromRGB(183, 133, 255)
@@ -65,30 +64,29 @@
 
 #define CRIT_WIDTH 215
 #define BAM_WIDTH 160
-#define BAM_HEIGHT 200
 
-#define TILE_SCALE 2
+#define TILE_SCALE 2.1
 #define TILE_SIZE 32 * TILE_SCALE
 
-typedef enum warrior_color {
+typedef enum color_entity_s {
     BLUE = 0,
     PURPLE,
     RED,
     YELLOW,
-} color_warrior_t;
+} color_entity_t;
 
-typedef enum warrior_x {
+typedef enum side_x_s {
     RIGHT = 0,
     LEFT,
-} x_warrior_t;
+} side_x_t;
 
-typedef enum warrior_y {
+typedef enum side_y_s {
     NONE = 0,
     DOWN,
     UP,
-} y_warrior_t;
+} side_y_t;
 
-typedef enum warrior_state {
+typedef enum state_entity_s {
     IDLE = 0,
     WALK,
     RUN,
@@ -96,7 +94,7 @@ typedef enum warrior_state {
     ATTACK,
     DEAD,
     RIEN,
-} state_warrior_t;
+} state_entity_t;
 
 typedef struct attributes_s {
     unsigned int max_health;
@@ -112,33 +110,37 @@ typedef struct my_clock_s {
     float seconds;
 } my_clock_t;
 
-typedef struct anim_death_s {
-    sfTexture *texture_dead;
-    sfSprite *sprite_dead;
-    sfIntRect rect_dead;
-    my_clock_t *clock_dead;
-    int number_dead;
-} anim_death_t;
+typedef struct anim_s {
+    sfTexture *texture;
+    sfSprite *sprite;
+    sfIntRect rect;
+    my_clock_t *myclock;
+} anim_t;
 
-typedef struct zones_warrior_s {
+typedef struct death_s {
+    anim_t *anim;
+    int number_dead;
+} death_t;
+
+typedef struct zones_entity_s {
     sfIntRect hitbox;
     sfRectangleShape *rect_hitbox;
     sfIntRect hitbox_attack;
     sfRectangleShape *rect_hitbox_attack;
-    unsigned int radius_max_detection;
-    sfCircleShape *circle_max_detection;
-} zones_warrior_t;
+    unsigned int l_radius;
+    sfCircleShape *l_circle;
+    unsigned int m_radius;
+    sfCircleShape *m_circle;
+    bool m_detect;
+    unsigned int s_radius;
+    sfCircleShape *s_circle;
+    bool s_detect;
+} zones_entity_t;
 
 typedef struct mark_s {
-    sfTexture *texture;
-    sfSprite *sprite;
+    anim_t *anim;
     sfVector2f pos;
-    my_clock_t *myclock;
-    sfIntRect rect;
     int is_display;
-    bool is_detecting;
-    sfCircleShape *circle;
-    unsigned int radius;
 } mark_t;
 
 typedef enum faction {
@@ -147,6 +149,7 @@ typedef enum faction {
     PURPLE_TEAM,
     YELLOW_TEAM,
     GOBLIN_TEAM,
+    AGAINST_ALL,
 } faction_t;
 
 typedef struct base_s {
@@ -169,47 +172,65 @@ typedef enum damage_text_state {
     MISS,
 } damage_text_state_t;
 
-typedef struct effect_s {
-    sfTexture *texture;
-    sfSprite *sprite;
-    sfIntRect rect;
-    my_clock_t *myclock;
-} effect_t;
 typedef struct damage_text_s {
     sfText *text;
-    sfText *text_shadow;
     sfFont *font;
     float size;
     sfVector2f pos;
-    effect_t *effect;
+    anim_t *effect;
     damage_text_state_t state;
     struct damage_text_s *next;
 } damage_text_t;
 
-typedef struct warrior_s {
+typedef struct common_entity_s {
     char *name;
-    sfTexture *texture;
-    sfSprite *sprite;
-    my_clock_t *myclock;
-    sfIntRect rect;
+    anim_t *anim;
     sfVector2f pos;
-    color_warrior_t color;
-    x_warrior_t x;
-    y_warrior_t y;
-    state_warrior_t state;
-    int line_attack;
-    int max_line_attack;
-    zones_warrior_t *zones;
+    color_entity_t color;
+    state_entity_t state;
+    side_x_t x;
+    side_y_t y;
+    zones_entity_t *zones;
     attributes_t *attributes;
-    anim_death_t *death;
-    mark_t *exclam;
-    mark_t *inter;
+    death_t *death;
     faction_t faction;
+    faction_t faction_origin;
     my_clock_t *clock_cooldown_attack;
     float attack_cooldown;
-    base_t *base;
     damage_text_t *damage_texts;
+} common_entity_t;
+
+typedef struct warrior_s {
+    int line_attack;
+    int max_line_attack;
+    mark_t *exclam;
+    mark_t *inter;
+    base_t *base;
 } warrior_t;
+
+typedef struct goblin_s {
+} goblin_t;
+
+typedef union spe_s {
+    warrior_t *warrior;
+    goblin_t *goblin;
+} spe_t;
+
+typedef enum entity_type_s {
+    WARRIOR,
+    GOBLIN,
+} entity_type_t;
+
+typedef struct entity_s {
+    spe_t *spe;
+    common_entity_t *common;
+    entity_type_t type;
+    bool in_view;
+    void (*updt)(void *rpg, struct entity_s *entity);
+    void (*disp)(void *rpg, struct entity_s *entity);
+    sfIntRect (*get_hitbox)(sfVector2f pos);
+    sfIntRect (*get_hitbox_attack)(sfVector2f pos, side_x_t x, side_y_t y);
+} entity_t;
 
 typedef struct restricted_s {
     sfTexture *texture;
@@ -222,10 +243,6 @@ typedef struct restricted_s {
 typedef struct interface_s {
     restricted_t *restricted;
 } interface_t;
-typedef struct lwarrior_s {
-    warrior_t *warrior;
-    struct lwarrior_s *next;
-} lwarrior_t;
 
 typedef enum quest_type {
     KILL,
@@ -250,7 +267,7 @@ typedef struct quest_s {
 typedef struct all_quests_s {
     char *proprietary;
     quest_t *quest;
-    warrior_t *warrior;
+    entity_t *entity;
     struct all_quests_s *next;
 } all_quests_t;
 
@@ -306,7 +323,6 @@ typedef struct win_s {
 typedef struct collision_s {
     sfIntRect rect;
     sfVector2f *pos;
-    // bool **coll_map;
     sfRectangleShape *shape;
     unsigned int size;
 } collision_t;
@@ -316,6 +332,15 @@ typedef struct map_s {
     sfTexture *high_texture;
     sfSprite *high_sprite;
 } map_t;
+
+enum item_type {
+    WEAPON,
+    ARMOR,
+    POTION,
+    QUEST,
+    KEY,
+    OTHER
+};
 
 typedef struct slot_s {
     int is_empty;
@@ -358,7 +383,7 @@ typedef struct player_status_s {
     sfSprite *s_attack;
     sfSprite *s_hp;
     sfSprite *s_gold;
-    warrior_t *player;
+    entity_t *player;
     sfSprite *pp;
     slot_t *stuff;
 } player_status_t;
@@ -371,25 +396,6 @@ typedef struct inventory_s {
     sfSprite *sprite;
     player_status_t *player_status;
 } inventory_t;
-
-typedef struct rpg_s {
-    win_t *win;
-    map_t *map;
-    sfEvent event;
-    lwarrior_t *lwarrior;
-    bool debug;
-    menu_t *main_menu;
-    menu_t *save_menu;
-    menu_t *settings;
-    state_t gamestate;
-    all_quests_t *quests;
-    sfText *quest_text;
-    sfText *quest_desc;
-    sfText *quest_info;
-    interface_t *interface;
-    collision_t *collision;
-    inventory_t *inventory;
-} rpg_t;
 
 enum item_type {
     WEAPON,
@@ -414,6 +420,26 @@ typedef struct line_of_sight_data_s {
     int sample_counter;
 } line_of_sight_data_t;
 
+typedef struct rpg_s {
+    win_t *win;
+    map_t *map;
+    sfEvent event;
+    entity_t **ent;
+    unsigned int ent_size;
+    bool debug;
+    menu_t *main_menu;
+    menu_t *save_menu;
+    menu_t *settings;
+    state_t gamestate;
+    all_quests_t *quests;
+    sfText *quest_text;
+    sfText *quest_desc;
+    sfText *quest_info;
+    interface_t *interface;
+    collision_t *collision;
+    inventory_t *inventory;
+} rpg_t;
+
 #include "../src/Init/init.h"
 #include "../src/Display/display.h"
 #include "../src/Menu/menu.h"
@@ -424,4 +450,10 @@ typedef struct line_of_sight_data_s {
 #include "../src/Animation/anim.h"
 #include "../src/Quests/quests.h"
 #include "../src/Defines/defines.h"
+#include "../src/Update/Update_Warrior/update_warrior.h"
+#include "../src/Update/Update_Entities/update_entities.h"
+#include "../src/Init/Init_Entities/init_entities.h"
+#include "../src/Init/Init_Entities/Init_Warrior/init_warrior.h"
+#include "../src/Init/Init_Entities/Init_Common/init_common.h"
+#include "../src/Lib/Entity_Tools/entity_lib.h"
 #include "singleton.h"
