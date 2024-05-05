@@ -11,11 +11,7 @@
 // Event
 void event(rpg_t *rpg);
 
-// Player
-state_warrior_t get_player_state(rpg_t *rpg);
-
 // Player move
-
 void player_move(rpg_t *rpg);
 
 // Player attack
@@ -24,7 +20,7 @@ void event_player_attack(rpg_t *rpg);
 
 // Quest event
 void quest_event(rpg_t *rpg);
-void accept_quest(rpg_t *rpg);
+void accept_quest(rpg_t *rpg, entity_t *entity);
 void refuse_quest(rpg_t *rpg);
 
 // Text box event

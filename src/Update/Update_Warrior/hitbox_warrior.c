@@ -16,7 +16,7 @@ sfIntRect get_hitbox_warrior(sfVector2f pos)
         WARRIOR_WIDTH / 3, WARRIOR_WIDTH / 3};
 }
 
-static sfIntRect get_hitbox_attack_left(sfVector2f pos, y_warrior_t y,
+static sfIntRect get_warrior_hitbox_attack_left(sfVector2f pos, side_y_t y,
     int hitbox_x, int hitbox_y)
 {
     if (y == UP)
@@ -33,7 +33,7 @@ static sfIntRect get_hitbox_attack_left(sfVector2f pos, y_warrior_t y,
         (WARRIOR_WIDTH - hitbox_y) / 2, hitbox_x, hitbox_y};
 }
 
-static sfIntRect get_hitbox_attack_right(sfVector2f pos, y_warrior_t y,
+static sfIntRect get_warrior_hitbox_attack_right(sfVector2f pos, side_y_t y,
     int hitbox_x, int hitbox_y)
 {
     if (y == UP)
@@ -52,46 +52,13 @@ static sfIntRect get_hitbox_attack_right(sfVector2f pos, y_warrior_t y,
 
 // Récupère la hitbox d'attaque d'un guerrier en fonction de sa position
 // et de son orientation
-sfIntRect get_hitbox_attack(sfVector2f pos, x_warrior_t x, y_warrior_t y)
+sfIntRect get_warrior_hitbox_attack(sfVector2f pos, side_x_t x, side_y_t y)
 {
     int hitbox_x = (y == NONE) ? WARRIOR_WIDTH / 3 : 3 * WARRIOR_WIDTH / 4;
     int hitbox_y = (y == NONE) ? 3 * WARRIOR_WIDTH / 4 : WARRIOR_WIDTH / 4;
 
     if (x == RIGHT)
-        return get_hitbox_attack_right(pos, y, hitbox_x, hitbox_y);
+        return get_warrior_hitbox_attack_right(pos, y, hitbox_x, hitbox_y);
     else
-        return get_hitbox_attack_left(pos, y, hitbox_x, hitbox_y);
-}
-
-// Vérifie si l'attaque d'un guerrier touche un autre guerrier
-bool warrior_can_attack_target(warrior_t *attacker, warrior_t *target)
-{
-    sfIntRect hitbox = target->zones->hitbox;
-    sfIntRect attack = attacker->zones->hitbox_attack;
-
-    if (sfIntRect_intersects(&attack, &hitbox, NULL))
-        return (true);
-    return (false);
-}
-
-// Vérifie si un cercle est en collision avec une hitbox
-bool hitbox_in_detection(sfIntRect hitbox, unsigned int radius,
-    sfVector2f circle_pos)
-{
-    float cx = circle_pos.x;
-    float cy = circle_pos.y;
-    float r = radius;
-    float rx = hitbox.left;
-    float ry = hitbox.top;
-    float w = hitbox.width;
-    float h = hitbox.height;
-    float closestX = fmaxf(rx, fminf(cx, rx + w));
-    float closestY = fmaxf(ry, fminf(cy, ry + h));
-    float distance = sqrtf((cx - closestX) * (cx - closestX) + (cy - closestY)
-        * (cy - closestY));
-
-    if (distance <= r)
-        return true;
-    else
-        return false;
+        return get_warrior_hitbox_attack_left(pos, y, hitbox_x, hitbox_y);
 }

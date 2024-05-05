@@ -20,7 +20,7 @@ bool intrect_is_in_view(rpg_t *rpg, sfIntRect hitbox)
     return (true);
 }
 
-bool warrior_is_in_view(rpg_t *rpg, warrior_t *warrior)
+bool entity_is_in_view(rpg_t *rpg, entity_t *entity)
 {
-    return intrect_is_in_view(rpg, warrior->zones->hitbox);
+    return intrect_is_in_view(rpg, entity->common->zones->hitbox);
 }

@@ -27,7 +27,7 @@ static int setup_value(player_status_t *player_status)
 {
     player_status->hp = 100;
     player_status->max_hp = 100;
-    player_status->attack = 10;
+    player_status->attack = 50;
     player_status->defense = 10;
     player_status->speed = 10;
     player_status->level = 1;
@@ -63,31 +63,39 @@ static void setup_sprite(player_status_t *player_status)
 
 static int setup_text(player_status_t *player_status)
 {
-    player_status->t_gold = init_text((sfVector2f){610, 430}, 40,
-    sfColor_fromRGB(135, 195, 155), "0");
-    player_status->t_hp = init_text((sfVector2f){460, 235}, 40,
-    sfColor_fromRGB(135, 195, 155), "100");
+    char *str = malloc(sizeof(char) * 10);
+    sfColor color = sfColor_fromRGB(135, 195, 155);
+
+    sprintf(str, "%d", player_status->gold);
+    player_status->t_gold = init_text((sfVector2f){610, 430}, 40, color, str);
+    sprintf(str, "%d", player_status->hp);
+    player_status->t_hp = init_text((sfVector2f){460, 235}, 40, color, str);
+    sprintf(str, "%d", player_status->attack);
     player_status->t_attack = init_text((sfVector2f){610, 235}, 40,
-    sfColor_fromRGB(135, 195, 155), "10");
+    color, str);
+    sprintf(str, "%d", player_status->defense);
     player_status->t_defense = init_text((sfVector2f){460, 295}, 40,
-    sfColor_fromRGB(135, 195, 155), "10");
-    player_status->t_speed = init_text((sfVector2f){610, 295}, 40,
-    sfColor_fromRGB(135, 195, 155), "10");
-    player_status->t_level = init_text((sfVector2f){210, 435}, 40,
-    sfColor_fromRGB(135, 195, 155), "{Lvl} : 1");
+    color, str);
+    sprintf(str, "%d", player_status->speed);
+    player_status->t_speed = init_text((sfVector2f){610, 295}, 40, color, str);
+    sprintf(str, "{Lvl} : %d", player_status->level);
+    player_status->t_level = init_text((sfVector2f){210, 435}, 40, color, str);
+    free(str);
     return 0;
 }
 
 player_status_t *init_player_status(void)
 {
     player_status_t *player_status = malloc(sizeof(player_status_t));
+    char **lines = file_to_array(".player.csv");
+    char **infos = split_string(lines[0], ";");
 
     setup_value(player_status);
     setup_sprite(player_status);
     setup_text(player_status);
-    player_status->player = init_warrior(BLUE, (sfVector2f){0, 0},
-        "Inventory");
-    sfSprite_setScale(player_status->player->sprite, (sfVector2f){1.3, 1.3});
+    player_status->player = init_entity_warrior(infos);
+    sfSprite_setScale(player_status->player->common->anim->sprite,
+        (sfVector2f){1.3, 1.3});
     player_status->pp = init_sprite_from_file("assets/inventory/19.png");
     sfSprite_setScale(player_status->pp, (sfVector2f){2, 2});
     sfSprite_setPosition(player_status->pp, (sfVector2f){180, 410});

@@ -64,11 +64,11 @@ static void init_rpg2(rpg_t *rpg)
     rpg->main_menu = init_menu();
     rpg->save_menu = init_save_menu();
     rpg->settings = init_settings();
-    init_all_quests(rpg);
     rpg->interface = init_interface();
     rpg->collision = init_collision();
     init_inventory(15);
     rpg->inventory = *inventory();
+    init_all_quests(rpg);
 }
 
 rpg_t *init_rpg(void)
@@ -85,7 +85,8 @@ rpg_t *init_rpg(void)
     rpg->gamestate = MAIN_MENU;
     start(rpg);
     rpg->win = init_win(WIDTH, HEIGHT);
-    rpg->lwarrior = init_lwarrior();
+    rpg->ent_size = 0;
+    rpg->ent = init_ent(&rpg->ent_size);
     rpg->event = (sfEvent){0};
     rpg->debug = true;
     rpg->text_box = init_text_box();

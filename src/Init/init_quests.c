@@ -56,7 +56,7 @@ static all_quests_t *add_node(all_quests_t *quests, char **infos)
 
     new->proprietary = strdup(infos[0]);
     new->quest = init_quest(infos);
-    new->warrior = NULL;
+    new->entity = NULL;
     new->next = NULL;
     while (tmp->next != NULL)
         tmp = tmp->next;
@@ -130,7 +130,7 @@ void init_all_quests(rpg_t *rpg)
             rpg->quests = malloc(sizeof(all_quests_t));
             rpg->quests->proprietary = strdup(infos[0]);
             rpg->quests->quest = init_quest(infos);
-            rpg->quests->warrior = NULL;
+            rpg->quests->entity = NULL;
             rpg->quests->next = NULL;
         } else
             add_quests(rpg->quests, infos, &end_loop);

@@ -7,10 +7,11 @@
 
 #include "rpg.h"
 
-void check_quest_done(lwarrior_t *lwarrior, quest_t *tmp, rpg_t *rpg)
+
+void check_quest_done(rpg_t *rpg, entity_t *entity, quest_t *tmp)
 {
-    if (lwarrior->warrior->state == DEAD &&
-        strcmp(lwarrior->warrior->name, tmp->objective) == 0) {
+    if (entity->common->state == DEAD &&
+        strcmp(entity->common->name, tmp->objective) == 0) {
         tmp->is_done = true;
         rpg->quest_header->state = Q_END;
         printf("Quest done: %s\n", tmp->name);
@@ -19,12 +20,11 @@ void check_quest_done(lwarrior_t *lwarrior, quest_t *tmp, rpg_t *rpg)
 
 void update_quest_list(rpg_t *rpg, quest_t *tmp)
 {
-    lwarrior_t *lwarrior = NULL;
-
     if (tmp->is_active && !tmp->is_done && tmp->type == KILL) {
-        lwarrior = rpg->lwarrior->next;
-        for (; lwarrior; lwarrior = lwarrior->next) {
-            check_quest_done(lwarrior, tmp, rpg);
+        for (unsigned int i = 0; i < rpg->ent_size; i++) {
+            if (rpg->ent[i]->type == WARRIOR) {
+                check_quest_done(rpg, rpg->ent[i], tmp);
+            }
         }
     }
 }

@@ -8,12 +8,8 @@
 
 #include "rpg.h"
 
-// Anim warrior
-void anim_warrior(rpg_t *rpg, warrior_t *warrior);
-
-// Classic anim warrior
-void animation_alive(rpg_t *rpg, warrior_t *warrior);
-void animation_dead(warrior_t *warrior);
+// Anim death
+void animation_death(common_entity_t *common);
 
 // Anim damage text effects
-void update_damage_text_effects(warrior_t *warrior);
+void update_damage_text_effects(damage_text_t **damage_texts);

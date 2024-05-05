@@ -61,56 +61,10 @@ void destroy_quests(rpg_t *rpg)
     }
 }
 
-static void destroy_mark(mark_t *mark)
-{
-    sfTexture_destroy(mark->texture);
-    sfSprite_destroy(mark->sprite);
-    sfClock_destroy(mark->myclock->clock);
-    free(mark->myclock);
-    sfCircleShape_destroy(mark->circle);
-    free(mark);
-}
-
-void destroy_warrior(warrior_t *warrior)
-{
-    free(warrior->name);
-    sfTexture_destroy(warrior->texture);
-    sfSprite_destroy(warrior->sprite);
-    sfRectangleShape_destroy(warrior->zones->rect_hitbox);
-    sfRectangleShape_destroy(warrior->zones->rect_hitbox_attack);
-    sfCircleShape_destroy(warrior->zones->circle_max_detection);
-    free(warrior->zones);
-    free(warrior->attributes);
-    sfTexture_destroy(warrior->death->texture_dead);
-    sfSprite_destroy(warrior->death->sprite_dead);
-    sfClock_destroy(warrior->death->clock_dead->clock);
-    free(warrior->death->clock_dead);
-    free(warrior->death);
-    destroy_mark(warrior->exclam);
-    destroy_mark(warrior->inter);
-    sfClock_destroy(warrior->myclock->clock);
-    free(warrior->myclock);
-    free(warrior);
-}
-
-void destroy_warriors(lwarrior_t *lwarrior)
-{
-    lwarrior_t *tmp = lwarrior;
-    lwarrior_t *next = NULL;
-
-    while (tmp) {
-        next = tmp->next;
-        destroy_warrior(tmp->warrior);
-        free(tmp);
-        tmp = next;
-    }
-}
-
 void destroy_rpg(rpg_t *rpg)
 {
     destroy_menus(rpg);
     destroy_quests(rpg);
-    destroy_warriors(rpg->lwarrior);
     sfClock_destroy(rpg->win->clock);
     sfView_destroy(rpg->win->view);
     sfRenderWindow_destroy(rpg->win->window);

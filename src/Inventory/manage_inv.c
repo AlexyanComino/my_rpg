@@ -30,8 +30,8 @@ void highlight_inventory(sfMouseMoveEvent event, slot_t *tmp)
         event.y + (*view_pos()).y - 1080 / 2)) ? 1 : 0;
         if (tmp->is_clicked && tmp->is_empty == 0 && tmp->type == WEAPON) {
             sfSprite_setPosition((weapon_t *){tmp->item}->sprite,
-            (sfVector2f){event.x + (*view_pos()).x - 1920 / 2,
-            event.y + (*view_pos()).y - 1080 / 2});
+            (sfVector2f){event.x - 15 + (*view_pos()).x - 1920 / 2,
+            event.y - 15 + (*view_pos()).y - 1080 / 2});
             tmp->is_moved = 1;
         }
         if (tmp->is_clicked && tmp->is_empty == 0 && tmp->type == ARMOR) {
@@ -61,32 +61,34 @@ static void slot_click(slot_t *tmp, slot_t *tmp2, sfMouseButtonEvent event)
 {
     sfFloatRect rect = {0, 0, 0, 0};
 
-    tmp->is_clicked = 0;
     for (; tmp2; tmp2 = tmp2->next) {
         rect = sfSprite_getGlobalBounds(tmp2->sprite);
-        if (sfFloatRect_contains(&rect,
-        event.x + (*view_pos()).x - 1920 / 2,
-        event.y + (*view_pos()).y - 1080 / 2) &&
-        tmp2->is_empty == 1) {
+        if (sfFloatRect_contains(&rect, event.x + (*view_pos()).x - 1920 / 2,
+        event.y + (*view_pos()).y - 1080 / 2) && tmp2->is_empty == 1 &&
+        (tmp2->access == OTHER || tmp->type == tmp2->access)) {
             tmp2->is_empty = 0;
+            tmp2->is_active = 0;
             tmp2->type = tmp->type;
             tmp2->item = tmp->item;
+            unapply_stuff(tmp);
             tmp->is_empty = 1;
             tmp->is_moved = 0;
+            tmp->is_active = 0;
             tmp->type = OTHER;
             tmp->item = NULL;
             break;
         }
     }
-    tmp->is_moved = 0;
 }
 
 int release_inventory(sfMouseButtonEvent event, slot_t *tmp)
 {
     for (; tmp; tmp = tmp->next) {
         if (tmp->is_clicked == 1) {
+            tmp->is_clicked = 0;
             slot_click(tmp, (*inventory())->slot, event);
             slot_click(tmp, (*inventory())->player_status->stuff, event);
+            tmp->is_moved = 0;
         }
     }
     return (0);
