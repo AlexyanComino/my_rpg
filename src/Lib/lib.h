@@ -41,3 +41,7 @@ bool is_warrior_hitbox_collide_warrior(rpg_t *rpg, warrior_t *warrior,
 // View tools
 bool intrect_is_in_view(rpg_t *rpg, sfIntRect hitbox);
 bool warrior_is_in_view(rpg_t *rpg, warrior_t *warrior);
+
+// file_to_array
+char **file_to_array(char *path);
+void free_array(char **array);

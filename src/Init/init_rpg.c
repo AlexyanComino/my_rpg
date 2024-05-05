@@ -24,22 +24,6 @@ static win_t *init_win(unsigned int width, unsigned int height)
     return win;
 }
 
-static map_t *init_map(void)
-{
-    map_t *map = malloc(sizeof(map_t));
-
-    map->ground_texture = sfTexture_createFromFile("assets/menu/bg.jpg", NULL);
-    map->ground_sprite = sfSprite_create();
-    sfSprite_setTexture(map->ground_sprite, map->ground_texture, sfTrue);
-    sfSprite_setScale(map->ground_sprite,
-        (sfVector2f){TILE_SCALE, TILE_SCALE});
-    map->high_texture = sfTexture_createFromFile("assets/menu/bg.jpg", NULL);
-    map->high_sprite = sfSprite_create();
-    sfSprite_setTexture(map->high_sprite, map->high_texture, sfTrue);
-    sfSprite_setScale(map->high_sprite, (sfVector2f){TILE_SCALE, TILE_SCALE});
-    return map;
-}
-
 static sfVector2f *get_collisions_pos(unsigned int *size)
 {
     sfVector2f *pos = NULL;
@@ -75,15 +59,6 @@ static collision_t *init_collision(void)
     return collision;
 }
 
-void *load_data(void *arg)
-{
-    shared_data_t *shared_data = (shared_data_t *)arg;
-
-    shared_data->map = init_map();
-    shared_data->loaded = 1;
-    pthread_exit(NULL);
-}
-
 static void init_rpg2(rpg_t *rpg)
 {
     rpg->main_menu = init_menu();
@@ -94,40 +69,6 @@ static void init_rpg2(rpg_t *rpg)
     rpg->collision = init_collision();
     init_inventory(15);
     rpg->inventory = *inventory();
-}
-
-static void set_sprite_transparent(sfSprite *sprite, int alpha)
-{
-    sfColor color = sfSprite_getColor(sprite);
-
-    color.a = alpha;
-    sfSprite_setColor(sprite, color);
-}
-
-static text_box_t *init_text_box(void)
-{
-    text_box_t *text_box = malloc(sizeof(text_box_t));
-
-    text_box->box_texture = sfTexture_createFromFile("assets/interface/text_box.png",
-        NULL);
-    text_box->box = sfSprite_create();
-    sfSprite_setTexture(text_box->box, text_box->box_texture, sfTrue);
-    sfSprite_setScale(text_box->box, (sfVector2f){0.5, 0.5});
-    set_sprite_transparent(text_box->box, 150);
-    text_box->font = sfFont_createFromFile("assets/fonts/CompassPro.ttf");
-    text_box->npc_name = sfText_create();
-    sfText_setFont(text_box->npc_name, text_box->font);
-    sfText_setCharacterSize(text_box->npc_name, 30);
-    text_box->npc_text = sfText_create();
-    sfText_setFont(text_box->npc_text, text_box->font);
-    sfText_setCharacterSize(text_box->npc_text, 30);
-    text_box->is_displayed = false;
-    text_box->is_fully_displayed = false;
-    text_box->clock = sfClock_create();
-    text_box->str = NULL;
-    text_box->displayed_str = NULL;
-    text_box->len = 0;
-    return text_box;
 }
 
 rpg_t *init_rpg(void)

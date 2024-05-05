@@ -44,3 +44,15 @@ faction_t get_faction(warrior_t *warrior);
 // Init damage texts
 damage_text_t *init_damage_text(rpg_t *rpg, warrior_t *warrior,
     int attack, damage_text_state_t state);
+
+// Init text box
+text_box_t *init_text_box(void);
+
+// Init map
+void *load_data(void *arg);
+
+// Init quests
+void init_all_quests(rpg_t *rpg);
+
+// Init dialog
+dialog_t *init_dialog(char *dialog);

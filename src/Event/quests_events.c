@@ -7,39 +7,47 @@
 
 #include "rpg.h"
 
-void interact_with_warrior(rpg_t *rpg, warrior_t *warrior)
+void interact_with_warrior(rpg_t *rpg)
 {
     all_quests_t *tmp = rpg->quests;
 
     for (; tmp; tmp = tmp->next) {
-        if (strcmp(tmp->proprietary, warrior->name) != 0 ||
+        if (strcmp(tmp->proprietary, rpg->text_box->warrior->name) != 0 ||
                 tmp->quest->is_active == true)
                     continue;
-        if (rpg->text_box->is_displayed == false) {
-            printf("Interacting with %s\n", warrior->name);
-            sfText_setString(rpg->quest_header->text, tmp->quest->name);
-            sfText_setString(rpg->text_box->npc_name, tmp->proprietary);
-            rpg->text_box->str = strdup(tmp->quest->description);
-            rpg->text_box->displayed_str = malloc(sizeof(char) * (strlen(rpg->text_box->str) + 1));
-            rpg->text_box->displayed_str[0] = '\0';
-            tmp->warrior = warrior;
-            rpg->text_box->is_displayed = true;
-        } else
-            rpg->text_box->is_displayed = false;
+        text_box_handling(rpg, tmp);
     }
 }
 
-void accept_quest(rpg_t *rpg, warrior_t *warrior)
+void accept_quest(rpg_t *rpg)
 {
     all_quests_t *tmp = rpg->quests;
 
     while (tmp != NULL) {
-        if (strcmp(tmp->proprietary, warrior->name) == 0 &&
+        if (strcmp(tmp->proprietary, rpg->text_box->warrior->name) == 0 &&
                 tmp->quest->is_active == false) {
             tmp->quest->is_active = true;
             rpg->text_box->is_displayed = false;
             rpg->quest_header->state = Q_START;
+            rpg->lwarrior->warrior->state = IDLE;
             printf("Quest accepted: %s\n", tmp->quest->name);
+        }
+        tmp = tmp->next;
+    }
+}
+
+void refuse_quest(rpg_t *rpg)
+{
+    all_quests_t *tmp = rpg->quests;
+
+    while (tmp != NULL) {
+        if (strcmp(tmp->proprietary, rpg->text_box->warrior->name) == 0 &&
+                tmp->quest->is_active == false) {
+            rpg->text_box->is_displayed = false;
+            rpg->text_box->is_fully_displayed = false;
+            rpg->text_box->len = 0;
+            free(rpg->text_box->displayed_str);
+            rpg->lwarrior->warrior->state = IDLE;
         }
         tmp = tmp->next;
     }
@@ -49,10 +57,18 @@ void quest_handling(rpg_t *rpg, lwarrior_t *tmp)
 {
     if (warrior_is_in_view(rpg, tmp->warrior) &&
     is_player_interact_warrior(rpg, tmp->warrior)) {
+        rpg->text_box->warrior = tmp->warrior;
         if (rpg->event.key.code == sfKeyE)
-            interact_with_warrior(rpg, tmp->warrior);
-        if (rpg->event.key.code == sfKeyEnter)
-            accept_quest(rpg, tmp->warrior);
+            interact_with_warrior(rpg);
+        if (rpg->event.key.code == sfKeyEnter &&
+        rpg->text_box->is_fully_displayed == true)
+            choice_action(rpg);
+        dialog_handling(rpg);
+        if ((rpg->event.key.code == sfKeyUp ||
+            rpg->event.key.code == sfKeyDown)
+            && rpg->text_box->is_fully_displayed == true &&
+                rpg->text_box->dialog->next == NULL)
+            change_choice(rpg);
     }
 }
 
@@ -60,7 +76,9 @@ void quest_event(rpg_t *rpg)
 {
     lwarrior_t *tmp = rpg->lwarrior->next;
 
-    if ((rpg->event.key.code == sfKeyE || rpg->event.key.code == sfKeyEnter)
+    if ((rpg->event.key.code == sfKeyE ||
+        rpg->event.key.code == sfKeyEnter ||
+        rpg->lwarrior->warrior->state == INTERACT)
         && rpg->event.type == sfEvtKeyReleased) {
         for (; tmp; tmp = tmp->next)
             quest_handling(rpg, tmp);

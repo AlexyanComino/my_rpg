@@ -24,6 +24,9 @@
 #define WIDTH 1920
 #define HEIGHT 1080
 
+#define CHOICE_WIDTH 518
+#define CHOICE_HEIGHT 101
+
 #define BUTTON_WIDTH 640
 #define BUTTON_HEIGHT 338
 
@@ -99,6 +102,7 @@ typedef enum warrior_state {
     ST_ATT,
     ATTACK,
     DEAD,
+    INTERACT,
     RIEN,
 } state_warrior_t;
 
@@ -238,6 +242,11 @@ typedef enum quest_type {
     MOVE
 } quest_type_t;
 
+typedef struct dialog_s {
+    char *txt;
+    struct dialog_s *next;
+} dialog_t;
+
 typedef struct quest_s {
     char *name;
     char *description;
@@ -248,6 +257,7 @@ typedef struct quest_s {
     bool is_active;
     bool is_displayed;
     quest_type_t type;
+    dialog_t *dialog;
     struct quest_s *next;
 } quest_t;
 
@@ -278,6 +288,7 @@ typedef enum button_state {
 typedef struct button_s {
     char *name;
     sfTexture *texture;
+    sfSprite *sprite;
     sfText *text;
     sfFont *font;
     sfRectangleShape *rect_shape;
@@ -390,6 +401,7 @@ typedef struct quest_header_s {
     sfFont *font;
     sfText *done;
     sfRectangleShape *rect;
+    sfRectangleShape *rect2;
     quest_state_t state;
     my_clock_t *myclock;
 } quest_header_t;
@@ -401,6 +413,9 @@ typedef struct text_box_s {
     sfText *npc_text;
     sfFont *font;
     sfClock *clock;
+    button_t *choice;
+    warrior_t *warrior;
+    dialog_t *dialog;
     char *str;
     char *displayed_str;
     bool is_displayed;
@@ -459,6 +474,5 @@ typedef struct line_of_sight_data_s {
 #include "../src/Update/update.h"
 #include "../src/Lib/lib.h"
 #include "../src/Animation/anim.h"
-#include "../src/Quests/quests.h"
 #include "../src/Defines/defines.h"
 #include "singleton.h"

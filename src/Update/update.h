@@ -55,3 +55,6 @@ void update_interface_pos(rpg_t *rpg, warrior_t *player, sfVector2f oldPos);
 
 // Update game interface
 void update_game_interface(rpg_t *rpg);
+
+// Update quest header
+void update_quest_header(rpg_t *rpg);

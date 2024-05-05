@@ -14,3 +14,8 @@ void display_all(rpg_t *rpg);
 // Display warriors
 void display_warrior(rpg_t *rpg, warrior_t *warrior);
 void display_warriors(rpg_t *rpg);
+
+// Display menus
+void display_main_menu(rpg_t *rpg);
+void display_settings(rpg_t *rpg);
+void display_save_menu(rpg_t *rpg);

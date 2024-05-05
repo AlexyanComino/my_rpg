@@ -63,7 +63,7 @@ static void animation_attack(rpg_t *rpg, warrior_t *warrior)
 
 void animation_alive(rpg_t *rpg, warrior_t *warrior)
 {
-    if (warrior->state == IDLE) {
+    if (warrior->state == IDLE || warrior->state == INTERACT) {
         warrior->rect.top = 0;
         animation_idle_walk_run(warrior);
     }

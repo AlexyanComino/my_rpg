@@ -8,101 +8,114 @@
 #include "rpg.h"
 #include "singleton.h"
 
-void display_main_menu(rpg_t *rpg)
+static void add_letter(rpg_t *rpg, sfFloatRect rect, sfVector2f pos)
 {
-    button_t *tmp = rpg->main_menu->buttons;
-
-    sfRenderWindow_drawSprite(
-        rpg->win->window, rpg->main_menu->background, NULL);
-    sfRenderWindow_drawText(rpg->win->window, rpg->main_menu->text, NULL);
-    while (tmp != NULL) {
-        sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
-        tmp = tmp->next;
-    }
-}
-
-void display_settings(rpg_t *rpg)
-{
-    button_t *tmp = rpg->settings->buttons;
-
-    sfRenderWindow_drawSprite(
-        rpg->win->window, rpg->main_menu->background, NULL);
-    while (tmp != NULL) {
-        sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
-        tmp = tmp->next;
-    }
-}
-
-void display_save_menu(rpg_t *rpg)
-{
-    button_t *tmp = rpg->save_menu->buttons;
-
-    sfRenderWindow_drawSprite(
-        rpg->win->window, rpg->main_menu->background, NULL);
-    while (tmp != NULL) {
-        if (strcmp(tmp->name, "BACK") != 0)
-            sfRenderWindow_drawRectangleShape(rpg->win->window,
-                tmp->rect_shape, NULL);
-        sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
-        tmp = tmp->next;
+    rpg->text_box->displayed_str[rpg->text_box->len] =
+        rpg->text_box->str[rpg->text_box->len];
+    rpg->text_box->displayed_str[rpg->text_box->len + 1] = '\0';
+    sfText_setString(rpg->text_box->npc_text,
+        rpg->text_box->displayed_str);
+    sfText_setOrigin(rpg->text_box->npc_text,
+        (sfVector2f){rect.width / 2, rect.height / 2});
+    sfText_setPosition(rpg->text_box->npc_text,
+        (sfVector2f){pos.x, pos.y - 10});
+    sfRenderWindow_drawText(rpg->win->window,
+        rpg->text_box->npc_text, NULL);
+    if (sfTime_asMilliseconds(
+        sfClock_getElapsedTime(rpg->text_box->clock)) >= 25) {
+        rpg->text_box->len++;
+        sfClock_restart(rpg->text_box->clock);
     }
 }
 
 static void display_text(rpg_t *rpg)
 {
-
     int len = strlen(rpg->text_box->str);
+    sfVector2f pos = sfSprite_getPosition(rpg->text_box->box);
+    sfFloatRect rect = sfText_getGlobalBounds(rpg->text_box->npc_text);
 
-    if (rpg->text_box->is_fully_displayed) {
-        sfText_setString(rpg->text_box->npc_text, rpg->text_box->str);
-        sfRenderWindow_drawText(rpg->win->window, rpg->text_box->npc_text, NULL);
-    }
     if (!rpg->text_box->is_fully_displayed && rpg->text_box->len < len) {
-        rpg->text_box->displayed_str[rpg->text_box->len] = rpg->text_box->str[rpg->text_box->len];
-        rpg->text_box->displayed_str[rpg->text_box->len + 1] = '\0';
-        sfText_setString(rpg->text_box->npc_text, rpg->text_box->displayed_str);
-        sfRenderWindow_drawText(rpg->win->window, rpg->text_box->npc_text, NULL);
-        if (sfTime_asMilliseconds(sfClock_getElapsedTime(rpg->text_box->clock)) >= 25) {
-            rpg->text_box->len++;
-            sfClock_restart(rpg->text_box->clock);
-        }
+        add_letter(rpg, rect, pos);
     } else
         rpg->text_box->is_fully_displayed = true;
+    if (rpg->text_box->is_fully_displayed) {
+        sfText_setString(rpg->text_box->npc_text, rpg->text_box->str);
+        sfText_setOrigin(rpg->text_box->npc_text, (sfVector2f){
+            rect.width / 2, rect.height / 2});
+        sfText_setPosition(rpg->text_box->npc_text, (sfVector2f){
+            pos.x, pos.y - 10});
+        sfRenderWindow_drawText(rpg->win->window,
+            rpg->text_box->npc_text, NULL);
+    }
+}
+
+static void move_rect(button_t *tmp)
+{
+    if (tmp->state == HOVERED) {
+        tmp->rect.top = 100;
+        sfSprite_setTextureRect(tmp->sprite, tmp->rect);
+    } else {
+        tmp->rect.top = 0;
+        sfSprite_setTextureRect(tmp->sprite, tmp->rect);
+    }
+}
+
+void display_choices(rpg_t *rpg)
+{
+    button_t *tmp = rpg->text_box->choice;
+    int i = 0;
+
+    if (rpg->text_box->is_fully_displayed != true ||
+        rpg->text_box->dialog->next != NULL)
+        return;
+    for (; tmp != NULL; tmp = tmp->next) {
+        move_rect(tmp);
+        sfSprite_setPosition(tmp->sprite, (sfVector2f){rpg->lwarrior->warrior->
+            pos.x + 500, rpg->lwarrior->warrior->pos.y + 300 + (i * 50)});
+        sfText_setPosition(tmp->text, (sfVector2f){rpg->lwarrior->warrior->
+            pos.x + 540, rpg->lwarrior->warrior->pos.y + 318 + (i * 50)});
+        sfRenderWindow_drawSprite(rpg->win->window, tmp->sprite, NULL);
+        sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
+        i++;
+    }
 }
 
 void display_text_box(rpg_t *rpg)
 {
     if (rpg->text_box->is_displayed == true) {
         sfSprite_setPosition(rpg->text_box->box, (sfVector2f){rpg->
-            lwarrior->warrior->pos.x - 300, rpg->lwarrior->warrior->pos.y +
-            300});
-        sfText_setPosition(rpg->text_box->npc_name, (sfVector2f){rpg->
-            lwarrior->warrior->pos.x - 200, rpg->lwarrior->warrior->pos.y + 275});
-        sfText_setPosition(rpg->text_box->npc_text, (sfVector2f){rpg->
-            lwarrior->warrior->pos.x - 200, rpg->lwarrior->warrior->pos.y + 380});
+            lwarrior->warrior->pos.x, rpg->lwarrior->warrior->pos.y +
+            400});
+        sfText_setPosition(rpg->text_box->npc_name, (sfVector2f){rpg->lwarrior
+            ->warrior->pos.x - 200, rpg->lwarrior->warrior->pos.y + 280});
+        display_choices(rpg);
         sfRenderWindow_drawSprite(rpg->win->window, rpg->text_box->box,
             NULL);
-        sfRenderWindow_drawText(rpg->win->window, rpg->text_box->npc_name, NULL);
+        sfRenderWindow_drawText(rpg->win->window, rpg->text_box->npc_name,
+            NULL);
         display_text(rpg);
     }
-
 }
 
 void display_quests(rpg_t *rpg)
 {
-    if (rpg->quest_header->state == Q_START || rpg->quest_header->state == Q_END) {
-        sfText_setPosition(rpg->quest_header->text, (sfVector2f){rpg->lwarrior->
-            warrior->pos.x - 400, rpg->lwarrior->warrior->pos.y - 370});
-        sfRectangleShape_setPosition(rpg->quest_header->rect, (sfVector2f){rpg->
-            lwarrior->warrior->pos.x - WIDTH / 2, rpg->lwarrior->warrior->pos.y -
-            400});
-        sfText_setPosition(rpg->quest_header->done, (sfVector2f){rpg->lwarrior->
-            warrior->pos.x + 200, rpg->lwarrior->warrior->pos.y - 250});
+    if (rpg->quest_header->state == Q_START
+        || rpg->quest_header->state == Q_END) {
+        sfText_setPosition(rpg->quest_header->text, (sfVector2f){
+            rpg->lwarrior->warrior->pos.x - 400,
+            rpg->lwarrior->warrior->pos.y - 370});
+        sfRectangleShape_setPosition(rpg->quest_header->rect, (sfVector2f){
+            rpg->lwarrior->warrior->pos.x - WIDTH / 2,
+            rpg->lwarrior->warrior->pos.y - 400});
+        sfText_setPosition(rpg->quest_header->done, (sfVector2f){rpg->
+        lwarrior->warrior->pos.x + 200, rpg->lwarrior->warrior->pos.y - 250});
         sfRenderWindow_drawRectangleShape(rpg->win->window, rpg->
             quest_header->rect, NULL);
-        sfRenderWindow_drawText(rpg->win->window, rpg->quest_header->text, NULL);
+        sfRenderWindow_drawText(rpg->win->window,
+            rpg->quest_header->text, NULL);
         if (rpg->quest_header->state == Q_END)
-            sfRenderWindow_drawText(rpg->win->window, rpg->quest_header->done, NULL);
+            sfRenderWindow_drawText(rpg->win->window,
+                rpg->quest_header->done, NULL);
     }
 }
 
@@ -126,6 +139,21 @@ static void display_collision(rpg_t *rpg)
     }
 }
 
+void display_game(rpg_t *rpg)
+{
+    sfRenderWindow_drawSprite(rpg->win->window, rpg->map->ground_sprite,
+        NULL);
+    display_warriors(rpg);
+    sfRenderWindow_drawSprite(rpg->win->window, rpg->map->high_sprite,
+        NULL);
+    if (rpg->debug)
+        display_collision(rpg);
+    update_inv(rpg);
+    display_restricted_text(rpg);
+    display_text_box(rpg);
+    display_quests(rpg);
+}
+
 void display_all(rpg_t *rpg)
 {
     sfRenderWindow_clear(rpg->win->window, sfBlack);
@@ -135,18 +163,7 @@ void display_all(rpg_t *rpg)
         display_save_menu(rpg);
     if (rpg->gamestate == SETTINGS)
         display_settings(rpg);
-    if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY) {
-        sfRenderWindow_drawSprite(rpg->win->window, rpg->map->ground_sprite,
-            NULL);
-        display_warriors(rpg);
-        //sfRenderWindow_drawSprite(rpg->win->window, rpg->map->high_sprite,
-        //    NULL);
-        if (rpg->debug)
-            display_collision(rpg);
-        update_inv(rpg);
-        display_restricted_text(rpg);
-        display_text_box(rpg);
-        display_quests(rpg);
-    }
+    if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY)
+        display_game(rpg);
     sfRenderWindow_display(rpg->win->window);
 }
