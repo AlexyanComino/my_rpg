@@ -36,7 +36,7 @@ static death_t *init_death(void)
 {
     death_t *death = malloc(sizeof(death_t));
 
-    death->anim = init_anim("assets/Warriors/Dead.png", DEAD_WIDTH,
+    death->anim = init_anim("assets/Entities/Effects/Dead.png", DEAD_WIDTH,
         DEAD_WIDTH);
     death->number_dead = 0;
     return death;
