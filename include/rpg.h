@@ -15,10 +15,17 @@
 #include <time.h>
 #include <math.h>
 #include <string.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <sys/mman.h>
+#include <fcntl.h>
 
 
 #define WIDTH 1920
 #define HEIGHT 1080
+
+#define CHOICE_WIDTH 518
+#define CHOICE_HEIGHT 101
 
 #define BUTTON_WIDTH 640
 #define BUTTON_HEIGHT 338
@@ -93,6 +100,7 @@ typedef enum state_entity_s {
     ST_ATT,
     ATTACK,
     DEAD,
+    INTERACT,
     RIEN,
 } state_entity_t;
 
@@ -251,6 +259,11 @@ typedef enum quest_type {
     MOVE
 } quest_type_t;
 
+typedef struct dialog_s {
+    char *txt;
+    struct dialog_s *next;
+} dialog_t;
+
 typedef struct quest_s {
     char *name;
     char *description;
@@ -261,6 +274,7 @@ typedef struct quest_s {
     bool is_active;
     bool is_displayed;
     quest_type_t type;
+    dialog_t *dialog;
     sfSprite *sprite;
     sfText *name_s;
     sfText *desc_s;
@@ -294,6 +308,7 @@ typedef enum button_state {
 typedef struct button_s {
     char *name;
     sfTexture *texture;
+    sfSprite *sprite;
     sfText *text;
     sfFont *font;
     sfRectangleShape *rect_shape;
@@ -392,15 +407,43 @@ typedef struct inventory_s {
     player_status_t *player_status;
 } inventory_t;
 
-enum item_type {
-    WEAPON,
-    ARMOR,
-    POTION,
-    QUEST,
-    KEY,
-    OTHER,
-    ALL
-};
+typedef struct {
+    map_t *map;
+    int loaded;
+} shared_data_t;
+
+typedef enum {
+    Q_START,
+    Q_END,
+    Q_HIDDEN
+} quest_state_t;
+
+typedef struct quest_header_s {
+    sfText *text;
+    sfFont *font;
+    sfText *done;
+    sfRectangleShape *rect;
+    sfRectangleShape *rect2;
+    quest_state_t state;
+    my_clock_t *myclock;
+} quest_header_t;
+
+typedef struct text_box_s {
+    sfSprite *box;
+    sfTexture *box_texture;
+    sfText *npc_name;
+    sfText *npc_text;
+    sfFont *font;
+    sfClock *clock;
+    button_t *choice;
+    entity_t *entity;
+    dialog_t *dialog;
+    char *str;
+    char *displayed_str;
+    bool is_displayed;
+    bool is_fully_displayed;
+    int len;
+} text_box_t;
 
 typedef struct line_of_sight_data_s {
     sfVector2f start;
@@ -427,12 +470,14 @@ typedef struct rpg_s {
     menu_t *settings;
     state_t gamestate;
     all_quests_t *quests;
-    sfText *quest_text;
-    sfText *quest_desc;
-    sfText *quest_info;
+    quest_header_t *quest_header;
+    text_box_t *text_box;
     interface_t *interface;
     collision_t *collision;
     inventory_t *inventory;
+    pthread_t thread;
+    shared_data_t *shared_data;
+    int shm_fd;
 } rpg_t;
 
 #include "../src/Init/init.h"
@@ -443,7 +488,6 @@ typedef struct rpg_s {
 #include "../src/Update/update.h"
 #include "../src/Lib/lib.h"
 #include "../src/Animation/anim.h"
-#include "../src/Quests/quests.h"
 #include "../src/Defines/defines.h"
 #include "../src/Update/Update_Warrior/update_warrior.h"
 #include "../src/Update/Update_Entities/update_entities.h"

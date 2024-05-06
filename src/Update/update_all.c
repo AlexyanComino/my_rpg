@@ -19,6 +19,7 @@ void update_all(rpg_t *rpg)
         (*view_pos()) = sfView_getCenter(rpg->win->view);
         sfRenderWindow_setView(rpg->win->window, rpg->win->view);
         update_entities(rpg);
+        update_quest_header(rpg);
         update_quests(rpg);
     }
     if (rpg->gamestate == INVENTORY)

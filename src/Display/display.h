@@ -11,7 +11,11 @@
 // Display
 void display_all(rpg_t *rpg);
 
-// Display warriors
+// Display menus
+void display_main_menu(rpg_t *rpg);
+void display_settings(rpg_t *rpg);
+void display_save_menu(rpg_t *rpg);
+
 void display_warrior(void *vrpg, entity_t *entity);
 
 // Display entities

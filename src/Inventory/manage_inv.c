@@ -65,7 +65,7 @@ static void slot_click(slot_t *tmp, slot_t *tmp2, sfMouseButtonEvent event)
         rect = sfSprite_getGlobalBounds(tmp2->sprite);
         if (sfFloatRect_contains(&rect, event.x + (*view_pos()).x - 1920 / 2,
         event.y + (*view_pos()).y - 1080 / 2) && tmp2->is_empty == 1 &&
-        (tmp2->access == ALL || tmp->type == tmp2->access)) {
+        (tmp2->access == OTHER || tmp->type == tmp2->access)) {
             tmp2->is_empty = 0;
             tmp2->is_active = 0;
             tmp2->type = tmp->type;

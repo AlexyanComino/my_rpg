@@ -24,22 +24,6 @@ static win_t *init_win(unsigned int width, unsigned int height)
     return win;
 }
 
-static map_t *init_map(void)
-{
-    map_t *map = malloc(sizeof(map_t));
-
-    map->ground_texture = sfTexture_createFromFile("assets/ground.png", NULL);
-    map->ground_sprite = sfSprite_create();
-    sfSprite_setTexture(map->ground_sprite, map->ground_texture, sfTrue);
-    sfSprite_setScale(map->ground_sprite,
-        (sfVector2f){TILE_SCALE, TILE_SCALE});
-    map->high_texture = sfTexture_createFromFile("assets/bat.png", NULL);
-    map->high_sprite = sfSprite_create();
-    sfSprite_setTexture(map->high_sprite, map->high_texture, sfTrue);
-    sfSprite_setScale(map->high_sprite, (sfVector2f){TILE_SCALE, TILE_SCALE});
-    return map;
-}
-
 static sfVector2f *get_collisions_pos(unsigned int *size)
 {
     sfVector2f *pos = NULL;
@@ -75,28 +59,38 @@ static collision_t *init_collision(void)
     return collision;
 }
 
-rpg_t *init_rpg(void)
+static void init_rpg2(rpg_t *rpg)
 {
-    rpg_t *rpg = malloc(sizeof(rpg_t));
-
-    srand(time(NULL));
-    rpg->gamestate = MAIN_MENU;
-    rpg->win = init_win(WIDTH, HEIGHT);
-    rpg->ent_size = 0;
-    rpg->ent = init_ent(&rpg->ent_size);
-    rpg->event = (sfEvent){0};
-    rpg->debug = false;
     rpg->main_menu = init_menu();
     rpg->save_menu = init_save_menu();
     rpg->settings = init_settings();
     rpg->interface = init_interface();
     rpg->collision = init_collision();
-    rpg->map = init_map();
-    rpg->quest_desc = NULL;
-    rpg->quest_info = NULL;
-    rpg->quest_text = NULL;
     init_inventory(15);
     init_all_quests(rpg);
     rpg->inventory = *inventory();
+    init_all_quests(rpg);
+}
+
+rpg_t *init_rpg(void)
+{
+    rpg_t *rpg = malloc(sizeof(rpg_t));
+
+    srand(time(NULL));
+    rpg->shm_fd = shm_open("/shared_memory", O_CREAT | O_RDWR, 0666);
+    ftruncate(rpg->shm_fd, sizeof(shared_data_t));
+    rpg->shared_data = (shared_data_t *)mmap(NULL, sizeof(shared_data_t),
+        PROT_READ | PROT_WRITE, MAP_SHARED, rpg->shm_fd, 0);
+    rpg->shared_data->loaded = 0;
+    pthread_create(&rpg->thread, NULL, load_data, (void *)rpg->shared_data);
+    rpg->gamestate = MAIN_MENU;
+    start(rpg);
+    rpg->win = init_win(WIDTH, HEIGHT);
+    rpg->ent_size = 0;
+    rpg->ent = init_ent(&rpg->ent_size);
+    rpg->event = (sfEvent){0};
+    rpg->debug = true;
+    rpg->text_box = init_text_box();
+    init_rpg2(rpg);
     return rpg;
 }

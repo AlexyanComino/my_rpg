@@ -50,7 +50,7 @@ static entity_t *init_entity(char **infos)
 
 entity_t **init_ent(unsigned int *size)
 {
-    char **tab = file_to_tab(".entities.csv");
+    char **tab = file_to_array(".entities.csv");
     char **infos = NULL;
     entity_t **ent = malloc(sizeof(entity_t *) * (tab_len(tab)));
 

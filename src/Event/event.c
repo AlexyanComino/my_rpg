@@ -11,7 +11,7 @@ void event_player_attack(rpg_t *rpg)
 {
     entity_t *player = rpg->ent[0];
 
-    if (rpg->event.type == sfEvtKeyPressed) {
+    if (rpg->event.type == sfEvtKeyPressed && player->common->state != INTERACT) {
         if (rpg->event.key.code == sfKeySpace &&
             is_attacking(player) && player->type == WARRIOR) {
             player->spe->warrior->max_line_attack = 1;
