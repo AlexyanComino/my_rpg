@@ -131,12 +131,25 @@ static void display_restricted_text(rpg_t *rpg)
 static void display_collision(rpg_t *rpg)
 {
     collision_t *collision = rpg->collision;
+    unsigned int col = rpg->ent[0]->common->pos.x / WIDTH;
+    unsigned int row = rpg->ent[0]->common->pos.y / HEIGHT;
 
-    for (unsigned int i = 0; i < collision->size; i++) {
-        sfRectangleShape_setPosition(collision->shape, collision->pos[i]);
+    if (col >= collision->cols || row >= collision->rows)
+        return;
+    for (unsigned int i = 0; i < collision->regions[col][row]->size; i++) {
+        collision->rect.left = collision->regions[col][row]->pos[i].x;
+        collision->rect.top = collision->regions[col][row]->pos[i].y;
+        if (!intrect_is_in_view(rpg, collision->rect))
+            continue;
+        sfRectangleShape_setPosition(collision->shape,
+            (sfVector2f){collision->rect.left, collision->rect.top});
         sfRenderWindow_drawRectangleShape(rpg->win->window, collision->shape,
             NULL);
     }
+    sfRectangleShape_setPosition(collision->region_shape,
+        (sfVector2f){col * WIDTH, row * HEIGHT});
+    sfRenderWindow_drawRectangleShape(rpg->win->window,
+        collision->region_shape, NULL);
 }
 
 void display_game(rpg_t *rpg)

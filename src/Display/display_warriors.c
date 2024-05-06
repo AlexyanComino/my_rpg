@@ -7,16 +7,6 @@
 
 #include "rpg.h"
 
-static void draw_circles_zones(rpg_t *rpg, entity_t *entity)
-{
-    sfRenderWindow_drawCircleShape(rpg->win->window,
-        entity->common->zones->l_circle, NULL);
-    sfRenderWindow_drawCircleShape(rpg->win->window,
-        entity->common->zones->m_circle, NULL);
-    sfRenderWindow_drawCircleShape(rpg->win->window,
-        entity->common->zones->s_circle, NULL);
-}
-
 static void display_pattern_pos_shapes(rpg_t *rpg, entity_t *entity)
 {
     int i = 0;
@@ -31,14 +21,6 @@ static void display_pattern_pos_shapes(rpg_t *rpg, entity_t *entity)
 
 static void display_debug_warrior(rpg_t *rpg, entity_t *entity)
 {
-    entity_t *player = rpg->ent[0];
-
-    sfRenderWindow_drawRectangleShape(rpg->win->window,
-        entity->common->zones->rect_hitbox, NULL);
-    sfRenderWindow_drawRectangleShape(rpg->win->window,
-        entity->common->zones->rect_hitbox_attack, NULL);
-    if (entity != player)
-        draw_circles_zones(rpg, entity);
     if (entity_has_base(entity)) {
         sfRenderWindow_drawRectangleShape(rpg->win->window,
         entity->spe->warrior->base->shape, NULL);
@@ -48,8 +30,7 @@ static void display_debug_warrior(rpg_t *rpg, entity_t *entity)
 
 static void display_alive_warrior(rpg_t *rpg, entity_t *entity)
 {
-    sfRenderWindow_drawSprite(rpg->win->window,
-        entity->common->anim->sprite, NULL);
+    display_common(rpg, entity);
     if (entity->spe->warrior->exclam->is_display)
         sfRenderWindow_drawSprite(rpg->win->window,
             entity->spe->warrior->exclam->anim->sprite, NULL);

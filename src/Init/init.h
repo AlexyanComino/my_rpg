@@ -20,6 +20,9 @@ sfText *create_text(sfFont *font, char *str, int size, sfVector2f pos);
 // Init interface
 interface_t *init_interface(void);
 
+// Init items
+item_t *init_item(item_type_t item_type);
+
 // Init damage texts
 damage_text_t *init_damage_text(rpg_t *rpg, entity_t *entity,
     int attack, damage_text_state_t state);
@@ -35,4 +38,3 @@ void init_all_quests(rpg_t *rpg);
 
 // Init dialog
 dialog_t *init_dialog(char *dialog);
-

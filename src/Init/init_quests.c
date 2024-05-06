@@ -34,19 +34,11 @@ static quest_t *init_quest(char **infos)
     quest->is_done = false;
     quest->is_active = false;
     quest->is_displayed = false;
-    quest->sprite = init_sprite_from_file("assets/inventory/QUEST.png");
-    sfSprite_setScale(quest->sprite, (sfVector2f){1.2, 1.2});
-    quest->name_s = create_text(sfFont_createFromFile("assets/fonts/m6x11plus.ttf"), quest->name, 50,
-        (sfVector2f){200, 700});
-    sfText_setColor(quest->name_s,  sfColor_fromRGB(105, 165, 125));
-    quest->desc_s = create_text(sfFont_createFromFile("assets/fonts/m6x11plus.ttf"), quest->description, 30,
-        (sfVector2f){200, 700});
-    sfText_setColor(quest->desc_s,  sfColor_fromRGB(135, 195, 155));
     quest->next = NULL;
     return quest;
 }
 
-quest_t *add_quest(quest_t *quest, char **infos)
+static quest_t *add_quest(quest_t *quest, char **infos)
 {
     quest_t *new = init_quest(infos);
     quest_t *tmp = quest;
@@ -72,7 +64,8 @@ static all_quests_t *add_node(all_quests_t *quests, char **infos)
     return quests;
 }
 
-all_quests_t *add_quests(all_quests_t *quests, char **infos, bool *end_loop)
+static all_quests_t *add_quests(all_quests_t *quests, char **infos,
+    bool *end_loop)
 {
     all_quests_t *tmp = quests;
 
@@ -103,7 +96,7 @@ static sfRectangleShape *create_rect_shape(sfVector2f size, sfVector2f pos,
     return rect;
 }
 
-void init_quest_header(rpg_t *rpg)
+static void init_quest_header(rpg_t *rpg)
 {
     rpg->quest_header = malloc(sizeof(quest_header_t));
     rpg->quest_header->font = sfFont_createFromFile(

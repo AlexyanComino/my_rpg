@@ -83,8 +83,42 @@ static void update_sprites_hitboxs_pos(entity_t *tmp)
         tmp->common->zones->hitbox_attack.height});
 }
 
+static void update_stun(entity_t *entity)
+{
+    if (entity->common->stun->is_stunned) {
+        update_clock_seconds(entity->common->stun->stun_clock);
+        if (entity->common->stun->stun_clock->seconds >=
+            entity->common->stun->stun_time) {
+            entity->common->stun->is_stunned = false;
+            entity->common->stun->stun_mark->anim->rect.left = 0;
+            entity->common->stun->stun_mark->anim->rect.top = 0;
+        }
+    }
+}
+
+void anim_stun(entity_t *entity)
+{
+    sfIntRect info;
+
+    if (entity->common->stun->is_stunned) {
+        update_clock_seconds(entity->common->stun->stun_mark->anim->myclock);
+        if (entity->common->stun->stun_mark->anim->myclock->seconds > 0.05) {
+            info = (sfIntRect){STUN_WIDTH, STUN_HEIGHT, 2, 41};
+            anim_mark(entity->common->stun->stun_mark, &info);
+        }
+        entity->common->stun->stun_mark->is_display = 1;
+        entity->common->stun->stun_mark->pos = (sfVector2f){
+            entity->common->pos.x, entity->common->pos.y - 50};
+        sfSprite_setPosition(entity->common->stun->stun_mark->anim->sprite,
+            entity->common->stun->stun_mark->pos);
+    } else {
+        entity->common->stun->stun_mark->is_display = 0;
+    }
+}
+
 void update_common(rpg_t *rpg, entity_t *entity)
 {
+    anim_stun(entity);
     update_sprites_pos(entity);
     update_sprite_scale(entity->common);
     update_sprites_hitboxs_pos(entity);
@@ -92,4 +126,5 @@ void update_common(rpg_t *rpg, entity_t *entity)
     update_damage_texts(&entity->common->damage_texts);
     update_damage_text_effects(&entity->common->damage_texts);
     update_entity_detection(rpg, entity);
+    update_stun(entity);
 }

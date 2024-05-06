@@ -30,9 +30,9 @@ static void check_special_attack(entity_t *entity, entity_t *target,
 
 static void decrease_health(rpg_t *rpg, entity_t *entity, entity_t *target)
 {
-    unsigned int max_attack = (entity->common->attributes->attack -
+    int max_attack = (entity->common->attributes->attack -
         target->common->attributes->defense);
-    unsigned int attack = rand() % max_attack;
+    unsigned int attack = max_attack > 0 ? rand() % max_attack : 0;
     damage_text_state_t state = NORMAL;
 
     if (!is_player(rpg, target))
@@ -53,10 +53,10 @@ void entity_attack(rpg_t *rpg, entity_t *entity)
 
     if (enemy == NULL)
         return;
-    if (entity_can_attack_target(entity, enemy))
+    if (entity_can_attack_target(rpg, entity, enemy))
         decrease_health(rpg, entity, enemy);
     else if (get_distance_between_pos(entity->common->pos,
-        enemy->common->pos) <= 200)
+        enemy->common->pos) <= 190)
         add_dmg_text(rpg, enemy, 0, MISS);
     entity->common->state = ATTACK;
 }

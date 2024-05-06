@@ -9,9 +9,17 @@
 
 static bool hitbox_collision(rpg_t *rpg, sfVector2f point)
 {
-    for (unsigned int i = 0; i < rpg->collision->size; i++) {
-        rpg->collision->rect.left = rpg->collision->pos[i].x;
-        rpg->collision->rect.top = rpg->collision->pos[i].y;
+    unsigned int col = point.x / WIDTH;
+    unsigned int row = point.y / HEIGHT;
+
+    if (col >= rpg->collision->cols || row >= rpg->collision->rows)
+        return false;
+    for (unsigned int i = 0; i < rpg->collision->regions[col][row]->size;
+        i++) {
+        rpg->collision->rect.left =
+            rpg->collision->regions[col][row]->pos[i].x;
+        rpg->collision->rect.top =
+            rpg->collision->regions[col][row]->pos[i].y;
         if (!intrect_is_in_view(rpg, rpg->collision->rect))
             continue;
         if (sfIntRect_contains(&rpg->collision->rect, point.x, point.y))

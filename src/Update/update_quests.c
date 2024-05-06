@@ -22,9 +22,7 @@ void update_quest_list(rpg_t *rpg, quest_t *tmp)
 {
     if (tmp->is_active && !tmp->is_done && tmp->type == KILL) {
         for (unsigned int i = 0; i < rpg->ent_size; i++) {
-            if (rpg->ent[i]->type == WARRIOR) {
-                check_quest_done(rpg, rpg->ent[i], tmp);
-            }
+            check_quest_done(rpg, rpg->ent[i], tmp);
         }
     }
 }

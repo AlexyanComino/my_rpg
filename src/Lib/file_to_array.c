@@ -7,6 +7,20 @@
 
 #include "rpg.h"
 
+static int count_lines(FILE *file)
+{
+    char *line = NULL;
+    size_t len = 0;
+    int i = 0;
+
+    while (getline(&line, &len, file) != -1) {
+        if (line[0] == '#' || line[0] == '\n' || line[0] == '\0')
+            continue;
+        i++;
+    }
+    return i;
+}
+
 char **file_to_array(char *path)
 {
     FILE *file = fopen(path, "r");
@@ -17,12 +31,11 @@ char **file_to_array(char *path)
 
     if (file == NULL)
         return NULL;
-    while (getline(&line, &len, file) != -1)
-        i++;
-    tab = malloc(sizeof(char *) * (i + 1));
+    tab = malloc(sizeof(char *) * (count_lines(file) + 1));
     fseek(file, 0, SEEK_SET);
-    i = 0;
     while (getline(&line, &len, file) != -1) {
+        if (line[0] == '#' || line[0] == '\n' || line[0] == '\0')
+            continue;
         tab[i] = strdup(line);
         i++;
     }

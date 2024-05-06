@@ -20,7 +20,6 @@
 #include <sys/mman.h>
 #include <fcntl.h>
 
-
 #define WIDTH 1920
 #define HEIGHT 1080
 
@@ -43,6 +42,18 @@
 #define WARRIOR_MAX_DETECTION_RADIUS 600
 #define WARRIOR_INTER_RADIUS 450
 #define WARRIOR_EXCLAM_RADIUS 300
+
+// Pawn
+#define PAWN_WIDTH 1152 / 6
+#define PAWN_OFFSET PAWN_WIDTH * 5
+#define MIN_PAWN_LENGTH 80
+
+
+// Torch
+#define TORCH_WIDTH 192
+#define TORCH_IDLE_OFFSET TORCH_WIDTH * 6
+#define TORCH_OFFSET TORCH_WIDTH * 5
+
 // Marks
 #define EXCLAM_WIDTH 91
 #define EXCLAM_HEIGHT 147
@@ -51,6 +62,9 @@
 #define EXCLAM_COOLDOWN 0.5
 #define INTER_INTERVAL 3.0
 #define INTER_COOLDOWN 1.5
+
+#define STUN_WIDTH 1192 / 2
+#define STUN_HEIGHT 13776 / 41
 //
 
 // Cooldowns
@@ -74,6 +88,12 @@
 
 #define TILE_SCALE 2.1
 #define TILE_SIZE 32 * TILE_SCALE
+
+// Items
+#define ITEM_SIZE 128
+
+#define MAP_HEIGHT 13301
+#define MAP_WIDTH 13971
 
 typedef enum color_entity_s {
     BLUE = 0,
@@ -99,6 +119,10 @@ typedef enum state_entity_s {
     RUN,
     ST_ATT,
     ATTACK,
+    ST_WORK,
+    WORK,
+    IDLE_CARRY,
+    MOVE_CARRY,
     DEAD,
     INTERACT,
     RIEN,
@@ -190,6 +214,13 @@ typedef struct damage_text_s {
     struct damage_text_s *next;
 } damage_text_t;
 
+typedef struct stun_s {
+    bool is_stunned;
+    mark_t *stun_mark;
+    my_clock_t *stun_clock;
+    float stun_time;
+} stun_t;
+
 typedef struct common_entity_s {
     char *name;
     anim_t *anim;
@@ -206,6 +237,7 @@ typedef struct common_entity_s {
     my_clock_t *clock_cooldown_attack;
     float attack_cooldown;
     damage_text_t *damage_texts;
+    stun_t *stun;
 } common_entity_t;
 
 typedef struct warrior_s {
@@ -216,17 +248,59 @@ typedef struct warrior_s {
     base_t *base;
 } warrior_t;
 
-typedef struct goblin_s {
-} goblin_t;
+typedef enum pawn_job_s {
+    CUT,
+    WORKING,
+    CARRY,
+    NO_JOB,
+} pawn_job_t;
+
+typedef enum item_type_s {
+    WOOD,
+    MEAT,
+    GOLD,
+    NO_ITEM,
+} item_type_t;
+
+typedef struct item_s {
+    char *name;
+    item_type_t type;
+    sfSprite *sprite;
+    sfTexture *texture;
+    sfVector2f *pos;
+    int quantity;
+    int *index_rev_scale;
+} item_t;
+
+typedef struct carry_s {
+    sfVector2f obj_pos;
+    bool is_carrying;
+    item_type_t item_type;
+    item_t *item;
+} carry_t;
+
+typedef struct pawn_s {
+    pawn_job_t job;
+    sfVector2f job_pos;
+    my_clock_t *myclock;
+    float job_cooldown;
+    side_x_t job_side;
+    carry_t *carry;
+} pawn_t;
+
+typedef struct torch_s {
+} torch_t;
 
 typedef union spe_s {
     warrior_t *warrior;
-    goblin_t *goblin;
+    pawn_t *pawn;
+    torch_t *torch;
 } spe_t;
 
 typedef enum entity_type_s {
     WARRIOR,
-    GOBLIN,
+    PAWN,
+    TORCH,
 } entity_type_t;
 
 typedef struct entity_s {
@@ -338,18 +412,38 @@ typedef struct win_s {
     float dt;
 } win_t;
 
+typedef struct region_s {
+    sfVector2f *pos;
+    unsigned int size;
+    sfIntRect rect;
+} region_t;
+
 typedef struct collision_s {
     sfIntRect rect;
-    sfVector2f *pos;
+    unsigned int rows;
+    unsigned int cols;
+    region_t ***regions;
     sfRectangleShape *shape;
+    sfRectangleShape *region_shape;
     unsigned int size;
 } collision_t;
+
 typedef struct map_s {
     sfTexture *ground_texture;
     sfSprite *ground_sprite;
     sfTexture *high_texture;
     sfSprite *high_sprite;
 } map_t;
+
+enum item_type {
+    WEAPON,
+    ARMOR,
+    POTION,
+    QUEST,
+    KEY,
+    OTHER,
+    ALL
+};
 
 typedef struct slot_s {
     int is_empty;
@@ -491,6 +585,11 @@ typedef struct line_of_sight_data_s {
     int sample_counter;
 } line_of_sight_data_t;
 
+typedef struct {
+    map_t *map;
+    int loaded;
+} shared_data_t;
+
 typedef struct rpg_s {
     win_t *win;
     map_t *map;
@@ -523,9 +622,14 @@ typedef struct rpg_s {
 #include "../src/Animation/anim.h"
 #include "../src/Defines/defines.h"
 #include "../src/Update/Update_Warrior/update_warrior.h"
+#include "../src/Update/Update_Pawn/update_pawn.h"
+#include "../src/Update/Update_Torch/update_torch.h"
 #include "../src/Update/Update_Entities/update_entities.h"
+
 #include "../src/Init/Init_Entities/init_entities.h"
 #include "../src/Init/Init_Entities/Init_Warrior/init_warrior.h"
+#include "../src/Init/Init_Entities/Init_Pawn/init_pawn.h"
+#include "../src/Init/Init_Entities/Init_Torch/init_torch.h"
 #include "../src/Init/Init_Entities/Init_Common/init_common.h"
 #include "../src/Lib/Entity_Tools/entity_lib.h"
 #include "singleton.h"

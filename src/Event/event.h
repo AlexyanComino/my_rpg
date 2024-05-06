@@ -20,7 +20,7 @@ void event_player_attack(rpg_t *rpg);
 
 // Quest event
 void quest_event(rpg_t *rpg);
-void accept_quest(rpg_t *rpg, entity_t *entity);
+void accept_quest(rpg_t *rpg);
 void refuse_quest(rpg_t *rpg);
 
 // Text box event

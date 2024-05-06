@@ -9,18 +9,13 @@
 // Update warrior
 void update_warrior(void *vrpg, entity_t *entity);
 
-// Warrior move
-void warrior_move(rpg_t *rpg, entity_t *entity);
-
 // Update pnj warrior
-void update_warrior_attack_rect(entity_t *entity);
 void update_pnj_warrior(rpg_t *rpg, entity_t *tmp);
 
 // Update warrior marks
 void update_warrior_marks(entity_t *entity);
 
 // Update warrior pos
-side_x_t get_entity_side(entity_t *entity, entity_t *enemy);
 void update_warrior_pos(rpg_t *rpg, entity_t *tmp, entity_t *enemy);
 
 // Anim warrior

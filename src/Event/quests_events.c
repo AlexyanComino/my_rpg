@@ -19,12 +19,12 @@ void interact_with_entity(rpg_t *rpg, entity_t *entity)
     }
 }
 
-void accept_quest(rpg_t *rpg, entity_t *entity)
+void accept_quest(rpg_t *rpg)
 {
     all_quests_t *tmp = rpg->quests;
 
     while (tmp != NULL) {
-        if (strcmp(tmp->proprietary, entity->common->name) == 0 &&
+        if (!strcmp(tmp->proprietary, rpg->text_box->entity->common->name) &&
                 tmp->quest->is_active == false) {
             tmp->quest->is_active = true;
             rpg->text_box->is_displayed = false;
@@ -41,8 +41,8 @@ void refuse_quest(rpg_t *rpg)
     all_quests_t *tmp = rpg->quests;
 
     while (tmp != NULL) {
-        if (strcmp(tmp->proprietary, rpg->text_box->entity->common->name) == 0 &&
-                tmp->quest->is_active == false) {
+        if (strcmp(tmp->proprietary, rpg->text_box->entity->common->name) == 0
+            && tmp->quest->is_active == false) {
             rpg->text_box->is_displayed = false;
             rpg->text_box->is_fully_displayed = false;
             rpg->text_box->len = 0;

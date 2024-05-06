@@ -7,18 +7,7 @@
 
 #include "rpg.h"
 
-static sfVector2f get_exclam_pos(entity_t *entity)
-{
-    if (entity->common->x == RIGHT) {
-        return (sfVector2f){entity->common->pos.x + WARRIOR_WIDTH / 4,
-            entity->common->pos.y - WARRIOR_WIDTH / 3};
-    } else {
-        return (sfVector2f){entity->common->pos.x - WARRIOR_WIDTH / 4,
-            entity->common->pos.y - WARRIOR_WIDTH / 3};
-    }
-}
-
-static sfVector2f get_inter_pos(entity_t *entity)
+static sfVector2f get_mark_pos(entity_t *entity)
 {
     if (entity->common->x == RIGHT) {
         return (sfVector2f){entity->common->pos.x + WARRIOR_WIDTH / 4,
@@ -31,14 +20,14 @@ static sfVector2f get_inter_pos(entity_t *entity)
 
 static void update_exclam_pos(entity_t *entity)
 {
-    entity->spe->warrior->exclam->pos = get_exclam_pos(entity);
+    entity->spe->warrior->exclam->pos = get_mark_pos(entity);
     sfSprite_setPosition(entity->spe->warrior->exclam->anim->sprite,
         entity->spe->warrior->exclam->pos);
 }
 
 static void update_inter_pos(entity_t *entity)
 {
-    entity->spe->warrior->inter->pos = get_inter_pos(entity);
+    entity->spe->warrior->inter->pos = get_mark_pos(entity);
     sfSprite_setPosition(entity->spe->warrior->inter->anim->sprite,
         entity->spe->warrior->inter->pos);
 }

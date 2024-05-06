@@ -11,8 +11,8 @@ static mark_t *init_exclam(char **infos)
 {
     mark_t *exclam = malloc(sizeof(mark_t));
 
-    exclam->anim = init_anim("assets/Warriors/exclam_anim.png", EXCLAM_WIDTH,
-        EXCLAM_HEIGHT);
+    exclam->anim = init_anim("assets/Entities/Effects/exclam_anim.png",
+        EXCLAM_WIDTH, EXCLAM_HEIGHT);
     exclam->pos = (sfVector2f){atoi(infos[3]), atoi(infos[4])};
     exclam->is_display = 0;
     return exclam;
@@ -22,8 +22,8 @@ static mark_t *init_inter(char **infos)
 {
     mark_t *inter = malloc(sizeof(mark_t));
 
-    inter->anim = init_anim("assets/Warriors/inter_anim.png", INTER_WIDTH,
-        INTER_HEIGHT);
+    inter->anim = init_anim("assets/Entities/Effects/inter_anim.png",
+        INTER_WIDTH, INTER_HEIGHT);
     inter->pos = (sfVector2f){atoi(infos[3]), atoi(infos[4])};
     inter->is_display = 0;
     return inter;

@@ -11,12 +11,12 @@ static map_t *init_map(void)
 {
     map_t *map = malloc(sizeof(map_t));
 
-    map->ground_texture = sfTexture_createFromFile("assets/ground.png", NULL);
+    map->ground_texture = sfTexture_createFromFile("assets/bas.png", NULL);
     map->ground_sprite = sfSprite_create();
     sfSprite_setTexture(map->ground_sprite, map->ground_texture, sfTrue);
     sfSprite_setScale(map->ground_sprite,
         (sfVector2f){TILE_SCALE, TILE_SCALE});
-    map->high_texture = sfTexture_createFromFile("assets/bat.png", NULL);
+    map->high_texture = sfTexture_createFromFile("assets/haut.png", NULL);
     map->high_sprite = sfSprite_create();
     sfSprite_setTexture(map->high_sprite, map->high_texture, sfTrue);
     sfSprite_setScale(map->high_sprite, (sfVector2f){TILE_SCALE, TILE_SCALE});
