@@ -261,6 +261,9 @@ typedef struct quest_s {
     bool is_active;
     bool is_displayed;
     quest_type_t type;
+    sfSprite *sprite;
+    sfText *name_s;
+    sfText *desc_s;
     struct quest_s *next;
 } quest_t;
 
@@ -333,15 +336,6 @@ typedef struct map_s {
     sfSprite *high_sprite;
 } map_t;
 
-enum item_type {
-    WEAPON,
-    ARMOR,
-    POTION,
-    QUEST,
-    KEY,
-    OTHER
-};
-
 typedef struct slot_s {
     int is_empty;
     int id;
@@ -392,6 +386,7 @@ typedef struct inventory_s {
     int gold;
     int size;
     int is_open;
+    quest_t *quest;
     slot_t *slot;
     sfSprite *sprite;
     player_status_t *player_status;

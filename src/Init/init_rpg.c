@@ -96,6 +96,7 @@ rpg_t *init_rpg(void)
     rpg->quest_info = NULL;
     rpg->quest_text = NULL;
     init_inventory(15);
+    init_all_quests(rpg);
     rpg->inventory = *inventory();
     return rpg;
 }

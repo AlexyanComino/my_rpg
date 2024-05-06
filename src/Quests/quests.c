@@ -64,6 +64,14 @@ quest_t *init_quest(char **infos)
     quest->is_done = false;
     quest->is_active = false;
     quest->is_displayed = false;
+    quest->sprite = init_sprite_from_file("assets/inventory/QUEST.png");
+    sfSprite_setScale(quest->sprite, (sfVector2f){1.2, 1.2});
+    quest->name_s = create_text(sfFont_createFromFile("assets/fonts/m6x11plus.ttf"), quest->name, 50,
+        (sfVector2f){200, 700});
+    sfText_setColor(quest->name_s,  sfColor_fromRGB(105, 165, 125));
+    quest->desc_s = create_text(sfFont_createFromFile("assets/fonts/m6x11plus.ttf"), quest->description, 30,
+        (sfVector2f){200, 700});
+    sfText_setColor(quest->desc_s,  sfColor_fromRGB(135, 195, 155));
     quest->next = NULL;
     return quest;
 }

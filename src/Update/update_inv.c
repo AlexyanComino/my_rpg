@@ -89,6 +89,22 @@ static void update_player_stat(void)
     (sfVector2f){(*view_pos()).x - 702, (*view_pos()).y - 175});
 }
 
+void update_quest(void)
+{
+    inventory_t *inv = (*inventory());
+    int pos = 0;
+
+    for (quest_t *tmp = inv->quest; tmp; tmp = tmp->next) {
+        sfSprite_setPosition(tmp->sprite, (sfVector2f){(*view_pos()).x + 100,
+            (*view_pos()).y - 400 + pos});
+        sfText_setPosition(tmp->name_s, (sfVector2f){(*view_pos()).x + 200,
+            (*view_pos()).y - 325 + pos});
+        sfText_setPosition(tmp->desc_s, (sfVector2f){(*view_pos()).x + 200,
+            (*view_pos()).y - 275 + pos});
+        pos += 200;
+    }
+}
+
 int display_inv(rpg_t *rpg)
 {
     if (rpg->gamestate == INVENTORY) {
@@ -96,6 +112,7 @@ int display_inv(rpg_t *rpg)
         update_stuff();
         update_player_status();
         update_player_stat();
+        update_quest();
         apply_stuff(rpg);
         open_inventory(rpg);
     }

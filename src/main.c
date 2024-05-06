@@ -15,6 +15,7 @@ int main(void)
         add_item(create_weapon(50), WEAPON);
     for (int i = 1; i < 15; i++)
         remove_item(i, (*inventory())->slot);
+    (*inventory())->quest = rpg->quests->quest;
     while (sfRenderWindow_isOpen(rpg->win->window)) {
         event(rpg);
         update_all(rpg);
