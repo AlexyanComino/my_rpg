@@ -69,7 +69,6 @@ static void init_rpg2(rpg_t *rpg)
     init_inventory(15);
     init_all_quests(rpg);
     rpg->inventory = *inventory();
-    init_all_quests(rpg);
 }
 
 rpg_t *init_rpg(void)

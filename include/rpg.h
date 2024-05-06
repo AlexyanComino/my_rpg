@@ -407,6 +407,39 @@ typedef struct inventory_s {
     player_status_t *player_status;
 } inventory_t;
 
+
+typedef struct weapon_s {
+    int damage;
+    int is_equipped;
+    sfSprite *sprite;
+} weapon_t;
+
+enum armor_type {
+    HELMET,
+    CHESTPLATE,
+    BOOTS
+};
+
+enum item_type {
+    WEAPON,
+    ARMOR,
+    POTION,
+    QUEST,
+    KEY,
+    OTHER,
+    ALL
+};
+
+typedef struct armor_s {
+    int defense;
+    int speed;
+    int armor_type;
+    int is_equipped;
+    int endurance;
+    sfSprite *sprite;
+} armor_t;
+
+
 typedef struct {
     map_t *map;
     int loaded;

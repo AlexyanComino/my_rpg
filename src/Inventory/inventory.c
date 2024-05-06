@@ -60,7 +60,7 @@ static int manage_slot(slot_t *tmp, void *item, int type, int *id)
     tmp = (*inventory())->slot;
     slot->id = *id;
     slot = setup_slot(slot, pos, type, item);
-    slot->access = OTHER;
+    slot->access = ALL;
     slot->next = NULL;
     pos.x = (*id % 5 == 0) ? start : pos.x + 100;
     pos.y += (*id % 5 == 0) ? 100 : 0;
