@@ -87,7 +87,7 @@ static int setup_text(player_status_t *player_status)
 player_status_t *init_player_status(void)
 {
     player_status_t *player_status = malloc(sizeof(player_status_t));
-    char **lines = file_to_tab(".player.csv");
+    char **lines = file_to_array(".player.csv");
     char **infos = split_string(lines[0], ";");
 
     setup_value(player_status);

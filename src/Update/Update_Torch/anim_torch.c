@@ -38,7 +38,7 @@ static void animation_attack_torch(rpg_t *rpg, entity_t *entity)
 
 static void animation_torch(rpg_t *rpg, entity_t *entity)
 {
-    if (entity->common->state == IDLE) {
+    if (entity->common->state == IDLE || entity->common->state == INTERACT) {
         entity->common->anim->rect.top = 0;
         return anim_line(entity->common, TORCH_IDLE_OFFSET, TORCH_WIDTH, 0.1);
     }

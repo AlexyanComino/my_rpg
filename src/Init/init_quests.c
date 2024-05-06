@@ -2,46 +2,10 @@
 ** EPITECH PROJECT, 2024
 ** my_rpg
 ** File description:
-** quests
+** init_quests
 */
 
 #include "rpg.h"
-
-void free_array(char **array)
-{
-    for (int i = 0; array[i] != NULL; i++)
-        free(array[i]);
-    free(array);
-}
-
-char **file_to_tab(char *path)
-{
-    FILE *file = fopen(path, "r");
-    char *line = NULL;
-    size_t len = 0;
-    char **tab = NULL;
-    int i = 0;
-
-    if (file == NULL)
-        return NULL;
-    while (getline(&line, &len, file) != -1) {
-        if (line[0] == '#' || line[0] == '\n' || line[0] == '\0')
-            continue;
-        i++;
-    }
-    tab = malloc(sizeof(char *) * (i + 1));
-    fseek(file, 0, SEEK_SET);
-    i = 0;
-    while (getline(&line, &len, file) != -1) {
-        if (line[0] == '#' || line[0] == '\n' || line[0] == '\0')
-            continue;
-        tab[i] = strdup(line);
-        i++;
-    }
-    tab[i] = NULL;
-    fclose(file);
-    return tab;
-}
 
 static quest_type_t get_type(char *type)
 {
@@ -56,16 +20,17 @@ static quest_type_t get_type(char *type)
     return -1;
 }
 
-quest_t *init_quest(char **infos)
+static quest_t *init_quest(char **infos)
 {
     quest_t *quest = malloc(sizeof(quest_t));
 
     quest->name = strdup(infos[1]);
     quest->description = strdup(infos[2]);
-    quest->reward = atoi(infos[3]);
-    quest->xp = atoi(infos[4]);
-    quest->type = get_type(infos[5]);
-    quest->objective = strdup(infos[6]);
+    quest->dialog = init_dialog(infos[3]);
+    quest->reward = atoi(infos[4]);
+    quest->xp = atoi(infos[5]);
+    quest->type = get_type(infos[6]);
+    quest->objective = strdup(infos[7]);
     quest->is_done = false;
     quest->is_active = false;
     quest->is_displayed = false;
@@ -73,7 +38,7 @@ quest_t *init_quest(char **infos)
     return quest;
 }
 
-quest_t *add_quest(quest_t *quest, char **infos)
+static quest_t *add_quest(quest_t *quest, char **infos)
 {
     quest_t *new = init_quest(infos);
     quest_t *tmp = quest;
@@ -84,7 +49,7 @@ quest_t *add_quest(quest_t *quest, char **infos)
     return quest;
 }
 
-all_quests_t *add_node(all_quests_t *quests, char **infos)
+static all_quests_t *add_node(all_quests_t *quests, char **infos)
 {
     all_quests_t *new = malloc(sizeof(all_quests_t));
     all_quests_t *tmp = quests;
@@ -99,7 +64,8 @@ all_quests_t *add_node(all_quests_t *quests, char **infos)
     return quests;
 }
 
-all_quests_t *add_quests(all_quests_t *quests, char **infos, bool *end_loop)
+static all_quests_t *add_quests(all_quests_t *quests, char **infos,
+    bool *end_loop)
 {
     all_quests_t *tmp = quests;
 
@@ -119,25 +85,46 @@ all_quests_t *add_quests(all_quests_t *quests, char **infos, bool *end_loop)
     return quests;
 }
 
-static void init_quest_text(rpg_t *rpg)
+static sfRectangleShape *create_rect_shape(sfVector2f size, sfVector2f pos,
+    sfColor color)
 {
-    rpg->quest_text = create_text(rpg->settings->font, "", 100,
+    sfRectangleShape *rect = sfRectangleShape_create();
+
+    sfRectangleShape_setSize(rect, size);
+    sfRectangleShape_setPosition(rect, pos);
+    sfRectangleShape_setFillColor(rect, color);
+    return rect;
+}
+
+static void init_quest_header(rpg_t *rpg)
+{
+    rpg->quest_header = malloc(sizeof(quest_header_t));
+    rpg->quest_header->font = sfFont_createFromFile(
+        "assets/fonts/HyliaSerifBeta-Regular.otf");
+    rpg->quest_header->text = create_text(rpg->quest_header->font, "", 75,
         (sfVector2f){200, 700});
-    rpg->quest_desc = create_text(rpg->settings->font, "", 50,
-        (sfVector2f){200, 800});
-    rpg->quest_info = create_text(rpg->settings->font,
-        "Appuie sur Entrée pour accepter", 20, (sfVector2f){200, 900});
+    sfText_setFillColor(rpg->quest_header->text, sfColor_fromRGBA(
+        255, 255, 255, 0));
+    rpg->quest_header->done = create_text(rpg->quest_header->font, "Complete",
+        60, (sfVector2f){300, 750});
+    sfText_setFillColor(rpg->quest_header->done, sfColor_fromRGBA(
+        254, 250, 190, 0));
+    rpg->quest_header->rect = create_rect_shape((sfVector2f){1920, 200},
+        (sfVector2f){0, 700}, sfColor_fromRGBA(0, 0, 0, 0));
+    rpg->quest_header->rect2 = create_rect_shape((sfVector2f){1920, 200},
+        (sfVector2f){0, 700}, sfColor_fromRGBA(0, 0, 0, 0));
+    rpg->quest_header->state = Q_HIDDEN;
+    rpg->quest_header->myclock = NULL;
     rpg->quests = NULL;
 }
 
 void init_all_quests(rpg_t *rpg)
 {
-    char **lines = file_to_tab(".quests.csv");
+    char **lines = file_to_array(".quests.csv");
     char **infos = NULL;
     bool end_loop = false;
 
-    rpg->quests = NULL;
-    init_quest_text(rpg);
+    init_quest_header(rpg);
     for (int i = 0; lines[i] != NULL; i++) {
         infos = split_string(lines[i], ";");
         if (rpg->quests == NULL) {

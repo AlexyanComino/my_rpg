@@ -7,29 +7,6 @@
 
 #include "rpg.h"
 
-void *get_action(char *txt)
-{
-    if (strcmp(txt, "PLAY") == 0)
-        return &save_menu;
-    if (strcmp(txt, "OPTIONS") == 0)
-        return &settings;
-    if (strcmp(txt, "QUIT") == 0)
-        return &quit;
-    if (strcmp(txt, "RESUME") == 0)
-        return &start;
-    if (strcmp(txt, "FULLSCREEN") == 0)
-        return &settings;
-    if (strcmp(txt, "BACK") == 0)
-        return &back_to_menu;
-    if (strcmp(txt, "SAVE 1") == 0)
-        return &start;
-    if (strcmp(txt, "SAVE 2") == 0)
-        return &start;
-    if (strcmp(txt, "SAVE 3") == 0)
-        return &start;
-    return NULL;
-}
-
 static button_t *new_button(char *txt)
 {
     button_t *new = malloc(sizeof(button_t));

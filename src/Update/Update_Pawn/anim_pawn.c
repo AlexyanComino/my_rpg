@@ -58,7 +58,7 @@ static void animation_pawn_carrying(entity_t *entity)
 
 static void animation_pawn(rpg_t *rpg, entity_t *entity)
 {
-    if (entity->common->state == IDLE) {
+    if (entity->common->state == IDLE || entity->common->state == INTERACT) {
         entity->common->anim->rect.top = 0;
         return anim_line(entity->common, PAWN_OFFSET, PAWN_WIDTH, 0.1);
     }

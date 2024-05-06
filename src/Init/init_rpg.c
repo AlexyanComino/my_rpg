@@ -24,22 +24,6 @@ static win_t *init_win(unsigned int width, unsigned int height)
     return win;
 }
 
-static map_t *init_map(void)
-{
-    map_t *map = malloc(sizeof(map_t));
-
-    map->ground_texture = sfTexture_createFromFile("assets/bas.png", NULL);
-    map->ground_sprite = sfSprite_create();
-    sfSprite_setTexture(map->ground_sprite, map->ground_texture, sfTrue);
-    sfSprite_setScale(map->ground_sprite,
-        (sfVector2f){TILE_SCALE, TILE_SCALE});
-    map->high_texture = sfTexture_createFromFile("assets/haut.png", NULL);
-    map->high_sprite = sfSprite_create();
-    sfSprite_setTexture(map->high_sprite, map->high_texture, sfTrue);
-    sfSprite_setScale(map->high_sprite, (sfVector2f){TILE_SCALE, TILE_SCALE});
-    return map;
-}
-
 static sfVector2f *get_collisions_pos(unsigned int *size)
 {
     sfVector2f *pos = NULL;
@@ -81,18 +65,18 @@ static region_t ***get_regions(unsigned int cols, unsigned int rows)
     region_t ***regions = init_regions(cols, rows);
     unsigned int size = 0;
     sfVector2f *pos = get_collisions_pos(&size);
-    unsigned int region_col = 0;
-    unsigned int region_row = 0;
+    unsigned int col = 0;
+    unsigned int row = 0;
 
     for (unsigned int i = 0; i < size; i++) {
-        region_col = pos[i].x / WIDTH;
-        region_row = pos[i].y / HEIGHT;
-        if (region_col >= cols || region_row >= rows)
+        col = pos[i].x / WIDTH;
+        row = pos[i].y / HEIGHT;
+        if (col >= cols || row >= rows)
             continue;
-        regions[region_col][region_row]->pos = realloc(regions[region_col][region_row]->pos,
-            sizeof(sfVector2f) * (regions[region_col][region_row]->size + 1));
-        regions[region_col][region_row]->pos[regions[region_col][region_row]->size] = pos[i];
-        regions[region_col][region_row]->size++;
+        regions[col][row]->pos = realloc(regions[col][row]->pos,
+            sizeof(sfVector2f) * (regions[col][row]->size + 1));
+        regions[col][row]->pos[regions[col][row]->size] = pos[i];
+        regions[col][row]->size++;
     }
     free(pos);
     return regions;
@@ -122,15 +106,6 @@ static collision_t *init_collision(void)
     return collision;
 }
 
-void *load_data(void *arg)
-{
-    shared_data_t *shared_data = (shared_data_t *)arg;
-
-    shared_data->map = init_map();
-    shared_data->loaded = 1;
-    pthread_exit(NULL);
-}
-
 static void init_thread(rpg_t *rpg)
 {
     rpg->shm_fd = shm_open("/shared_memory", O_CREAT | O_RDWR, 0666);
@@ -139,6 +114,19 @@ static void init_thread(rpg_t *rpg)
         PROT_READ | PROT_WRITE, MAP_SHARED, rpg->shm_fd, 0);
     rpg->shared_data->loaded = 0;
     pthread_create(&rpg->thread, NULL, load_data, (void *)rpg->shared_data);
+}
+
+static void init_rpg2(rpg_t *rpg)
+{
+    rpg->main_menu = init_menu();
+    rpg->save_menu = init_save_menu();
+    rpg->settings = init_settings();
+    rpg->interface = init_interface();
+    rpg->collision = init_collision();
+    init_inventory(15);
+    init_all_quests(rpg);
+    rpg->inventory = *inventory();
+    init_all_quests(rpg);
 }
 
 rpg_t *init_rpg(void)
@@ -152,18 +140,8 @@ rpg_t *init_rpg(void)
     rpg->ent_size = 0;
     rpg->ent = init_ent(&rpg->ent_size);
     rpg->event = (sfEvent){0};
-    rpg->debug = true;
-    rpg->main_menu = init_menu();
-    rpg->save_menu = init_save_menu();
-    rpg->settings = init_settings();
-    rpg->interface = init_interface();
-    rpg->collision = init_collision();
-    rpg->quest_desc = NULL;
-    rpg->quest_info = NULL;
-    rpg->quest_text = NULL;
-    init_inventory(15);
-    rpg->inventory = *inventory();
-    rpg->items = malloc(sizeof(item_t *));
-    rpg->items_size = 0;
+    rpg->debug = false;
+    rpg->text_box = init_text_box();
+    init_rpg2(rpg);
     return rpg;
 }

@@ -52,7 +52,7 @@ static void animation_attack_warrior(rpg_t *rpg, entity_t *entity)
 
 static void animation_warrior(rpg_t *rpg, entity_t *entity)
 {
-    if (entity->common->state == IDLE) {
+    if (entity->common->state == IDLE || entity->common->state == INTERACT) {
         entity->common->anim->rect.top = 0;
         anim_line(entity->common, WARRIOR_OFFSET, WARRIOR_WIDTH, 0.1);
     }

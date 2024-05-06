@@ -36,7 +36,8 @@ void event_player_action(rpg_t *rpg)
             event_player_warrior(rpg, player);
         if (player->type == PAWN && !in_action(player))
             event_player_pawn(rpg, player);
-        if (rpg->event.key.code == sfKeySpace && !in_action(player)) {
+        if (rpg->event.key.code == sfKeySpace && !in_action(player) &&
+            player->common->state != INTERACT) {
             player->common->state = ST_ATT;
             init_entity_action(player);
         }
@@ -76,6 +77,6 @@ void event(rpg_t *rpg)
     }
     if (rpg->gamestate == GAME)
         if (player_is_not_in_action(rpg) && player_is_alive(rpg) &&
-            !is_stunned(rpg->ent[0]))
+            !is_stunned(rpg->ent[0]) && rpg->ent[0]->common->state != INTERACT)
             player_move(rpg);
 }
