@@ -27,7 +27,7 @@ bool is_discreet(entity_t *entity)
     if (!entity)
         return false;
     return entity->common->state == WALK || entity->common->state == IDLE ||
-        entity->common->state == ST_ATT;
+        entity->common->state == ST_ATT || entity->common->state == ST_WORK;
 }
 
 bool is_attacking(entity_t *entity)

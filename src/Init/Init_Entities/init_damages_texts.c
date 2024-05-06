@@ -61,8 +61,8 @@ static sfColor get_color_damage_text(rpg_t *rpg, entity_t *entity,
 
 static void init_damage_text2(damage_text_t *new, damage_text_state_t state)
 {
-    char *path = state == BAM ? "assets/Effects/bam.png" :
-        "assets/Effects/crit.png";
+    char *path = state == BAM ? "assets/Entities/Effects/bam.png" :
+        "assets/Entities/Effects/crit.png";
     int width = state == BAM ? BAM_WIDTH : CRIT_WIDTH;
     int height = state == BAM ? BAM_WIDTH : CRIT_WIDTH;
 

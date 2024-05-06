@@ -24,12 +24,17 @@ char **file_to_tab(char *path)
 
     if (file == NULL)
         return NULL;
-    while (getline(&line, &len, file) != -1)
+    while (getline(&line, &len, file) != -1) {
+        if (line[0] == '#' || line[0] == '\n' || line[0] == '\0')
+            continue;
         i++;
+    }
     tab = malloc(sizeof(char *) * (i + 1));
     fseek(file, 0, SEEK_SET);
     i = 0;
     while (getline(&line, &len, file) != -1) {
+        if (line[0] == '#' || line[0] == '\n' || line[0] == '\0')
+            continue;
         tab[i] = strdup(line);
         i++;
     }

@@ -60,6 +60,10 @@ static sfIntRect get_hitbox_from_type(entity_type_t type, sfVector2f pos)
 {
     if (type == WARRIOR)
         return get_hitbox_warrior(pos);
+    if (type == PAWN)
+        return get_hitbox_pawn(pos);
+    if (type == TORCH)
+        return get_hitbox_torch(pos);
     return (sfIntRect){0, 0, 0, 0};
 }
 

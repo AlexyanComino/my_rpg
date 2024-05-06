@@ -44,6 +44,10 @@ static entity_t *init_entity(char **infos)
 {
     if (!strcmp(infos[0], "W"))
         return init_entity_warrior(infos);
+    if (!strcmp(infos[0], "P"))
+        return init_entity_pawn(infos);
+    if (!strcmp(infos[0], "T"))
+        return init_entity_torch(infos);
     fprintf(stderr, "Error: invalid entity type\n");
     return NULL;
 }
@@ -54,12 +58,14 @@ entity_t **init_ent(unsigned int *size)
     char **infos = NULL;
     entity_t **ent = malloc(sizeof(entity_t *) * (tab_len(tab)));
 
-    for (int i = 1; tab[i] != NULL; i++) {
+    for (int i = 0; tab[i] != NULL; i++) {
         infos = split_string(tab[i], ";");
-        ent[i - 1] = init_entity(infos);
+        ent[i] = init_entity(infos);
         (*size)++;
         free_array(infos);
     }
     free_array(tab);
+    ent[0]->common->faction = BLUE_TEAM;
+    ent[0]->common->faction_origin = BLUE_TEAM;
     return ent;
 }

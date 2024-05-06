@@ -11,8 +11,17 @@
 // Display
 void display_all(rpg_t *rpg);
 
+// Display common
+void display_common(rpg_t *rpg, entity_t *entity);
+
 // Display warriors
 void display_warrior(void *vrpg, entity_t *entity);
+
+// Display pawns
+void display_pawn(void *vrpg, entity_t *entity);
+
+// Display torch
+void display_torch(void *vrpg, entity_t *entity);
 
 // Display entities
 void display_entities(rpg_t *rpg);

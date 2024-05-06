@@ -25,4 +25,6 @@ bool hitbox_in_detection(sfIntRect hitbox, unsigned int radius,
 bool entity_can_attack_enemy(rpg_t *rpg, entity_t *entity);
 
 // Entity Tools3
-bool entity_can_attack_target(entity_t *entity, entity_t *target);
+bool entity_can_attack_target(rpg_t *rpg, entity_t *entity, entity_t *target);
+bool entity_can_attack(rpg_t *rpg, entity_t *entity, entity_t *target);
+side_x_t get_entity_side(entity_t *entity, sfVector2f pos);

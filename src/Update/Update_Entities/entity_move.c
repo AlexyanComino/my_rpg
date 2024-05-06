@@ -7,96 +7,83 @@
 
 #include "rpg.h"
 
-sfVector2f get_movement(sfVector2f center_target, sfVector2f center_entity,
-    float distance, int speed)
+static unsigned int get_entity_speed(entity_t *entity)
 {
-    sfVector2f direction =
-        {center_target.x - center_entity.x,
-        center_target.y - center_entity.y};
-
-    return (sfVector2f)
-        {direction.x / distance * speed, direction.y / distance * speed};
+    if (entity->common->state == WALK || entity->common->state == MOVE_CARRY)
+        return entity->common->attributes->speed / 2;
+    return entity->common->attributes->speed;
 }
 
-void update_side_x(entity_t *entity, sfVector2f movement)
+static bool pawn_is_arrived(entity_t *entity, float distance,
+    float min_lenght)
 {
-    if (movement.x < 0)
-        entity->common->x = LEFT;
-    else if (movement.x > 0)
-        entity->common->x = RIGHT;
+    if (distance < min_lenght) {
+        entity->common->state = IDLE;
+        sfClock_restart(entity->spe->pawn->myclock->clock);
+        return true;
+    }
+    return false;
 }
 
-void update_side_y(entity_t *entity, sfVector2f movement)
+static bool warrior_is_arrived(entity_t *entity, float distance,
+    float min_lenght)
 {
-    bool y_is_sup = fabs(movement.y) > fabs(movement.x);
+    if (distance < min_lenght && entity_has_base(entity) &&
+        entity->spe->warrior->base->come_back) {
+        entity->common->state = IDLE;
+        entity->spe->warrior->base->in_cooldown = true;
+        sfClock_restart(entity->spe->warrior->base->myclock->clock);
+        return true;
+    } else if (distance < min_lenght) {
+        entity->common->state = IDLE;
+        return true;
+    }
+    return false;
+}
 
-    if (movement.y > 0) {
-        if (y_is_sup)
-            entity->common->y = DOWN;
-        else
-            entity->common->y = NONE;
+static bool entity_is_arrived(entity_t *entity, float distance,
+    float min_lenght)
+{
+    switch (entity->type) {
+    case PAWN:
+        return pawn_is_arrived(entity, distance, min_lenght);
+    case WARRIOR:
+        return warrior_is_arrived(entity, distance, min_lenght);
+    default:
+        return false;
+    }
+}
+
+static void check_entity_is_stuck(entity_t *entity,
+    sfVector2f oldPos)
+{
+    if (fabs(entity->common->pos.x - oldPos.x) < 0.1 &&
+        fabs(entity->common->pos.y - oldPos.y) < 0.1) {
+            if (entity->common->state == MOVE_CARRY)
+                entity->common->state = IDLE_CARRY;
+            else
+                entity->common->state = IDLE;
+        }
+}
+
+void entity_move(rpg_t *rpg, entity_t *entity, sfVector2f target_pos,
+    float min_lenght)
+{
+    sfVector2f movement;
+    float distance;
+    float speed = get_entity_speed(entity);
+    sfVector2f oldPos = entity->common->pos;
+    float new_distance;
+
+    distance = get_distance_between_pos(entity->common->pos, target_pos);
+    if (distance < min_lenght) {
+        entity->common->state = IDLE;
         return;
     }
-    if (movement.y < 0) {
-        if (y_is_sup)
-            entity->common->y = UP;
-        else
-            entity->common->y = NONE;
+    movement = get_movement(target_pos, entity->common->pos, distance, speed);
+    update_entity_pos(rpg, entity, movement);
+    new_distance = get_distance_between_pos(entity->common->pos, target_pos);
+    if (entity_is_arrived(entity, new_distance, min_lenght))
         return;
-    }
-    entity->common->y = NONE;
-}
-
-static void get_new_pos_x(entity_t *entity, sfVector2f *newPos,
-    sfVector2f movement, float dt)
-{
-    update_side_x(entity, movement);
-    if (movement.x < 0) {
-        newPos->x += movement.x * dt;
-    } else if (movement.x > 0) {
-        newPos->x += movement.x * dt;
-    }
-}
-
-static void update_entity_x(rpg_t *rpg, entity_t *entity, sfVector2f movement)
-{
-    sfVector2f newPos = entity->common->pos;
-    sfIntRect newHitbox;
-
-    get_new_pos_x(entity, &newPos, movement, rpg->win->dt);
-    newHitbox = entity->get_hitbox(newPos);
-    if (!is_entity_hitbox_collide(rpg, entity, newHitbox)) {
-        entity->common->pos.x = newPos.x;
-        entity->common->zones->hitbox = newHitbox;
-    }
-}
-
-static void get_new_pos_y(entity_t *entity, sfVector2f *newPos,
-    sfVector2f movement, float dt)
-{
-    update_side_y(entity, movement);
-    if (movement.y < 0) {
-        newPos->y += movement.y * dt;
-    } else if (movement.y > 0) {
-        newPos->y += movement.y * dt;
-    }
-}
-
-static void update_entity_y(rpg_t *rpg, entity_t *entity, sfVector2f movement)
-{
-    sfVector2f newPos = entity->common->pos;
-    sfIntRect newHitbox;
-
-    get_new_pos_y(entity, &newPos, movement, rpg->win->dt);
-    newHitbox = entity->get_hitbox(newPos);
-    if (!is_entity_hitbox_collide(rpg, entity, newHitbox)) {
-        entity->common->pos.y = newPos.y;
-        entity->common->zones->hitbox = newHitbox;
-    }
-}
-
-void update_entity_pos(rpg_t *rpg, entity_t *entity, sfVector2f movement)
-{
-    update_entity_x(rpg, entity, movement);
-    update_entity_y(rpg, entity, movement);
+    check_entity_is_stuck(entity, oldPos);
 }

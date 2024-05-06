@@ -24,8 +24,16 @@ void update_entity_detection(rpg_t *rpg, entity_t *entity);
 void update_common(rpg_t *rpg, entity_t *entity);
 
 // Entity move
+void entity_move(rpg_t *rpg, entity_t *entity, sfVector2f target_pos,
+    float min_lenght);
+
+// Init entity action
+void init_entity_action(entity_t *entity);
+
+// Entity stun
+void entity_stun(rpg_t *rpg, entity_t *entity);
+
+// Update entity pos
 sfVector2f get_movement(sfVector2f center_target, sfVector2f center_entity,
     float distance, int speed);
-void update_side_x(entity_t *entity, sfVector2f movement);
-void update_side_y(entity_t *entity, sfVector2f movement);
 void update_entity_pos(rpg_t *rpg, entity_t *entity, sfVector2f movement);

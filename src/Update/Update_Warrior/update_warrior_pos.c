@@ -7,13 +7,6 @@
 
 #include "rpg.h"
 
-side_x_t get_entity_side(entity_t *entity, entity_t *enemy)
-{
-    if (entity->common->pos.x < enemy->common->pos.x)
-        return LEFT;
-    return RIGHT;
-}
-
 static bool entity_can_move(entity_t *entity)
 {
     if ((entity->common->state == IDLE || entity->common->state == WALK ||
@@ -61,42 +54,58 @@ static void update_warrior_side(rpg_t *rpg, entity_t *tmp, entity_t *enemy)
 {
     if (entity_see_enemy(rpg, tmp, enemy) && tmp->common->state != ATTACK &&
         !is_discreet(enemy))
-        tmp->common->x = get_entity_side(enemy, tmp);
+        tmp->common->x = get_entity_side(tmp, enemy->common->pos);
 }
 
-static void normal_move(rpg_t *rpg, entity_t *tmp, entity_t *enemy)
+static void defend_base(rpg_t *rpg, entity_t *tmp, entity_t *enemy)
 {
+    sfVector2f target_pos = enemy->common->pos;
+    float min_lenght = MIN_WARRIOR_LENGTH;
+
     if (tmp->common->zones->s_detect)
         tmp->common->state = RUN;
-    else if ((entity_see_enemy(rpg, tmp, enemy) &&
-        enemy_is_in_base(tmp, enemy)) ||
-        tmp->spe->warrior->base->come_back)
+    else
         tmp->common->state = WALK;
-    warrior_move(rpg, tmp);
+    entity_move(rpg, tmp, target_pos, min_lenght);
+}
+
+static void warrior_come_back(rpg_t *rpg, entity_t *tmp)
+{
+    float min_lenght = 10;
+    sfVector2f target_pos = tmp->spe->warrior->base->pattern_pos[tmp->spe->
+        warrior->base->pattern_pos_index];
+
+    tmp->common->state = WALK;
+    entity_move(rpg, tmp, target_pos, min_lenght);
 }
 
 static void move_warrior_base(rpg_t *rpg, entity_t *tmp, entity_t *enemy)
 {
     come_back_to_next_point(rpg, tmp, enemy);
     update_base_cooldown(tmp);
-    if (!enemy && tmp->spe->warrior->base->come_back) {
-        tmp->common->state = WALK;
-        warrior_move(rpg, tmp);
-        return;
-    }
-    update_warrior_side(rpg, tmp, enemy);
     if ((!enemy_is_in_base(tmp, enemy) && entity_see_enemy(rpg, tmp, enemy))
         || (enemy_is_in_base(tmp, enemy) && !entity_see_enemy(rpg, tmp, enemy)
         && !tmp->spe->warrior->base->come_back)) {
         tmp->common->state = IDLE;
         return;
     }
+    if ((entity_see_enemy(rpg, tmp, enemy) &&
+        enemy_is_in_base(tmp, enemy)))
+        return defend_base(rpg, tmp, enemy);
+    update_warrior_side(rpg, tmp, enemy);
+    if (tmp->spe->warrior->base->in_cooldown) {
+        tmp->common->state = IDLE;
+        return;
+    }
     if (entity_can_move(tmp))
-        normal_move(rpg, tmp, enemy);
+        warrior_come_back(rpg, tmp);
 }
 
 static void move_warrior_no_base(rpg_t *rpg, entity_t *tmp, entity_t *enemy)
 {
+    float min_lenght = 0;
+    sfVector2f target_pos;
+
     if (!enemy || !entity_see_enemy(rpg, tmp, enemy)) {
         tmp->common->state = IDLE;
         return;
@@ -106,7 +115,9 @@ static void move_warrior_no_base(rpg_t *rpg, entity_t *tmp, entity_t *enemy)
         tmp->common->state = RUN;
     else
         tmp->common->state = WALK;
-    warrior_move(rpg, tmp);
+    target_pos = enemy->common->pos;
+    min_lenght = MIN_WARRIOR_LENGTH;
+    entity_move(rpg, tmp, target_pos, min_lenght);
 }
 
 void update_warrior_pos(rpg_t *rpg, entity_t *tmp, entity_t *enemy)
