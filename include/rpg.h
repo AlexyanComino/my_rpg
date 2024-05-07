@@ -350,8 +350,6 @@ typedef struct quest_s {
     quest_type_t type;
     dialog_t *dialog;
     sfSprite *sprite;
-    sfText *name_s;
-    sfText *desc_s;
     struct quest_s *next;
 } quest_t;
 
@@ -514,16 +512,6 @@ enum armor_type {
     BOOTS
 };
 
-enum item_type {
-    WEAPON,
-    ARMOR,
-    POTION,
-    QUEST,
-    KEY,
-    OTHER,
-    ALL
-};
-
 typedef struct armor_s {
     int defense;
     int speed;
@@ -532,12 +520,6 @@ typedef struct armor_s {
     int endurance;
     sfSprite *sprite;
 } armor_t;
-
-
-typedef struct {
-    map_t *map;
-    int loaded;
-} shared_data_t;
 
 typedef enum {
     Q_START,

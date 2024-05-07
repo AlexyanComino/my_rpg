@@ -89,20 +89,48 @@ static void update_player_stat(void)
     (sfVector2f){(*view_pos()).x - 702, (*view_pos()).y - 175});
 }
 
-void update_quest(void)
+static int update_quest_next(sfSprite *sprite, sfText *name_s,
+    sfText *desc_s, rpg_t *rpg)
 {
     inventory_t *inv = (*inventory());
     int pos = 0;
 
     for (quest_t *tmp = inv->quest; tmp; tmp = tmp->next) {
-        sfSprite_setPosition(tmp->sprite, (sfVector2f){(*view_pos()).x + 100,
+        sfSprite_setPosition(sprite, (sfVector2f){(*view_pos()).x + 100,
             (*view_pos()).y - 400 + pos});
-        sfText_setPosition(tmp->name_s, (sfVector2f){(*view_pos()).x + 200,
+        sfText_setString(name_s, tmp->name);
+        sfText_setPosition(name_s, (sfVector2f){(*view_pos()).x + 200,
             (*view_pos()).y - 325 + pos});
-        sfText_setPosition(tmp->desc_s, (sfVector2f){(*view_pos()).x + 200,
+        sfText_setString(desc_s, tmp->description);
+        sfText_setPosition(desc_s, (sfVector2f){(*view_pos()).x + 200,
             (*view_pos()).y - 275 + pos});
+        sfRenderWindow_drawSprite(rpg->win->window, sprite, NULL);
+        sfRenderWindow_drawText(rpg->win->window, name_s, NULL);
+        sfRenderWindow_drawText(rpg->win->window, desc_s, NULL);
         pos += 200;
     }
+    return 0;
+}
+
+void update_quest(rpg_t *rpg)
+{
+    static sfSprite *sprite = NULL;
+    static sfText *name_s = NULL;
+    static sfText *desc_s = NULL;
+
+    if (sprite == NULL) {
+        sprite = init_sprite_from_file("assets/inventory/QUEST.png");
+        sfSprite_setScale(sprite, (sfVector2f){1.2, 1.2});
+        name_s = create_text(
+        sfFont_createFromFile("assets/fonts/m6x11plus.ttf"), "empty", 50,
+        (sfVector2f){200, 700});
+        sfText_setColor(name_s, sfColor_fromRGB(105, 165, 125));
+        desc_s = create_text(
+        sfFont_createFromFile("assets/fonts/m6x11plus.ttf"), "empty", 30,
+            (sfVector2f){200, 700});
+        sfText_setColor(desc_s, sfColor_fromRGB(135, 195, 155));
+    }
+    update_quest_next(sprite, name_s, desc_s, rpg);
 }
 
 int display_inv(rpg_t *rpg)
@@ -112,9 +140,9 @@ int display_inv(rpg_t *rpg)
         update_stuff();
         update_player_status();
         update_player_stat();
-        update_quest();
         apply_stuff(rpg);
         open_inventory(rpg);
+        update_quest(rpg);
     }
     return 0;
 }

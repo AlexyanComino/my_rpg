@@ -170,29 +170,6 @@ static int draw_slot(sfRenderWindow *window)
     return (0);
 }
 
-int draw_quest(sfRenderWindow *window, quest_t *quest)
-{
-    quest_t *tmp = quest;
-    static int pos = 0;
-    int i = 0;
-
-    while (tmp != NULL) {
-        if (i < pos) {
-            tmp = tmp->next;
-            i++;
-            continue;
-        }
-        sfRenderWindow_drawSprite(window, tmp->sprite, NULL);
-        sfRenderWindow_drawText(window, tmp->name_s, NULL);
-        sfRenderWindow_drawText(window, tmp->desc_s, NULL);
-        tmp = tmp->next;
-        i++;
-        if (i == pos + 5)
-            break;
-    }
-    return (0);
-}
-
 int open_inventory(rpg_t *rpg)
 {
     if ((*inventory())->is_open == 1) {
@@ -200,7 +177,6 @@ int open_inventory(rpg_t *rpg)
         draw_stuff(rpg->win->window);
         draw_slot(rpg->win->window);
         display_warrior(rpg, (*inventory())->player_status->player);
-        draw_quest(rpg->win->window, (*inventory())->quest);
     }
     if ((*inventory())->is_open == 0) {
         for (slot_t *tmp = (*inventory())->slot; tmp; tmp = tmp->next)

@@ -44,7 +44,7 @@ static death_t *init_death(void)
 
 static faction_t get_faction(color_entity_t color, entity_type_t type)
 {
-    if (type == GOBLIN)
+    if (type == TORCH)
         return GOBLIN_TEAM;
     if (color == BLUE)
         return BLUE_TEAM;
@@ -60,6 +60,28 @@ static faction_t get_faction(color_entity_t color, entity_type_t type)
 static float get_attack_cooldown(void)
 {
     return (float)(rand() % 75 + 75) / 100;
+}
+
+static mark_t *init_mark(char *path, int width, int height)
+{
+    mark_t *mark = malloc(sizeof(mark_t));
+
+    mark->anim = init_anim(path, width, height);
+    mark->is_display = 0;
+    return mark;
+}
+
+static stun_t *init_stun(void)
+{
+    stun_t *stun = malloc(sizeof(stun_t));
+
+    stun->stun_mark = init_mark("assets/Entities/Effects/stun.png",
+        STUN_WIDTH, STUN_HEIGHT);
+    sfSprite_setScale(stun->stun_mark->anim->sprite, (sfVector2f){0.4, 0.4});
+    stun->is_stunned = false;
+    stun->stun_time = 2;
+    stun->stun_clock = init_my_clock();
+    return stun;
 }
 
 common_entity_t *init_common(char **infos, entity_type_t type)
@@ -81,5 +103,6 @@ common_entity_t *init_common(char **infos, entity_type_t type)
     common->clock_cooldown_attack = init_my_clock();
     common->attack_cooldown = get_attack_cooldown();
     common->damage_texts = NULL;
+    common->stun = init_stun();
     return common;
 }
