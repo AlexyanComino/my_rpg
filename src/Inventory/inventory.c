@@ -20,6 +20,8 @@ int init_inventory(int size)
     inv->size = size;
     inv->slot = NULL;
     inv->quest = NULL;
+    inv->scroll = 0;
+    inv->scroll_max = 0;
     inv->sprite = init_sprite_from_file("assets/inventory/1.png");
     inv->player_status = init_player_status();
     sfSprite_setScale(inv->sprite, (sfVector2f){2, 2});
