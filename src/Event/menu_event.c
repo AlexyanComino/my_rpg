@@ -12,8 +12,8 @@ void menu_button_event(rpg_t *rpg, button_t *buttons)
     button_t *tmp = buttons;
 
     while (tmp) {
-        is_button_clicked(tmp, &rpg->event.mouseButton);
-        is_button_hovered(tmp, &rpg->event.mouseMove);
+        is_button_clicked(tmp, rpg);
+        is_button_hovered(tmp, rpg);
         if (tmp->state == HOVERED)
             sfText_setColor(tmp->text, sfYellow);
         if (tmp->state == CLICKED) {
@@ -24,7 +24,7 @@ void menu_button_event(rpg_t *rpg, button_t *buttons)
             tmp->rect.left = 0;
             sfText_setColor(tmp->text, sfWhite);
         }
-        is_button_released(tmp, &rpg->event.mouseButton);
+        is_button_released(tmp, rpg);
         if (tmp->state == RELEASED)
             tmp->action(rpg);
         tmp = tmp->next;

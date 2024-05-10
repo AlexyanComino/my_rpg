@@ -403,6 +403,7 @@ typedef struct menu_s {
 typedef struct win_s {
     sfRenderWindow *window;
     sfView *view;
+    sfVector2f mouse_pos;
     unsigned int width;
     unsigned int height;
     unsigned int framerate;

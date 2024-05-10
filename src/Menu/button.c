@@ -7,13 +7,13 @@
 
 #include "rpg.h"
 
-bool is_button_clicked(struct button_s *button, sfMouseButtonEvent *event)
+bool is_button_clicked(struct button_s *button, rpg_t *rpg)
 {
-    sfVector2f mouse_pos = {(float) event->x, (float) event->y};
     sfFloatRect rect_bounds = sfText_getGlobalBounds(button->text);
 
-    if (event->type == sfEvtMouseButtonPressed) {
-        if (sfFloatRect_contains(&rect_bounds, mouse_pos.x, mouse_pos.y)) {
+    if (rpg->event.type == sfEvtMouseButtonPressed) {
+        if (sfFloatRect_contains(&rect_bounds, rpg->win->mouse_pos.x,
+            rpg->win->mouse_pos.y)) {
             button->state = CLICKED;
             return true;
         }
@@ -22,15 +22,14 @@ bool is_button_clicked(struct button_s *button, sfMouseButtonEvent *event)
     return false;
 }
 
-bool is_button_hovered(struct button_s *button, sfMouseMoveEvent *event)
+bool is_button_hovered(struct button_s *button, rpg_t *rpg)
 {
-    sfVector2f mouse_pos = {(float)event->x, (float)event->y};
     sfFloatRect rect_bounds = sfText_getGlobalBounds(button->text);
-
     if (button->state == CLICKED || button->state == RELEASED) {
         return true;
     }
-    if (sfFloatRect_contains(&rect_bounds, mouse_pos.x, mouse_pos.y)) {
+    if (sfFloatRect_contains(&rect_bounds, rpg->win->mouse_pos.x,
+        rpg->win->mouse_pos.y)) {
         button->state = HOVERED;
         return true;
     } else {
@@ -39,13 +38,14 @@ bool is_button_hovered(struct button_s *button, sfMouseMoveEvent *event)
     }
 }
 
-bool is_button_released(struct button_s *button, sfMouseButtonEvent *event)
+bool is_button_released(struct button_s *button, rpg_t *rpg)
 {
-    sfVector2f mouse_pos = {(float) event->x, (float) event->y};
+
     sfFloatRect rect_bounds = sfText_getGlobalBounds(button->text);
 
-    if (event->type == sfEvtMouseButtonReleased) {
-        if (sfFloatRect_contains(&rect_bounds, mouse_pos.x, mouse_pos.y)) {
+    if (rpg->event.type == sfEvtMouseButtonReleased) {
+        if (sfFloatRect_contains(&rect_bounds, rpg->win->mouse_pos.x,
+            rpg->win->mouse_pos.y)) {
             button->state = RELEASED;
             return true;
         }

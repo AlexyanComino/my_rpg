@@ -30,3 +30,7 @@ void display_torch(void *vrpg, entity_t *entity);
 
 // Display entities
 void display_entities(rpg_t *rpg);
+
+// Display quests
+void display_quests(rpg_t *rpg);
+void display_text_box(rpg_t *rpg);

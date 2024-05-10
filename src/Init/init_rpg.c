@@ -20,6 +20,7 @@ static win_t *init_win(unsigned int width, unsigned int height)
     win->height = height;
     win->framerate = 60;
     win->clock = sfClock_create();
+    win->mouse_pos = (sfVector2f){0, 0};
     sfRenderWindow_setFramerateLimit(win->window, win->framerate);
     return win;
 }

@@ -10,9 +10,9 @@
 #include "rpg.h"
 
 // button
-bool is_button_clicked(struct button_s *button, sfMouseButtonEvent *event);
-bool is_button_hovered(struct button_s *button, sfMouseMoveEvent *event);
-bool is_button_released(struct button_s *button, sfMouseButtonEvent *event);
+bool is_button_clicked(struct button_s *button, rpg_t *rpg);
+bool is_button_hovered(struct button_s *button, rpg_t *rpg);
+bool is_button_released(struct button_s *button, rpg_t *rpg);
 
 // action
 void *get_action(char *txt);
