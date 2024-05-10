@@ -153,6 +153,21 @@ int draw_item(sfRenderWindow *window, slot_t *tmp)
     return 0;
 }
 
+static void update_cursor_inv(sfRenderWindow *window)
+{
+    for (slot_t *tmp = (*inventory())->player_status->stuff; tmp;
+    tmp = tmp->next) {
+        if (tmp->is_empty == 0 && tmp->type == WEAPON && tmp->is_moved == 1) {
+            sfRenderWindow_drawSprite(window,
+            (weapon_t *){tmp->item}->sprite, NULL);
+        }
+        if (tmp->is_empty == 0 && tmp->type == ARMOR && tmp->is_moved == 1) {
+            sfRenderWindow_drawSprite(window,
+            (armor_t *){tmp->item}->sprite, NULL);
+        }
+    }
+}
+
 static int draw_slot(sfRenderWindow *window)
 {
     for (slot_t *tmp = (*inventory())->slot; tmp; tmp = tmp->next) {
@@ -169,6 +184,7 @@ static int draw_slot(sfRenderWindow *window)
             (armor_t *){tmp->item}->sprite, NULL);
         }
     }
+    update_cursor_inv(window);
     return (0);
 }
 
