@@ -29,5 +29,6 @@ void *load_data(void *arg)
 
     shared_data->map = init_map();
     shared_data->loaded = 1;
+    printf("Data loaded\n");
     pthread_exit(NULL);
 }

@@ -9,8 +9,9 @@
 #include "rpg.h"
 
 // Tools
-float get_distance_between_pos(sfVector2f center1, sfVector2f center2);
+float get_distance(sfVector2f center1, sfVector2f center2);
 void update_clock_seconds(my_clock_t *myclock);
+int tab_len(char **tab);
 
 // My_str_to_word_array
 char **split_string(char *str, char *delim);

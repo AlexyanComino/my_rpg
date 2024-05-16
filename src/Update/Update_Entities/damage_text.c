@@ -41,12 +41,16 @@ static void remove_damage_text(damage_text_t **damage_texts,
 
 static void change_pos_and_alpha(damage_text_t *tmp, sfColor color)
 {
+    sfColor shadow_color = sfText_getOutlineColor(tmp->text);
+
     if (tmp->state != CRITICAL && tmp->state != BAM) {
         tmp->pos.y -= 1.5;
         sfText_setPosition(tmp->text, tmp->pos);
     }
     color.a -= 5;
     sfText_setColor(tmp->text, color);
+    shadow_color.a -= 5;
+    sfText_setOutlineColor(tmp->text, shadow_color);
 }
 
 void update_damage_texts(damage_text_t **damage_texts)

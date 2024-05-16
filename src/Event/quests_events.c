@@ -22,6 +22,7 @@ void interact_with_entity(rpg_t *rpg, entity_t *entity)
 void accept_quest(rpg_t *rpg)
 {
     all_quests_t *tmp = rpg->quests;
+    entity_t *player = get_player(rpg);
 
     while (tmp != NULL) {
         if (!strcmp(tmp->proprietary, rpg->text_box->entity->common->name) &&
@@ -29,7 +30,7 @@ void accept_quest(rpg_t *rpg)
             tmp->quest->is_active = true;
             rpg->text_box->is_displayed = false;
             rpg->quest_header->state = Q_START;
-            rpg->ent[0]->common->state = IDLE;
+            player->common->state = IDLE;
             printf("Quest accepted: %s\n", tmp->quest->name);
         }
         tmp = tmp->next;
@@ -39,6 +40,7 @@ void accept_quest(rpg_t *rpg)
 void refuse_quest(rpg_t *rpg)
 {
     all_quests_t *tmp = rpg->quests;
+    entity_t *player = get_player(rpg);
 
     while (tmp != NULL) {
         if (strcmp(tmp->proprietary, rpg->text_box->entity->common->name) == 0
@@ -47,7 +49,7 @@ void refuse_quest(rpg_t *rpg)
             rpg->text_box->is_fully_displayed = false;
             rpg->text_box->len = 0;
             free(rpg->text_box->displayed_str);
-            rpg->ent[0]->common->state = IDLE;
+            player->common->state = IDLE;
         }
         tmp = tmp->next;
     }
@@ -77,7 +79,7 @@ void quest_event(rpg_t *rpg)
 {
     if ((rpg->event.key.code == sfKeyE ||
         rpg->event.key.code == sfKeyEnter ||
-        rpg->ent[0]->common->state == INTERACT)
+        get_player(rpg)->common->state == INTERACT)
         && rpg->event.type == sfEvtKeyReleased) {
         for (unsigned int i = 0; i < rpg->ent_size; i++) {
             quest_handling(rpg, rpg->ent[i]);

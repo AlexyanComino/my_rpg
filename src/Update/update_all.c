@@ -10,14 +10,11 @@
 
 void update_all(rpg_t *rpg)
 {
-    if (rpg->gamestate != GAME &&
-        rpg->gamestate != PAUSE && rpg->gamestate != END)
+    if (rpg->gamestate == MAIN_MENU || rpg->gamestate == PAUSE ||
+        rpg->gamestate == SETTINGS || rpg->gamestate == SAVE_MENU)
         update_background(rpg);
     if (rpg->gamestate == GAME) {
         update_game_interface(rpg);
-        sfView_setCenter(rpg->win->view, rpg->ent[0]->common->pos);
-        (*view_pos()) = sfView_getCenter(rpg->win->view);
-        sfRenderWindow_setView(rpg->win->window, rpg->win->view);
         update_entities(rpg);
         update_quest_header(rpg);
         update_quests(rpg);

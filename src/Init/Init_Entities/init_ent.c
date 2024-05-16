@@ -32,22 +32,18 @@ anim_t *init_anim(char *texture_path, int width, int height)
     return anim;
 }
 
-static int tab_len(char **tab)
-{
-    int i = 0;
-
-    for (; tab[i] != NULL; i++);
-    return i;
-}
-
 static entity_t *init_entity(char **infos)
 {
     if (!strcmp(infos[0], "W"))
         return init_entity_warrior(infos);
     if (!strcmp(infos[0], "P"))
         return init_entity_pawn(infos);
-    if (!strcmp(infos[0], "T"))
+    if (!strcmp(infos[0], "TO"))
         return init_entity_torch(infos);
+    if (!strcmp(infos[0], "TN"))
+        return init_entity_tnt(infos);
+    if (!strcmp(infos[0], "A"))
+        return init_entity_archer(infos);
     fprintf(stderr, "Error: invalid entity type\n");
     return NULL;
 }

@@ -20,6 +20,8 @@
 #include <sys/mman.h>
 #include <fcntl.h>
 
+#define NUM_POINTS 30  // Nombre de points pour la parabole
+
 #define WIDTH 1920
 #define HEIGHT 1080
 
@@ -53,6 +55,33 @@
 #define TORCH_WIDTH 192
 #define TORCH_IDLE_OFFSET TORCH_WIDTH * 6
 #define TORCH_OFFSET TORCH_WIDTH * 5
+#define MIN_TORCH_LENGTH 90
+
+// Tnt
+#define TNT_WIDTH 192
+#define TNT_OFFSET TORCH_WIDTH * 5
+#define TNT_OFFSET_ATTACK TORCH_WIDTH * 6
+#define MIN_TNT_LENGTH 400
+#define MAX_TNT_LENGTH 200
+
+#define DYNA_WIDTH 64
+#define DYNA_OFFSET DYNA_WIDTH * 5
+
+#define EXPLO_WIDTH 192
+#define EXPLO_OFFSET EXPLO_WIDTH * 8
+
+#define CIBLE_WIDTH 300
+
+// Archer
+#define ARCHER_WIDTH 192
+#define ARCHER_OFFSET ARCHER_WIDTH * 5
+#define ARCHER_OFFSET_ATTACK ARCHER_WIDTH * 7
+
+#define ARROW_WIDTH 64
+#define ARROW_COOLDOWN 10
+#define ARROW_HIT_ENTITY_COOLDOWN 5
+
+#define MIN_ARCHER_LENGTH 400
 
 // Marks
 #define EXCLAM_WIDTH 91
@@ -65,12 +94,15 @@
 
 #define STUN_WIDTH 1192 / 2
 #define STUN_HEIGHT 13776 / 41
+
+#define GOB_EXCLAM_WIDTH 1788 / 3
+#define GOB_EXCLAM_HEIGHT 3696 / 11
+
+#define FIRE_WIDTH 128
 //
 
 // Cooldowns
 #define DEAD_COOLDOWN 10.0
-
-#define PLAYER_NAME "Pablodrigo"
 
 #define BASE_COLOR sfColor_fromRGB(146, 255, 250)
 
@@ -79,9 +111,10 @@
 #define DAMAGE_COLOR_RED sfColor_fromRGB(255, 88, 65)
 #define DAMAGE_COLOR_YELLOW sfColor_fromRGB(255, 215, 66)
 #define DAMAGE_COLOR_PURPLE sfColor_fromRGB(183, 133, 255)
-#define DAMAGE_COLOR_GREEN sfColor_fromRGB(176, 255, 87)
+#define DAMAGE_COLOR_GREEN sfColor_fromRGB(59, 255, 100)
 #define DAMAGE_COLOR_BAM sfWhite
 #define DAMAGE_COLOR_CRITICAL sfColor_fromRGB(255, 61, 30)
+#define DAMAGE_COLOR_FIRE sfColor_fromRGB(255, 157, 59)
 
 #define CRIT_WIDTH 215
 #define BAM_WIDTH 160
@@ -94,6 +127,11 @@
 
 #define MAP_HEIGHT 13301
 #define MAP_WIDTH 13971
+
+// Minimap
+#define MINIMAP_ARROW_WIDTH 373
+
+#define MINIMAP_BACK_SIZE 224
 
 typedef enum color_entity_s {
     BLUE = 0,
@@ -159,6 +197,8 @@ typedef struct zones_entity_s {
     sfRectangleShape *rect_hitbox;
     sfIntRect hitbox_attack;
     sfRectangleShape *rect_hitbox_attack;
+    sfIntRect hitbox_foot;
+    sfRectangleShape *rect_hitbox_foot;
     unsigned int l_radius;
     sfCircleShape *l_circle;
     unsigned int m_radius;
@@ -202,6 +242,7 @@ typedef enum damage_text_state {
     CRITICAL,
     BAM,
     MISS,
+    FIRE_TEXT,
 } damage_text_state_t;
 
 typedef struct damage_text_s {
@@ -221,10 +262,70 @@ typedef struct stun_s {
     float stun_time;
 } stun_t;
 
-typedef struct common_entity_s {
-    char *name;
+typedef struct fire_s {
+    bool is_on_fire;
+    mark_t *fire_mark;
+    my_clock_t *fire_clock;
+    float burn_time;
+    float fire_time;
+    my_clock_t *fire_damage_clock;
+    int fire_damage;
+} fire_t;
+
+typedef struct round_rectangle_t {
+    sfRectangleShape *rect_w;
+    sfRectangleShape *rect_h;
+    sfCircleShape *circle;
+    sfVector2f circle_pos[4];
+    sfVector2f size;
+    sfVector2f init_size;
+    int r;
+    int init_r;
+    sfVector2f pos;
+} round_rectangle_t;
+
+typedef struct health_bar_s {
+    round_rectangle_t *back;
+    round_rectangle_t *front;
+    int diff_y;
+} health_bar_t;
+
+
+typedef enum arrow_state {
+    FLY_ARROW,
+    HIT_ARROW,
+} arrow_state_t;
+
+typedef enum arrow_dir_s {
+    UP_ARROW,
+    UP_LEFT_ARROW,
+    UP_RIGHT_ARROW,
+    DOWN_ARROW,
+    DOWN_LEFT_ARROW,
+    DOWN_RIGHT_ARROW,
+    LEFT_ARROW,
+    RIGHT_ARROW,
+} arrow_dir_t;
+
+typedef struct arrows_s {
     anim_t *anim;
     sfVector2f pos;
+    sfVector2f dir;
+    sfVector2f end;
+    sfVertex vertices[2];
+    arrow_state_t state;
+    my_clock_t *myclock;
+    int arrow_index;
+    sfVector2f diff_center;
+    struct arrows_s *next;
+} arrows_t;
+
+typedef struct common_entity_s {
+    char *name;
+    sfText *name_text;
+    anim_t *anim;
+    sfVector2f pos;
+    sfVector2f init_pos;
     color_entity_t color;
     state_entity_t state;
     side_x_t x;
@@ -238,6 +339,10 @@ typedef struct common_entity_s {
     float attack_cooldown;
     damage_text_t *damage_texts;
     stun_t *stun;
+    fire_t *fire;
+    health_bar_t *health_bar;
+    arrows_t *arrows_hit;
+    bool is_fleeing;
 } common_entity_t;
 
 typedef struct warrior_s {
@@ -289,18 +394,64 @@ typedef struct pawn_s {
 } pawn_t;
 
 typedef struct torch_s {
+    mark_t *exclam;
 } torch_t;
+
+typedef struct curve_s {
+    sfVector2f *points;
+    sfConvexShape *curve_shape;
+    side_x_t x;
+    side_y_t y;
+    int nb_points;
+} curve_t;
+
+typedef struct dyna_s {
+    anim_t *anim;
+    float dyna_angle;
+    sfVector2f pos;
+    bool is_launched;
+    sfVector2f *points;
+    int index;
+    side_x_t side;
+} dyna_t;
+
+typedef struct explo_s {
+    anim_t *anim;
+    sfCircleShape *boom_circle;
+    int radius;
+    sfVector2f boom_center;
+    sfSprite *cible;
+    sfTexture *cible_texture;
+} explo_t;
+
+typedef struct tnt_s {
+    dyna_t *dyna;
+    bool is_launched;
+    curve_t *curve;
+    bool is_exploded;
+    explo_t *explo;
+} tnt_t;
+
+typedef struct archer_s {
+    arrows_t *arrows;
+    arrow_dir_t arrow_dir;
+    base_t *base;
+} archer_t;
 
 typedef union spe_s {
     warrior_t *warrior;
     pawn_t *pawn;
     torch_t *torch;
+    tnt_t *tnt;
+    archer_t *archer;
 } spe_t;
 
 typedef enum entity_type_s {
     WARRIOR,
     PAWN,
     TORCH,
+    TNT,
+    ARCHER,
 } entity_type_t;
 
 typedef struct entity_s {
@@ -312,6 +463,7 @@ typedef struct entity_s {
     void (*disp)(void *rpg, struct entity_s *entity);
     sfIntRect (*get_hitbox)(sfVector2f pos);
     sfIntRect (*get_hitbox_attack)(sfVector2f pos, side_x_t x, side_y_t y);
+    sfIntRect (*get_hitbox_foot)(sfVector2f pos);
 } entity_t;
 
 typedef struct restricted_s {
@@ -324,6 +476,7 @@ typedef struct restricted_s {
 
 typedef struct interface_s {
     restricted_t *restricted;
+    health_bar_t *health_bar;
 } interface_t;
 
 typedef enum quest_type {
@@ -367,6 +520,7 @@ typedef enum {
     SETTINGS,
     SAVE_MENU,
     INVENTORY,
+    MAP,
     END
 } state_t;
 
@@ -574,9 +728,31 @@ typedef struct {
     int loaded;
 } shared_data_t;
 
+typedef struct minimap_s {
+    sfView *view;
+    sfVector2f pos;
+    bool is_drag;
+    float zoom;
+    sfTexture *arrow_texture;
+    sfSprite *arrow_sprite;
+    float rotation;
+    sfRectangleShape *rect;
+    float size;
+    sfTexture *blur_texture;
+    sfSprite *blur;
+    sfTexture *back_texture;
+    sfSprite *back;
+    sfFont *font;
+    sfText **texts;
+    int nb_texts;
+    float texts_size;
+    float texts_thickness;
+} minimap_t;
+
 typedef struct rpg_s {
     win_t *win;
     map_t *map;
+    minimap_t *minimap;
     sfEvent event;
     entity_t **ent;
     unsigned int ent_size;
@@ -594,9 +770,12 @@ typedef struct rpg_s {
     pthread_t thread;
     shared_data_t *shared_data;
     int shm_fd;
+    unsigned int player_index;
+    bool plus;
 } rpg_t;
 
 #include "../src/Init/init.h"
+#include "../src/Display/Display_entities/display_entities.h"
 #include "../src/Display/display.h"
 #include "../src/Menu/menu.h"
 #include "../src/Event/event.h"
@@ -605,15 +784,19 @@ typedef struct rpg_s {
 #include "../src/Lib/lib.h"
 #include "../src/Animation/anim.h"
 #include "../src/Defines/defines.h"
-#include "../src/Update/Update_Warrior/update_warrior.h"
-#include "../src/Update/Update_Pawn/update_pawn.h"
-#include "../src/Update/Update_Torch/update_torch.h"
+#include "../src/Update/Update_Entities/Update_Warrior/update_warrior.h"
+#include "../src/Update/Update_Entities/Update_Pawn/update_pawn.h"
+#include "../src/Update/Update_Entities/Update_Torch/update_torch.h"
+#include "../src/Update/Update_Entities/Update_Tnt/update_tnt.h"
+#include "../src/Update/Update_Entities/Update_Archer/update_archer.h"
 #include "../src/Update/Update_Entities/update_entities.h"
 
 #include "../src/Init/Init_Entities/init_entities.h"
 #include "../src/Init/Init_Entities/Init_Warrior/init_warrior.h"
 #include "../src/Init/Init_Entities/Init_Pawn/init_pawn.h"
 #include "../src/Init/Init_Entities/Init_Torch/init_torch.h"
+#include "../src/Init/Init_Entities/Init_Tnt/init_tnt.h"
+#include "../src/Init/Init_Entities/Init_Archer/init_archer.h"
 #include "../src/Init/Init_Entities/Init_Common/init_common.h"
 #include "../src/Lib/Entity_Tools/entity_lib.h"
 #include "singleton.h"

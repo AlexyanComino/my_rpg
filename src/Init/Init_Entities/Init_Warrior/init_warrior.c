@@ -37,7 +37,7 @@ static warrior_t *init_warrior(char **infos)
     warrior->max_line_attack = 0;
     warrior->exclam = init_exclam(infos);
     warrior->inter = init_inter(infos);
-    warrior->base = init_warrior_base(infos);
+    warrior->base = init_base(infos);
     return warrior;
 }
 
@@ -61,5 +61,6 @@ entity_t *init_entity_warrior(char **infos)
     entity->disp = &display_warrior;
     entity->get_hitbox = &get_hitbox_warrior;
     entity->get_hitbox_attack = &get_warrior_hitbox_attack;
+    entity->get_hitbox_foot = &get_hitbox_warrior_foot;
     return entity;
 }

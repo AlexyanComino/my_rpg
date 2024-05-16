@@ -27,3 +27,4 @@ bool is_stunned(entity_t *entity);
 bool is_slow(entity_t *entity);
 bool is_working(entity_t *entity);
 bool is_carrying(entity_t *entity);
+bool cooldown_is_over(mark_t *mark, float cooldown);
