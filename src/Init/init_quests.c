@@ -34,6 +34,7 @@ static quest_t *init_quest(char **infos)
     quest->is_done = false;
     quest->is_active = false;
     quest->is_displayed = false;
+    quest->is_last = strcmp(infos[8], "true") == 0 ? true : false;
     quest->next = NULL;
     return quest;
 }

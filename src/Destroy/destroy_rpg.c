@@ -34,7 +34,6 @@ static void destroy_menu(menu_t *menu)
 void destroy_menus(rpg_t *rpg)
 {
     destroy_menu(rpg->main_menu);
-    destroy_menu(rpg->save_menu);
     destroy_menu(rpg->settings);
 }
 

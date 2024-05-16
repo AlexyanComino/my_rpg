@@ -18,6 +18,7 @@ void display_common(rpg_t *rpg, entity_t *entity);
 void display_main_menu(rpg_t *rpg);
 void display_settings(rpg_t *rpg);
 void display_save_menu(rpg_t *rpg);
+void display_selector(rpg_t *rpg);
 
 // Display warriors
 void display_warrior(void *vrpg, entity_t *entity);

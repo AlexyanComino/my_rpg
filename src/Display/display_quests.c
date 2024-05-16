@@ -86,7 +86,8 @@ void display_text_box(rpg_t *rpg)
             ent[0]->common->pos.x, rpg->ent[0]->common->pos.y + 400});
         sfText_setPosition(rpg->text_box->npc_name, (sfVector2f){rpg->
         ent[0]->common->pos.x - 250, rpg->ent[0]->common->pos.y + 250});
-        display_choices(rpg);
+        if (rpg->text_box->has_choice)
+            display_choices(rpg);
         sfRenderWindow_drawSprite(rpg->win->window, rpg->text_box->box,
             NULL);
         sfRenderWindow_drawText(rpg->win->window, rpg->text_box->npc_name,

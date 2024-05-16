@@ -49,12 +49,14 @@ void event_player_action(rpg_t *rpg)
 
 void event_states(rpg_t *rpg)
 {
-    if (rpg->gamestate == MAIN_MENU)
-        menu_button_event(rpg, rpg->main_menu->buttons);
+    if (rpg->gamestate == SELECTOR)
+        slct_button_event(rpg, rpg->selector->buttons);
+    if (rpg->gamestate == SAVE_MENU)
+        save_button_event(rpg, rpg->save_menu->buttons);
     if (rpg->gamestate == SETTINGS)
         menu_button_event(rpg, rpg->settings->buttons);
-    if (rpg->gamestate == SAVE_MENU)
-        menu_button_event(rpg, rpg->save_menu->buttons);
+    if (rpg->gamestate == MAIN_MENU)
+        menu_button_event(rpg, rpg->main_menu->buttons);
     if (rpg->gamestate == GAME) {
         event_player_action(rpg);
         quest_event(rpg);
@@ -63,7 +65,7 @@ void event_states(rpg_t *rpg)
 
 void update_mouse_pos(rpg_t *rpg)
 {
-     sfVector2f old_mouse_pos = {(float)rpg->event.mouseMove.x,
+    sfVector2f old_mouse_pos = {(float)rpg->event.mouseMove.x,
         (float)rpg->event.mouseMove.y};
     sfVector2u window_size = sfRenderWindow_getSize(rpg->win->window);
 

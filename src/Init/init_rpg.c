@@ -122,6 +122,7 @@ static void init_rpg2(rpg_t *rpg)
     rpg->main_menu = init_menu();
     rpg->save_menu = init_save_menu();
     rpg->settings = init_settings();
+    rpg->selector = init_select_menu();
     rpg->interface = init_interface();
     rpg->collision = init_collision();
     init_inventory(15);
