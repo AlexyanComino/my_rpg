@@ -17,23 +17,28 @@ static void text_is_displayed(rpg_t *rpg)
     get_player(rpg)->common->state = IDLE;
 }
 
-void text_box_handling(rpg_t *rpg, all_quests_t *tmp)
+void text_box_handling(rpg_t *rpg, all_quests_t *tmp, quest_t *quest)
 {
     if (rpg->text_box->is_displayed == false) {
         get_player(rpg)->common->state = INTERACT;
-        sfText_setString(rpg->quest_header->text, tmp->quest->name);
+        rpg->text_box->all_quests = tmp;
+        rpg->text_box->quest = quest;
+        rpg->text_box->is_fully_displayed = false;
+        rpg->text_box->len = 0;
+        sfText_setString(rpg->quest_header->text, quest->name);
         sfText_setString(rpg->text_box->npc_name, tmp->proprietary);
         sfText_setOrigin(rpg->text_box->npc_name, (sfVector2f){
             sfText_getGlobalBounds(rpg->text_box->npc_name).width / 2, 0});
-        rpg->text_box->dialog = tmp->quest->dialog;
+        rpg->text_box->dialog = quest->dialog;
         rpg->text_box->str = strdup(rpg->text_box->dialog->txt);
         rpg->text_box->displayed_str =
             malloc(sizeof(char) * (strlen(rpg->text_box->str) + 1));
         rpg->text_box->displayed_str[0] = '\0';
         tmp->entity = rpg->text_box->entity;
         rpg->text_box->is_displayed = true;
-    } else
+    } else {
         text_is_displayed(rpg);
+    }
 }
 
 void change_choice(rpg_t *rpg)
@@ -54,6 +59,16 @@ void choice_action(rpg_t *rpg)
     }
 }
 
+static void end_dialog(rpg_t *rpg)
+{
+    if (rpg->text_box->quest->is_last) {
+        rpg->text_box->quest->is_done = true;
+        rpg->quest_header->state = Q_END;
+    } else
+        rpg->text_box->quest->next->is_active = true;
+    text_is_displayed(rpg);
+}
+
 static void next_dialog(rpg_t *rpg)
 {
     dialog_t *tmp = rpg->text_box->dialog;
@@ -66,7 +81,8 @@ static void next_dialog(rpg_t *rpg)
         rpg->text_box->displayed_str[0] = '\0';
         rpg->text_box->len = 0;
         rpg->text_box->is_fully_displayed = false;
-    }
+    } else if (rpg->text_box->has_choice == false)
+        end_dialog(rpg);
 }
 
 void dialog_handling(rpg_t *rpg)

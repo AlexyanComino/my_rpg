@@ -17,6 +17,8 @@ void display_all(rpg_t *rpg)
         display_save_menu(rpg);
     if (rpg->gamestate == SETTINGS)
         display_settings(rpg);
+    if (rpg->gamestate == SELECTOR)
+        display_selector(rpg);
     if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY ||
         rpg->gamestate == MAP)
         display_game(rpg);

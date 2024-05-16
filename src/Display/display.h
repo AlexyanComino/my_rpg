@@ -15,6 +15,7 @@ void display_all(rpg_t *rpg);
 void display_main_menu(rpg_t *rpg);
 void display_settings(rpg_t *rpg);
 void display_save_menu(rpg_t *rpg);
+void display_selector(rpg_t *rpg);
 
 // Display game
 void display_game(rpg_t *rpg);

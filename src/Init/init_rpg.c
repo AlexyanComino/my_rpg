@@ -19,6 +19,7 @@ static win_t *init_win(unsigned int width, unsigned int height)
     win->height = height;
     win->framerate = 60;
     win->clock = sfClock_create();
+    win->mouse_pos = (sfVector2f){0, 0};
     sfRenderWindow_setFramerateLimit(win->window, win->framerate);
     return win;
 }
@@ -120,6 +121,7 @@ static void init_rpg2(rpg_t *rpg)
     rpg->main_menu = init_menu();
     rpg->save_menu = init_save_menu();
     rpg->settings = init_settings();
+    rpg->selector = init_select_menu();
     rpg->interface = init_interface();
     rpg->minimap = init_minimap(WIDTH, HEIGHT);
     update_interface_pos(rpg, get_player(rpg), get_player(rpg)->common->pos);
