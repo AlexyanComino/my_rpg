@@ -19,7 +19,8 @@ static bool pawn_is_arrived(entity_t *entity, float distance,
 {
     if (distance < min_lenght) {
         entity->common->state = IDLE;
-        sfClock_restart(entity->spe->pawn->myclock->clock);
+        if (entity->spe->pawn->job != NO_JOB)
+            sfClock_restart(entity->spe->pawn->myclock->clock);
         return true;
     }
     return false;
@@ -41,6 +42,22 @@ static bool warrior_is_arrived(entity_t *entity, float distance,
     return false;
 }
 
+static bool archer_is_arrived(entity_t *entity, float distance,
+    float min_lenght)
+{
+    if (distance < min_lenght && entity_has_base(entity) &&
+        entity->spe->archer->base->come_back) {
+        entity->common->state = IDLE;
+        entity->spe->archer->base->in_cooldown = true;
+        sfClock_restart(entity->spe->archer->base->myclock->clock);
+        return true;
+    } else if (distance < min_lenght) {
+        entity->common->state = IDLE;
+        return true;
+    }
+    return false;
+}
+
 static bool entity_is_arrived(entity_t *entity, float distance,
     float min_lenght)
 {
@@ -49,6 +66,8 @@ static bool entity_is_arrived(entity_t *entity, float distance,
         return pawn_is_arrived(entity, distance, min_lenght);
     case WARRIOR:
         return warrior_is_arrived(entity, distance, min_lenght);
+    case ARCHER:
+        return archer_is_arrived(entity, distance, min_lenght);
     default:
         return false;
     }
@@ -75,14 +94,14 @@ void entity_move(rpg_t *rpg, entity_t *entity, sfVector2f target_pos,
     sfVector2f oldPos = entity->common->pos;
     float new_distance;
 
-    distance = get_distance_between_pos(entity->common->pos, target_pos);
+    distance = get_distance(entity->common->pos, target_pos);
     if (distance < min_lenght) {
         entity->common->state = IDLE;
         return;
     }
     movement = get_movement(target_pos, entity->common->pos, distance, speed);
     update_entity_pos(rpg, entity, movement);
-    new_distance = get_distance_between_pos(entity->common->pos, target_pos);
+    new_distance = get_distance(entity->common->pos, target_pos);
     if (entity_is_arrived(entity, new_distance, min_lenght))
         return;
     check_entity_is_stuck(entity, oldPos);

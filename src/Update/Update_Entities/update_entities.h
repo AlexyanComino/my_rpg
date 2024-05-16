@@ -15,6 +15,7 @@ void update_damage_texts(damage_text_t **damage_texts);
 void update_entities(rpg_t *rpg);
 
 // Entity attack
+void decrease_health(rpg_t *rpg, entity_t *entity, entity_t *target);
 void entity_attack(rpg_t *rpg, entity_t *entity);
 
 // Update entity detection
@@ -22,6 +23,9 @@ void update_entity_detection(rpg_t *rpg, entity_t *entity);
 
 // Update common
 void update_common(rpg_t *rpg, entity_t *entity);
+
+// Update common2
+void update_entity_sprite(entity_t *entity);
 
 // Entity move
 void entity_move(rpg_t *rpg, entity_t *entity, sfVector2f target_pos,
@@ -37,3 +41,14 @@ void entity_stun(rpg_t *rpg, entity_t *entity);
 sfVector2f get_movement(sfVector2f center_target, sfVector2f center_entity,
     float distance, int speed);
 void update_entity_pos(rpg_t *rpg, entity_t *entity, sfVector2f movement);
+
+// Get hitbox foot
+sfIntRect get_hitbox_foot(entity_t *entity, sfVector2f pos);
+
+// Update health bar
+void fill_round(round_rectangle_t *rect, float r, sfVector2f pos,
+    sfVector2f size);
+void update_health_bar(entity_t *entity);
+
+// Flee entity
+bool flee_entity(rpg_t *rpg, entity_t *entity, entity_t *enemy);

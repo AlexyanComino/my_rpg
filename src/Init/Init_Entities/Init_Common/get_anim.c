@@ -97,6 +97,36 @@ static anim_t *get_anim_torch(color_entity_t color)
     return anim;
 }
 
+static char *get_tnt_texture_path(color_entity_t color)
+{
+    char *texture_paths[4] = {
+        "assets/Entities/Tnt/TNT_Blue.png",
+        "assets/Entities/Tnt/TNT_Purple.png",
+        "assets/Entities/Tnt/TNT_Red.png",
+        "assets/Entities/Tnt/TNT_Yellow.png",
+    };
+    int color_index = 0;
+
+    if (color == BLUE)
+        color_index = 0;
+    if (color == PURPLE)
+        color_index = 1;
+    if (color == RED)
+        color_index = 2;
+    if (color == YELLOW)
+        color_index = 3;
+    return strdup(texture_paths[color_index]);
+}
+
+static anim_t *get_anim_tnt(color_entity_t color)
+{
+    char *texture_path = get_tnt_texture_path(color);
+    anim_t *anim = init_anim(texture_path, TNT_WIDTH, TNT_WIDTH);
+
+    free(texture_path);
+    return anim;
+}
+
 anim_t *get_anim(entity_type_t type, color_entity_t color)
 {
     if (type == WARRIOR)
@@ -105,5 +135,9 @@ anim_t *get_anim(entity_type_t type, color_entity_t color)
         return get_anim_pawn(color);
     if (type == TORCH)
         return get_anim_torch(color);
+    if (type == TNT)
+        return get_anim_tnt(color);
+    if (type == ARCHER)
+        return get_anim_archer(color);
     return NULL;
 }

@@ -39,3 +39,6 @@ void init_all_quests(rpg_t *rpg);
 
 // Init dialog
 dialog_t *init_dialog(char *dialog);
+
+// Init minimap
+minimap_t *init_minimap(unsigned int width, unsigned int height);

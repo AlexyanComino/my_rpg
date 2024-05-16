@@ -34,3 +34,11 @@ void dialog_handling(rpg_t *rpg);
 void menu_button_event(rpg_t *rpg, button_t *buttons);
 void save_button_event(rpg_t *rpg, save_button_t *buttons);
 void slct_button_event(rpg_t *rpg, select_button_t *buttons);
+
+// Event map
+void event_map(rpg_t *rpg);
+
+// Event game
+void event_game(rpg_t *rpg);
+
+

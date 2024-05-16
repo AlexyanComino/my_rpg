@@ -18,7 +18,7 @@ entity_t *get_nearest_entity(rpg_t *rpg, entity_t *entity, bool same_faction)
             rpg->ent[i] == entity || (!same_faction &&
             entities_in_same_faction(entity, rpg->ent[i])))
             continue;
-        distance = get_distance_between_pos(entity->common->pos,
+        distance = get_distance(entity->common->pos,
             rpg->ent[i]->common->pos);
         if (nearest == NULL || distance < min_distance) {
             nearest = rpg->ent[i];
@@ -45,7 +45,7 @@ bool entity_look_at_enemy(entity_t *entity, entity_t *enemy)
 // Vérifie si un guerrier peut interagir avec le joueur
 bool is_player_interact_entity(rpg_t *rpg, entity_t *entity)
 {
-    entity_t *player = rpg->ent[0];
+    entity_t *player = get_player(rpg);
     sfIntRect hitbox_attack = player->common->zones->hitbox_attack;
 
     if (sfIntRect_intersects(&hitbox_attack,

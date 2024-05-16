@@ -14,13 +14,13 @@ static void text_is_displayed(rpg_t *rpg)
     rpg->text_box->len = 0;
     free(rpg->text_box->displayed_str);
     rpg->text_box->displayed_str = NULL;
-    rpg->ent[0]->common->state = IDLE;
+    get_player(rpg)->common->state = IDLE;
 }
 
 void text_box_handling(rpg_t *rpg, all_quests_t *tmp, quest_t *quest)
 {
     if (rpg->text_box->is_displayed == false) {
-        rpg->ent[0]->common->state = INTERACT;
+        get_player(rpg)->common->state = INTERACT;
         rpg->text_box->all_quests = tmp;
         rpg->text_box->quest = quest;
         rpg->text_box->is_fully_displayed = false;

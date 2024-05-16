@@ -17,7 +17,8 @@ static bool enemy_is_in_small_detect(rpg_t *rpg, entity_t *entity,
         return false;
     if (!entity_look_at_enemy(entity, enemy) && is_discreet(enemy))
         return false;
-    if (is_in_line_of_sight(rpg, entity->common->pos, enemy->common->pos))
+    if (is_in_line_of_sight(rpg, entity,
+        entity->common->pos, enemy->common->pos))
         return false;
     return true;
 }
@@ -51,9 +52,7 @@ void update_entity_detection(rpg_t *rpg, entity_t *entity)
 
     if (!enemy)
         return;
-    in_base = entity_has_base(entity) &&
-        sfIntRect_intersects(&entity->spe->warrior->base->rect,
-        &enemy->common->zones->hitbox, NULL);
+    in_base = entity_has_base(entity) && enemy_is_in_base(entity, enemy);
     if (!in_base && !entity_has_base(entity))
         in_base = true;
     update_small_detection(rpg, entity, enemy, in_base);

@@ -25,3 +25,7 @@ void update_game_interface(rpg_t *rpg);
 // Update quest header
 void update_quest_header(rpg_t *rpg);
 int *scroll_quest(int *scroll, int *scroll_max);
+
+// Update minimap
+bool is_valid_minimap_view_pos(minimap_t *minimap, sfVector2f new_pos);
+void init_map_pos(rpg_t *rpg);

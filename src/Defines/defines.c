@@ -14,7 +14,7 @@ bool is_alive(entity_t *entity)
 
 bool is_player(rpg_t *rpg, entity_t *entity)
 {
-    return rpg->ent[0] == entity;
+    return rpg->ent[rpg->player_index] == entity;
 }
 
 bool is_dead(entity_t *entity)

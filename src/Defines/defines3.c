@@ -29,3 +29,8 @@ bool is_carrying(entity_t *entity)
         (entity->common->state == MOVE_CARRY ||
             entity->common->state == IDLE_CARRY);
 }
+
+bool cooldown_is_over(mark_t *mark, float cooldown)
+{
+    return mark->anim->myclock->seconds > cooldown;
+}

@@ -64,10 +64,9 @@ static void update_entity_x(rpg_t *rpg, entity_t *entity, sfVector2f movement)
     sfIntRect newHitbox;
 
     get_new_pos_x(entity, &newPos, movement, rpg->win->dt);
-    newHitbox = entity->get_hitbox(newPos);
+    newHitbox = entity->get_hitbox_foot(newPos);
     if (!is_entity_hitbox_collide(rpg, entity, newHitbox)) {
         entity->common->pos.x = newPos.x;
-        entity->common->zones->hitbox = newHitbox;
     }
 }
 
@@ -88,10 +87,9 @@ static void update_entity_y(rpg_t *rpg, entity_t *entity, sfVector2f movement)
     sfIntRect newHitbox;
 
     get_new_pos_y(entity, &newPos, movement, rpg->win->dt);
-    newHitbox = entity->get_hitbox(newPos);
+    newHitbox = entity->get_hitbox_foot(newPos);
     if (!is_entity_hitbox_collide(rpg, entity, newHitbox)) {
         entity->common->pos.y = newPos.y;
-        entity->common->zones->hitbox = newHitbox;
     }
 }
 

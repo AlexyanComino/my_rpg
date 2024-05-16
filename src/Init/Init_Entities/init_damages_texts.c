@@ -50,6 +50,8 @@ static char *get_damage_text(int attack, damage_text_state_t state)
 static sfColor get_color_damage_text(rpg_t *rpg, entity_t *entity,
     damage_text_state_t state)
 {
+    if (state == FIRE_TEXT)
+        return DAMAGE_COLOR_FIRE;
     if (is_player(rpg, entity))
         return DAMAGE_COLOR_PLAYER;
     if (state == BAM)
@@ -75,6 +77,7 @@ static void init_damage_text2(damage_text_t *new, damage_text_state_t state)
         sfSprite_setPosition(new->effect->sprite, (sfVector2f){new->pos.x,
             new->pos.y});
     }
+    new->next = NULL;
 }
 
 damage_text_t *init_damage_text(rpg_t *rpg, entity_t *entity,
@@ -91,12 +94,13 @@ damage_text_t *init_damage_text(rpg_t *rpg, entity_t *entity,
     sfText_setString(new->text, damage_text);
     sfText_setFont(new->text, new->font);
     sfText_setCharacterSize(new->text, new->size);
+    sfText_setOutlineThickness(new->text, 2);
+    sfText_setOutlineColor(new->text, sfBlack);
     new->pos = get_damage_text_pos(entity, state);
     sfText_setPosition(new->text, new->pos);
     sfText_setColor(new->text, color);
     rect = sfText_getGlobalBounds(new->text);
     sfText_setOrigin(new->text, (sfVector2f){rect.width / 2, rect.height / 2});
     init_damage_text2(new, state);
-    new->next = NULL;
     return new;
 }

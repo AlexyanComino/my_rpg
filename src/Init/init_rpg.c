@@ -14,7 +14,6 @@ static win_t *init_win(unsigned int width, unsigned int height)
 
     win->window = sfRenderWindow_create(mode, "My_RPG", sfDefaultStyle, NULL);
     win->view = sfView_createFromRect((sfFloatRect){0, 0, width, height});
-    sfView_setViewport(win->view, (sfFloatRect){0, 0, 1, 1});
     sfRenderWindow_setView(win->window, win->view);
     win->width = width;
     win->height = height;
@@ -89,8 +88,8 @@ static collision_t *init_collision(void)
 
     collision->rect = (sfIntRect){0, 0, TILE_SIZE, TILE_SIZE};
     collision->size = 0;
-    collision->cols = (MAP_WIDTH + WIDTH + 1) / WIDTH;
-    collision->rows = (MAP_HEIGHT + HEIGHT + 1) / HEIGHT;
+    collision->cols = ((MAP_WIDTH + WIDTH + 1) * TILE_SCALE) / WIDTH;
+    collision->rows = ((MAP_HEIGHT + HEIGHT + 1) * TILE_SCALE) / HEIGHT;
     collision->regions = get_regions(collision->cols, collision->rows);
     collision->shape = sfRectangleShape_create();
     sfRectangleShape_setFillColor(collision->shape, sfTransparent);
@@ -124,10 +123,13 @@ static void init_rpg2(rpg_t *rpg)
     rpg->settings = init_settings();
     rpg->selector = init_select_menu();
     rpg->interface = init_interface();
+    rpg->minimap = init_minimap(WIDTH, HEIGHT);
+    update_interface_pos(rpg, get_player(rpg), get_player(rpg)->common->pos);
     rpg->collision = init_collision();
     init_inventory(15);
     init_all_quests(rpg);
     rpg->inventory = *inventory();
+    rpg->plus = false;
 }
 
 rpg_t *init_rpg(void)
@@ -139,7 +141,10 @@ rpg_t *init_rpg(void)
     rpg->gamestate = MAIN_MENU;
     rpg->win = init_win(WIDTH, HEIGHT);
     rpg->ent_size = 0;
+    printf("Start init ent\n");
     rpg->ent = init_ent(&rpg->ent_size);
+    printf("End init ent\n");
+    rpg->player_index = 0;
     rpg->event = (sfEvent){0};
     rpg->debug = false;
     rpg->text_box = init_text_box();

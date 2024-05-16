@@ -26,10 +26,24 @@ static restricted_t *init_restricted(void)
     return restricted;
 }
 
+static health_bar_t *init_health_bar_interface(void)
+{
+    health_bar_t *health_bar = malloc(sizeof(health_bar_t));
+    sfVector2f back_size = {WIDTH / 3, HEIGHT / 30};
+    sfVector2f front_size = {WIDTH / 3 - 10, HEIGHT / 30 - 10};
+
+    health_bar->back = init_round_rectangle((sfVector2f){0, 0}, 15,
+        back_size, sfBlack);
+    health_bar->front = init_round_rectangle((sfVector2f){0, 0}, 10,
+        front_size, sfGreen);
+    return health_bar;
+}
+
 interface_t *init_interface(void)
 {
     interface_t *interface = malloc(sizeof(interface_t));
 
     interface->restricted = init_restricted();
+    interface->health_bar = init_health_bar_interface();
     return interface;
 }
