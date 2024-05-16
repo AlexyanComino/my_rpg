@@ -89,13 +89,46 @@ static void update_player_stat(void)
     (sfVector2f){(*view_pos()).x - 702, (*view_pos()).y - 175});
 }
 
-static int update_quest_next(sfSprite *sprite, sfText *name_s,
+int *scroll_quest(int *scroll, int *scroll_max)
+{
+    int i = 0;
+
+    for (all_quests_t *all = (*inventory())->quest; all &&
+    (*inventory())->is_open; all = all->next) {
+        for (quest_t *tmp = all->quest; tmp &&
+        (*inventory())->is_open; tmp = tmp->next)
+            i = (tmp->is_active) ? i + 1 : i;
+    }
+    if ((*inventory())->is_open && i != 0)
+        *scroll_max = 4 % i;
+    if (sfKeyboard_isKeyPressed(sfKeyS) &&
+    *scroll < *scroll_max && (*inventory())->is_open)
+        *scroll += 1;
+    if (sfKeyboard_isKeyPressed(sfKeyZ) && *scroll > 0 &&
+    (*inventory())->is_open)
+        *scroll -= 1;
+    return scroll;
+}
+
+static int print_quest(quest_t *tmp, int *i, int *scroll)
+{
+    if (tmp->is_active == false || *i < *scroll) {
+        *i = (tmp->is_active) ? *i + 1 : *i;
+        return 1;
+    }
+    return 0;
+}
+
+static void update_quest_next(sfSprite *sprite, sfText *name_s,
     sfText *desc_s, rpg_t *rpg)
 {
     inventory_t *inv = (*inventory());
     int pos = 0;
+    int i = 0;
 
-    for (quest_t *tmp = inv->quest; tmp; tmp = tmp->next) {
+    for (quest_t *tmp = inv->quest->quest; tmp; tmp = tmp->next) {
+        if (print_quest(tmp, &i, &inv->scroll))
+            continue;
         sfSprite_setPosition(sprite, (sfVector2f){(*view_pos()).x + 100,
             (*view_pos()).y - 400 + pos});
         sfText_setString(name_s, tmp->name);
@@ -109,7 +142,6 @@ static int update_quest_next(sfSprite *sprite, sfText *name_s,
         sfRenderWindow_drawText(rpg->win->window, desc_s, NULL);
         pos += 200;
     }
-    return 0;
 }
 
 void update_quest(rpg_t *rpg)

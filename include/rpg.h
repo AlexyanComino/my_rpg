@@ -548,7 +548,9 @@ typedef struct inventory_s {
     int gold;
     int size;
     int is_open;
-    quest_t *quest;
+    all_quests_t *quest;
+    int scroll;
+    int scroll_max;
     slot_t *slot;
     sfSprite *sprite;
     player_status_t *player_status;
