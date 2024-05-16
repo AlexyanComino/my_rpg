@@ -62,7 +62,7 @@ menu_t *init_menu(void)
     menu_t *menu = malloc(sizeof(menu_t));
 
     menu->background_texture = sfTexture_createFromFile(
-        "assets/menu/bg1.png", NULL);
+        "assets/menu/bg.png", NULL);
     menu->background = sfSprite_create();
     menu->bg_rect = (sfIntRect){0, 0, WIDTH, HEIGHT};
     sfSprite_setTexture(menu->background, menu->background_texture, sfTrue);
@@ -86,7 +86,7 @@ menu_t *init_settings(void)
     menu_t *menu = malloc(sizeof(menu_t));
 
     menu->background_texture = sfTexture_createFromFile(
-        "assets/menu/bg.jpg", NULL);
+        "assets/menu/bg.png", NULL);
     menu->background = sfSprite_create();
     sfSprite_setTexture(menu->background, menu->background_texture, sfTrue);
     menu->font = sfFont_createFromFile("assets/fonts/m6x11plus.ttf");
@@ -99,28 +99,5 @@ menu_t *init_settings(void)
     (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 + 50}, "TEMP");
     add_button(menu->buttons,
     (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 + 150}, "BACK");
-    return menu;
-}
-
-menu_t *init_save_menu(void)
-{
-    menu_t *menu = malloc(sizeof(menu_t));
-
-    menu->background_texture = sfTexture_createFromFile(
-        "assets/menu/bg.jpg", NULL);
-    menu->background = sfSprite_create();
-    sfSprite_setTexture(menu->background, menu->background_texture, sfTrue);
-    menu->font = sfFont_createFromFile("assets/fonts/m6x11plus.ttf");
-    menu->myclock = NULL;
-    menu->text = NULL;
-    menu->buttons = NULL;
-    menu->buttons = add_button(menu->buttons,
-    (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 - 150}, "SAVE 1");
-    add_button(menu->buttons,
-    (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 + 75}, "SAVE 2");
-    add_button(menu->buttons,
-    (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 + 300}, "SAVE 3");
-    add_button(menu->buttons,
-    (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 + 450}, "BACK");
     return menu;
 }

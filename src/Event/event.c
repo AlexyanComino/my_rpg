@@ -49,16 +49,29 @@ void event_player_action(rpg_t *rpg)
 
 void event_states(rpg_t *rpg)
 {
-    if (rpg->gamestate == MAIN_MENU)
-        menu_button_event(rpg, rpg->main_menu->buttons);
+    if (rpg->gamestate == SELECTOR)
+        slct_button_event(rpg, rpg->selector->buttons);
+    if (rpg->gamestate == SAVE_MENU)
+        save_button_event(rpg, rpg->save_menu->buttons);
     if (rpg->gamestate == SETTINGS)
         menu_button_event(rpg, rpg->settings->buttons);
-    if (rpg->gamestate == SAVE_MENU)
-        menu_button_event(rpg, rpg->save_menu->buttons);
+    if (rpg->gamestate == MAIN_MENU)
+        menu_button_event(rpg, rpg->main_menu->buttons);
     if (rpg->gamestate == GAME) {
         event_player_action(rpg);
         quest_event(rpg);
     }
+}
+
+void update_mouse_pos(rpg_t *rpg)
+{
+    sfVector2f old_mouse_pos = {(float)rpg->event.mouseMove.x,
+        (float)rpg->event.mouseMove.y};
+    sfVector2u window_size = sfRenderWindow_getSize(rpg->win->window);
+
+    rpg->win->mouse_pos = (sfVector2f){
+        (float)old_mouse_pos.x / ((float)window_size.x / (float)WIDTH),
+        (float)old_mouse_pos.y / ((float)window_size.y / (float)HEIGHT)};
 }
 
 void event(rpg_t *rpg)
@@ -68,6 +81,8 @@ void event(rpg_t *rpg)
     rpg->win->dt = sfTime_asSeconds(elapsed_time);
     sfClock_restart(rpg->win->clock);
     while (sfRenderWindow_pollEvent(rpg->win->window, &rpg->event)) {
+        if (rpg->event.type == sfEvtMouseMoved)
+            update_mouse_pos(rpg);
         if (rpg->event.type == sfEvtClosed ||
             rpg->event.key.code == sfKeyEscape)
             sfRenderWindow_close(rpg->win->window);

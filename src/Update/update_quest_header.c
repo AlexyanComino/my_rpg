@@ -47,6 +47,19 @@ void remove_header(rpg_t *rpg, sfColor *color)
     rpg->quest_header->myclock = NULL;
 }
 
+static void update_header_pos(rpg_t *rpg)
+{
+    sfRectangleShape_setPosition(rpg->quest_header->rect, (sfVector2f){
+        rpg->ent[0]->common->pos.x - WIDTH / 2,
+        rpg->ent[0]->common->pos.y - 400});
+    sfRectangleShape_setPosition(rpg->quest_header->rect2, (sfVector2f){
+        rpg->ent[0]->common->pos.x - WIDTH / 2,
+        rpg->ent[0]->common->pos.y - 390});
+    sfText_setPosition(rpg->quest_header->done, (sfVector2f){
+        rpg->ent[0]->common->pos.x + 200,
+        rpg->ent[0]->common->pos.y - 250});
+}
+
 void update_quest_header(rpg_t *rpg)
 {
     sfColor color = {0, 0, 0, 0};
@@ -57,6 +70,7 @@ void update_quest_header(rpg_t *rpg)
     if (rpg->quest_header->myclock == NULL)
         rpg->quest_header->myclock = init_my_clock();
     update_clock_seconds(rpg->quest_header->myclock);
+    update_header_pos(rpg);
     if (rpg->quest_header->myclock->time.microseconds % 1 == 0) {
         color = sfText_getFillColor(rpg->quest_header->text);
         update_header_color(rpg, &color);

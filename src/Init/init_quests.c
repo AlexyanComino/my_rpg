@@ -34,6 +34,7 @@ static quest_t *init_quest(char **infos)
     quest->is_done = false;
     quest->is_active = false;
     quest->is_displayed = false;
+    quest->is_last = strcmp(infos[8], "true") == 0 ? true : false;
     quest->next = NULL;
     return quest;
 }
@@ -111,7 +112,7 @@ static void init_quest_header(rpg_t *rpg)
         254, 250, 190, 0));
     rpg->quest_header->rect = create_rect_shape((sfVector2f){1920, 200},
         (sfVector2f){0, 700}, sfColor_fromRGBA(0, 0, 0, 0));
-    rpg->quest_header->rect2 = create_rect_shape((sfVector2f){1920, 200},
+    rpg->quest_header->rect2 = create_rect_shape((sfVector2f){1920, 180},
         (sfVector2f){0, 700}, sfColor_fromRGBA(0, 0, 0, 0));
     rpg->quest_header->state = Q_HIDDEN;
     rpg->quest_header->myclock = NULL;

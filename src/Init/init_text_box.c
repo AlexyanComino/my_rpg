@@ -40,10 +40,10 @@ button_t *add_choice(button_t *buttons, char *txt)
     button_t *tmp = buttons;
 
     sfSprite_setTexture(new->sprite, new->texture, sfTrue);
-    sfSprite_setScale(new->sprite, (sfVector2f){0.5, 0.5});
+    sfSprite_setScale(new->sprite, (sfVector2f){0.75, 0.75});
     sfSprite_setTextureRect(new->sprite, new->rect);
     sfText_setFont(new->text, new->font);
-    sfText_setCharacterSize(new->text, 15);
+    sfText_setCharacterSize(new->text, 25);
     sfText_setColor(new->text, sfWhite);
     sfText_setString(new->text, txt);
     if (buttons == NULL)
@@ -69,10 +69,10 @@ static void create_text_box_text(text_box_t *text_box)
     text_box->font = sfFont_createFromFile("assets/fonts/CompassPro.ttf");
     text_box->npc_name = sfText_create();
     sfText_setFont(text_box->npc_name, text_box->font);
-    sfText_setCharacterSize(text_box->npc_name, 30);
+    sfText_setCharacterSize(text_box->npc_name, 43);
     text_box->npc_text = sfText_create();
     sfText_setFont(text_box->npc_text, text_box->font);
-    sfText_setCharacterSize(text_box->npc_text, 30);
+    sfText_setCharacterSize(text_box->npc_text, 35);
 }
 
 text_box_t *init_text_box(void)
@@ -83,7 +83,7 @@ text_box_t *init_text_box(void)
         "assets/interface/text_box.png", NULL);
     text_box->box = sfSprite_create();
     sfSprite_setTexture(text_box->box, text_box->box_texture, sfTrue);
-    sfSprite_setScale(text_box->box, (sfVector2f){0.5, 0.5});
+    sfSprite_setScale(text_box->box, (sfVector2f){0.6, 0.6});
     sfSprite_setOrigin(text_box->box, (sfVector2f){1566 / 2, 391 / 2});
     set_sprite_transparent(text_box->box, 150);
     create_text_box_text(text_box);

@@ -347,6 +347,7 @@ typedef struct quest_s {
     bool is_done;
     bool is_active;
     bool is_displayed;
+    bool is_last;
     quest_type_t type;
     dialog_t *dialog;
     sfSprite *sprite;
@@ -366,9 +367,55 @@ typedef enum {
     PAUSE,
     SETTINGS,
     SAVE_MENU,
+    SELECTOR,
     INVENTORY,
     END
 } state_t;
+
+typedef struct slot_s {
+    int is_empty;
+    int id;
+    int is_active;
+    int type;
+    int access;
+    int is_highlighted;
+    int is_clicked;
+    int is_moved;
+    void *item;
+    struct slot_s *next;
+    sfSprite *highlight;
+    sfSprite *sprite;
+} slot_t;
+
+typedef struct player_status_s {
+    int hp;
+    int max_hp;
+    int attack;
+    int attack_max;
+    int defense;
+    int defense_max;
+    int speed;
+    int speed_max;
+    int level;
+    int xp;
+    int max_xp;
+    int gold;
+    sfText *t_hp;
+    sfText *t_attack;
+    sfText *t_defense;
+    sfText *t_speed;
+    sfText *t_level;
+    sfText *t_gold;
+    sfSprite *s_level;
+    sfSprite *s_def;
+    sfSprite *s_speed;
+    sfSprite *s_attack;
+    sfSprite *s_hp;
+    sfSprite *s_gold;
+    entity_t *player;
+    sfSprite *pp;
+    slot_t *stuff;
+} player_status_t;
 
 typedef enum button_state {
     HOVERED,
@@ -386,6 +433,7 @@ typedef struct button_s {
     sfRectangleShape *rect_shape;
     sfIntRect rect;
     button_state_t state;
+    attributes_t *attributes;
     void (*action)(void *rpg);
     struct button_s *next;
 } button_t;
@@ -400,9 +448,62 @@ typedef struct menu_s {
     sfFont *font;
 } menu_t;
 
+typedef struct save_button_s {
+    char *name;
+    sfTexture *texture;
+    sfSprite *sprite;
+    sfText *text;
+    sfFont *font;
+    sfRectangleShape *rect_shape;
+    sfIntRect rect;
+    button_state_t state;
+    player_status_t *player_status;
+    void (*action)(void *rpg);
+    struct save_button_s *next;
+} save_button_t;
+
+typedef struct save_menu_s {
+    sfSprite *background;
+    sfTexture *background_texture;
+    my_clock_t *myclock;
+    save_button_t *buttons;
+    sfIntRect bg_rect;
+    sfText *text;
+    sfFont *font;
+} save_menu_t;
+
+typedef struct select_button_s {
+    char *name;
+    sfTexture *texture;
+    sfSprite *sprite;
+    sfText *text;
+    sfText *hp;
+    sfText *attack;
+    sfText *defense;
+    sfText *speed;
+    sfFont *font;
+    sfRectangleShape *rect_shape;
+    sfIntRect rect;
+    button_state_t state;
+    attributes_t *attributes;
+    void (*action)(void *rpg);
+    struct select_button_s *next;
+} select_button_t;
+
+typedef struct select_menu_s {
+    sfSprite *background;
+    sfTexture *background_texture;
+    my_clock_t *myclock;
+    select_button_t *buttons;
+    sfIntRect bg_rect;
+    sfText *text;
+    sfFont *font;
+} select_menu_t;
+
 typedef struct win_s {
     sfRenderWindow *window;
     sfView *view;
+    sfVector2f mouse_pos;
     unsigned int width;
     unsigned int height;
     unsigned int framerate;
@@ -442,52 +543,6 @@ enum item_type {
     OTHER,
     ALL
 };
-
-typedef struct slot_s {
-    int is_empty;
-    int id;
-    int is_active;
-    int type;
-    int access;
-    int is_highlighted;
-    int is_clicked;
-    int is_moved;
-    void *item;
-    struct slot_s *next;
-    sfSprite *highlight;
-    sfSprite *sprite;
-} slot_t;
-
-
-typedef struct player_status_s {
-    int hp;
-    int max_hp;
-    int attack;
-    int attack_max;
-    int defense;
-    int defense_max;
-    int speed;
-    int speed_max;
-    int level;
-    int xp;
-    int max_xp;
-    int gold;
-    sfText *t_hp;
-    sfText *t_attack;
-    sfText *t_defense;
-    sfText *t_speed;
-    sfText *t_level;
-    sfText *t_gold;
-    sfSprite *s_level;
-    sfSprite *s_def;
-    sfSprite *s_speed;
-    sfSprite *s_attack;
-    sfSprite *s_hp;
-    sfSprite *s_gold;
-    entity_t *player;
-    sfSprite *pp;
-    slot_t *stuff;
-} player_status_t;
 
 typedef struct inventory_s {
     int gold;
@@ -554,6 +609,9 @@ typedef struct text_box_s {
     bool is_displayed;
     bool is_fully_displayed;
     int len;
+    bool has_choice;
+    all_quests_t *all_quests;
+    quest_t *quest;
 } text_box_t;
 
 typedef struct line_of_sight_data_s {
@@ -582,8 +640,9 @@ typedef struct rpg_s {
     unsigned int ent_size;
     bool debug;
     menu_t *main_menu;
-    menu_t *save_menu;
+    save_menu_t *save_menu;
     menu_t *settings;
+    select_menu_t *selector;
     state_t gamestate;
     all_quests_t *quests;
     quest_header_t *quest_header;

@@ -14,7 +14,8 @@ rpg_t *init_rpg(void);
 // InitMenu
 menu_t *init_menu(void);
 menu_t *init_settings(void);
-menu_t *init_save_menu(void);
+save_menu_t *init_save_menu(void);
+select_menu_t *init_select_menu(void);
 sfText *create_text(sfFont *font, char *str, int size, sfVector2f pos);
 
 // Init interface

@@ -7,15 +7,34 @@
 
 #include "rpg.h"
 
+static int interact_quest(
+    rpg_t *rpg, entity_t *entity, all_quests_t *tmp, quest_t *tmp_quest)
+{
+    for (; tmp_quest; tmp_quest = tmp_quest->next) {
+        if (tmp_quest->is_done == true)
+            continue;
+        if (tmp_quest->is_active == true && tmp_quest->type != TALK)
+            return 1;
+        printf("Interacting with %s\n", entity->common->name);
+        rpg->text_box->has_choice = (tmp_quest->type == TALK) ? false : true;
+        text_box_handling(rpg, tmp, tmp_quest);
+        if (tmp_quest->is_done == false)
+            return 1;
+    }
+    return 0;
+}
+
 void interact_with_entity(rpg_t *rpg, entity_t *entity)
 {
     all_quests_t *tmp = rpg->quests;
+    quest_t *tmp_quest = NULL;
 
     for (; tmp; tmp = tmp->next) {
-        if (strcmp(tmp->proprietary, entity->common->name) != 0
-            || tmp->quest->is_active == true)
+        if (strcmp(tmp->proprietary, entity->common->name) != 0)
             continue;
-        text_box_handling(rpg, tmp);
+        tmp_quest = tmp->quest;
+        if (interact_quest(rpg, entity, tmp, tmp_quest) == 1)
+            continue;
     }
 }
 
@@ -62,13 +81,15 @@ void quest_handling(rpg_t *rpg, entity_t *tmp)
         if (rpg->event.key.code == sfKeyE)
             interact_with_entity(rpg, tmp);
         if (rpg->event.key.code == sfKeyEnter &&
-        rpg->text_box->is_fully_displayed == true)
+        rpg->text_box->is_fully_displayed == true
+        && rpg->text_box->has_choice)
             choice_action(rpg);
         dialog_handling(rpg);
         if ((rpg->event.key.code == sfKeyUp ||
             rpg->event.key.code == sfKeyDown)
             && rpg->text_box->is_fully_displayed == true &&
-                rpg->text_box->dialog->next == NULL)
+                rpg->text_box->dialog->next == NULL
+                && rpg->text_box->has_choice)
             change_choice(rpg);
     }
 }
