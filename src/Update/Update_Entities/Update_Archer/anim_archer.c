@@ -59,14 +59,34 @@ static void animation_archer(rpg_t *rpg, entity_t *entity)
 {
     if (entity->common->state == IDLE || entity->common->state == INTERACT) {
         entity->common->anim->rect.top = 0;
-        return anim_line(entity->common, ARCHER_OFFSET, ARCHER_WIDTH, 0.1);
+        return anim_line(entity->common->anim, ARCHER_OFFSET, ARCHER_WIDTH, 0.1);
     }
     if (entity->common->state == WALK || entity->common->state == RUN) {
         entity->common->anim->rect.top = ARCHER_WIDTH;
-        return anim_line(entity->common, ARCHER_OFFSET, ARCHER_WIDTH, 0.1);
+        return anim_line(entity->common->anim, ARCHER_OFFSET, ARCHER_WIDTH, 0.1);
     }
     if (is_attacking(entity))
         return animation_attack_archer(rpg, entity);
+}
+
+static void anim_exclam(archer_t *archer)
+{
+    sfIntRect info = {EXCLAM_WIDTH, EXCLAM_HEIGHT, 11, 2};
+
+    update_clock_seconds(archer->exclam->anim->myclock);
+    if (archer->exclam->anim->myclock->seconds > 0.02) {
+        anim_mark(archer->exclam, &info);
+    }
+}
+
+static void anim_inter(archer_t *archer)
+{
+    sfIntRect info = {INTER_WIDTH, INTER_HEIGHT, 14, 2};
+
+    update_clock_seconds(archer->inter->anim->myclock);
+    if (archer->inter->anim->myclock->seconds > 0.02) {
+        anim_mark(archer->inter, &info);
+    }
 }
 
 void anim_archer(rpg_t *rpg, entity_t *entity)
@@ -76,4 +96,8 @@ void anim_archer(rpg_t *rpg, entity_t *entity)
         animation_death(entity->common);
     else if (!is_stunned(entity))
         animation_archer(rpg, entity);
+    if (entity->spe->archer->exclam->is_display == 1)
+        anim_exclam(entity->spe->archer);
+    if (entity->spe->archer->inter->is_display == 1)
+        anim_inter(entity->spe->archer);
 }

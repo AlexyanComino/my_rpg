@@ -9,6 +9,7 @@
 // Init ent
 my_clock_t *init_my_clock(void);
 anim_t *init_anim(char *texture_path, int width, int height);
+entity_t *init_entity(char **infos);
 entity_t **init_ent(unsigned int *size);
 
 // Init damage texts

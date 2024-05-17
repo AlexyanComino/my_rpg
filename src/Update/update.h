@@ -10,7 +10,7 @@
 void update_all(rpg_t *rpg);
 
 // Update background
-void update_background(rpg_t *rpg);
+// void update_background(rpg_t *rpg);
 
 // Update quests
 void update_quests(rpg_t *rpg);

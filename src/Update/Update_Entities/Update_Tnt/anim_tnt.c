@@ -49,11 +49,11 @@ static void animation_tnt(entity_t *entity)
 {
     if (entity->common->state == IDLE || entity->common->state == INTERACT) {
         entity->common->anim->rect.top = 0;
-        return anim_line(entity->common, TNT_OFFSET, TNT_WIDTH, 0.1);
+        return anim_line(entity->common->anim, TNT_OFFSET, TNT_WIDTH, 0.1);
     }
     if (entity->common->state == WALK || entity->common->state == RUN) {
         entity->common->anim->rect.top = TORCH_WIDTH;
-        return anim_line(entity->common, TNT_OFFSET, TNT_WIDTH, 0.1);
+        return anim_line(entity->common->anim, TNT_OFFSET, TNT_WIDTH, 0.1);
     }
     if (is_attacking(entity))
         return animation_attack_tnt(entity);

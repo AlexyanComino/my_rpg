@@ -125,13 +125,17 @@
 // Items
 #define ITEM_SIZE 128
 
-#define MAP_HEIGHT 13301
-#define MAP_WIDTH 13971
-
 // Minimap
 #define MINIMAP_ARROW_WIDTH 373
 
 #define MINIMAP_BACK_SIZE 224
+
+// Map
+#define MAP_HEIGHT 13301
+#define MAP_WIDTH 13971
+#define WATER_ANIM_WIDTH 928
+#define WATER_ANIM_HEIGHT 608
+#define WATER_ANIM_OFFSET 7424 / 7
 
 typedef enum color_entity_s {
     BLUE = 0,
@@ -436,6 +440,8 @@ typedef struct archer_s {
     arrows_t *arrows;
     arrow_dir_t arrow_dir;
     base_t *base;
+    mark_t *exclam;
+    mark_t *inter;
 } archer_t;
 
 typedef union spe_s {
@@ -593,8 +599,10 @@ typedef struct button_s {
 } button_t;
 
 typedef struct menu_s {
-    sfSprite *background;
-    sfTexture *background_texture;
+    sfSprite *ground;
+    sfTexture *ground_texture;
+    sfSprite *high;
+    sfTexture *high_texture;
     my_clock_t *myclock;
     button_t *buttons;
     sfIntRect bg_rect;
@@ -656,6 +664,7 @@ typedef struct select_menu_s {
 
 typedef struct win_s {
     sfRenderWindow *window;
+    sfView *view_menu;
     sfView *view;
     sfVector2f mouse_pos;
     unsigned int width;
@@ -663,6 +672,8 @@ typedef struct win_s {
     unsigned int framerate;
     sfClock *clock;
     float dt;
+    int zoom;
+    sfVector2f view_pos;
 } win_t;
 
 typedef struct region_s {
@@ -680,7 +691,6 @@ typedef struct collision_s {
     sfRectangleShape *region_shape;
     unsigned int size;
 } collision_t;
-
 typedef struct map_s {
     sfTexture *ground_texture;
     sfSprite *ground_sprite;
@@ -807,6 +817,23 @@ typedef struct minimap_s {
     float texts_thickness;
 } minimap_t;
 
+typedef enum decor_type {
+    GROUND,
+    HIGH,
+} decor_type_t;
+typedef struct decor_anim_s {
+    anim_t *anim;
+    sfVector2f pos;
+    int width;
+    int height;
+    float speed;
+    int nb_rows;
+    int nb_cols;
+    sfIntRect rect;
+    sfRectangleShape *shape;
+    decor_type_t type;
+} decor_anim_t;
+
 typedef struct rpg_s {
     win_t *win;
     map_t *map;
@@ -831,6 +858,8 @@ typedef struct rpg_s {
     int shm_fd;
     unsigned int player_index;
     bool plus;
+    decor_anim_t **decors;
+    unsigned int decors_size;
 } rpg_t;
 
 #include "../src/Init/init.h"

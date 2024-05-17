@@ -13,10 +13,6 @@ static void destroy_menu(menu_t *menu)
     button_t *tmp = menu->buttons;
     button_t *next = NULL;
 
-    sfTexture_destroy(menu->background_texture);
-    sfSprite_destroy(menu->background);
-    if (menu->myclock != NULL)
-    sfClock_destroy(menu->myclock->clock);
     while (tmp) {
         next = tmp->next;
         sfText_destroy(tmp->text);

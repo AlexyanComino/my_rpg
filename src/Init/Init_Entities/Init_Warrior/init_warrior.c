@@ -7,7 +7,7 @@
 
 #include "rpg.h"
 
-static mark_t *init_exclam(char **infos)
+mark_t *init_exclam(char **infos)
 {
     mark_t *exclam = malloc(sizeof(mark_t));
 
@@ -18,7 +18,7 @@ static mark_t *init_exclam(char **infos)
     return exclam;
 }
 
-static mark_t *init_inter(char **infos)
+mark_t *init_inter(char **infos)
 {
     mark_t *inter = malloc(sizeof(mark_t));
 

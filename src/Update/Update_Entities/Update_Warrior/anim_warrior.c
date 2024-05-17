@@ -54,11 +54,11 @@ static void animation_warrior(rpg_t *rpg, entity_t *entity)
 {
     if (entity->common->state == IDLE || entity->common->state == INTERACT) {
         entity->common->anim->rect.top = 0;
-        anim_line(entity->common, WARRIOR_OFFSET, WARRIOR_WIDTH, 0.1);
+        anim_line(entity->common->anim, WARRIOR_OFFSET, WARRIOR_WIDTH, 0.1);
     }
     if (entity->common->state == WALK || entity->common->state == RUN) {
         entity->common->anim->rect.top = WARRIOR_WIDTH;
-        anim_line(entity->common, WARRIOR_OFFSET, WARRIOR_WIDTH, 0.1);
+        anim_line(entity->common->anim, WARRIOR_OFFSET, WARRIOR_WIDTH, 0.1);
     }
     if (is_attacking(entity))
         animation_attack_warrior(rpg, entity);

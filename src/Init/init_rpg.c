@@ -14,13 +14,18 @@ static win_t *init_win(unsigned int width, unsigned int height)
 
     win->window = sfRenderWindow_create(mode, "My_RPG", sfDefaultStyle, NULL);
     win->view = sfView_createFromRect((sfFloatRect){0, 0, width, height});
-    sfRenderWindow_setView(win->window, win->view);
+    win->view_menu = sfView_createFromRect((sfFloatRect){0, 0, width, height});
     win->width = width;
     win->height = height;
     win->framerate = 60;
     win->clock = sfClock_create();
     win->mouse_pos = (sfVector2f){0, 0};
     sfRenderWindow_setFramerateLimit(win->window, win->framerate);
+    win->view_pos = (sfVector2f){5331,8353};
+    sfView_setCenter(win->view_menu, win->view_pos);
+    sfView_zoom(win->view_menu, 2);
+    win->zoom = 2;
+    sfRenderWindow_setView(win->window, win->view_menu);
     return win;
 }
 
@@ -118,18 +123,22 @@ static void init_thread(rpg_t *rpg)
 
 static void init_rpg2(rpg_t *rpg)
 {
-    rpg->main_menu = init_menu();
-    rpg->save_menu = init_save_menu();
-    rpg->settings = init_settings();
-    rpg->selector = init_select_menu();
+    rpg->main_menu = init_menu(rpg);
+    rpg->save_menu = init_save_menu(rpg);
+    rpg->settings = init_settings(rpg);
+    rpg->selector = init_select_menu(rpg);
     rpg->interface = init_interface();
     rpg->minimap = init_minimap(WIDTH, HEIGHT);
-    update_interface_pos(rpg, get_player(rpg), get_player(rpg)->common->pos);
     rpg->collision = init_collision();
     init_inventory(15);
     init_all_quests(rpg);
     rpg->inventory = *inventory();
     rpg->plus = false;
+    rpg->decors_size = 0;
+    rpg->decors = init_decors(&rpg->decors_size);
+    pthread_join(rpg->thread, NULL);
+    if (rpg->shared_data->loaded)
+        rpg->map = rpg->shared_data->map;
 }
 
 rpg_t *init_rpg(void)

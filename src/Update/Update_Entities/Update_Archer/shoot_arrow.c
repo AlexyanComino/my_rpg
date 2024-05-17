@@ -56,11 +56,11 @@ static bool point_is_in_view(rpg_t *rpg, sfVector2f point)
     sfVector2f view_size = {WIDTH, HEIGHT};
     sfVector2f view_center = get_player(rpg)->common->pos;
 
-    if (point.x < view_center.x - view_size.x / 2 ||
-        point.x > view_center.x + view_size.x / 2)
+    if (point.x < view_center.x - view_size.x ||
+        point.x > view_center.x + view_size.x)
         return false;
-    if (point.y < view_center.y - view_size.y / 2 ||
-        point.y > view_center.y + view_size.y / 2)
+    if (point.y < view_center.y - view_size.y ||
+        point.y > view_center.y + view_size.y)
         return false;
     return true;
 }

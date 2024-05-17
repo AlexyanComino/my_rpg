@@ -26,8 +26,10 @@ bool flee_entity(rpg_t *rpg, entity_t *entity, entity_t *enemy)
         entity->common->is_fleeing = true;
     else if (entity->common->is_fleeing &&
         !hitbox_in_detection(enemy->common->zones->hitbox,
-        entity->common->zones->s_radius, entity->common->pos))
+        entity->common->zones->s_radius, entity->common->pos)) {
         entity->common->is_fleeing = false;
+        entity->common->x = get_entity_side(entity, enemy->common->pos);
+    }
     if (entity->common->is_fleeing) {
         min_lenght = 10;
         target_pos = get_flee_pos(entity, enemy);

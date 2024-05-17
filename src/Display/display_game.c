@@ -80,9 +80,11 @@ void display_game(rpg_t *rpg)
         sfRenderWindow_setView(rpg->win->window, rpg->win->view);
     sfRenderWindow_drawSprite(rpg->win->window, rpg->map->ground_sprite,
         NULL);
+    display_decors_ground(rpg);
     display_entities(rpg);
     sfRenderWindow_drawSprite(rpg->win->window, rpg->map->high_sprite,
         NULL);
+    display_decors_high(rpg);
     if (rpg->debug)
         display_collision(rpg);
     display_inv(rpg);

@@ -7,12 +7,23 @@
 
 #include "rpg.h"
 
+static void display_background_menus(rpg_t *rpg)
+{
+    sfRenderWindow_drawSprite(
+        rpg->win->window, rpg->map->ground_sprite, NULL);
+    if (!sfKeyboard_isKeyPressed(sfKeyV))
+        display_decors_ground(rpg);
+    sfRenderWindow_drawSprite(
+        rpg->win->window, rpg->map->high_sprite, NULL);
+    if (!sfKeyboard_isKeyPressed(sfKeyV))
+        display_decors_high(rpg);
+}
+
 void display_main_menu(rpg_t *rpg)
 {
     button_t *tmp = rpg->main_menu->buttons;
 
-    sfRenderWindow_drawSprite(
-        rpg->win->window, rpg->main_menu->background, NULL);
+    display_background_menus(rpg);
     sfRenderWindow_drawText(rpg->win->window, rpg->main_menu->text, NULL);
     while (tmp != NULL) {
         sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
@@ -24,8 +35,7 @@ void display_settings(rpg_t *rpg)
 {
     button_t *tmp = rpg->settings->buttons;
 
-    sfRenderWindow_drawSprite(
-        rpg->win->window, rpg->main_menu->background, NULL);
+    display_background_menus(rpg);
     while (tmp != NULL) {
         sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
         tmp = tmp->next;
@@ -36,8 +46,7 @@ void display_save_menu(rpg_t *rpg)
 {
     save_button_t *tmp = rpg->save_menu->buttons;
 
-    sfRenderWindow_drawSprite(
-        rpg->win->window, rpg->main_menu->background, NULL);
+    display_background_menus(rpg);
     while (tmp != NULL) {
         if (strcmp(tmp->name, "BACK") != 0)
             sfRenderWindow_drawRectangleShape(rpg->win->window,
@@ -86,8 +95,7 @@ void display_selector(rpg_t *rpg)
 {
     select_button_t *tmp = rpg->selector->buttons;
 
-    sfRenderWindow_drawSprite(
-        rpg->win->window, rpg->main_menu->background, NULL);
+    display_background_menus(rpg);
     for (; tmp != NULL; tmp = tmp->next) {
         if (strcmp(tmp->name, "BACK") == 0) {
             sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);

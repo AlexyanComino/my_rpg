@@ -25,3 +25,7 @@ void display_quests(rpg_t *rpg);
 
 // Display text box
 void display_text_box(rpg_t *rpg);
+
+// Display decors
+void display_decors_ground(rpg_t *rpg);
+void display_decors_high(rpg_t *rpg);

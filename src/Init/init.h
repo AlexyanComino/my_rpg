@@ -9,13 +9,14 @@
 #include "rpg.h"
 
 // InitRpg
+sfVector2f *get_file_pos(unsigned int *size, char *filepath);
 rpg_t *init_rpg(void);
 
 // InitMenu
-menu_t *init_menu(void);
-menu_t *init_settings(void);
-save_menu_t *init_save_menu(void);
-select_menu_t *init_select_menu(void);
+menu_t *init_menu(rpg_t *rpg);
+menu_t *init_settings(rpg_t *rpg);
+save_menu_t *init_save_menu(rpg_t *rpg);
+select_menu_t *init_select_menu(rpg_t *rpg);
 sfText *create_text(sfFont *font, char *str, int size, sfVector2f pos);
 
 // Init interface
@@ -42,3 +43,6 @@ dialog_t *init_dialog(char *dialog);
 
 // Init minimap
 minimap_t *init_minimap(unsigned int width, unsigned int height);
+
+// Init decors
+decor_anim_t **init_decors(unsigned int *size);

@@ -19,13 +19,13 @@ static void get_texture(char *txt, select_button_t *new)
             "assets/Entities/Pawn/Pawn_Blue.png", NULL);
     if (strcmp(txt, "ARCHER") == 0)
         new->texture = sfTexture_createFromFile(
-            "assets/Entities/Warriors/Warrior_Purple.png", NULL);
+            "assets/Entities/Archer/Archer_Blue.png", NULL);
     if (strcmp(txt, "TORCH") == 0)
         new->texture = sfTexture_createFromFile(
             "assets/Entities/Torch/Torch_Blue.png", NULL);
     if (strcmp(txt, "TNT") == 0)
         new->texture = sfTexture_createFromFile(
-            "assets/Entities/Warriors/Warrior_Red.png", NULL);
+            "assets/Entities/Tnt/TNT_Blue.png", NULL);
     if (new->texture == NULL)
         return;
 }
@@ -46,44 +46,32 @@ static void get_sprite(select_button_t *new)
     }
 }
 
-static void get_attributes2(char *txt, select_button_t *new)
-{
-    if (strcmp(txt, "ARCHER") == 0) {
-        new->attributes->health = 100;
-        new->attributes->attack = 15;
-        new->attributes->defense = 5;
-        new->attributes->speed = 5;
-    }
-    if (strcmp(txt, "TORCH") == 0) {
-        new->attributes->health = 75;
-        new->attributes->attack = 20;
-        new->attributes->defense = 0;
-        new->attributes->speed = 5;
-    }
-    if (strcmp(txt, "TNT") == 0) {
-        new->attributes->health = 50;
-        new->attributes->attack = 25;
-        new->attributes->defense = 0;
-        new->attributes->speed = 5;
-    }
-}
+static void get_attributes(char *txt, select_button_t *new, char **tab)
+{;
+    char **infos = NULL;
 
-static void get_attributes(char *txt, select_button_t *new)
-{
     new->attributes = malloc(sizeof(attributes_t));
-    if (strcmp(txt, "WARRIOR") == 0) {
-        new->attributes->health = 100;
-        new->attributes->attack = 10;
-        new->attributes->defense = 10;
-        new->attributes->speed = 10;
+    if (!strcmp(txt, "BACK")) {
+        free(new->attributes);
+        new->attributes = NULL;
     }
-    if (strcmp(txt, "PAWN") == 0) {
-        new->attributes->health = 50;
-        new->attributes->attack = 5;
-        new->attributes->defense = 5;
-        new->attributes->speed = 10;
+    if (strcmp(txt, "WARRIOR") == 0)
+        infos = split_string(tab[0], ";");
+    if (strcmp(txt, "PAWN") == 0)
+        infos = split_string(tab[1], ";");
+    if (strcmp(txt, "ARCHER") == 0)
+        infos = split_string(tab[5], ";");
+    if (strcmp(txt, "TORCH") == 0)
+        infos = split_string(tab[3], ";");
+    if (strcmp(txt, "TNT") == 0)
+        infos = split_string(tab[4], ";");
+    if (infos != NULL) {
+        new->attributes->health = atoi(infos[8]);
+        new->attributes->attack = atoi(infos[9]);
+        new->attributes->defense = atoi(infos[10]);
+        new->attributes->speed = atoi(infos[11]);
+        return free_array(infos);
     }
-    get_attributes2(txt, new);
 }
 
 static select_button_t *sel_new_button(char *txt, sfVector2f pos)
@@ -129,11 +117,14 @@ static sfText *create_texte(
     return text;
 }
 
-static void init_stats(select_button_t *new, sfVector2f pos, char *txt)
+static void init_stats(select_button_t *new, sfVector2f pos, char *txt,
+    char **tab)
 {
-    char *str = calloc(5, sizeof(char));
+    char *str = malloc(sizeof(char) * 10);
 
-    get_attributes(txt, new);
+    get_attributes(txt, new, tab);
+    if (new->attributes == NULL)
+        return;
     sprintf(str, "%d", new->attributes->health);
     new->hp = create_texte(new, str, 30, pos);
     sprintf(str, "%d", new->attributes->attack);
@@ -145,14 +136,14 @@ static void init_stats(select_button_t *new, sfVector2f pos, char *txt)
 }
 
 select_button_t *add_select_button(
-    select_button_t *buttons, sfVector2f pos, char *txt)
+    select_button_t *buttons, sfVector2f pos, char *txt, char **tab)
 {
     select_button_t *new = sel_new_button(txt, pos);
     select_button_t *tmp = buttons;
     sfFloatRect rect;
     sfFloatRect rect2;
 
-    init_stats(new, pos, txt);
+    init_stats(new, pos, txt, tab);
     get_sprite(new);
     rect = sfText_getGlobalBounds(new->text);
     rect2 = sfRectangleShape_getGlobalBounds(new->rect_shape);
@@ -167,24 +158,28 @@ select_button_t *add_select_button(
     return buttons;
 }
 
-static void create_buttons(select_menu_t *menu)
+static void create_buttons(rpg_t *rpg, select_menu_t *menu)
 {
+    char **tab = file_to_array(".entities.csv");
+    sfVector2f top_left = {rpg->win->view_pos.x - (WIDTH / 2 * rpg->win->zoom),
+        rpg->win->view_pos.y - (HEIGHT / 2 * rpg->win->zoom)};
+
     menu->buttons = NULL;
     menu->buttons = add_select_button(menu->buttons,
-    (sfVector2f){WIDTH / 2 - 650, HEIGHT / 2 - 300}, "WARRIOR");
+    (sfVector2f){top_left.x + (WIDTH / 2 - 650) * rpg->win->zoom, top_left.y + (HEIGHT / 2 - 300) * rpg->win->zoom}, "WARRIOR", tab);
     add_select_button(menu->buttons,
-    (sfVector2f){WIDTH / 2 - 325, HEIGHT / 2 - 300}, "PAWN");
+    (sfVector2f){top_left.x + (WIDTH / 2 - 325) * rpg->win->zoom, top_left.y + (HEIGHT / 2 - 300) * rpg->win->zoom}, "PAWN", tab);
     add_select_button(menu->buttons,
-    (sfVector2f){WIDTH / 2, HEIGHT / 2 - 300}, "ARCHER");
+    (sfVector2f){top_left.x + (WIDTH / 2) * rpg->win->zoom, top_left.y + (HEIGHT / 2 - 300) * rpg->win->zoom}, "ARCHER", tab);
     add_select_button(menu->buttons,
-    (sfVector2f){WIDTH / 2 + 325, HEIGHT / 2 - 300}, "TORCH");
+    (sfVector2f){top_left.x + (WIDTH / 2 + 325) * rpg->win->zoom, top_left.y + (HEIGHT / 2 - 300) * rpg->win->zoom}, "TORCH", tab);
     add_select_button(menu->buttons,
-    (sfVector2f){WIDTH / 2 + 650, HEIGHT / 2 - 300}, "TNT");
+    (sfVector2f){top_left.x + (WIDTH / 2 + 650) * rpg->win->zoom, (HEIGHT / 2 - 300) * rpg->win->zoom}, "TNT", tab);
     add_select_button(menu->buttons,
-    (sfVector2f){WIDTH / 2, HEIGHT / 2 + 400}, "BACK");
+    (sfVector2f){top_left.x + (WIDTH / 2) * rpg->win->zoom, top_left.y + (HEIGHT / 2 + 400) * rpg->win->zoom}, "BACK", tab);
 }
 
-select_menu_t *init_select_menu(void)
+select_menu_t *init_select_menu(rpg_t *rpg)
 {
     select_menu_t *menu = malloc(sizeof(menu_t));
 
@@ -195,6 +190,6 @@ select_menu_t *init_select_menu(void)
     menu->font = sfFont_createFromFile("assets/fonts/m6x11plus.ttf");
     menu->myclock = NULL;
     menu->text = NULL;
-    create_buttons(menu);
+    create_buttons(rpg, menu);
     return menu;
 }

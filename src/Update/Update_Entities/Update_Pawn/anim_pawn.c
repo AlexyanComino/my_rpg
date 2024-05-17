@@ -49,11 +49,11 @@ static void animation_pawn_carrying(entity_t *entity)
 {
     if (entity->common->state == IDLE_CARRY) {
         entity->common->anim->rect.top = PAWN_WIDTH * 4;
-        anim_line(entity->common, PAWN_OFFSET, PAWN_WIDTH, 0.1);
+        anim_line(entity->common->anim, PAWN_OFFSET, PAWN_WIDTH, 0.1);
     }
     if (entity->common->state == MOVE_CARRY) {
         entity->common->anim->rect.top = PAWN_WIDTH * 5;
-        anim_line(entity->common, PAWN_OFFSET, PAWN_WIDTH, 0.1);
+        anim_line(entity->common->anim, PAWN_OFFSET, PAWN_WIDTH, 0.1);
     }
 }
 
@@ -61,11 +61,11 @@ static void animation_pawn(rpg_t *rpg, entity_t *entity)
 {
     if (entity->common->state == IDLE || entity->common->state == INTERACT) {
         entity->common->anim->rect.top = 0;
-        return anim_line(entity->common, PAWN_OFFSET, PAWN_WIDTH, 0.1);
+        return anim_line(entity->common->anim, PAWN_OFFSET, PAWN_WIDTH, 0.1);
     }
     if (entity->common->state == WALK || entity->common->state == RUN) {
         entity->common->anim->rect.top = PAWN_WIDTH;
-        return anim_line(entity->common, PAWN_OFFSET, PAWN_WIDTH, 0.1);
+        return anim_line(entity->common->anim, PAWN_OFFSET, PAWN_WIDTH, 0.1);
     }
     if (entity->common->state == WORK || entity->common->state == ST_WORK) {
         entity->common->anim->rect.top = PAWN_WIDTH * 2;

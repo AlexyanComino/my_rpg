@@ -13,91 +13,97 @@ static button_t *new_button(char *txt)
 
     new->name = strdup(txt);
     new->text = sfText_create();
-    new->font = sfFont_createFromFile("assets/fonts/CompassPro.ttf");
+    new->font = sfFont_createFromFile("assets/fonts/Say Comic.ttf");
     new->state = NOTHING;
     new->action = get_action(txt);
     new->rect_shape = sfRectangleShape_create();
     new->rect = (sfIntRect){0, 0, BUTTON_WIDTH, BUTTON_HEIGHT};
+    sfText_setFont(new->text, new->font);
+    if (!strcmp(txt, "PLAY"))
+        sfText_setCharacterSize(new->text, 300);
+    else
+        sfText_setCharacterSize(new->text, 120);
     new->next = NULL;
     return new;
 }
 
-static button_t *add_button(button_t *buttons, sfVector2f pos, char *txt)
+static void add_button(button_t **buttons, sfVector2f pos, char *txt,
+    sfColor color)
 {
     button_t *new = new_button(txt);
-    button_t *tmp = buttons;
+    button_t *tmp = *buttons;
+    sfFloatRect bounds;
 
-    sfText_setFont(new->text, new->font);
-    sfText_setCharacterSize(new->text, 50);
-    sfText_setColor(new->text, sfWhite);
+    sfText_setColor(new->text, color);
     sfText_setString(new->text, txt);
     sfText_setPosition(new->text, pos);
+    bounds = sfText_getLocalBounds(new->text);
+    sfText_setOrigin(new->text, (sfVector2f){bounds.width / 2,
+        bounds.height / 2});
     sfRectangleShape_setSize(new->rect_shape, (sfVector2f){500, 150});
     sfRectangleShape_setPosition(new->rect_shape,
         (sfVector2f){pos.x - 190, pos.y});
     sfRectangleShape_setFillColor(new->rect_shape,
         sfColor_fromRGBA(0, 0, 0, 100));
-    if (buttons == NULL)
-        return new;
-    while (tmp->next != NULL)
+    while (tmp && tmp->next != NULL)
         tmp = tmp->next;
-    tmp->next = new;
-    return buttons;
+    if (!tmp)
+        *buttons = new;
+    else if (tmp->next == NULL)
+        tmp->next = new;
 }
 
 sfText *create_text(sfFont *font, char *str, int size, sfVector2f pos)
 {
     sfText *text = sfText_create();
+    sfFloatRect bounds;
 
     sfText_setFont(text, font);
     sfText_setCharacterSize(text, size);
     sfText_setColor(text, sfWhite);
     sfText_setString(text, str);
+    bounds = sfText_getLocalBounds(text);
+    sfText_setOrigin(text, (sfVector2f){bounds.width / 2, bounds.height / 2});
     sfText_setPosition(text, pos);
     return text;
 }
 
-menu_t *init_menu(void)
+menu_t *init_menu(rpg_t *rpg)
 {
     menu_t *menu = malloc(sizeof(menu_t));
+    sfVector2f top_left = {rpg->win->view_pos.x - (WIDTH / 2 * rpg->win->zoom),
+        rpg->win->view_pos.y - (HEIGHT / 2 * rpg->win->zoom)};
+    char *buttons_names[3] = {"OPTIONS", "QUIT", "PLAY"};
+    sfColor colors[3] = {sfWhite, sfColor_fromRGB(255, 103, 101), sfWhite};
 
-    menu->background_texture = sfTexture_createFromFile(
-        "assets/menu/bg.png", NULL);
-    menu->background = sfSprite_create();
-    menu->bg_rect = (sfIntRect){0, 0, WIDTH, HEIGHT};
-    sfSprite_setTexture(menu->background, menu->background_texture, sfTrue);
-    sfSprite_setTextureRect(menu->background, (sfIntRect){0, 0, 1920, HEIGHT});
-    menu->myclock = init_my_clock();
-    menu->font = sfFont_createFromFile("assets/fonts/CompassPro.ttf");
-    menu->text = create_text(menu->font, "MY RPG", 100, (sfVector2f)
-    {(WIDTH - (strlen("MY RPG") * 50)) / 2, 100});
+    menu->font = sfFont_createFromFile("assets/fonts/BreatheFireIii-PKLOB.ttf");
+    menu->text = create_text(menu->font, "MY RPG", 300, (sfVector2f)
+    {top_left.x + ((WIDTH - strlen("MY RPG") / 2) * rpg->win->zoom / 2), top_left.y + 100});
     menu->buttons = NULL;
-    menu->buttons = add_button(menu->buttons, (sfVector2f)
-    {200, 400}, "PLAY");
-    add_button(menu->buttons, (sfVector2f)
-    {200, 600}, "OPTIONS");
-    add_button(menu->buttons, (sfVector2f)
-    {200, 800}, "QUIT");
+
+    add_button(&menu->buttons, (sfVector2f){top_left.x + 250 * rpg->win->zoom, top_left.y + 760 * rpg->win->zoom}, buttons_names[0], colors[0]);
+    add_button(&menu->buttons, (sfVector2f){top_left.x + 1760 * rpg->win->zoom, top_left.y + 950 * rpg->win->zoom}, buttons_names[1], colors[1]);
+    add_button(&menu->buttons, (sfVector2f){top_left.x + 290 * rpg->win->zoom, top_left.y + 880 * rpg->win->zoom}, buttons_names[2], colors[2]);
     return menu;
 }
 
-menu_t *init_settings(void)
+menu_t *init_settings(rpg_t *rpg)
 {
     menu_t *menu = malloc(sizeof(menu_t));
+    sfColor colors[3] = {sfWhite, sfWhite, sfWhite};
+    sfVector2f top_left = {rpg->win->view_pos.x - (WIDTH / 2 * rpg->win->zoom),
+        rpg->win->view_pos.y - (HEIGHT / 2 * rpg->win->zoom)};
+    char *buttons_names[3] = {"VOLUME", "FULLSCREEN", "BACK"};
 
-    menu->background_texture = sfTexture_createFromFile(
-        "assets/menu/bg.png", NULL);
-    menu->background = sfSprite_create();
-    sfSprite_setTexture(menu->background, menu->background_texture, sfTrue);
     menu->font = sfFont_createFromFile("assets/fonts/m6x11plus.ttf");
     menu->myclock = NULL;
     menu->text = NULL;
     menu->buttons = NULL;
-    menu->buttons = add_button(menu->buttons,
-    (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 - 50}, "CACA");
-    add_button(menu->buttons,
-    (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 + 50}, "TEMP");
-    add_button(menu->buttons,
-    (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 + 150}, "BACK");
+    add_button(&menu->buttons, (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
+        top_left.y + HEIGHT / 2 - 100 * rpg->win->zoom}, buttons_names[0], colors[0]);
+    add_button(&menu->buttons, (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
+        top_left.y + HEIGHT / 2 * rpg->win->zoom}, buttons_names[1], colors[1]);
+    add_button(&menu->buttons, (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
+        top_left.y + HEIGHT / 2 + 100 * rpg->win->zoom}, buttons_names[2], colors[2]);
     return menu;
 }

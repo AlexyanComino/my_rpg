@@ -47,10 +47,12 @@ static save_button_t *add_button_save(
     return buttons;
 }
 
-save_menu_t *init_save_menu(void)
+save_menu_t *init_save_menu(rpg_t *rpg)
 {
     save_menu_t *menu = malloc(sizeof(menu_t));
-
+    sfVector2f top_left = {rpg->win->view_pos.x - (WIDTH / 2 * rpg->win->zoom),
+        rpg->win->view_pos.y - (HEIGHT / 2 * rpg->win->zoom)};
+    
     menu->background_texture = sfTexture_createFromFile(
         "assets/menu/bg.png", NULL);
     menu->background = sfSprite_create();
@@ -60,12 +62,16 @@ save_menu_t *init_save_menu(void)
     menu->text = NULL;
     menu->buttons = NULL;
     menu->buttons = add_button_save(menu->buttons,
-    (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 - 150}, "SAVE 1");
+    (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
+        top_left.y + (HEIGHT / 2 - 150) * rpg->win->zoom}, "SAVE 1");
     add_button_save(menu->buttons,
-    (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 + 75}, "SAVE 2");
+    (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
+        top_left.y + (HEIGHT / 2 + 75) * rpg->win->zoom}, "SAVE 2");
     add_button_save(menu->buttons,
-    (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 + 300}, "SAVE 3");
+    (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
+        top_left.y + (HEIGHT / 2 + 300) * rpg->win->zoom}, "SAVE 3");
     add_button_save(menu->buttons,
-    (sfVector2f){(WIDTH - 100) / 2, HEIGHT / 2 + 450}, "BACK");
+    (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
+        top_left.y + (HEIGHT / 2 + 450) * rpg->win->zoom}, "BACK");
     return menu;
 }

@@ -77,7 +77,8 @@ static bool archer_can_attack(entity_t *entity, entity_t *target)
         if ((entity->common->state == IDLE || entity->common->state == WALK ||
             entity->common->state == RUN) &&
             archer_can_attack_target(entity, target) &&
-            is_alive(target)) {
+            is_alive(target) && (!entity_has_base(entity) ||
+            enemy_is_in_base(entity, target))) {
             return true;
         }
     }
@@ -92,7 +93,9 @@ void update_pnj_archer(rpg_t *rpg, entity_t *entity)
         return;
     if (!is_attacking(entity))
         update_archer_pos(rpg, entity, enemy);
+    update_archer_marks(entity);
     if (archer_can_attack(entity, enemy)) {
+        entity->common->x = get_entity_side(entity, enemy->common->pos);
         entity->common->state = ST_ATT;
         init_entity_action(entity);
     }

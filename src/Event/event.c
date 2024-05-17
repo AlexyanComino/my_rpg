@@ -28,10 +28,16 @@ void update_mouse_pos(rpg_t *rpg)
     sfVector2f old_mouse_pos = {(float)rpg->event.mouseMove.x,
         (float)rpg->event.mouseMove.y};
     sfVector2u window_size = sfRenderWindow_getSize(rpg->win->window);
+    sfVector2f view_pos = rpg->win->view_pos;
 
+    window_size = window_size;
     rpg->win->mouse_pos = (sfVector2f){
-        (float)old_mouse_pos.x / ((float)window_size.x / (float)WIDTH),
-        (float)old_mouse_pos.y / ((float)window_size.y / (float)HEIGHT)};
+        (float)view_pos.x - (float)WIDTH / 2 * rpg->win->zoom +
+            (float)old_mouse_pos.x / ((float)window_size.x /
+            (float)WIDTH) * rpg->win->zoom,
+        (float)view_pos.y - (float)HEIGHT / 2 * rpg->win->zoom +
+            (float)old_mouse_pos.y / ((float)window_size.y /
+            (float)HEIGHT) * rpg->win->zoom};
 }
 
 void event(rpg_t *rpg)

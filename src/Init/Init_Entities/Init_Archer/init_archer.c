@@ -13,6 +13,8 @@ static archer_t *init_archer(char **infos)
 
     archer->arrows = NULL;
     archer->base = init_base(infos);
+    archer->exclam = init_exclam(infos);
+    archer->inter = init_inter(infos);
     return archer;
 }
 

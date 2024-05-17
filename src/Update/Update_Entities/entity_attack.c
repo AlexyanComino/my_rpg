@@ -53,9 +53,13 @@ static unsigned int get_attack(entity_t *entity, entity_t *target)
 {
     int attack = entity->common->attributes->attack -
         target->common->attributes->defense;
-    int quart = (attack * 0.25);
-    int bonus_attack = rand() % (quart + 1);
+    int quart = 0;
+    int bonus_attack = 0;
 
+    quart = (attack * 0.25);
+    if (quart == -1)
+        quart = 0;
+    bonus_attack = rand() % (quart + 1);
     if (rand() % 2 == 0)
         attack += bonus_attack;
     else

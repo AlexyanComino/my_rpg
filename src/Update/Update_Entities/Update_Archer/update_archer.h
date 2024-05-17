@@ -27,3 +27,6 @@ void update_pnj_archer(rpg_t *rpg, entity_t *entity);
 
 // Update archer pos
 void update_archer_pos(rpg_t *rpg, entity_t *entity, entity_t *enemy);
+
+// Update archer marks
+void update_archer_marks(entity_t *entity);

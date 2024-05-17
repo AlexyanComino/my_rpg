@@ -39,6 +39,10 @@ static void archer_come_back(rpg_t *rpg, entity_t *tmp)
     sfVector2f target_pos = tmp->spe->archer->base->pattern_pos[tmp->spe->
         archer->base->pattern_pos_index];
 
+    if (tmp->spe->archer->base->in_cooldown) {
+        tmp->common->state = IDLE;
+        return;
+    }
     tmp->common->state = WALK;
     entity_move(rpg, tmp, target_pos, min_lenght);
 }
@@ -51,21 +55,14 @@ static void update_archer_defend_base(rpg_t *rpg, entity_t *tmp,
 
     if (flee_entity(rpg, tmp, enemy))
         return;
-    if (enemy && tmp->common->zones->m_detect) {
-        target_pos = enemy->common->pos;
-        tmp->common->state = RUN;
-        tmp->common->x = get_entity_side(tmp, enemy->common->pos);
-        entity_move(rpg, tmp, target_pos, min_lenght);
-    } else if (get_distance(tmp->common->pos,
-        tmp->common->init_pos) > 10) {
-        min_lenght = 10;
-        target_pos = tmp->common->init_pos;
-        tmp->common->state = WALK;
-        tmp->common->x = get_entity_side(tmp, target_pos);
-        entity_move(rpg, tmp, target_pos, min_lenght);
-    } else {
+    if (!enemy_is_in_base(tmp, enemy)) {
         tmp->common->state = IDLE;
+        return;
     }
+    target_pos = enemy->common->pos;
+    tmp->common->state = RUN;
+    tmp->common->x = get_entity_side(tmp, enemy->common->pos);
+    entity_move(rpg, tmp, target_pos, min_lenght);
 }
 
 static void update_archer_pos_base(rpg_t *rpg, entity_t *entity,
