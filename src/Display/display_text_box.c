@@ -86,10 +86,11 @@ void display_text_box(rpg_t *rpg)
 
     if (rpg->text_box->is_displayed == true) {
         player = get_player(rpg);
-        sfSprite_setPosition(rpg->text_box->box, (sfVector2f){rpg->
-            ent[0]->common->pos.x, player->common->pos.y + 400});
-        sfText_setPosition(rpg->text_box->npc_name, (sfVector2f){rpg->
-        ent[0]->common->pos.x - 200, player->common->pos.y + 280});
+        sfSprite_setPosition(rpg->text_box->box,
+            (sfVector2f){player->common->pos.x, player->common->pos.y + 400});
+        sfText_setPosition(rpg->text_box->npc_name,
+            (sfVector2f){player->common->pos.x - 200,
+            player->common->pos.y + 280});
         display_choices(rpg);
         sfRenderWindow_drawSprite(rpg->win->window, rpg->text_box->box,
             NULL);
