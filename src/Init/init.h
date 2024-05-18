@@ -32,8 +32,9 @@ damage_text_t *init_damage_text(rpg_t *rpg, entity_t *entity,
 // Init text box
 text_box_t *init_text_box(void);
 
-// Init map
+// Init threads
 void *load_data(void *arg);
+void *load_entities(void *arg);
 
 // Init quests
 void init_all_quests(rpg_t *rpg);
