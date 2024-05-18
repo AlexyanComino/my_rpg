@@ -38,7 +38,7 @@ static side_x_t get_job_side(char *side)
     return LEFT;
 }
 
-static item_type_t get_item_type(char *item)
+static item_pawn_type_t get_item_type(char *item)
 {
     if (!strcmp(item, "W"))
         return WOOD;
@@ -58,7 +58,7 @@ static carry_t *get_pawn_carry(pawn_t *pawn, char **infos)
     carry = malloc(sizeof(carry_t));
     carry->obj_pos = (sfVector2f){atoi(infos[16]), atoi(infos[17])};
     carry->item_type = get_item_type(infos[18]);
-    carry->item = init_item(carry->item_type);
+    carry->item = init_item_pawn(carry->item_type);
     return carry;
 }
 

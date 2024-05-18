@@ -56,7 +56,7 @@ void destroy_quests(rpg_t *rpg)
     }
 }
 
-void destroy_rpg(rpg_t *rpg)
+void destroy(rpg_t *rpg)
 {
     destroy_menus(rpg);
     destroy_quests(rpg);

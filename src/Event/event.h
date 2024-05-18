@@ -40,5 +40,3 @@ void event_map(rpg_t *rpg);
 
 // Event game
 void event_game(rpg_t *rpg);
-
-

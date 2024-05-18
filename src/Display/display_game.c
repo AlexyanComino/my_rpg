@@ -74,6 +74,19 @@ static void display_health_bar_interface(rpg_t *rpg)
         rpg->interface->health_bar->front);
 }
 
+static void display_chests(rpg_t *rpg)
+{
+    for (unsigned int i = 0; i < rpg->chests_size; i++) {
+        if (!intrect_is_in_view(rpg, rpg->chests[i]->rect))
+            continue;
+        sfRenderWindow_drawSprite(rpg->win->window,
+            rpg->chests[i]->anim->sprite, NULL);
+        if (rpg->debug)
+            sfRenderWindow_drawRectangleShape(rpg->win->window,
+                rpg->chests[i]->shape, NULL);
+    }
+}
+
 void display_game(rpg_t *rpg)
 {
     if (sfRenderWindow_getView(rpg->win->window) != rpg->win->view)
@@ -81,6 +94,7 @@ void display_game(rpg_t *rpg)
     sfRenderWindow_drawSprite(rpg->win->window, rpg->map->ground_sprite,
         NULL);
     display_decors_ground(rpg);
+    display_chests(rpg);
     display_entities(rpg);
     sfRenderWindow_drawSprite(rpg->win->window, rpg->map->high_sprite,
         NULL);

@@ -1,0 +1,14 @@
+#Weapons
+#Type;ItemName;TexturePath;Damages;
+W;Iron Sword;assets/item/Weapon & Tool/Iron Sword.png;7;
+W;Silver Sword;assets/item/Weapon & Tool/Silver Sword.png;10;
+
+#Armors
+#Type;ItemName;TexturePath;Defense;Speed;Endurance;ArmorType(0=HELMET,1=CHESTPLATE,2=BOOTS);
+A;Iron Helmet;assets/item/Equipment/Iron Helmet.png;10;0;0;0;
+A;Iron Chestplate;assets/item/Equipment/Iron Armor.png;20;0;0;1;
+A;Iron Boots;assets/item/Equipment/Iron Boot.png;5;50;0;2;
+
+#Potions
+#Type;ItemName;TexturePath;
+P;Blue Potion;assets/item/Potion/Blue Potion.png;
