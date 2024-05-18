@@ -7,16 +7,6 @@
 
 #include "rpg.h"
 
-bool player_is_not_in_action(rpg_t *rpg)
-{
-    return !in_action(get_player(rpg));
-}
-
-bool player_is_alive(rpg_t *rpg)
-{
-    return is_alive(get_player(rpg));
-}
-
 bool entities_in_same_faction(entity_t *entity1, entity_t *entity2)
 {
     return entity1->common->faction == entity2->common->faction;

@@ -12,7 +12,7 @@
 void event(rpg_t *rpg);
 
 // Player move
-void player_move(rpg_t *rpg);
+void player_move_event(rpg_t *rpg);
 
 // Player attack
 void player_attack(rpg_t *rpg);

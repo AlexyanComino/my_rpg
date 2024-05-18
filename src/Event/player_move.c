@@ -118,7 +118,7 @@ static void event_player_move(entity_t *player)
     }
 }
 
-void player_move(rpg_t *rpg)
+static void player_move(rpg_t *rpg)
 {
     entity_t *player = get_player(rpg);
     sfVector2f oldPos = player->common->pos;
@@ -131,4 +131,13 @@ void player_move(rpg_t *rpg)
         oldPos.y != player->common->pos.y) {
         update_interface_pos(rpg, player, oldPos);
     }
+}
+
+void player_move_event(rpg_t *rpg)
+{
+    entity_t *player = get_player(rpg);
+
+    if (!in_action(player) && is_alive(player) && !is_stunned(player) &&
+        player->common->state != INTERACT)
+        player_move(rpg);
 }

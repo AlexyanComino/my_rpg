@@ -43,7 +43,6 @@ void update_mouse_pos(rpg_t *rpg)
 void event(rpg_t *rpg)
 {
     sfTime elapsed_time = sfClock_getElapsedTime(rpg->win->clock);
-    entity_t *player = get_player(rpg);
 
     rpg->win->dt = sfTime_asSeconds(elapsed_time);
     sfClock_restart(rpg->win->clock);
@@ -57,8 +56,6 @@ void event(rpg_t *rpg)
             manage_evt_inv(rpg->event, rpg);
         event_states(rpg);
     }
-    if (rpg->gamestate == GAME && player_is_not_in_action(rpg) &&
-        player_is_alive(rpg) && !is_stunned(player) &&
-        player->common->state != INTERACT)
-        player_move(rpg);
+    if (rpg->gamestate == GAME)
+        player_move_event(rpg);
 }

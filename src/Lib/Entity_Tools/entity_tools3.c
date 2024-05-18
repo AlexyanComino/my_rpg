@@ -48,16 +48,6 @@ side_x_t get_entity_side(entity_t *entity, sfVector2f objectif_pos)
 
 entity_t *get_player(rpg_t *rpg)
 {
-    char *infos[] = {"W", "Player", "B", "7500", "6000", "600", "450", "300",
-        "200", "50", "20", "500", "0", "0", "0", "0", "0"};
-
-    if (rpg->player_index == UINT_MAX) {
-        rpg->player_index = INT_MAX;
-        rpg->tmp_entity = init_entity_warrior(infos);
-        return rpg->tmp_entity;
-    }
-    if (rpg->player_index == INT_MAX)
-        return rpg->tmp_entity;
     return rpg->ent[rpg->player_index];
 }
 
