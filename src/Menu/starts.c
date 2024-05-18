@@ -12,7 +12,6 @@ void start_warrior(rpg_t *rpg)
     char **tab = file_to_array(".entities.csv");
     char **infos = split_string(tab[0], ";");
 
-    
     rpg->ent[rpg->ent_size] = init_entity(infos);
     rpg->ent[rpg->ent_size]->common->faction = BLUE_TEAM;
     rpg->ent[rpg->ent_size]->common->faction_origin = BLUE_TEAM;

@@ -16,12 +16,8 @@ static sfVector2f get_flee_pos(entity_t *entity, entity_t *enemy)
         entity->common->pos.y - diff.y};
 }
 
-bool flee_entity(rpg_t *rpg, entity_t *entity, entity_t *enemy)
+static void update_is_fleeing(entity_t *entity, entity_t *enemy)
 {
-    float min_lenght;
-    sfVector2f target_pos;
-    sfVector2f old = entity->common->pos;
-
     if (entity->common->zones->s_detect && !entity->common->is_fleeing)
         entity->common->is_fleeing = true;
     else if (entity->common->is_fleeing &&
@@ -30,6 +26,15 @@ bool flee_entity(rpg_t *rpg, entity_t *entity, entity_t *enemy)
         entity->common->is_fleeing = false;
         entity->common->x = get_entity_side(entity, enemy->common->pos);
     }
+}
+
+bool flee_entity(rpg_t *rpg, entity_t *entity, entity_t *enemy)
+{
+    float min_lenght;
+    sfVector2f target_pos;
+    sfVector2f old = entity->common->pos;
+
+    update_is_fleeing(entity, enemy);
     if (entity->common->is_fleeing) {
         min_lenght = 10;
         target_pos = get_flee_pos(entity, enemy);

@@ -11,5 +11,5 @@
 #include <stdlib.h>
 #include "rpg.h"
 
-weapon_t *create_weapon(int damage);
-armor_t *create_armor(int defense, int speed, int armor_type, int endurance);
+weapon_t *create_weapon(rpg_t *rpg, char *name);
+armor_t *create_armor(rpg_t *rpg, char *name);

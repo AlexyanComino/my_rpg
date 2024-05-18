@@ -8,7 +8,7 @@
 #include "rpg.h"
 #include "singleton.h"
 
-void display_all(rpg_t *rpg)
+void display(rpg_t *rpg)
 {
     sfRenderWindow_clear(rpg->win->window, sfBlack);
     if (rpg->gamestate == MAIN_MENU)

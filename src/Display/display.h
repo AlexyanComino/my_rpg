@@ -9,7 +9,7 @@
 #include "rpg.h"
 
 // Display
-void display_all(rpg_t *rpg);
+void display(rpg_t *rpg);
 
 // Display menus
 void display_main_menu(rpg_t *rpg);

@@ -137,6 +137,9 @@
 #define WATER_ANIM_HEIGHT 608
 #define WATER_ANIM_OFFSET 7424 / 7
 
+// Chests
+#define CHEST_WIDTH 192
+
 typedef enum color_entity_s {
     BLUE = 0,
     PURPLE,
@@ -364,28 +367,28 @@ typedef enum pawn_job_s {
     NO_JOB,
 } pawn_job_t;
 
-typedef enum item_type_s {
+typedef enum item_pawn_type_s {
     WOOD,
     MEAT,
     GOLD,
     NO_ITEM,
-} item_type_t;
+} item_pawn_type_t;
 
-typedef struct item_s {
+typedef struct item_pawn_s {
     char *name;
-    item_type_t type;
+    item_pawn_type_t type;
     sfSprite *sprite;
     sfTexture *texture;
     sfVector2f *pos;
     int quantity;
     int *index_rev_scale;
-} item_t;
+} item_pawn_t;
 
 typedef struct carry_s {
     sfVector2f obj_pos;
     bool is_carrying;
-    item_type_t item_type;
-    item_t *item;
+    item_pawn_type_t item_type;
+    item_pawn_t *item;
 } carry_t;
 
 typedef struct pawn_s {
@@ -542,6 +545,7 @@ typedef struct slot_s {
     int is_clicked;
     int is_moved;
     void *item;
+    char *name;
     struct slot_s *next;
     sfSprite *highlight;
     sfSprite *sprite;
@@ -821,6 +825,7 @@ typedef enum decor_type {
     GROUND,
     HIGH,
 } decor_type_t;
+
 typedef struct decor_anim_s {
     anim_t *anim;
     sfVector2f pos;
@@ -833,6 +838,36 @@ typedef struct decor_anim_s {
     sfRectangleShape *shape;
     decor_type_t type;
 } decor_anim_t;
+
+typedef enum chest_state_s {
+    CLOSED,
+    OPENING,
+    OPENED,
+    CLOSING,
+} chest_state_t;
+
+typedef struct chest_s {
+    anim_t *anim;
+    sfVector2f pos;
+    chest_state_t state;
+    sfIntRect rect;
+    sfRectangleShape *shape;
+    enum item_type item_type;
+    char *item_name;
+    bool is_interacted;
+    bool is_recieved;
+} chest_t;
+
+typedef struct item_s {
+    char *name;
+    char *texture_path;
+    enum item_type type;
+    int damage;
+    int defense;
+    int speed;
+    int endurance;
+    enum armor_type armor_type;
+} item_t;
 
 typedef struct rpg_s {
     win_t *win;
@@ -860,6 +895,10 @@ typedef struct rpg_s {
     bool plus;
     decor_anim_t **decors;
     unsigned int decors_size;
+    chest_t **chests;
+    unsigned int chests_size;
+    item_t **items;
+    unsigned int items_size;
 } rpg_t;
 
 #include "../src/Init/init.h"

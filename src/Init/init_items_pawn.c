@@ -7,7 +7,7 @@
 
 #include "rpg.h"
 
-static int get_quantity(item_type_t item_type)
+static int get_quantity(item_pawn_type_t item_type)
 {
     if (item_type == WOOD)
         return 3;
@@ -18,7 +18,7 @@ static int get_quantity(item_type_t item_type)
     return 0;
 }
 
-static char *get_item_texture_path(item_type_t item_type)
+static char *get_item_texture_path(item_pawn_type_t item_type)
 {
     char *texture_paths[3] = {
         "assets/item/W_Idle_(NoShadow).png",
@@ -36,7 +36,7 @@ static char *get_item_texture_path(item_type_t item_type)
     return strdup(texture_paths[item_index]);
 }
 
-static sfVector2f *get_items_pos(item_t *item)
+static sfVector2f *get_items_pos(item_pawn_t *item)
 {
     sfVector2f *pos = malloc(sizeof(sfVector2f) * item->quantity);
     int quantity = item->quantity;
@@ -59,10 +59,10 @@ static sfVector2f *get_items_pos(item_t *item)
     return NULL;
 }
 
-static int *get_index_rev_scale(item_t *item)
+static int *get_index_rev_scale(item_pawn_t *item)
 {
     int *index_rev_scale = malloc(sizeof(int) * item->quantity);
-    item_type_t item_type = item->type;
+    item_pawn_type_t item_type = item->type;
 
     if (item_type == WOOD) {
         index_rev_scale[0] = 0;
@@ -78,9 +78,9 @@ static int *get_index_rev_scale(item_t *item)
     return index_rev_scale;
 }
 
-item_t *init_item(item_type_t item_type)
+item_pawn_t *init_item_pawn(item_pawn_type_t item_type)
 {
-    item_t *item = malloc(sizeof(item_t));
+    item_pawn_t *item = malloc(sizeof(item_pawn_t));
     char *texture_path = get_item_texture_path(item_type);
 
     item->type = item_type;

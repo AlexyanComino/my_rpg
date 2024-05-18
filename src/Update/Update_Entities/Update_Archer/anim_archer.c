@@ -59,11 +59,13 @@ static void animation_archer(rpg_t *rpg, entity_t *entity)
 {
     if (entity->common->state == IDLE || entity->common->state == INTERACT) {
         entity->common->anim->rect.top = 0;
-        return anim_line(entity->common->anim, ARCHER_OFFSET, ARCHER_WIDTH, 0.1);
+        return anim_line(entity->common->anim, ARCHER_OFFSET,
+            ARCHER_WIDTH, 0.1);
     }
     if (entity->common->state == WALK || entity->common->state == RUN) {
         entity->common->anim->rect.top = ARCHER_WIDTH;
-        return anim_line(entity->common->anim, ARCHER_OFFSET, ARCHER_WIDTH, 0.1);
+        return anim_line(entity->common->anim, ARCHER_OFFSET,
+            ARCHER_WIDTH, 0.1);
     }
     if (is_attacking(entity))
         return animation_attack_archer(rpg, entity);

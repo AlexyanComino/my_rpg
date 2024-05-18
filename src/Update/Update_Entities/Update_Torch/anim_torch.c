@@ -40,7 +40,8 @@ static void animation_torch(rpg_t *rpg, entity_t *entity)
 {
     if (entity->common->state == IDLE || entity->common->state == INTERACT) {
         entity->common->anim->rect.top = 0;
-        return anim_line(entity->common->anim, TORCH_IDLE_OFFSET, TORCH_WIDTH, 0.1);
+        return anim_line(entity->common->anim, TORCH_IDLE_OFFSET,
+            TORCH_WIDTH, 0.1);
     }
     if (entity->common->state == WALK || entity->common->state == RUN) {
         entity->common->anim->rect.top = TORCH_WIDTH;

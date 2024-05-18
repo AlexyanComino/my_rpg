@@ -16,8 +16,8 @@ static float get_player_speed(rpg_t *rpg, entity_t *player)
     return player->common->attributes->speed;
 }
 
-static void get_newpos_and_newx(rpg_t *rpg, entity_t *player, sfVector2f *newPos,
-    float dt)
+static void get_newpos_and_newx(rpg_t *rpg, entity_t *player,
+    sfVector2f *newPos, float dt)
 {
     float speed = get_player_speed(rpg, player);
 
@@ -46,8 +46,8 @@ static void update_player_x(rpg_t *rpg, entity_t *player)
 }
 
 //
-static void get_newpos_and_newy(rpg_t *rpg, entity_t *player, sfVector2f *newPos,
-    float dt)
+static void get_newpos_and_newy(rpg_t *rpg, entity_t *player,
+    sfVector2f *newPos, float dt)
 {
     float speed = get_player_speed(rpg, player);
 

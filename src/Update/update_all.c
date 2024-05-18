@@ -34,7 +34,7 @@ static void update_decors_anim(rpg_t *rpg)
     }
 }
 
-void update_all(rpg_t *rpg)
+void update(rpg_t *rpg)
 {
     if (rpg->gamestate == MAIN_MENU || rpg->gamestate == PAUSE ||
         rpg->gamestate == SETTINGS || rpg->gamestate == SAVE_MENU) {
@@ -42,6 +42,7 @@ void update_all(rpg_t *rpg)
     }
     if (rpg->gamestate == GAME) {
         update_game_interface(rpg);
+        update_chests(rpg);
         update_entities(rpg);
         update_quest_header(rpg);
         update_quests(rpg);

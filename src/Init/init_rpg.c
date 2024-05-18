@@ -21,7 +21,7 @@ static win_t *init_win(unsigned int width, unsigned int height)
     win->clock = sfClock_create();
     win->mouse_pos = (sfVector2f){0, 0};
     sfRenderWindow_setFramerateLimit(win->window, win->framerate);
-    win->view_pos = (sfVector2f){5331,8353};
+    win->view_pos = (sfVector2f){5331, 8353};
     sfView_setCenter(win->view_menu, win->view_pos);
     sfView_zoom(win->view_menu, 2);
     win->zoom = 2;
@@ -130,12 +130,16 @@ static void init_rpg2(rpg_t *rpg)
     rpg->interface = init_interface();
     rpg->minimap = init_minimap(WIDTH, HEIGHT);
     rpg->collision = init_collision();
-    init_inventory(15);
     init_all_quests(rpg);
-    rpg->inventory = *inventory();
     rpg->plus = false;
     rpg->decors_size = 0;
     rpg->decors = init_decors(&rpg->decors_size);
+    rpg->chests_size = 0;
+    rpg->chests = init_chests(&rpg->chests_size);
+    rpg->items_size = 0;
+    rpg->items = init_items_tab(&rpg->items_size);
+    init_inventory(rpg, 15);
+    rpg->inventory = *inventory();
     pthread_join(rpg->thread, NULL);
     if (rpg->shared_data->loaded)
         rpg->map = rpg->shared_data->map;

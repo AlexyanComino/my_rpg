@@ -11,29 +11,6 @@
 #include "item.h"
 #include "rpg.h"
 
-int init_inventory(int size)
-{
-    inventory_t *inv = malloc(sizeof(inventory_t));
-
-    inv->is_open = 0;
-    inv->gold = 0;
-    inv->size = size;
-    inv->slot = NULL;
-    inv->quest = NULL;
-    inv->scroll = 0;
-    inv->scroll_max = 0;
-    inv->sprite = init_sprite_from_file("assets/inventory/1.png");
-    inv->player_status = init_player_status();
-    sfSprite_setScale(inv->sprite, (sfVector2f){2, 2});
-    sfSprite_setPosition(inv->sprite, (sfVector2f){0, 80});
-    *inventory() = inv;
-    for (int i = 0; i < 4; i++)
-        add_stuff(create_armor(10, 10, 1, 10), ARMOR);
-    for (int i = 0; i <= 4; i++)
-        remove_item(i, (*inventory())->player_status->stuff);
-    return (0);
-}
-
 static slot_t *setup_slot(slot_t *slot, sfVector2f pos, int type, void *item)
 {
     slot->is_empty = 0;
@@ -77,7 +54,7 @@ static int manage_slot(slot_t *tmp, void *item, int type, int *id)
     return (1);
 }
 
-int add_item(void *item, int type)
+int add_item(void *item, int type, char *name)
 {
     slot_t *tmp = (*inventory())->slot;
     int empty_id = -1;
@@ -97,6 +74,7 @@ int add_item(void *item, int type)
     tmp->is_empty = 0;
     tmp->type = type;
     tmp->item = item;
+    tmp->name = strdup(name);
     return (0);
 }
 

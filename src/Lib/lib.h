@@ -23,3 +23,7 @@ bool entity_is_in_view(rpg_t *rpg, entity_t *entity);
 // file_to_array
 char **file_to_array(char *path);
 void free_array(char **array);
+
+// Item tools
+item_t *get_item_from_name(rpg_t *rpg, char *name, enum item_type type);
+void add_item_from_type(rpg_t *rpg, char *name, enum item_type type);
