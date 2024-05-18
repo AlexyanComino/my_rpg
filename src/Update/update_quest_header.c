@@ -41,6 +41,8 @@ void remove_header(rpg_t *rpg, sfColor *color)
 {
     sfRectangleShape_setFillColor(rpg->quest_header->rect,
             sfColor_fromRGBA(0, 0, 0, 0));
+    sfRectangleShape_setFillColor(rpg->quest_header->rect2,
+            sfColor_fromRGBA(0, 0, 0, 0));
     sfText_setColor(rpg->quest_header->text,
         sfColor_fromRGBA(color->r, color->g, color->b, 0));
     rpg->quest_header->state = Q_HIDDEN;

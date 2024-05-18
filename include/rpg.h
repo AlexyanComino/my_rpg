@@ -19,6 +19,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <fcntl.h>
+#include <limits.h>
 
 #define NUM_POINTS 30  // Nombre de points pour la parabole
 
@@ -800,6 +801,12 @@ typedef struct {
     int loaded;
 } shared_data_t;
 
+typedef struct {
+    entity_t **entities;
+    unsigned int nb_entities;
+    int loaded;
+} shared_data2_t;
+
 typedef struct minimap_s {
     sfView *view;
     sfVector2f pos;
@@ -875,6 +882,7 @@ typedef struct rpg_s {
     minimap_t *minimap;
     sfEvent event;
     entity_t **ent;
+    entity_t *tmp_entity;
     unsigned int ent_size;
     bool debug;
     menu_t *main_menu;
@@ -889,8 +897,11 @@ typedef struct rpg_s {
     collision_t *collision;
     inventory_t *inventory;
     pthread_t thread;
+    pthread_t thread2;
     shared_data_t *shared_data;
-    int shm_fd;
+    shared_data2_t *shared_data2;
+    int shm_fd1;
+    int shm_fd2;
     unsigned int player_index;
     bool plus;
     decor_anim_t **decors;

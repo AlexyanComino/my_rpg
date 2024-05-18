@@ -89,9 +89,10 @@ static select_button_t *sel_new_button(char *txt, sfVector2f pos)
     new->rect_shape = sfRectangleShape_create();
     new->rect = (sfIntRect){0, 0, BUTTON_WIDTH, BUTTON_HEIGHT};
     new->next = NULL;
+    sfText_setFillColor(new->text, sfBlack);
     sfRectangleShape_setSize(new->rect_shape, (sfVector2f){300, 500});
     sfRectangleShape_setFillColor(new->rect_shape,
-        sfColor_fromRGBA(0, 0, 0, 100));
+        sfColor_fromRGBA(200, 200, 200, 150));
     sfRectangleShape_setPosition(new->rect_shape,
         (sfVector2f){pos.x, pos.y});
     return new;
@@ -174,7 +175,7 @@ static void create_buttons(rpg_t *rpg, select_menu_t *menu)
     add_select_button(menu->buttons,
     (sfVector2f){top_left.x + (WIDTH / 2 + 325) * rpg->win->zoom, top_left.y + (HEIGHT / 2 - 300) * rpg->win->zoom}, "TORCH", tab);
     add_select_button(menu->buttons,
-    (sfVector2f){top_left.x + (WIDTH / 2 + 650) * rpg->win->zoom, (HEIGHT / 2 - 300) * rpg->win->zoom}, "TNT", tab);
+    (sfVector2f){top_left.x + (WIDTH / 2 + 650) * rpg->win->zoom, top_left.y + (HEIGHT / 2 - 300) * rpg->win->zoom}, "TNT", tab);
     add_select_button(menu->buttons,
     (sfVector2f){top_left.x + (WIDTH / 2) * rpg->win->zoom, top_left.y + (HEIGHT / 2 + 400) * rpg->win->zoom}, "BACK", tab);
 }

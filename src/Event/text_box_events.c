@@ -62,6 +62,7 @@ void choice_action(rpg_t *rpg)
 static void end_dialog(rpg_t *rpg)
 {
     if (rpg->text_box->quest->is_last) {
+        rpg->text_box->quest->is_active = false;
         rpg->text_box->quest->is_done = true;
         rpg->quest_header->state = Q_END;
     } else
