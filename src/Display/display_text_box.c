@@ -71,9 +71,9 @@ void display_choices(rpg_t *rpg)
     for (; tmp != NULL; tmp = tmp->next) {
         move_rect(tmp);
         sfSprite_setPosition(tmp->sprite, (sfVector2f){player->common->
-        pos.x + 500, player->common->pos.y + 300 + (i * 50)});
+        pos.x + 500, player->common->pos.y + 300 + (i * 75)});
         sfText_setPosition(tmp->text, (sfVector2f){player->common->pos.x
-        + 540, player->common->pos.y + 318 + (i * 50)});
+        + 550, player->common->pos.y + 325 + (i * 75)});
         sfRenderWindow_drawSprite(rpg->win->window, tmp->sprite, NULL);
         sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
         i++;
@@ -91,7 +91,8 @@ void display_text_box(rpg_t *rpg)
         sfText_setPosition(rpg->text_box->npc_name,
             (sfVector2f){player->common->pos.x - 200,
             player->common->pos.y + 280});
-        display_choices(rpg);
+        if (rpg->text_box->has_choice)
+            display_choices(rpg);
         sfRenderWindow_drawSprite(rpg->win->window, rpg->text_box->box,
             NULL);
         sfRenderWindow_drawText(rpg->win->window, rpg->text_box->npc_name,
