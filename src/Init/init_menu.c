@@ -74,7 +74,7 @@ menu_t *init_menu(rpg_t *rpg)
     sfVector2f top_left = {rpg->win->view_pos.x - (WIDTH / 2 * rpg->win->zoom),
         rpg->win->view_pos.y - (HEIGHT / 2 * rpg->win->zoom)};
     char *buttons_names[3] = {"OPTIONS", "QUIT", "PLAY"};
-    sfColor colors[3] = {sfWhite, sfColor_fromRGB(255, 103, 101), sfWhite};
+    sfColor colors[3] = {sfColor_fromRGB(220, 220, 220), sfColor_fromRGB(255, 103, 101), sfColor_fromRGB(220, 220, 220)};
 
     menu->font = sfFont_createFromFile("assets/fonts/BreatheFireIii-PKLOB.ttf");
     menu->text = create_text(menu->font, "MY RPG", 300, (sfVector2f)
@@ -90,7 +90,7 @@ menu_t *init_menu(rpg_t *rpg)
 menu_t *init_settings(rpg_t *rpg)
 {
     menu_t *menu = malloc(sizeof(menu_t));
-    sfColor colors[3] = {sfWhite, sfWhite, sfWhite};
+    sfColor color = sfColor_fromRGB(220, 220, 220);
     sfVector2f top_left = {rpg->win->view_pos.x - (WIDTH / 2 * rpg->win->zoom),
         rpg->win->view_pos.y - (HEIGHT / 2 * rpg->win->zoom)};
     char *buttons_names[3] = {"VOLUME", "FULLSCREEN", "BACK"};
@@ -100,10 +100,10 @@ menu_t *init_settings(rpg_t *rpg)
     menu->text = NULL;
     menu->buttons = NULL;
     add_button(&menu->buttons, (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
-        top_left.y + HEIGHT / 2 - 100 * rpg->win->zoom}, buttons_names[0], colors[0]);
+        top_left.y + HEIGHT / 2 - 100 * rpg->win->zoom}, buttons_names[0], color);
     add_button(&menu->buttons, (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
-        top_left.y + HEIGHT / 2 * rpg->win->zoom}, buttons_names[1], colors[1]);
+        top_left.y + HEIGHT / 2 * rpg->win->zoom}, buttons_names[1], color);
     add_button(&menu->buttons, (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
-        top_left.y + HEIGHT / 2 + 100 * rpg->win->zoom}, buttons_names[2], colors[2]);
+        top_left.y + HEIGHT / 2 + 100 * rpg->win->zoom}, buttons_names[2], color);
     return menu;
 }
