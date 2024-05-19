@@ -7,6 +7,25 @@
 
 #include "rpg.h"
 
+void quest_done_item(rpg_t *rpg, char *item)
+{
+    all_quests_t *quests = rpg->quests;
+    quest_t *tmp = NULL;
+
+    for (; quests; quests = quests->next) {
+        tmp = quests->quest;
+        for (; tmp; tmp = tmp->next) {
+            if (tmp->type == GATHER && tmp->is_active && strcmp(tmp->objective, item) == 0) {
+                tmp->is_done = true;
+                if (tmp->is_last)
+                    rpg->quest_header->state = Q_END;
+                else
+                    tmp->next->is_active = true;
+                printf("Quest get done: %s\n", tmp->name);
+            }
+        }
+    }
+}
 
 void quest_done_kill(rpg_t *rpg, entity_t *entity, quest_t *tmp)
 {
