@@ -16,8 +16,6 @@ bool is_discreet(entity_t *entity);
 bool is_attacking(entity_t *entity);
 
 // Defines 2
-bool player_is_not_in_action(rpg_t *rpg);
-bool player_is_alive(rpg_t *rpg);
 bool entities_in_same_faction(entity_t *entity1, entity_t *entity2);
 bool entity_has_base(entity_t *entity);
 bool in_action(entity_t *entity);
@@ -27,3 +25,4 @@ bool is_stunned(entity_t *entity);
 bool is_slow(entity_t *entity);
 bool is_working(entity_t *entity);
 bool is_carrying(entity_t *entity);
+bool cooldown_is_over(mark_t *mark, float cooldown);

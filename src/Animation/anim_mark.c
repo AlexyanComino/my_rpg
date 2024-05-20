@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** my_rpg
 ** File description:
-** anim_stun
+** anim_mark
 */
 
 #include "rpg.h"
@@ -19,8 +19,20 @@ void anim_mark(mark_t *mark, sfIntRect *info)
         mark->anim->rect.left += width;
     } else if (mark->anim->rect.left >= width * max_width) {
         mark->is_display = 2;
+        mark->anim->rect.left = 0;
+        mark->anim->rect.top = 0;
     } else
         mark->anim->rect.top += height;
     sfSprite_setTextureRect(mark->anim->sprite, mark->anim->rect);
     sfClock_restart(mark->anim->myclock->clock);
+}
+
+void anim_fire_mark(mark_t *fire_mark, int width, int max_offset)
+{
+    if (fire_mark->anim->rect.left >= width * max_offset) {
+        fire_mark->anim->rect.left = 0;
+    } else
+        fire_mark->anim->rect.left += width;
+    sfSprite_setTextureRect(fire_mark->anim->sprite, fire_mark->anim->rect);
+    sfClock_restart(fire_mark->anim->myclock->clock);
 }

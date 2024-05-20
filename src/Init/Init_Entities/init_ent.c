@@ -32,22 +32,18 @@ anim_t *init_anim(char *texture_path, int width, int height)
     return anim;
 }
 
-static int tab_len(char **tab)
-{
-    int i = 0;
-
-    for (; tab[i] != NULL; i++);
-    return i;
-}
-
-static entity_t *init_entity(char **infos)
+entity_t *init_entity(char **infos)
 {
     if (!strcmp(infos[0], "W"))
         return init_entity_warrior(infos);
     if (!strcmp(infos[0], "P"))
         return init_entity_pawn(infos);
-    if (!strcmp(infos[0], "T"))
+    if (!strcmp(infos[0], "TO"))
         return init_entity_torch(infos);
+    if (!strcmp(infos[0], "TN"))
+        return init_entity_tnt(infos);
+    if (!strcmp(infos[0], "A"))
+        return init_entity_archer(infos);
     fprintf(stderr, "Error: invalid entity type\n");
     return NULL;
 }
@@ -56,16 +52,14 @@ entity_t **init_ent(unsigned int *size)
 {
     char **tab = file_to_array(".entities.csv");
     char **infos = NULL;
-    entity_t **ent = malloc(sizeof(entity_t *) * (tab_len(tab)));
+    entity_t **ent = malloc(sizeof(entity_t *) * (tab_len(tab)) - 4);
 
-    for (int i = 0; tab[i] != NULL; i++) {
+    for (int i = 5; tab[i] != NULL; i++) {
         infos = split_string(tab[i], ";");
-        ent[i] = init_entity(infos);
+        ent[i - 5] = init_entity(infos);
         (*size)++;
         free_array(infos);
     }
     free_array(tab);
-    ent[0]->common->faction = BLUE_TEAM;
-    ent[0]->common->faction_origin = BLUE_TEAM;
     return ent;
 }

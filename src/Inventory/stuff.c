@@ -121,7 +121,7 @@ static int update_stat_print(slot_t *tmp)
 int apply_stuff(rpg_t *rpg)
 {
     slot_t *tmp = (*inventory())->player_status->stuff;
-    attributes_t *attribute = rpg->ent[0]->common->attributes;
+    attributes_t *attribute = get_player(rpg)->common->attributes;
 
     for (; tmp; tmp = tmp->next)
         update_stat_print(tmp);

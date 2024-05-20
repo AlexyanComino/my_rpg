@@ -7,20 +7,46 @@
 
 #include "rpg.h"
 
-
-void update_all(rpg_t *rpg)
+static void anim_decors(decor_anim_t *decor)
 {
-    if (rpg->gamestate != GAME &&
-        rpg->gamestate != PAUSE && rpg->gamestate != END)
-        update_background(rpg);
+    update_clock_seconds(decor->anim->myclock);
+    if (decor->anim->myclock->seconds < decor->speed)
+        return;
+    if (decor->anim->rect.left >= decor->width * decor->nb_cols &&
+        decor->anim->rect.top >= decor->height * decor->nb_rows) {
+        decor->anim->rect.left = 0;
+        decor->anim->rect.top = 0;
+    } else if (decor->anim->rect.left >= decor->width * decor->nb_cols) {
+        decor->anim->rect.left = 0;
+        decor->anim->rect.top += decor->height;
+    } else
+        decor->anim->rect.left += decor->width;
+    sfSprite_setTextureRect(decor->anim->sprite, decor->anim->rect);
+    sfClock_restart(decor->anim->myclock->clock);
+}
+
+static void update_decors_anim(rpg_t *rpg)
+{
+    for (int i = 0; i < (int)rpg->decors_size; i++) {
+        if (!intrect_is_in_view(rpg, rpg->decors[i]->rect))
+            continue;
+        anim_decors(rpg->decors[i]);
+    }
+}
+
+void update(rpg_t *rpg)
+{
+    if (rpg->gamestate == MAIN_MENU || rpg->gamestate == PAUSE ||
+        rpg->gamestate == SETTINGS || rpg->gamestate == SAVE_MENU) {
+        update_decors_anim(rpg);
+    }
     if (rpg->gamestate == GAME) {
         update_game_interface(rpg);
-        sfView_setCenter(rpg->win->view, rpg->ent[0]->common->pos);
-        (*view_pos()) = sfView_getCenter(rpg->win->view);
-        sfRenderWindow_setView(rpg->win->window, rpg->win->view);
+        update_chests(rpg);
         update_entities(rpg);
         update_quest_header(rpg);
         update_quests(rpg);
+        update_decors_anim(rpg);
     }
     if (rpg->gamestate == INVENTORY)
         anim_warrior(rpg, (*inventory())->player_status->player);

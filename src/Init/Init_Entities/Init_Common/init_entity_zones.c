@@ -64,6 +64,25 @@ static sfIntRect get_hitbox_from_type(entity_type_t type, sfVector2f pos)
         return get_hitbox_pawn(pos);
     if (type == TORCH)
         return get_hitbox_torch(pos);
+    if (type == TNT)
+        return get_hitbox_tnt(pos);
+    if (type == ARCHER)
+        return get_hitbox_archer(pos);
+    return (sfIntRect){0, 0, 0, 0};
+}
+
+static sfIntRect get_hitbox_foot_from_type(entity_type_t type, sfVector2f pos)
+{
+    if (type == WARRIOR)
+        return get_hitbox_warrior_foot(pos);
+    if (type == PAWN)
+        return get_hitbox_pawn_foot(pos);
+    if (type == TORCH)
+        return get_hitbox_torch_foot(pos);
+    if (type == TNT)
+        return get_hitbox_tnt_foot(pos);
+    if (type == ARCHER)
+        return get_hitbox_archer_foot(pos);
     return (sfIntRect){0, 0, 0, 0};
 }
 
@@ -77,6 +96,8 @@ zones_entity_t *init_entity_zones(char **infos, sfVector2f pos,
     zones->hitbox_attack = (sfIntRect){0, 0, 0, 0};
     zones->rect_hitbox_attack = init_rect_hitbox(zones->hitbox_attack,
         sfRed);
+    zones->hitbox_foot = get_hitbox_foot_from_type(type, pos);
+    zones->rect_hitbox_foot = init_rect_hitbox(zones->hitbox_foot, sfGreen);
     init_detect(infos, zones);
     return zones;
 }

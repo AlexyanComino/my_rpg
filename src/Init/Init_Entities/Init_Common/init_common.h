@@ -9,9 +9,15 @@
 // Init common
 common_entity_t *init_common(char **infos, entity_type_t type);
 
+// Init common 2
+void init_common2(common_entity_t *common, entity_type_t type);
+
 // Init entity zones
 zones_entity_t *init_entity_zones(char **infos, sfVector2f pos,
     entity_type_t type);
 
 // Get anim
 anim_t *get_anim(entity_type_t type, color_entity_t color);
+
+// Get anim 2
+anim_t *get_anim_archer(color_entity_t color);

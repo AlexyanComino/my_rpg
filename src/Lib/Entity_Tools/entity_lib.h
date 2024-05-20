@@ -17,7 +17,6 @@ bool entity_look_at_enemy(entity_t *entity, entity_t *enemy);
 bool is_player_interact_entity(rpg_t *rpg, entity_t *entity);
 
 // Entity Tools2
-bool is_in_line_of_sight(rpg_t *rpg, sfVector2f start, sfVector2f end);
 bool entity_see_enemy(rpg_t *rpg, entity_t *entity, entity_t *enemy);
 sfColor get_color_from_faction(entity_t *entity);
 bool hitbox_in_detection(sfIntRect hitbox, unsigned int radius,
@@ -28,3 +27,9 @@ bool entity_can_attack_enemy(rpg_t *rpg, entity_t *entity);
 bool entity_can_attack_target(rpg_t *rpg, entity_t *entity, entity_t *target);
 bool entity_can_attack(rpg_t *rpg, entity_t *entity, entity_t *target);
 side_x_t get_entity_side(entity_t *entity, sfVector2f pos);
+entity_t *get_player(rpg_t *rpg);
+bool enemy_is_in_base(entity_t *enemy, entity_t *entity);
+
+// Line of sight
+bool is_in_line_of_sight(rpg_t *rpg, entity_t *entity, sfVector2f start,
+    sfVector2f end);

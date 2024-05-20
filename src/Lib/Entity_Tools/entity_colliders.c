@@ -15,8 +15,8 @@ static bool is_entity_hitbox_collide_entity(rpg_t *rpg, entity_t *entity,
             rpg->ent[i] == entity ||
             !is_alive(rpg->ent[i]))
             continue;
-        if (sfIntRect_intersects(&hitbox, &rpg->ent[i]->common->zones->hitbox,
-            NULL))
+        if (sfIntRect_intersects(&hitbox,
+            &rpg->ent[i]->common->zones->hitbox_foot, NULL))
             return (true);
     }
     return (false);

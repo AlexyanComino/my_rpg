@@ -38,7 +38,7 @@ static side_x_t get_job_side(char *side)
     return LEFT;
 }
 
-static item_type_t get_item_type(char *item)
+static item_pawn_type_t get_item_type(char *item)
 {
     if (!strcmp(item, "W"))
         return WOOD;
@@ -58,7 +58,7 @@ static carry_t *get_pawn_carry(pawn_t *pawn, char **infos)
     carry = malloc(sizeof(carry_t));
     carry->obj_pos = (sfVector2f){atoi(infos[16]), atoi(infos[17])};
     carry->item_type = get_item_type(infos[18]);
-    carry->item = init_item(carry->item_type);
+    carry->item = init_item_pawn(carry->item_type);
     return carry;
 }
 
@@ -68,6 +68,8 @@ static pawn_t *init_pawn(char **infos)
 
     pawn->job = get_job(infos[12]);
     pawn->job_pos = (sfVector2f){atoi(infos[13]), atoi(infos[14])};
+    if (pawn->job == NO_JOB)
+        return pawn;
     pawn->myclock = init_my_clock();
     pawn->job_cooldown = get_new_job_cooldown(pawn->job);
     pawn->job_side = get_job_side(infos[15]);
@@ -95,5 +97,6 @@ entity_t *init_entity_pawn(char **infos)
     entity->disp = &display_pawn;
     entity->get_hitbox = &get_hitbox_pawn;
     entity->get_hitbox_attack = &get_hitbox_attack_pawn;
+    entity->get_hitbox_foot = &get_hitbox_pawn_foot;
     return entity;
 }

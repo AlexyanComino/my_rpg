@@ -9,8 +9,9 @@
 #include "rpg.h"
 
 // Tools
-float get_distance_between_pos(sfVector2f center1, sfVector2f center2);
+float get_distance(sfVector2f center1, sfVector2f center2);
 void update_clock_seconds(my_clock_t *myclock);
+int tab_len(char **tab);
 
 // My_str_to_word_array
 char **split_string(char *str, char *delim);
@@ -22,3 +23,7 @@ bool entity_is_in_view(rpg_t *rpg, entity_t *entity);
 // file_to_array
 char **file_to_array(char *path);
 void free_array(char **array);
+
+// Item tools
+item_t *get_item_from_name(rpg_t *rpg, char *name, enum item_type type);
+void add_item_from_type(rpg_t *rpg, char *name, enum item_type type);

@@ -7,13 +7,22 @@
 
 #include "rpg.h"
 
-static void get_newpos_and_newx(entity_t *player, sfVector2f *newPos,
-    float dt)
+static float get_player_speed(rpg_t *rpg, entity_t *player)
 {
-    float speed = is_slow(player) ?
-        player->common->attributes->speed / 2 :
-        player->common->attributes->speed;
+    if (rpg->debug && sfKeyboard_isKeyPressed(sfKeyLShift))
+        return player->common->attributes->speed * 4;
+    else if (is_slow(player))
+        return player->common->attributes->speed / 2;
+    return player->common->attributes->speed;
+}
 
+static void get_newpos_and_newx(rpg_t *rpg, entity_t *player,
+    sfVector2f *newPos, float dt)
+{
+    float speed = get_player_speed(rpg, player);
+
+    if (sfKeyboard_isKeyPressed(sfKeyZ) || sfKeyboard_isKeyPressed(sfKeyS))
+        speed /= sqrt(2.0f);
     if (sfKeyboard_isKeyPressed(sfKeyQ)) {
         player->common->x = LEFT;
         newPos->x -= speed * dt;
@@ -28,23 +37,22 @@ static void update_player_x(rpg_t *rpg, entity_t *player)
     sfVector2f newPos = player->common->pos;
     sfIntRect newHitbox;
 
-    get_newpos_and_newx(player, &newPos, rpg->win->dt);
-    newHitbox = player->get_hitbox(newPos);
+    get_newpos_and_newx(rpg, player, &newPos, rpg->win->dt);
+    newHitbox = player->get_hitbox_foot(newPos);
     if (!is_entity_hitbox_collide(rpg, player, newHitbox) ||
         (rpg->debug && player->common->state == WALK)) {
         player->common->pos.x = newPos.x;
-        player->common->zones->hitbox = newHitbox;
     }
 }
 
 //
-static void get_newpos_and_newy(entity_t *player, sfVector2f *newPos,
-    float dt)
+static void get_newpos_and_newy(rpg_t *rpg, entity_t *player,
+    sfVector2f *newPos, float dt)
 {
-    float speed = is_slow(player) ?
-        player->common->attributes->speed / 2 :
-        player->common->attributes->speed;
+    float speed = get_player_speed(rpg, player);
 
+    if (sfKeyboard_isKeyPressed(sfKeyQ) || sfKeyboard_isKeyPressed(sfKeyD))
+        speed /= sqrt(2.0f);
     if (sfKeyboard_isKeyPressed(sfKeyZ) && sfKeyboard_isKeyPressed(sfKeyS)) {
         player->common->y = NONE;
         return;
@@ -52,14 +60,12 @@ static void get_newpos_and_newy(entity_t *player, sfVector2f *newPos,
     if (sfKeyboard_isKeyPressed(sfKeyZ)) {
         player->common->y = UP;
         newPos->y -= speed * dt;
-        return;
-    }
-    if (sfKeyboard_isKeyPressed(sfKeyS)) {
+    } else if (sfKeyboard_isKeyPressed(sfKeyS)) {
         player->common->y = DOWN;
         newPos->y += speed * dt;
-        return;
+    } else {
+        player->common->y = NONE;
     }
-    player->common->y = NONE;
 }
 
 static void update_player_y(rpg_t *rpg, entity_t *player)
@@ -67,12 +73,11 @@ static void update_player_y(rpg_t *rpg, entity_t *player)
     sfVector2f newPos = player->common->pos;
     sfIntRect newHitbox;
 
-    get_newpos_and_newy(player, &newPos, rpg->win->dt);
-    newHitbox = player->get_hitbox(newPos);
+    get_newpos_and_newy(rpg, player, &newPos, rpg->win->dt);
+    newHitbox = player->get_hitbox_foot(newPos);
     if (!is_entity_hitbox_collide(rpg, player, newHitbox) ||
         (rpg->debug && player->common->state == WALK)) {
         player->common->pos.y = newPos.y;
-        player->common->zones->hitbox = newHitbox;
     }
 }
 
@@ -113,9 +118,9 @@ static void event_player_move(entity_t *player)
     }
 }
 
-void player_move(rpg_t *rpg)
+static void player_move(rpg_t *rpg)
 {
-    entity_t *player = rpg->ent[0];
+    entity_t *player = get_player(rpg);
     sfVector2f oldPos = player->common->pos;
 
     event_player_move(player);
@@ -126,4 +131,13 @@ void player_move(rpg_t *rpg)
         oldPos.y != player->common->pos.y) {
         update_interface_pos(rpg, player, oldPos);
     }
+}
+
+void player_move_event(rpg_t *rpg)
+{
+    entity_t *player = get_player(rpg);
+
+    if (!in_action(player) && is_alive(player) && !is_stunned(player) &&
+        player->common->state != INTERACT)
+        player_move(rpg);
 }

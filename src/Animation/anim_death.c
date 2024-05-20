@@ -15,6 +15,8 @@ static void reset_common(common_entity_t *common)
     common->death->number_dead = 0;
     common->attributes->health = common->attributes->max_health;
     common->state = IDLE;
+    common->health_bar->front->size = common->health_bar->front->init_size;
+    common->health_bar->front->r = common->health_bar->front->init_r;
 }
 
 static void animation_dead3(common_entity_t *common, bool time_elapsed)

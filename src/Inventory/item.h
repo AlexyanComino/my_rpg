@@ -11,6 +11,5 @@
 #include <stdlib.h>
 #include "rpg.h"
 
-weapon_t *create_weapon(int damage, char *name);
-armor_t *create_armor(int defense, int speed, int armor_type, char *name);
-sfText *init_text(sfVector2f pos, int size, sfColor color, char *val);
+weapon_t *create_weapon(rpg_t *rpg, char *name);
+armor_t *create_armor(rpg_t *rpg, char *name);

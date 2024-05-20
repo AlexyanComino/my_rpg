@@ -7,14 +7,14 @@
 
 #include "rpg.h"
 
-void anim_line(common_entity_t *common, int offset, int width, float time)
+void anim_line(anim_t *anim, int offset, int width, float time)
 {
-    if (common->anim->myclock->seconds > time) {
-        if (common->anim->rect.left >= offset) {
-            common->anim->rect.left = 0;
+    if (anim->myclock->seconds > time) {
+        if (anim->rect.left >= offset) {
+            anim->rect.left = 0;
         } else
-            common->anim->rect.left += width;
-        sfSprite_setTextureRect(common->anim->sprite, common->anim->rect);
-        sfClock_restart(common->anim->myclock->clock);
+            anim->rect.left += width;
+        sfSprite_setTextureRect(anim->sprite, anim->rect);
+        sfClock_restart(anim->myclock->clock);
     }
 }

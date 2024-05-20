@@ -13,10 +13,6 @@ static void destroy_menu(menu_t *menu)
     button_t *tmp = menu->buttons;
     button_t *next = NULL;
 
-    sfTexture_destroy(menu->background_texture);
-    sfSprite_destroy(menu->background);
-    if (menu->myclock != NULL)
-    sfClock_destroy(menu->myclock->clock);
     while (tmp) {
         next = tmp->next;
         sfText_destroy(tmp->text);
@@ -34,7 +30,6 @@ static void destroy_menu(menu_t *menu)
 void destroy_menus(rpg_t *rpg)
 {
     destroy_menu(rpg->main_menu);
-    destroy_menu(rpg->save_menu);
     destroy_menu(rpg->settings);
 }
 
@@ -61,7 +56,7 @@ void destroy_quests(rpg_t *rpg)
     }
 }
 
-void destroy_rpg(rpg_t *rpg)
+void destroy(rpg_t *rpg)
 {
     destroy_menus(rpg);
     destroy_quests(rpg);
