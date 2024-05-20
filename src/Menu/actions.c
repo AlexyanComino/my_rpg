@@ -10,6 +10,7 @@
 void start(rpg_t *rpg)
 {
     rpg->gamestate = GAME;
+    rpg->win->zoom = 1;
     sfSprite_setOrigin(rpg->inventory->player_status->s_hp,
         (sfVector2f){0, 0});
     sfSprite_setOrigin(rpg->inventory->player_status->s_attack,
