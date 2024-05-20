@@ -28,6 +28,9 @@ void highlight_inventory(sfMouseMoveEvent event, slot_t *tmp)
         tmp->is_highlighted = (sfFloatRect_contains(&rect,
         event.x + (*view_pos()).x - 1920 / 2,
         event.y + (*view_pos()).y - 1080 / 2)) ? 1 : 0;
+        sfSprite_setPosition((*inventory())->desc_sprite,
+        (sfVector2f){event.x + (*view_pos()).x - 1920 / 2,
+        event.y + (*view_pos()).y - 1080 / 2});
         if (tmp->is_clicked && tmp->is_empty == 0 && tmp->type == WEAPON) {
             sfSprite_setPosition((weapon_t *){tmp->item}->sprite,
             (sfVector2f){event.x - 15 + (*view_pos()).x - 1920 / 2,

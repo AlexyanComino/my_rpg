@@ -12,7 +12,7 @@ int main(void)
     rpg_t *rpg = init_rpg();
 
     for (int i = 0; i < 15; i++)
-        add_item(create_weapon(50), WEAPON);
+        add_item(create_weapon(50, "Epee"), WEAPON);
     for (int i = 1; i < 15; i++)
         remove_item(i, (*inventory())->slot);
     (*inventory())->quest = rpg->quests;

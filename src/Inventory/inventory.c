@@ -22,13 +22,16 @@ int init_inventory(int size)
     inv->quest = NULL;
     inv->scroll = 0;
     inv->scroll_max = 0;
+    inv->desc = init_text((sfVector2f){0, 0}, 30, sfColor_fromRGB(135, 195, 155), " ");
+    inv->desc_sprite = init_sprite_from_file("assets/inventory/desc_inv.png");
+    sfSprite_setScale(inv->desc_sprite, (sfVector2f){1.5, 1.5});
     inv->sprite = init_sprite_from_file("assets/inventory/1.png");
     inv->player_status = init_player_status();
     sfSprite_setScale(inv->sprite, (sfVector2f){2, 2});
     sfSprite_setPosition(inv->sprite, (sfVector2f){0, 80});
     *inventory() = inv;
     for (int i = 0; i < 4; i++)
-        add_stuff(create_armor(10, 10, 1, 10), ARMOR);
+        add_stuff(create_armor(10, 10, 1, "Armor"), ARMOR);
     for (int i = 0; i <= 4; i++)
         remove_item(i, (*inventory())->player_status->stuff);
     return (0);
@@ -148,8 +151,9 @@ int draw_item(sfRenderWindow *window, slot_t *tmp)
         {sfSprite_getPosition(tmp->sprite).x + 8,
         sfSprite_getPosition(tmp->sprite).y + 9});
     }
-    if (tmp->is_highlighted == 1)
+    if (tmp->is_highlighted == 1) {
         sfRenderWindow_drawSprite(window, tmp->highlight, NULL);
+    }
     return 0;
 }
 
@@ -164,6 +168,36 @@ static void update_cursor_inv(sfRenderWindow *window)
         if (tmp->is_empty == 0 && tmp->type == ARMOR && tmp->is_moved == 1) {
             sfRenderWindow_drawSprite(window,
             (armor_t *){tmp->item}->sprite, NULL);
+        }
+    }
+}
+
+static void draw_desc(sfRenderWindow *window)
+{
+    sfVector2f pos = {180, 500};
+
+    for (slot_t *tmp = (*inventory())->slot; tmp; tmp = tmp->next) {
+        if (tmp->is_highlighted && tmp->is_empty == 0) {
+            if (tmp->type == WEAPON)
+                sfText_setString((*inventory())->desc, (weapon_t *){tmp->item}->name);
+            if (tmp->type == ARMOR)
+                sfText_setString((*inventory())->desc, (armor_t *){tmp->item}->name);
+            pos = sfSprite_getPosition((*inventory())->desc_sprite);
+            sfText_setPosition((*inventory())->desc, (sfVector2f){pos.x + 100, pos.y + 60});
+            sfRenderWindow_drawSprite(window, (*inventory())->desc_sprite, NULL);
+            sfRenderWindow_drawText(window, (*inventory())->desc, NULL);
+        }
+    }
+    for (slot_t *tmp = (*inventory())->player_status->stuff; tmp; tmp = tmp->next) {
+        if (tmp->is_empty == 0 && tmp->is_highlighted == 1) {
+            if (tmp->type == WEAPON)
+                sfText_setString((*inventory())->desc, (weapon_t *){tmp->item}->name);
+            if (tmp->type == ARMOR)
+                sfText_setString((*inventory())->desc, (armor_t *){tmp->item}->name);
+            pos = sfSprite_getPosition((*inventory())->desc_sprite);
+            sfText_setPosition((*inventory())->desc, (sfVector2f){pos.x + 100, pos.y + 60});
+            sfRenderWindow_drawSprite(window, (*inventory())->desc_sprite, NULL);
+            sfRenderWindow_drawText(window, (*inventory())->desc, NULL);
         }
     }
 }
@@ -184,6 +218,7 @@ static int draw_slot(sfRenderWindow *window)
             (armor_t *){tmp->item}->sprite, NULL);
         }
     }
+    draw_desc(window);
     update_cursor_inv(window);
     return (0);
 }

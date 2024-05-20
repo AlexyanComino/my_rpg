@@ -33,11 +33,12 @@ int remove_gold(int gold)
     return (0);
 }
 
-weapon_t *create_weapon(int damage)
+weapon_t *create_weapon(int damage, char *name)
 {
     weapon_t *weapon = malloc(sizeof(weapon_t));
 
     weapon->damage = damage;
+    weapon->name = name;
     weapon->is_equipped = 0;
     weapon->sprite = init_sprite_from_file
     ("assets/item/Weapon & Tool/Iron Sword.png");
@@ -45,7 +46,7 @@ weapon_t *create_weapon(int damage)
     return (weapon);
 }
 
-armor_t *create_armor(int defense, int speed, int armor_type, int endurance)
+armor_t *create_armor(int defense, int speed, int armor_type, char *name)
 {
     armor_t *armor = malloc(sizeof(armor_t));
 
@@ -53,7 +54,7 @@ armor_t *create_armor(int defense, int speed, int armor_type, int endurance)
     armor->speed = speed;
     armor->armor_type = armor_type;
     armor->is_equipped = 0;
-    armor->endurance = endurance;
+    armor->name = name;
     armor->sprite = init_sprite_from_file
     ("assets/item/Equipment/Iron Armor.png");
     sfSprite_setScale(armor->sprite, (sfVector2f){1.5, 1.5});
