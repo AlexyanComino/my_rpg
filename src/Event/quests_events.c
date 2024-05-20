@@ -55,7 +55,6 @@ int check_quest_already_done(rpg_t *rpg, quest_t *quest)
                 printf("Quest already done: %s\n", quest->name);
                 return 0;
             }
-        
         }
     }
     return 1;
