@@ -39,11 +39,87 @@ static health_bar_t *init_health_bar_interface(void)
     return health_bar;
 }
 
+static void init_popup_item_text(sfText *text, int size, sfColor color,
+    sfColor outline)
+{
+    sfColor color_png = {color.r, color.g, color.b, 0};
+    sfColor outline_png = {outline.r, outline.g, outline.b, 0};
+
+    sfText_setCharacterSize(text, size);
+    sfText_setColor(text, color_png);
+    sfText_setOutlineThickness(text, 1);
+    sfText_setOutlineColor(text, outline_png);
+}
+
+static void init_popup_item2(popup_item_t *popup_item)
+{
+    sfSprite_setColor(popup_item->back_sprite, (sfColor){255, 255, 255, 0});
+    popup_item->font = sfFont_createFromFile("assets/fonts/Say Comic.ttf");
+    popup_item->item_name = sfText_create();
+    sfText_setFont(popup_item->item_name, popup_item->font);
+    init_popup_item_text(popup_item->item_name, 40, sfWhite, sfBlack);
+    popup_item->item_sprite = NULL;
+    popup_item->item_texture = NULL;
+    popup_item->item_description = sfText_create();
+    sfText_setFont(popup_item->item_description, popup_item->font);
+    init_popup_item_text(popup_item->item_description, 18, sfWhite, sfBlack);
+    sfText_setLineSpacing(popup_item->item_description, 1.5);
+    popup_item->rarity = sfText_create();
+    sfText_setFont(popup_item->rarity, popup_item->font);
+    init_popup_item_text(popup_item->rarity, 20, sfWhite, sfBlack);
+    popup_item->skip_text = sfText_create();
+    sfText_setFont(popup_item->skip_text, popup_item->font);
+    sfText_setString(popup_item->skip_text, "Press E to skip");
+    init_popup_item_text(popup_item->skip_text, 20, sfBlack, sfWhite);
+    popup_item->display = 0;
+}
+
+static popup_item_t *init_popup_item(void)
+{
+    popup_item_t *pop = malloc(sizeof(popup_item_t));
+    sfFloatRect rect;
+
+    pop->back_texture = sfTexture_createFromFile(
+        "assets/interface/popup_item.png", NULL);
+    pop->back_sprite = sfSprite_create();
+    sfSprite_setTexture(pop->back_sprite, pop->back_texture, sfTrue);
+    pop->light_texture = sfTexture_createFromFile(
+        "assets/interface/light.png", NULL);
+    pop->light_sprite = sfSprite_create();
+    sfSprite_setTexture(pop->light_sprite, pop->light_texture, sfTrue);
+    pop->light_angle = 0;
+    rect = sfSprite_getGlobalBounds(pop->light_sprite);
+    sfSprite_setOrigin(pop->light_sprite,
+        (sfVector2f){rect.width / 2, rect.height / 2});
+    rect = sfSprite_getGlobalBounds(pop->back_sprite);
+    sfSprite_setOrigin(pop->back_sprite,
+        (sfVector2f){rect.width / 2, rect.height / 2});
+    init_popup_item2(pop);
+    return pop;
+}
+
+static player_infos_t *init_player_infos(void)
+{
+    player_infos_t *player_infos = malloc(sizeof(player_infos_t));
+
+    player_infos->font = sfFont_createFromFile("assets/fonts/Say Comic.ttf");
+    player_infos->player_text = sfText_create();
+    sfText_setFont(player_infos->player_text, player_infos->font);
+    sfText_setCharacterSize(player_infos->player_text, 30);
+    sfText_setColor(player_infos->player_text, sfColor_fromRGB(103, 211, 255));
+    sfText_setOutlineThickness(player_infos->player_text, 2);
+    sfText_setOutlineColor(player_infos->player_text, sfBlack);
+    sfText_setString(player_infos->player_text, "Pablodrigo");
+    return player_infos;
+}
+
 interface_t *init_interface(void)
 {
     interface_t *interface = malloc(sizeof(interface_t));
 
     interface->restricted = init_restricted();
     interface->health_bar = init_health_bar_interface();
+    interface->popup_item = init_popup_item();
+    interface->player_infos = init_player_infos();
     return interface;
 }

@@ -233,7 +233,8 @@ int open_inventory(rpg_t *rpg)
         draw_inventory_ui(rpg->win->window, *inventory());
         draw_stuff(rpg->win->window);
         draw_slot(rpg->win->window);
-        display_warrior(rpg, (*inventory())->player_status->player);
+        (*inventory())->player_status->player->disp(rpg,
+            (*inventory())->player_status->player);
     }
     if ((*inventory())->is_open == 0) {
         for (slot_t *tmp = (*inventory())->slot; tmp; tmp = tmp->next)

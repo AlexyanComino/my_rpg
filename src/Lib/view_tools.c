@@ -7,6 +7,19 @@
 
 #include "rpg.h"
 
+bool intrect_is_in_view_menu(rpg_t *rpg, sfIntRect hitbox)
+{
+    sfVector2f view_pos = sfView_getCenter(rpg->win->view_menu);
+    sfVector2f view_size = sfView_getSize(rpg->win->view_menu);
+
+    if (hitbox.left + hitbox.width < view_pos.x - view_size.x ||
+        hitbox.left > view_pos.x + view_size.x ||
+        hitbox.top + hitbox.height < view_pos.y - view_size.y ||
+        hitbox.top > view_pos.y + view_size.y)
+        return (false);
+    return (true);
+}
+
 bool intrect_is_in_view(rpg_t *rpg, sfIntRect hitbox)
 {
     sfVector2f view_pos = sfView_getCenter(rpg->win->view);

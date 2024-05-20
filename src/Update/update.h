@@ -30,3 +30,6 @@ void init_map_pos(rpg_t *rpg);
 
 // Update chests
 void update_chests(rpg_t *rpg);
+
+// Update popup item
+void update_popup_item(rpg_t *rpg);

@@ -53,6 +53,14 @@ int click_inventory(rpg_t *rpg, slot_t *tmp)
     return (0);
 }
 
+static void replace_slot_item(slot_t *tmp, slot_t *tmp2)
+{
+    tmp2->type = tmp->type;
+    tmp2->item = tmp->item;
+    tmp->name = tmp2->name;
+    tmp2->name = NULL;
+}
+
 static void slot_click(slot_t *tmp, slot_t *tmp2, rpg_t *rpg)
 {
     sfFloatRect rect = {0, 0, 0, 0};
@@ -64,8 +72,7 @@ static void slot_click(slot_t *tmp, slot_t *tmp2, rpg_t *rpg)
         (tmp2->access == ALL || tmp->type == tmp2->access)) {
             tmp2->is_empty = 0;
             tmp2->is_active = 0;
-            tmp2->type = tmp->type;
-            tmp2->item = tmp->item;
+            replace_slot_item(tmp, tmp2);
             unapply_stuff(tmp);
             tmp->is_empty = 1;
             tmp->is_moved = 0;

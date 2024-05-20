@@ -87,15 +87,11 @@ static int setup_text(player_status_t *player_status)
 player_status_t *init_player_status(void)
 {
     player_status_t *player_status = malloc(sizeof(player_status_t));
-    char **lines = file_to_array(".player.csv");
-    char **infos = split_string(lines[0], ";");
 
     setup_value(player_status);
     setup_sprite(player_status);
     setup_text(player_status);
-    player_status->player = init_entity_warrior(infos);
-    sfSprite_setScale(player_status->player->common->anim->sprite,
-        (sfVector2f){1.3, 1.3});
+    player_status->player = NULL;
     player_status->pp = init_sprite_from_file("assets/inventory/19.png");
     sfSprite_setScale(player_status->pp, (sfVector2f){2, 2});
     sfSprite_setPosition(player_status->pp, (sfVector2f){180, 410});

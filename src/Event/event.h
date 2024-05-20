@@ -40,3 +40,9 @@ void event_map(rpg_t *rpg);
 
 // Event game
 void event_game(rpg_t *rpg);
+
+// Event chests
+void event_chests(rpg_t *rpg, sfKeyCode key);
+
+// Description handling
+char *description_handling(char *description);

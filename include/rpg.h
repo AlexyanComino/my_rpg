@@ -484,9 +484,32 @@ typedef struct restricted_s {
     bool in_base;
 } restricted_t;
 
+typedef struct popup_item_s {
+    sfSprite *back_sprite;
+    sfTexture *back_texture;
+    sfSprite *light_sprite;
+    sfTexture *light_texture;
+    float light_angle;
+    sfFont *font;
+    sfText *item_name;
+    sfSprite *item_sprite;
+    sfTexture *item_texture;
+    sfText *item_description;
+    sfText *rarity;
+    sfText *skip_text;
+    int display;
+} popup_item_t;
+
+typedef struct player_infos_s {
+    sfText *player_text;
+    sfFont *font;
+} player_infos_t;
+
 typedef struct interface_s {
     restricted_t *restricted;
     health_bar_t *health_bar;
+    popup_item_t *popup_item;
+    player_infos_t *player_infos;
 } interface_t;
 
 typedef enum quest_type {
@@ -869,9 +892,19 @@ typedef struct chest_s {
     bool is_recieved;
 } chest_t;
 
+typedef enum rarity_s {
+    COMMON,
+    UNCOMMON,
+    RARE,
+    EPIC,
+    LEGENDARY,
+} rarity_t;
+
 typedef struct item_s {
     char *name;
     char *texture_path;
+    char *description;
+    rarity_t rarity;
     enum item_type type;
     int damage;
     int defense;

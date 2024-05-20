@@ -28,9 +28,32 @@ static void anim_decors(decor_anim_t *decor)
 static void update_decors_anim(rpg_t *rpg)
 {
     for (int i = 0; i < (int)rpg->decors_size; i++) {
-        if (!intrect_is_in_view(rpg, rpg->decors[i]->rect))
+        if (!intrect_is_in_view_menu(rpg, rpg->decors[i]->rect))
             continue;
         anim_decors(rpg->decors[i]);
+    }
+}
+
+static void update_anim_inventory(rpg_t *rpg)
+{
+    entity_t *entity = rpg->inventory->player_status->player;
+
+    switch (get_player(rpg)->type) {
+        case WARRIOR:
+            anim_warrior(rpg, entity);
+            break;
+        case PAWN:
+            anim_pawn(rpg, entity);
+            break;
+        case TORCH:
+            anim_torch(rpg, entity);
+            break;
+        case TNT:
+            anim_tnt(entity);
+            break;
+        case ARCHER:
+            anim_archer(rpg, entity);
+            break;
     }
 }
 
@@ -49,5 +72,5 @@ void update(rpg_t *rpg)
         update_decors_anim(rpg);
     }
     if (rpg->gamestate == INVENTORY)
-        anim_warrior(rpg, (*inventory())->player_status->player);
+        update_anim_inventory(rpg);
 }
