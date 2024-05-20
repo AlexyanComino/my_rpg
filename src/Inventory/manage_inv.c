@@ -24,7 +24,6 @@ void highlight_inventory(rpg_t *rpg, slot_t *tmp)
     sfFloatRect rect = {0, 0, 0, 0};
     sfVector2f pos = rpg->win->mouse_pos;
 
-    printf("x %f y %f\n", pos.x, pos.y);
     for (; tmp; tmp = tmp->next) {
         rect = sfSprite_getGlobalBounds(tmp->sprite);
         tmp->is_highlighted = (sfFloatRect_contains(&rect, pos.x, pos.y)) ? 1 : 0;
@@ -41,28 +40,27 @@ void highlight_inventory(rpg_t *rpg, slot_t *tmp)
     }
 }
 
-int click_inventory(sfMouseButtonEvent event, slot_t *tmp)
+int click_inventory(rpg_t *rpg, slot_t *tmp)
 {
     sfFloatRect rect = {0, 0, 0, 0};
+    sfVector2f pos = rpg->win->mouse_pos;
 
     for (; tmp; tmp = tmp->next) {
         rect = sfSprite_getGlobalBounds(tmp->sprite);
-        tmp->is_clicked = (sfFloatRect_contains(&rect,
-        event.x + (*view_pos()).x - 1920 / 2,
-        event.y + (*view_pos()).y - 1080 / 2))
+        tmp->is_clicked = (sfFloatRect_contains(&rect, pos.x, pos.y))
         ? 1 : 0;
     }
     return (0);
 }
 
-static void slot_click(slot_t *tmp, slot_t *tmp2, sfMouseButtonEvent event)
+static void slot_click(slot_t *tmp, slot_t *tmp2, rpg_t *rpg)
 {
     sfFloatRect rect = {0, 0, 0, 0};
+    sfVector2f pos = rpg->win->mouse_pos;
 
     for (; tmp2; tmp2 = tmp2->next) {
         rect = sfSprite_getGlobalBounds(tmp2->sprite);
-        if (sfFloatRect_contains(&rect, event.x + (*view_pos()).x - 1920 / 2,
-        event.y + (*view_pos()).y - 1080 / 2) && tmp2->is_empty == 1 &&
+        if (sfFloatRect_contains(&rect, pos.x, pos.y) && tmp2->is_empty == 1 &&
         (tmp2->access == ALL || tmp->type == tmp2->access)) {
             tmp2->is_empty = 0;
             tmp2->is_active = 0;
@@ -79,13 +77,13 @@ static void slot_click(slot_t *tmp, slot_t *tmp2, sfMouseButtonEvent event)
     }
 }
 
-int release_inventory(sfMouseButtonEvent event, slot_t *tmp)
+int release_inventory(rpg_t *rpg, slot_t *tmp)
 {
     for (; tmp; tmp = tmp->next) {
         if (tmp->is_clicked == 1) {
             tmp->is_clicked = 0;
-            slot_click(tmp, (*inventory())->slot, event);
-            slot_click(tmp, (*inventory())->player_status->stuff, event);
+            slot_click(tmp, (*inventory())->slot, rpg);
+            slot_click(tmp, (*inventory())->player_status->stuff, rpg);
             tmp->is_moved = 0;
         }
     }
@@ -109,15 +107,13 @@ int manage_evt_inv(sfEvent event, rpg_t *rpg)
     }
     if (event.type == sfEvtMouseButtonPressed &&
     event.mouseButton.button == sfMouseLeft && (*inventory())->is_open) {
-        click_inventory(event.mouseButton, (*inventory())->slot);
-        click_inventory(event.mouseButton,
-        (*inventory())->player_status->stuff);
+        click_inventory(rpg, (*inventory())->slot);
+        click_inventory(rpg, (*inventory())->player_status->stuff);
     }
     if (event.type == sfEvtMouseButtonReleased &&
     event.mouseButton.button == sfMouseLeft && (*inventory())->is_open) {
-        release_inventory(event.mouseButton, (*inventory())->slot);
-        release_inventory(event.mouseButton,
-        (*inventory())->player_status->stuff);
+        release_inventory(rpg, (*inventory())->slot);
+        release_inventory(rpg, (*inventory())->player_status->stuff);
     }
     return 0;
 }
