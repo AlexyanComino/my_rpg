@@ -11,3 +11,4 @@
 
 sfVector2f *view_pos(void);
 inventory_t **inventory(void);
+sfText *init_text(sfVector2f pos, int size, sfColor color, char *val);

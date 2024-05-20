@@ -11,6 +11,7 @@ static void display_restricted_text(rpg_t *rpg)
 {
     restricted_t *restricted = rpg->interface->restricted;
     entity_t *player = get_player(rpg);
+
     if (!is_alive(player))
         return;
     sfRenderWindow_drawSprite(rpg->win->window, restricted->sprite, NULL);

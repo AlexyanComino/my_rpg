@@ -15,7 +15,6 @@
 
 #define WARRIOR_WIDTH 192
 
-int init_inventory(rpg_t *rpg, int size);
 int remove_item(int id, slot_t *tmp);
 int remove_gold(int gold);
 int add_gold(int gold);
@@ -29,7 +28,6 @@ sfSprite *init_sprite_from_file(char *texture);
 int add_stuff(void *item, int type);
 int draw_stuff(sfRenderWindow *window);
 int draw_item(sfRenderWindow *window, slot_t *tmp);
-
 
 int manage_evt_inv(sfEvent event, rpg_t *rpg);
 int display_inv(rpg_t *rpg);
