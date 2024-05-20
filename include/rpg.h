@@ -743,6 +743,8 @@ typedef struct inventory_s {
     all_quests_t *quest;
     int scroll;
     int scroll_max;
+    sfText *desc;
+    sfSprite *desc_sprite;
     slot_t *slot;
     sfSprite *sprite;
     player_status_t *player_status;
@@ -750,6 +752,7 @@ typedef struct inventory_s {
 
 
 typedef struct weapon_s {
+    char *name;
     int damage;
     int is_equipped;
     sfSprite *sprite;
@@ -766,6 +769,7 @@ typedef struct armor_s {
     int speed;
     int armor_type;
     int is_equipped;
+    char *name;
     int endurance;
     sfSprite *sprite;
 } armor_t;

@@ -12,6 +12,7 @@ void update(rpg_t *rpg);
 // Update quests
 void update_quests(rpg_t *rpg);
 void update_quest_header(rpg_t *rpg);
+void quest_done_item(rpg_t *rpg, char *item);
 
 // Update interface pos
 void update_interface_pos(rpg_t *rpg, entity_t *player, sfVector2f oldPos);

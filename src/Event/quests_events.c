@@ -38,19 +38,50 @@ void interact_with_entity(rpg_t *rpg, entity_t *entity)
     }
 }
 
+int check_quest_already_done(rpg_t *rpg, quest_t *quest)
+{
+    slot_t *tmp = rpg->inventory->slot;
+    entity_t *player = get_player(rpg);
+
+    if (quest->type == GATHER) {
+        for (; tmp; tmp = tmp->next) {
+            if (tmp->item == NULL)
+                continue;
+            if (strcmp(tmp->name, quest->objective) == 0) {
+                quest->is_done = true;
+                rpg->text_box->is_displayed = false;
+                rpg->quest_header->state = Q_END;
+                player->common->state = IDLE;
+                printf("Quest already done: %s\n", quest->name);
+                return 0;
+            }
+        
+        }
+    }
+    return 1;
+}
+
 void accept_quest(rpg_t *rpg)
 {
     all_quests_t *tmp = rpg->quests;
+    quest_t *tmp_quest = NULL;
     entity_t *player = get_player(rpg);
 
     while (tmp != NULL) {
-        if (!strcmp(tmp->proprietary, rpg->text_box->entity->common->name) &&
-                tmp->quest->is_active == false) {
-            tmp->quest->is_active = true;
-            rpg->text_box->is_displayed = false;
-            rpg->quest_header->state = Q_START;
-            player->common->state = IDLE;
-            printf("Quest accepted: %s\n", tmp->quest->name);
+        for (tmp_quest = tmp->quest; tmp_quest; tmp_quest = tmp_quest->next) {
+            if (tmp_quest->is_done == true)
+                continue;
+            if (!strcmp(tmp->proprietary, rpg->text_box->entity->common->name) &&
+                    tmp_quest->is_active == false) {
+                if (check_quest_already_done(rpg, tmp_quest) == 0)
+                    return;
+                tmp_quest->is_active = true;
+                rpg->text_box->is_displayed = false;
+                rpg->quest_header->state = Q_START;
+                player->common->state = IDLE;
+                printf("Quest accepted: %s\n", tmp_quest->name);
+                return;
+            }
         }
         tmp = tmp->next;
     }

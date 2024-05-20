@@ -53,6 +53,7 @@ void choice_action(rpg_t *rpg)
 {
     button_t *tmp = rpg->text_box->choice;
 
+    printf("Choice: %s\n", tmp->name);
     for (; tmp != NULL; tmp = tmp->next) {
         if (tmp->state == HOVERED)
             tmp->action(rpg);
