@@ -39,7 +39,7 @@ weapon_t *create_weapon(rpg_t *rpg, char *name)
 
     weapon->damage = item->damage;
     weapon->is_equipped = 0;
-    weapon->name = item->name;
+    weapon->name = strdup(item->name);
     weapon->sprite = init_sprite_from_file
     (item->texture_path);
     sfSprite_setScale(weapon->sprite, (sfVector2f){1.5, 1.5});

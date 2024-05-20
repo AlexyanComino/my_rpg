@@ -85,6 +85,7 @@ int remove_item(int id, slot_t *tmp)
             tmp->is_empty = 1;
             tmp->item = NULL;
             tmp->type = OTHER;
+            tmp->name = NULL;
             return (0);
         }
         tmp = tmp->next;

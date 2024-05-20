@@ -47,6 +47,14 @@ int check_quest_already_done(rpg_t *rpg, quest_t *quest)
         for (; tmp; tmp = tmp->next) {
             if (tmp->item == NULL)
                 continue;
+            if (tmp->type == WEAPON) {
+                weapon_t *weapon = (weapon_t *)tmp->item;
+                printf("Weapon: %s\n", weapon->name);
+            }
+            printf("aaa\n");
+            printf("Objective: %s\n", quest->objective);
+            printf("bbbb\n");
+            printf("Item: %s\n", tmp->name);
             if (strcmp(tmp->name, quest->objective) == 0) {
                 quest->is_done = true;
                 rpg->text_box->is_displayed = false;
