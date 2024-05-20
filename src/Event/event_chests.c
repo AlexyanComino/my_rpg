@@ -103,6 +103,7 @@ static void chest_is_interacted(rpg_t *rpg, entity_t *player, int i)
 {
     if (rpg->chests[i]->item_type != OTHER &&
         !rpg->chests[i]->is_interacted && !rpg->chests[i]->is_recieved) {
+        quest_done_item(rpg, rpg->chests[i]->item_name);
         add_item_from_type(rpg, rpg->chests[i]->item_name,
             rpg->chests[i]->item_type);
         reinit_popup_item(rpg, rpg->chests[i]);
