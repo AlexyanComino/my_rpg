@@ -148,6 +148,32 @@ static void update_cursor_inv(sfRenderWindow *window)
     }
 }
 
+static void item_desc_inv
+    (slot_t *tmp, sfRenderWindow *window, sfVector2f pos, char *str)
+{
+    inventory_t *inv = (*inventory());
+
+    sfText_setPosition(inv->desc, (sfVector2f){pos.x + 155, pos.y + 140});
+    if (tmp->type == WEAPON) {
+        sfSprite_setPosition(inv->player_status->s_attack,
+        (sfVector2f){pos.x + 100, pos.y + 140});
+        sprintf(str, "%d", (weapon_t *){tmp->item}->damage);
+        sfText_setString(inv->desc, str);
+        sfRenderWindow_drawText(window, inv->desc, NULL);
+        sfText_setString(inv->desc, (weapon_t *){tmp->item}->name);
+        sfRenderWindow_drawSprite(window, inv->player_status->s_attack, NULL);
+    }
+    if (tmp->type == ARMOR) {
+        sfSprite_setPosition(inv->player_status->s_def,
+        (sfVector2f){pos.x + 100, pos.y + 140});
+        sprintf(str, "%d", (armor_t *){tmp->item}->defense);
+        sfText_setString(inv->desc, str);
+        sfRenderWindow_drawText(window, inv->desc, NULL);
+        sfText_setString(inv->desc, (armor_t *){tmp->item}->name);
+        sfRenderWindow_drawSprite(window, inv->player_status->s_def, NULL);
+    }
+}
+
 static void draw_desc(sfRenderWindow *window)
 {
     sfVector2f pos = {180, 500};
@@ -157,24 +183,7 @@ static void draw_desc(sfRenderWindow *window)
         if (tmp->is_highlighted && tmp->is_empty == 0) {
             pos = sfSprite_getPosition((*inventory())->desc_sprite);
             sfRenderWindow_drawSprite(window, (*inventory())->desc_sprite, NULL);
-            if (tmp->type == WEAPON) {
-                sfSprite_setPosition((*inventory())->player_status->s_attack, (sfVector2f){pos.x + 100, pos.y + 140});
-                sfText_setPosition((*inventory())->desc, (sfVector2f){pos.x + 155, pos.y + 140});
-                sprintf(str, "%d", (weapon_t *){tmp->item}->damage);
-                sfText_setString((*inventory())->desc, str);
-                sfRenderWindow_drawText(window, (*inventory())->desc, NULL);
-                sfText_setString((*inventory())->desc, (weapon_t *){tmp->item}->name);
-                sfRenderWindow_drawSprite(window, (*inventory())->player_status->s_attack, NULL);
-            }
-            if (tmp->type == ARMOR) {
-                sfSprite_setPosition((*inventory())->player_status->s_def, (sfVector2f){pos.x + 100, pos.y + 140});
-                sfText_setPosition((*inventory())->desc, (sfVector2f){pos.x + 155, pos.y + 140});
-                sprintf(str, "%d", (armor_t *){tmp->item}->defense);
-                sfText_setString((*inventory())->desc, str);
-                sfRenderWindow_drawText(window, (*inventory())->desc, NULL);
-                sfText_setString((*inventory())->desc, (armor_t *){tmp->item}->name);
-                sfRenderWindow_drawSprite(window, (*inventory())->player_status->s_def, NULL);
-            }
+            item_desc_inv(tmp, window, pos, str);
             sfText_setOrigin((*inventory())->desc, (sfVector2f){sfText_getGlobalBounds((*inventory())->desc).width / 2, 0});
             sfText_setPosition((*inventory())->desc, (sfVector2f){pos.x + 145, pos.y + 80});
             sfRenderWindow_drawText(window, (*inventory())->desc, NULL);
@@ -185,24 +194,7 @@ static void draw_desc(sfRenderWindow *window)
         if (tmp->is_highlighted && tmp->is_empty == 0) {
             pos = sfSprite_getPosition((*inventory())->desc_sprite);
             sfRenderWindow_drawSprite(window, (*inventory())->desc_sprite, NULL);
-            if (tmp->type == WEAPON) {
-                sfSprite_setPosition((*inventory())->player_status->s_attack, (sfVector2f){pos.x + 100, pos.y + 140});
-                sfText_setPosition((*inventory())->desc, (sfVector2f){pos.x + 155, pos.y + 140});
-                sprintf(str, "%d", (weapon_t *){tmp->item}->damage);
-                sfText_setString((*inventory())->desc, str);
-                sfRenderWindow_drawText(window, (*inventory())->desc, NULL);
-                sfText_setString((*inventory())->desc, (weapon_t *){tmp->item}->name);
-                sfRenderWindow_drawSprite(window, (*inventory())->player_status->s_attack, NULL);
-            }
-            if (tmp->type == ARMOR) {
-                sfSprite_setPosition((*inventory())->player_status->s_def, (sfVector2f){pos.x + 100, pos.y + 140});
-                sfText_setPosition((*inventory())->desc, (sfVector2f){pos.x + 155, pos.y + 140});
-                sprintf(str, "%d", (armor_t *){tmp->item}->defense);
-                sfText_setString((*inventory())->desc, str);
-                sfRenderWindow_drawText(window, (*inventory())->desc, NULL);
-                sfText_setString((*inventory())->desc, (armor_t *){tmp->item}->name);
-                sfRenderWindow_drawSprite(window, (*inventory())->player_status->s_def, NULL);
-            }
+            item_desc_inv(tmp, window, pos, str);
             sfText_setOrigin((*inventory())->desc, (sfVector2f){sfText_getGlobalBounds((*inventory())->desc).width / 2, 0});
             sfText_setPosition((*inventory())->desc, (sfVector2f){pos.x + 145, pos.y + 80});
             sfRenderWindow_drawText(window, (*inventory())->desc, NULL);
