@@ -50,6 +50,7 @@ void update_interface_pos(rpg_t *rpg, entity_t *player, sfVector2f oldPos)
     float diff_y = player->common->pos.y - oldPos.y;
 
     sfView_setCenter(rpg->win->view, player->common->pos);
+    rpg->win->view_pos = player->common->pos;
     (*view_pos()) = player->common->pos;
     rpg->interface->restricted->danger_pos.x += diff_x;
     rpg->interface->restricted->danger_pos.y += diff_y;
