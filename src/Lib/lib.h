@@ -17,6 +17,7 @@ int tab_len(char **tab);
 char **split_string(char *str, char *delim);
 
 // View tools
+bool intrect_is_in_view_menu(rpg_t *rpg, sfIntRect hitbox);
 bool intrect_is_in_view(rpg_t *rpg, sfIntRect hitbox);
 bool entity_is_in_view(rpg_t *rpg, entity_t *entity);
 

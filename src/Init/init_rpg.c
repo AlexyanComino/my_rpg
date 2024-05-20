@@ -124,7 +124,8 @@ static void init_thread(rpg_t *rpg)
     rpg->shared_data2 = (shared_data2_t *)mmap(NULL, sizeof(shared_data2_t),
         PROT_READ | PROT_WRITE, MAP_SHARED, rpg->shm_fd2, 0);
     rpg->shared_data2->loaded = 0;
-    pthread_create(&rpg->thread2, NULL, load_entities, (void *)rpg->shared_data2);
+    pthread_create(&rpg->thread2, NULL, load_entities,
+        (void *)rpg->shared_data2);
 }
 
 static void init_rpg2(rpg_t *rpg)

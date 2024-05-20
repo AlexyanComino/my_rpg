@@ -10,7 +10,9 @@
 static void init_item_values(item_t *item)
 {
     item->name = NULL;
+    item->rarity = COMMON;
     item->texture_path = NULL;
+    item->description = NULL;
     item->damage = 0;
     item->type = OTHER;
     item->defense = 0;
@@ -19,15 +21,33 @@ static void init_item_values(item_t *item)
     item->armor_type = 0;
 }
 
+static rarity_t get_rarity_item(char *inf)
+{
+    if (!strcmp(inf, "C"))
+        return COMMON;
+    if (!strcmp(inf, "U"))
+        return UNCOMMON;
+    if (!strcmp(inf, "R"))
+        return RARE;
+    if (!strcmp(inf, "E"))
+        return EPIC;
+    if (!strcmp(inf, "L"))
+        return LEGENDARY;
+    fprintf(stderr, "Error: item rarity not found\n");
+    return COMMON;
+}
+
 static item_t *init_item_weapon(char **infos)
 {
     item_t *item = malloc(sizeof(item_t));
 
     init_item_values(item);
     item->type = WEAPON;
-    item->name = strdup(infos[1]);
-    item->texture_path = strdup(infos[2]);
-    item->damage = atoi(infos[3]);
+    item->rarity = get_rarity_item(infos[1]);
+    item->name = strdup(infos[2]);
+    item->texture_path = strdup(infos[3]);
+    item->description = strdup(infos[4]);
+    item->damage = atoi(infos[5]);
     return item;
 }
 
@@ -37,12 +57,14 @@ static item_t *init_item_armor(char **infos)
 
     init_item_values(item);
     item->type = ARMOR;
-    item->name = strdup(infos[1]);
-    item->texture_path = strdup(infos[2]);
-    item->defense = atoi(infos[3]);
-    item->speed = atoi(infos[4]);
-    item->endurance = atoi(infos[5]);
-    item->armor_type = atoi(infos[6]);
+    item->rarity = get_rarity_item(infos[1]);
+    item->name = strdup(infos[2]);
+    item->texture_path = strdup(infos[3]);
+    item->description = strdup(infos[4]);
+    item->defense = atoi(infos[5]);
+    item->speed = atoi(infos[6]);
+    item->endurance = atoi(infos[7]);
+    item->armor_type = atoi(infos[8]);
     return item;
 }
 
@@ -52,8 +74,10 @@ static item_t *init_item_potion(char **infos)
 
     init_item_values(item);
     item->type = POTION;
-    item->name = strdup(infos[1]);
-    item->texture_path = strdup(infos[2]);
+    item->rarity = get_rarity_item(infos[1]);
+    item->name = strdup(infos[2]);
+    item->texture_path = strdup(infos[3]);
+    item->description = strdup(infos[4]);
     return item;
 }
 

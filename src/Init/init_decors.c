@@ -7,15 +7,23 @@
 
 #include "rpg.h"
 
-static void init_decor_anim2(decor_anim_t *decor)
+static void init_decor_anim2(decor_anim_t *decor, sfVector2f scale)
 {
+    int init_col = rand() % decor->nb_cols;
+
     decor->shape = sfRectangleShape_create();
-    sfRectangleShape_setSize(decor->shape, (sfVector2f){decor->width *
-        TILE_SCALE, decor->height * TILE_SCALE});
+    sfRectangleShape_setSize(decor->shape, (sfVector2f){decor->width,
+        decor->height});
     sfRectangleShape_setFillColor(decor->shape, sfTransparent);
     sfRectangleShape_setOutlineThickness(decor->shape, 1);
     sfRectangleShape_setOutlineColor(decor->shape, sfMagenta);
+    sfRectangleShape_setOrigin(decor->shape, (sfVector2f){decor->width / 2,
+        decor->height / 2});
+    sfRectangleShape_setScale(decor->shape, scale);
     sfRectangleShape_setPosition(decor->shape, decor->pos);
+    decor->anim->rect = (sfIntRect){init_col * decor->width, 0,
+        decor->width, decor->height};
+    sfSprite_setTextureRect(decor->anim->sprite, decor->anim->rect);
 }
 
 static decor_anim_t *init_decor_anim(char **infos)
@@ -35,8 +43,8 @@ static decor_anim_t *init_decor_anim(char **infos)
     sfSprite_setPosition(decor->anim->sprite, decor->pos);
     sfSprite_setScale(decor->anim->sprite, scale);
     decor->rect = (sfIntRect){decor->pos.x, decor->pos.y,
-        decor->width * TILE_SCALE, decor->height * TILE_SCALE};
-    init_decor_anim2(decor);
+        decor->width, decor->height};
+    init_decor_anim2(decor, scale);
     return decor;
 }
 

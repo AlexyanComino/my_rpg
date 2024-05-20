@@ -1,3 +1,7 @@
 #Type;TexturePath;Width;Height;Speed(float);NbCols;NbRows;Posx;PosY;Scale
 G;assets/Decors/anim_water.png;928;608;0.1;8;1;5780;8195;1
-H;assets/Decors/wind.png;312;64;0.1;48;1;5780;8195;2
+H;assets/Decors/wind.png;312;64;0.1;48;1;6577;7809;2
+H;assets/Decors/wind.png;312;64;0.1;48;1;4881;8061;2
+H;assets/Decors/wind.png;312;64;0.1;48;1;6165;8877;2
+H;assets/Decors/wind.png;312;64;0.1;48;1;4083;9363;2
+H;assets/Decors/wind.png;312;64;0.1;48;1;3417;7001;2

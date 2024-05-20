@@ -30,7 +30,6 @@ void update_mouse_pos(rpg_t *rpg)
     sfVector2u window_size = sfRenderWindow_getSize(rpg->win->window);
     sfVector2f view_pos = rpg->win->view_pos;
 
-    window_size = window_size;
     rpg->win->mouse_pos = (sfVector2f){
         (float)view_pos.x - (float)WIDTH / 2 * rpg->win->zoom +
             (float)old_mouse_pos.x / ((float)window_size.x /
@@ -49,6 +48,9 @@ void event(rpg_t *rpg)
     while (sfRenderWindow_pollEvent(rpg->win->window, &rpg->event)) {
         if (rpg->event.type == sfEvtMouseMoved)
             update_mouse_pos(rpg);
+        if (rpg->event.type == sfEvtMouseButtonPressed)
+            printf("Mouse pos: %f, %f\n", rpg->win->mouse_pos.x,
+            rpg->win->mouse_pos.y);
         if (rpg->event.type == sfEvtClosed ||
             rpg->event.key.code == sfKeyEscape)
             sfRenderWindow_close(rpg->win->window);

@@ -142,4 +142,5 @@ void update_game_interface(rpg_t *rpg)
 {
     update_restricted(rpg);
     update_health_bar_interface(rpg);
+    update_popup_item(rpg);
 }

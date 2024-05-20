@@ -7,15 +7,6 @@
 
 #include "rpg.h"
 
-static void display_restricted_text(rpg_t *rpg)
-{
-    restricted_t *restricted = rpg->interface->restricted;
-    entity_t *player = get_player(rpg);
-    if (!is_alive(player))
-        return;
-    sfRenderWindow_drawSprite(rpg->win->window, restricted->sprite, NULL);
-}
-
 static void display_collision(rpg_t *rpg)
 {
     collision_t *coll = rpg->collision;
@@ -66,14 +57,6 @@ static void display_minimap(rpg_t *rpg)
     sfRenderWindow_drawRectangleShape(rpg->win->window, minimap->rect, NULL);
 }
 
-static void display_health_bar_interface(rpg_t *rpg)
-{
-    display_round_rectangle(rpg->win->window,
-        rpg->interface->health_bar->back);
-    display_round_rectangle(rpg->win->window,
-        rpg->interface->health_bar->front);
-}
-
 static void display_chests(rpg_t *rpg)
 {
     for (unsigned int i = 0; i < rpg->chests_size; i++) {
@@ -101,9 +84,8 @@ void display_game(rpg_t *rpg)
     display_decors_high(rpg);
     if (rpg->debug)
         display_collision(rpg);
+    display_game_interface(rpg);
     display_inv(rpg);
-    display_restricted_text(rpg);
-    display_health_bar_interface(rpg);
     display_text_box(rpg);
     display_quests(rpg);
     if (rpg->gamestate == MAP)

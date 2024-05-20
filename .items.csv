@@ -1,14 +1,17 @@
 #Weapons
-#Type;ItemName;TexturePath;Damages;
-W;Iron Sword;assets/item/Weapon & Tool/Iron Sword.png;7;
-W;Silver Sword;assets/item/Weapon & Tool/Silver Sword.png;10;
+#Type;Rarity;ItemName;TexturePath;Description;Damages;
+W;U;Iron Sword;assets/item/Weapon & Tool/Iron Sword.png;Description de fou;7;
+W;R;Silver Sword;assets/item/Weapon & Tool/Silver Sword.png;Cette epee en argent, ornee de runes mystiques, brille d'une lueur surnaturelle.\n\nAugmente la puissance d'attaque de son porteur de 10;10;
+W;L;Lame d'Orion;assets/item/Weapon & Tool/Golden Sword.png;Cette epee legendaire scintille comme les rayons du soleil.\n\nForgee par les dieux, elle confere a son porteur une puissance d'attaque inegalee de 50 points.;50;
+W;C;Branche de Sylvain;assets/item/Weapon & Tool/Wooden Sword.png;Cette epee en bois simple mais elegante est taillee dans le chene sacre. Legere et maniable, elle confere à son porteur une puissance d'attaque modeste de 5 points.;5;
+W;U;Griffon d'Acier;assets/item/Weapon & Tool/Pickaxe.png;Cette pioche en fer est concue pour une efficacite maximale. Sa pointe affutee inflige 7 points de degats a chaque coup;7;
 
 #Armors
-#Type;ItemName;TexturePath;Defense;Speed;Endurance;ArmorType(0=HELMET,1=CHESTPLATE,2=BOOTS);
-A;Iron Helmet;assets/item/Equipment/Iron Helmet.png;10;0;0;0;
-A;Iron Chestplate;assets/item/Equipment/Iron Armor.png;20;0;0;1;
-A;Iron Boots;assets/item/Equipment/Iron Boot.png;5;50;0;2;
+#Type;Rarity;ItemName;TexturePath;Description;Defense;Speed;Endurance;ArmorType(0=HELMET,1=CHESTPLATE,2=BOOTS);
+A;C;Iron Helmet;assets/item/Equipment/Iron Helmet.png;Ce casque en fer, au design simple et solide, assure une protection efficace lors des combats.\n\nIl confère 10 points d'armure supplémentaires a son porteur;10;0;0;0;
+A;C;Iron Chestplate;assets/item/Equipment/Iron Armor.png;Cette armure en fer robuste, d'un design simple mais efficace, est un choix fiable sur le champ de bataille.\n\nElle offre une protection accrue de 20 points d'armure a son porteur;20;0;0;1;
+A;C;Iron Boots;assets/item/Equipment/Iron Boot.png;Ces bottes en fer, alliant robustesse et agilite, sont ideales pour les terrains difficiles.\n\nElles offrent 5 points d'armure et augmentent la vitesse de 50 points;5;50;0;2;
 
 #Potions
-#Type;ItemName;TexturePath;
-P;Blue Potion;assets/item/Potion/Blue Potion.png;
+#Type;Rarity;ItemName;TexturePath;Description;
+P;C;Blue Potion;assets/item/Potion/Blue Potion.png;Description de fou;
