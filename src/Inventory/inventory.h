@@ -20,7 +20,7 @@ int remove_gold(int gold);
 int add_gold(int gold);
 int add_item(void *item, int type, char *name);
 int open_inventory(rpg_t *rpg);
-void highlight_inventory(sfMouseMoveEvent event, slot_t *tmp);
+void highlight_inventory(rpg_t *rpg, slot_t *tmp);
 int click_inventory(sfMouseButtonEvent event, slot_t *tmp);
 int release_inventory(sfMouseButtonEvent event, slot_t *tmp);
 player_status_t *init_player_status(void);

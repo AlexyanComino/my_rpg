@@ -19,28 +19,23 @@ sfSprite *init_sprite_from_file(char *texture)
     return sprite;
 }
 
-void highlight_inventory(sfMouseMoveEvent event, slot_t *tmp)
+void highlight_inventory(rpg_t *rpg, slot_t *tmp)
 {
     sfFloatRect rect = {0, 0, 0, 0};
+    sfVector2f pos = rpg->win->mouse_pos;
 
+    printf("x %f y %f\n", pos.x, pos.y);
     for (; tmp; tmp = tmp->next) {
         rect = sfSprite_getGlobalBounds(tmp->sprite);
-        tmp->is_highlighted = (sfFloatRect_contains(&rect,
-        event.x + (*view_pos()).x - 1920 / 2,
-        event.y + (*view_pos()).y - 1080 / 2)) ? 1 : 0;
-        sfSprite_setPosition((*inventory())->desc_sprite,
-        (sfVector2f){event.x + (*view_pos()).x - 1920 / 2,
-        event.y + (*view_pos()).y - 1080 / 2});
+        tmp->is_highlighted = (sfFloatRect_contains(&rect, pos.x, pos.y)) ? 1 : 0;
+        sfSprite_setPosition((*inventory())->desc_sprite, pos);
         if (tmp->is_clicked && tmp->is_empty == 0 && tmp->type == WEAPON) {
             sfSprite_setPosition((weapon_t *){tmp->item}->sprite,
-            (sfVector2f){event.x - 15 + (*view_pos()).x - 1920 / 2,
-            event.y - 15 + (*view_pos()).y - 1080 / 2});
+            (sfVector2f){pos.x - 15, pos.y - 15});
             tmp->is_moved = 1;
         }
         if (tmp->is_clicked && tmp->is_empty == 0 && tmp->type == ARMOR) {
-            sfSprite_setPosition((armor_t *){tmp->item}->sprite,
-            (sfVector2f){event.x + (*view_pos()).x - 1920 / 2,
-            event.y + (*view_pos()).y - 1080 / 2});
+            sfSprite_setPosition((armor_t *){tmp->item}->sprite, pos);
             tmp->is_moved = 1;
         }
     }
@@ -109,9 +104,8 @@ int manage_evt_inv(sfEvent event, rpg_t *rpg)
     if (event.type == sfEvtKeyPressed && event.key.code == sfKeyTab)
         inv_is_open(rpg);
     if (event.type == sfEvtMouseMoved && (*inventory())->is_open) {
-        highlight_inventory(event.mouseMove, (*inventory())->slot);
-        highlight_inventory(event.mouseMove,
-        (*inventory())->player_status->stuff);
+        highlight_inventory(rpg, (*inventory())->slot);
+        highlight_inventory(rpg, (*inventory())->player_status->stuff);
     }
     if (event.type == sfEvtMouseButtonPressed &&
     event.mouseButton.button == sfMouseLeft && (*inventory())->is_open) {
