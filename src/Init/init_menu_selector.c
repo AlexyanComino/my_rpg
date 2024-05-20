@@ -8,42 +8,39 @@
 #include "rpg.h"
 
 
-static void get_texture(char *txt, select_button_t *new)
+static char **get_infos(char *txt)
 {
-    new->texture = NULL;
+    char **tab = file_to_array(".entities.csv");
+    char **infos = NULL;
+
     if (strcmp(txt, "WARRIOR") == 0)
-        new->texture = sfTexture_createFromFile(
-            "assets/Entities/Warriors/Warrior_Blue.png", NULL);
+        infos = split_string(tab[0], ";");
     if (strcmp(txt, "PAWN") == 0)
-        new->texture = sfTexture_createFromFile(
-            "assets/Entities/Pawn/Pawn_Blue.png", NULL);
+        infos = split_string(tab[1], ";");
     if (strcmp(txt, "ARCHER") == 0)
-        new->texture = sfTexture_createFromFile(
-            "assets/Entities/Archer/Archer_Blue.png", NULL);
+        infos = split_string(tab[4], ";");
     if (strcmp(txt, "TORCH") == 0)
-        new->texture = sfTexture_createFromFile(
-            "assets/Entities/Torch/Torch_Blue.png", NULL);
+        infos = split_string(tab[2], ";");
     if (strcmp(txt, "TNT") == 0)
-        new->texture = sfTexture_createFromFile(
-            "assets/Entities/Tnt/TNT_Blue.png", NULL);
-    if (new->texture == NULL)
-        return;
+        infos = split_string(tab[3], ";");
+    free_array(tab);
+    return infos;
 }
 
-static void get_sprite(select_button_t *new)
+static void get_entity(select_button_t *new)
 {
     sfVector2f pos = sfRectangleShape_getPosition(new->rect_shape);
+    char **infos = get_infos(new->name);
 
-    get_texture(new->name, new);
-    if (new->texture != NULL) {
-        new->sprite = sfSprite_create();
-        sfSprite_setTexture(new->sprite, new->texture, sfTrue);
-        sfSprite_setTextureRect(new->sprite,
-            (sfIntRect){0, 0, WARRIOR_WIDTH, WARRIOR_WIDTH});
-        sfSprite_setPosition(new->sprite, (sfVector2f){pos.x, pos.y + 150});
-        sfSprite_setOrigin(new->sprite,
-            (sfVector2f){WARRIOR_WIDTH / 2, WARRIOR_WIDTH / 2});
+    if (infos != NULL) {
+        new->entity = init_entity(infos);
+        sfSprite_setScale(new->entity->common->anim->sprite, (sfVector2f){3,
+            3});
+        sfSprite_setPosition(new->entity->common->anim->sprite,
+            (sfVector2f){pos.x, pos.y + 250});
+        return free_array(infos);
     }
+    new->entity = NULL;
 }
 
 static void get_attributes(char *txt, select_button_t *new, char **tab)
@@ -83,14 +80,14 @@ static select_button_t *sel_new_button(char *txt, sfVector2f pos)
     new->attack = sfText_create();
     new->defense = sfText_create();
     new->font = sfFont_createFromFile("assets/fonts/CompassPro.ttf");
-    new->text = create_text(new->font, txt, 50, pos);
+    new->text = create_text(new->font, txt, 100, pos);
     new->state = NOTHING;
     new->action = get_action(txt);
     new->rect_shape = sfRectangleShape_create();
     new->rect = (sfIntRect){0, 0, BUTTON_WIDTH, BUTTON_HEIGHT};
     new->next = NULL;
     sfText_setFillColor(new->text, sfBlack);
-    sfRectangleShape_setSize(new->rect_shape, (sfVector2f){300, 500});
+    sfRectangleShape_setSize(new->rect_shape, (sfVector2f){600, 1000});
     sfRectangleShape_setFillColor(new->rect_shape,
         sfColor_fromRGBA(200, 200, 200, 150));
     sfRectangleShape_setPosition(new->rect_shape,
@@ -105,7 +102,7 @@ static sfText *create_texte(
     sfFloatRect rect;
     static int i = 0;
 
-    if (i > 150)
+    if (i > 390)
         i = 0;
     sfText_setFont(text, new->font);
     sfText_setCharacterSize(text, size);
@@ -113,8 +110,8 @@ static sfText *create_texte(
     sfText_setString(text, str);
     rect = sfText_getGlobalBounds(text);
     sfText_setOrigin(text, (sfVector2f){rect.height / 2, rect.width / 2});
-    sfText_setPosition(text, (sfVector2f){pos.x + 300 / 6, pos.y + 240 + i});
-    i += 50;
+    sfText_setPosition(text, (sfVector2f){pos.x + 120, pos.y + 500 + i});
+    i += 130;
     return text;
 }
 
@@ -127,13 +124,41 @@ static void init_stats(select_button_t *new, sfVector2f pos, char *txt,
     if (new->attributes == NULL)
         return;
     sprintf(str, "%d", new->attributes->health);
-    new->hp = create_texte(new, str, 30, pos);
+    new->hp = create_texte(new, str, 80, pos);
     sprintf(str, "%d", new->attributes->attack);
-    new->attack = create_texte(new, str, 30, pos);
+    new->attack = create_texte(new, str, 80, pos);
     sprintf(str, "%d", new->attributes->defense);
-    new->defense = create_texte(new, str, 30, pos);
+    new->defense = create_texte(new, str, 80, pos);
     sprintf(str, "%d", new->attributes->speed);
-    new->speed = create_texte(new, str, 30, pos);
+    new->speed = create_texte(new, str, 80, pos);
+}
+
+static void init_sprite_from_pos(sfTexture **texture, sfSprite **sprite,
+    sfVector2f pos, char *path)
+{
+    sfFloatRect rect;
+
+    *texture = sfTexture_createFromFile(path, NULL);
+    *sprite = sfSprite_create();
+    sfSprite_setTexture(*sprite, *texture, sfTrue);
+    sfSprite_setScale(*sprite, (sfVector2f){4, 4});
+    rect = sfSprite_getGlobalBounds(*sprite);
+    sfSprite_setOrigin(*sprite, (sfVector2f){rect.width / 2, rect.height / 2});
+    sfSprite_setPosition(*sprite, pos);
+}
+
+static void init_sprites_attributes(select_button_t *new, sfVector2f pos)
+{
+    init_sprite_from_pos(&new->pp_texture, &new->pp_sprite,
+        (sfVector2f){pos.x + 490, pos.y + 500}, "assets/inventory/19.png");
+    init_sprite_from_pos(&new->hp_texture, &new->hp_sprite,
+        (sfVector2f){pos.x + 80, pos.y + 700}, "assets/item/Misc/Heart.png");
+    init_sprite_from_pos(&new->attack_texture, &new->attack_sprite,
+        (sfVector2f){pos.x + 80, pos.y + 700 + 130}, "assets/item/Weapon & Tool/Iron Sword.png");
+    init_sprite_from_pos(&new->defense_texture, &new->defense_sprite,
+        (sfVector2f){pos.x + 80, pos.y + 700 + 130 * 2}, "assets/item/Weapon & Tool/Iron Shield.png");
+    init_sprite_from_pos(&new->speed_texture, &new->speed_sprite,
+        (sfVector2f){pos.x + 80, pos.y + 700 + 130 * 3}, "assets/item/Equipment/Leather Boot.png");
 }
 
 select_button_t *add_select_button(
@@ -145,7 +170,8 @@ select_button_t *add_select_button(
     sfFloatRect rect2;
 
     init_stats(new, pos, txt, tab);
-    get_sprite(new);
+    init_sprites_attributes(new, pos);
+    get_entity(new);
     rect = sfText_getGlobalBounds(new->text);
     rect2 = sfRectangleShape_getGlobalBounds(new->rect_shape);
     sfText_setOrigin(new->text, (sfVector2f){rect.width / 2, rect.height / 2});

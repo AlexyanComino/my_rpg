@@ -664,14 +664,23 @@ typedef struct save_menu_s {
 
 typedef struct select_button_s {
     char *name;
-    sfTexture *texture;
-    sfSprite *sprite;
+    entity_t *entity;
     sfText *text;
     sfText *hp;
     sfText *attack;
     sfText *defense;
     sfText *speed;
     sfFont *font;
+    sfTexture *pp_texture;
+    sfSprite *pp_sprite;
+    sfTexture *hp_texture;
+    sfSprite *hp_sprite;
+    sfTexture *attack_texture;
+    sfSprite *attack_sprite;
+    sfTexture *defense_texture;
+    sfSprite *defense_sprite;
+    sfTexture *speed_texture;
+    sfSprite *speed_sprite;
     sfRectangleShape *rect_shape;
     sfIntRect rect;
     button_state_t state;

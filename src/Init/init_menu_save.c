@@ -28,17 +28,19 @@ static save_button_t *add_button_save(
 {
     save_button_t *new = new_save_button(txt);
     save_button_t *tmp = buttons;
+    sfFloatRect rect;
 
     sfText_setFont(new->text, new->font);
-    sfText_setCharacterSize(new->text, 50);
+    sfText_setCharacterSize(new->text, 100);
     sfText_setColor(new->text, sfWhite);
     sfText_setString(new->text, txt);
+    rect = sfText_getGlobalBounds(new->text);
+    sfText_setOrigin(new->text, (sfVector2f){rect.width / 2, rect.height / 2});
     sfText_setPosition(new->text, pos);
-    sfRectangleShape_setSize(new->rect_shape, (sfVector2f){500, 150});
-    sfRectangleShape_setPosition(new->rect_shape,
-        (sfVector2f){pos.x - 190, pos.y});
-    sfRectangleShape_setFillColor(new->rect_shape,
-        sfColor_fromRGBA(0, 0, 0, 100));
+    sfRectangleShape_setSize(new->rect_shape, (sfVector2f){1000, 250});
+    sfRectangleShape_setOrigin(new->rect_shape, (sfVector2f){500, 125});
+    sfRectangleShape_setPosition(new->rect_shape, pos);
+    sfRectangleShape_setFillColor(new->rect_shape, sfColor_fromRGBA(0, 0, 0, 100));
     if (buttons == NULL)
         return new;
     while (tmp->next != NULL)
@@ -62,16 +64,16 @@ save_menu_t *init_save_menu(rpg_t *rpg)
     menu->text = NULL;
     menu->buttons = NULL;
     menu->buttons = add_button_save(menu->buttons,
-    (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
+    (sfVector2f){top_left.x + WIDTH / 2 * rpg->win->zoom,
         top_left.y + (HEIGHT / 2 - 150) * rpg->win->zoom}, "SAVE 1");
     add_button_save(menu->buttons,
-    (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
+    (sfVector2f){top_left.x + WIDTH / 2 * rpg->win->zoom,
         top_left.y + (HEIGHT / 2 + 75) * rpg->win->zoom}, "SAVE 2");
     add_button_save(menu->buttons,
-    (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
+    (sfVector2f){top_left.x + WIDTH / 2 * rpg->win->zoom,
         top_left.y + (HEIGHT / 2 + 300) * rpg->win->zoom}, "SAVE 3");
     add_button_save(menu->buttons,
-    (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
+    (sfVector2f){top_left.x + WIDTH / 2 * rpg->win->zoom,
         top_left.y + (HEIGHT / 2 + 450) * rpg->win->zoom}, "BACK");
     return menu;
 }
