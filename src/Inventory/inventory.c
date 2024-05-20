@@ -175,8 +175,10 @@ static void draw_desc(sfRenderWindow *window)
                 sfText_setString((*inventory())->desc, (armor_t *){tmp->item}->name);
                 sfRenderWindow_drawSprite(window, (*inventory())->player_status->s_def, NULL);
             }
-            sfText_setPosition((*inventory())->desc, (sfVector2f){pos.x + 90, pos.y + 80});
+            sfText_setOrigin((*inventory())->desc, (sfVector2f){sfText_getGlobalBounds((*inventory())->desc).width / 2, 0});
+            sfText_setPosition((*inventory())->desc, (sfVector2f){pos.x + 145, pos.y + 80});
             sfRenderWindow_drawText(window, (*inventory())->desc, NULL);
+            sfText_setOrigin((*inventory())->desc, (sfVector2f){0, 0});
         }
     }
     for (slot_t *tmp = (*inventory())->player_status->stuff; tmp; tmp = tmp->next) {

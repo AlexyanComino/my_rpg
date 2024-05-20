@@ -28,6 +28,10 @@ void highlight_inventory(rpg_t *rpg, slot_t *tmp)
         rect = sfSprite_getGlobalBounds(tmp->sprite);
         tmp->is_highlighted = (sfFloatRect_contains(&rect, pos.x, pos.y)) ? 1 : 0;
         sfSprite_setPosition((*inventory())->desc_sprite, pos);
+        if (tmp->is_highlighted && rpg->event.key.code == sfKeyBackspace && tmp->is_empty == 0) {
+            printf("ID: %d\n", tmp->id);
+            remove_item(tmp->id, tmp);
+        }
         if (tmp->is_clicked && tmp->is_empty == 0 && tmp->type == WEAPON) {
             sfSprite_setPosition((weapon_t *){tmp->item}->sprite,
             (sfVector2f){pos.x - 15, pos.y - 15});
@@ -108,7 +112,7 @@ int manage_evt_inv(sfEvent event, rpg_t *rpg)
 {
     if (event.type == sfEvtKeyPressed && event.key.code == sfKeyTab)
         inv_is_open(rpg);
-    if (event.type == sfEvtMouseMoved && (*inventory())->is_open) {
+    if ((*inventory())->is_open) {
         highlight_inventory(rpg, (*inventory())->slot);
         highlight_inventory(rpg, (*inventory())->player_status->stuff);
     }
