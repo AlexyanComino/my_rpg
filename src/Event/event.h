@@ -46,3 +46,7 @@ void event_chests(rpg_t *rpg, sfKeyCode key);
 
 // Description handling
 char *description_handling(char *description);
+
+// save
+void save(rpg_t *rpg);
+save_t *load(rpg_t *rpg);

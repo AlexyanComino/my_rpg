@@ -56,6 +56,12 @@ void event(rpg_t *rpg)
             sfRenderWindow_close(rpg->win->window);
         if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY)
             manage_evt_inv(rpg->event, rpg);
+        if (rpg->event.type == sfEvtKeyReleased &&
+            rpg->event.key.code == sfKeyW)
+            save(rpg);
+        if (rpg->event.type == sfEvtKeyReleased &&
+            rpg->event.key.code == sfKeyA)
+            load(rpg);
         event_states(rpg);
     }
     if (rpg->gamestate == GAME)
