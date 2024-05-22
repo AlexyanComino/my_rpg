@@ -57,6 +57,8 @@ void event(rpg_t *rpg)
             sfRenderWindow_close(rpg->win->window);
         if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY)
             manage_evt_inv(rpg->event, rpg);
+        if (rpg->gamestate == GAME || rpg->gamestate == SKILL_TREE)
+            manage_skill_tree(rpg);
         event_states(rpg);
     }
     if (rpg->gamestate == GAME)

@@ -556,6 +556,7 @@ typedef enum {
     SELECTOR,
     INVENTORY,
     MAP,
+    SKILL_TREE,
     END
 } state_t;
 
@@ -922,6 +923,8 @@ typedef struct item_s {
     enum armor_type armor_type;
 } item_t;
 
+typedef struct skill_s skill_t;
+
 typedef struct rpg_s {
     win_t *win;
     map_t *map;
@@ -956,8 +959,10 @@ typedef struct rpg_s {
     unsigned int chests_size;
     item_t **items;
     unsigned int items_size;
+    skill_t *skill_tree;
 } rpg_t;
 
+#include "../src/skill_tree/skill_tree.h"
 #include "../src/Init/init.h"
 #include "../src/Display/Display_entities/display_entities.h"
 #include "../src/Display/display.h"
