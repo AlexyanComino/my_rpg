@@ -923,6 +923,15 @@ typedef struct item_s {
     enum armor_type armor_type;
 } item_t;
 
+typedef struct save_s {
+    sfVector2f pos;
+    attributes_t *attributes;
+    int type;
+    slot_t *slot;
+    slot_t *stuff;
+    all_quests_t *quests;
+} save_t;
+
 typedef struct skill_s skill_t;
 
 typedef struct rpg_s {
@@ -959,6 +968,7 @@ typedef struct rpg_s {
     unsigned int chests_size;
     item_t **items;
     unsigned int items_size;
+    save_t **save;
     skill_t *skill_tree;
 } rpg_t;
 
