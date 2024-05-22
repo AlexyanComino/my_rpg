@@ -22,5 +22,6 @@ void display(rpg_t *rpg)
     if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY ||
         rpg->gamestate == MAP)
         display_game(rpg);
+    draw_skill_tree(rpg);
     sfRenderWindow_display(rpg->win->window);
 }

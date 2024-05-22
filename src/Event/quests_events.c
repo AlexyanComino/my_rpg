@@ -15,6 +15,7 @@ static int interact_quest(
             continue;
         if (tmp_quest->is_active == true && tmp_quest->type != TALK)
             return 1;
+        entity->common->x = get_entity_side(entity, get_player(rpg)->common->pos);
         printf("Interacting with %s\n", entity->common->name);
         rpg->text_box->has_choice = (tmp_quest->type == TALK) ? false : true;
         text_box_handling(rpg, tmp, tmp_quest);

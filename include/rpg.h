@@ -556,6 +556,7 @@ typedef enum {
     SELECTOR,
     INVENTORY,
     MAP,
+    SKILL_TREE,
     END
 } state_t;
 
@@ -664,14 +665,23 @@ typedef struct save_menu_s {
 
 typedef struct select_button_s {
     char *name;
-    sfTexture *texture;
-    sfSprite *sprite;
+    entity_t *entity;
     sfText *text;
     sfText *hp;
     sfText *attack;
     sfText *defense;
     sfText *speed;
     sfFont *font;
+    sfTexture *pp_texture;
+    sfSprite *pp_sprite;
+    sfTexture *hp_texture;
+    sfSprite *hp_sprite;
+    sfTexture *attack_texture;
+    sfSprite *attack_sprite;
+    sfTexture *defense_texture;
+    sfSprite *defense_sprite;
+    sfTexture *speed_texture;
+    sfSprite *speed_sprite;
     sfRectangleShape *rect_shape;
     sfIntRect rect;
     button_state_t state;
@@ -922,6 +932,8 @@ typedef struct save_s {
     all_quests_t *quests;
 } save_t;
 
+typedef struct skill_s skill_t;
+
 typedef struct rpg_s {
     win_t *win;
     map_t *map;
@@ -957,8 +969,10 @@ typedef struct rpg_s {
     item_t **items;
     unsigned int items_size;
     save_t **save;
+    skill_t *skill_tree;
 } rpg_t;
 
+#include "../src/skill_tree/skill_tree.h"
 #include "../src/Init/init.h"
 #include "../src/Display/Display_entities/display_entities.h"
 #include "../src/Display/display.h"

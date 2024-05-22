@@ -156,6 +156,7 @@ static void init_rpg2(rpg_t *rpg)
     rpg->items = init_items_tab(&rpg->items_size);
     init_inventory(rpg, 15);
     rpg->inventory = *inventory();
+    rpg->skill_tree = init_all_skill();
     pthread_join(rpg->thread, NULL);
     if (rpg->shared_data->loaded)
         rpg->map = rpg->shared_data->map;

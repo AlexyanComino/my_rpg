@@ -36,6 +36,9 @@ static health_bar_t *init_health_bar_interface(void)
         back_size, sfBlack);
     health_bar->front = init_round_rectangle((sfVector2f){0, 0}, 10,
         front_size, sfGreen);
+    health_bar->front->init_r = 10;
+    health_bar->front->init_size = front_size;
+    health_bar->front->r = 10;
     return health_bar;
 }
 
@@ -106,7 +109,7 @@ static player_infos_t *init_player_infos(void)
     player_infos->player_text = sfText_create();
     sfText_setFont(player_infos->player_text, player_infos->font);
     sfText_setCharacterSize(player_infos->player_text, 30);
-    sfText_setColor(player_infos->player_text, sfColor_fromRGB(103, 211, 255));
+    sfText_setColor(player_infos->player_text, sfWhite);
     sfText_setOutlineThickness(player_infos->player_text, 2);
     sfText_setOutlineColor(player_infos->player_text, sfBlack);
     sfText_setString(player_infos->player_text, "Pablodrigo");
