@@ -9,7 +9,6 @@
 
 static void check_done_item(quest_t *tmp, char *item, rpg_t *rpg)
 {
-    for (; tmp; tmp = tmp->next) {
     if (tmp->type == GATHER && tmp->is_active &&
         strcmp(tmp->objective, item) == 0) {
         tmp->is_done = true;
@@ -20,7 +19,6 @@ static void check_done_item(quest_t *tmp, char *item, rpg_t *rpg)
         printf("Quest get done: %s\n", tmp->name);
     }
 }
-}
 
 void quest_done_item(rpg_t *rpg, char *item)
 {
@@ -29,7 +27,9 @@ void quest_done_item(rpg_t *rpg, char *item)
 
     for (; quests; quests = quests->next) {
         tmp = quests->quest;
+        for (; tmp; tmp = tmp->next) {
         check_done_item(tmp, item, rpg);
+        }
     }
 }
 
