@@ -128,6 +128,15 @@ static void init_thread(rpg_t *rpg)
         (void *)rpg->shared_data2);
 }
 
+static save_t **init_saves(void)
+{
+    save_t **saves = malloc(sizeof(save_t *) * 3);
+
+    for (int i = 0; i < 3; i++)
+        saves[i] = load(i + 1);
+    return saves;
+}
+
 static void init_rpg2(rpg_t *rpg)
 {
     rpg->main_menu = init_menu(rpg);
@@ -164,6 +173,7 @@ rpg_t *init_rpg(void)
     rpg->event = (sfEvent){0};
     rpg->debug = false;
     rpg->text_box = init_text_box();
+    rpg->save = init_saves();
     init_rpg2(rpg);
     return rpg;
 }

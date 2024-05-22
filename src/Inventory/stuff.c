@@ -11,15 +11,6 @@
 #include "item.h"
 #include "rpg.h"
 
-static char *get_item_name(int type, void *item)
-{
-    char *name = NULL;
-
-    name = (type == WEAPON) ? ((weapon_t *)item)->name : name;
-    name = (type == ARMOR) ? ((armor_t *)item)->name : name;
-    return name;
-}
-
 static slot_t *setup_stuff(slot_t *slot, sfVector2f pos, int type, void *item)
 {
     slot->access = (slot->id == 1) ? WEAPON : slot->access;
@@ -31,7 +22,6 @@ static slot_t *setup_stuff(slot_t *slot, sfVector2f pos, int type, void *item)
     slot->is_clicked = 0;
     slot->is_moved = 0;
     slot->type = type;
-    slot->name = get_item_name(type, item);
     slot->item = item;
     slot->sprite = init_sprite_from_file("assets/inventory/item_hold.png");
     slot->highlight = init_sprite_from_file("assets/inventory/5.png");
@@ -84,6 +74,16 @@ int add_stuff(void *item, int type)
     tmp->is_empty = 0;
     tmp->type = type;
     tmp->item = item;
+    return (0);
+}
+
+int add_stuff_from_type(rpg_t *rpg, char *name, int type)
+{
+    void *item = NULL;
+
+    item = (type == WEAPON) ? create_weapon(rpg, name) : item;
+    item = (type == ARMOR) ? create_armor(rpg, name) : item;
+    add_stuff(item, type);
     return (0);
 }
 

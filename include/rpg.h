@@ -956,6 +956,7 @@ typedef struct rpg_s {
     unsigned int chests_size;
     item_t **items;
     unsigned int items_size;
+    save_t **save;
 } rpg_t;
 
 #include "../src/Init/init.h"
