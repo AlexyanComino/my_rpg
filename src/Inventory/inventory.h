@@ -33,3 +33,5 @@ int manage_evt_inv(sfEvent event, rpg_t *rpg);
 int display_inv(rpg_t *rpg);
 int apply_stuff(rpg_t *rpg);
 int unapply_stuff(slot_t *tmp);
+void draw_desc(sfRenderWindow *window);
+int manage_slot(slot_t *tmp, void *item, int type, int *id);

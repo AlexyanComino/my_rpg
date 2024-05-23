@@ -10,30 +10,46 @@
 #include "rpg.h"
 #include "skill_tree.h"
 
-int skill_test(rpg_t *rpg)
+static int skill_test(rpg_t *rpg)
 {
     rpg = rpg;
     printf("Skill test\n");
     return 1;
 }
 
-skill_t *init_all_skill(void)
+static skill_t *init_skill_tree(skill_t *skill)
 {
-    skill_t *skill = init_skill("Fireball", "Shoot a fireball", 10, &skill_test);
-
-    skill = add_skill(skill, init_skill("Heal", "Heal yourself", 10, &skill_test));
-    skill = add_skill(skill, init_skill("Lightning", "Shoot a lightning", 10, &skill_test));
-    skill = add_skill(skill, init_skill("Ice", "Shoot a ice", 10, &skill_test));
-    skill = add_skill(skill, init_skill("Poison", "Shoot a poison", 10, &skill_test));
-    skill = add_skill(skill, init_skill("Wind", "Shoot a wind", 10, &skill_test));
-    skill = add_skill(skill, init_skill("Earth", "Shoot a earth", 10, &skill_test));
-    skill = add_skill(skill, init_skill("Water", "Shoot a water", 10, &skill_test));
-    skill = add_skill(skill, init_skill("Dark", "Shoot a dark", 10, &skill_test));
-    skill = add_skill(skill, init_skill("Light", "Shoot a light", 10, &skill_test));
+    skill = add_skill(skill,
+    init_skill("Earth", "Shoot a earth", 10, &skill_test));
+    skill = add_skill(skill,
+    init_skill("Water", "Shoot a water", 10, &skill_test));
+    skill = add_skill(skill,
+    init_skill("Dark", "Shoot a dark", 10, &skill_test));
+    skill = add_skill(skill,
+    init_skill("Light", "Shoot a light", 10, &skill_test));
     return skill;
 }
 
-skill_t *init_skill(char *name, char *description, int cost, int (*function)(rpg_t *rpg))
+skill_t *init_all_skill(void)
+{
+    skill_t *skill = init_skill
+    ("Fireball", "Shoot a fireball", 10, &skill_test);
+
+    skill = add_skill(skill,
+    init_skill("Heal", "Heal yourself", 10, &skill_test));
+    skill = add_skill(skill,
+    init_skill("Lightning", "Shoot a lightning", 10, &skill_test));
+    skill = add_skill(skill,
+    init_skill("Ice", "Shoot a ice", 10, &skill_test));
+    skill = add_skill(skill,
+    init_skill("Poison", "Shoot a poison", 10, &skill_test));
+    skill = add_skill(skill,
+    init_skill("Wind", "Shoot a wind", 10, &skill_test));
+    return init_skill_tree(skill);
+}
+
+skill_t *init_skill
+(char *name, char *description, int cost, int (*function)(rpg_t *rpg))
 {
     skill_t *skill = malloc(sizeof(skill_t));
 

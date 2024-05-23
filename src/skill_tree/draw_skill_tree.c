@@ -16,10 +16,13 @@ int draw_ui_tree(rpg_t *rpg)
 
     if (title == NULL) {
         title = init_text((sfVector2f){100, 100}, 100, sfWhite, "Skill Tree");
-        sfText_setFont(title, sfFont_createFromFile("assets/fonts/BreatheFireIii-PKLOB.ttf"));
-        sfText_setOrigin(title, (sfVector2f){sfText_getLocalBounds(title).width / 2, 0});
+        sfText_setFont(title,
+        sfFont_createFromFile("assets/fonts/BreatheFireIii-PKLOB.ttf"));
+        sfText_setOrigin(title,
+        (sfVector2f){sfText_getLocalBounds(title).width / 2, 0});
     }
-    sfText_setPosition(title, (sfVector2f){rpg->win->view_pos.x, rpg->win->view_pos.y - 500});
+    sfText_setPosition(title, (sfVector2f){rpg->win->view_pos.x,
+    rpg->win->view_pos.y - 500});
     sfRenderWindow_drawText(rpg->win->window, title, NULL);
     return 1;
 }

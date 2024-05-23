@@ -55,4 +55,4 @@ chest_t **init_chests(unsigned int *size);
 item_t **init_items_tab(unsigned int *size);
 
 // Init inventory
-int init_inventory(rpg_t *rpg, int size);
+void init_inventory(rpg_t *rpg, int size);
