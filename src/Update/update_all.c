@@ -73,4 +73,5 @@ void update(rpg_t *rpg)
     }
     if (rpg->gamestate == INVENTORY)
         update_anim_inventory(rpg);
+    principal_music(rpg);
 }

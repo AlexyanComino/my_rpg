@@ -14,6 +14,7 @@ bool is_button_clicked(struct button_s *button, rpg_t *rpg)
     if (rpg->event.type == sfEvtMouseButtonPressed) {
         if (sfFloatRect_contains(&rect_bounds, rpg->win->mouse_pos.x,
             rpg->win->mouse_pos.y)) {
+            play_music(rpg->sounds->click, 100);
             button->state = CLICKED;
             return true;
         }

@@ -164,6 +164,8 @@ rpg_t *init_rpg(void)
     rpg->event = (sfEvent){0};
     rpg->debug = false;
     rpg->text_box = init_text_box();
+    rpg->sounds = init_sounds();
     init_rpg2(rpg);
+    play_music(rpg->sounds->intro, 50);
     return rpg;
 }

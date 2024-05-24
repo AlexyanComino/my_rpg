@@ -83,12 +83,15 @@ void decrease_health(rpg_t *rpg, entity_t *entity, entity_t *target)
         entity->common->faction = AGAINST_ALL;
     target->common->attributes->health -= attack;
     if (entity->type == TORCH) {
+        play_music(rpg->sounds->burn, 100);
         burn_entity(target, attack);
     }
     add_dmg_text(rpg, target, attack, state);
     target->common->x = get_entity_side(target, entity->common->pos);
-    if (target->common->attributes->health <= 0)
+    if (target->common->attributes->health <= 0) {
         entity_is_dead(target);
+        play_music(rpg->sounds->death, 100);
+    }
 }
 
 static void check_miss_attack(rpg_t *rpg, entity_t *entity, entity_t *enemy)
@@ -116,10 +119,13 @@ void entity_attack(rpg_t *rpg, entity_t *entity)
         if (!is_player(rpg, entity) &&
             entity->common->faction == enemy->common->faction)
             continue;
-        if (entity_can_attack_target(rpg, entity, enemy))
+        if (entity_can_attack_target(rpg, entity, enemy)) {
+            touch(entity, rpg);
             decrease_health(rpg, entity, enemy);
-        else
+        } else {
+            which_entities(rpg, entity);
             check_miss_attack(rpg, entity, enemy);
+        }
     }
     if (entity->type != TNT)
         entity->common->state = ATTACK;

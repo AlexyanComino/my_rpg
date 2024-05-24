@@ -56,3 +56,6 @@ item_t **init_items_tab(unsigned int *size);
 
 // Init inventory
 int init_inventory(rpg_t *rpg, int size);
+
+// Init sounds
+sounds_t *init_sounds(void);

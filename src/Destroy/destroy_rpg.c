@@ -8,6 +8,28 @@
 #include "rpg.h"
 
 
+void destroy_music(sounds_t *sounds)
+{
+    sfMusic_stop(sounds->loop);
+    sfMusic_destroy(sounds->sword);
+    sfMusic_destroy(sounds->attack_fire);
+    sfMusic_destroy(sounds->explosion);
+    sfMusic_destroy(sounds->arrow);
+    sfMusic_destroy(sounds->attack_sword);
+    sfMusic_destroy(sounds->burn);
+    sfMusic_destroy(sounds->hammer);
+    sfMusic_destroy(sounds->click);
+    sfMusic_destroy(sounds->death);
+    sfMusic_destroy(sounds->open);
+    sfMusic_destroy(sounds->close);
+    sfMusic_destroy(sounds->intro);
+    sfMusic_destroy(sounds->loop);
+    sfMusic_destroy(sounds->items);
+    sfMusic_destroy(sounds->quest);
+    sfMusic_destroy(sounds->attack);
+    free(sounds);
+}
+
 static void destroy_menu(menu_t *menu)
 {
     button_t *tmp = menu->buttons;
@@ -60,6 +82,7 @@ void destroy(rpg_t *rpg)
 {
     destroy_menus(rpg);
     destroy_quests(rpg);
+    destroy_music(rpg->sounds);
     sfClock_destroy(rpg->win->clock);
     sfView_destroy(rpg->win->view);
     sfRenderWindow_destroy(rpg->win->window);
