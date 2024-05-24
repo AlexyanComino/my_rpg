@@ -294,7 +294,7 @@ typedef struct round_rectangle_t {
 } round_rectangle_t;
 
 typedef struct health_bar_s {
-    round_rectangle_t *back;play_music(rpg->sounds->intro, 50);
+    round_rectangle_t *back;
     round_rectangle_t *front;
     int diff_y;
 } health_bar_t;
@@ -947,7 +947,7 @@ typedef struct item_s {
     enum armor_type armor_type;
 } item_t;
 
-typedef struct sounds_s {;
+typedef struct sounds_s {
     sfMusic* sword;
     sfMusic* arrow;
     sfMusic* attack_fire;
