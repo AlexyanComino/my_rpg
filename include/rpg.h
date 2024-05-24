@@ -8,6 +8,7 @@
 #pragma once
 
 #include <SFML/Graphics.h>
+#include <SFML/Audio.h>
 #include <SFML/Window.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -293,7 +294,7 @@ typedef struct round_rectangle_t {
 } round_rectangle_t;
 
 typedef struct health_bar_s {
-    round_rectangle_t *back;
+    round_rectangle_t *back;play_music(rpg->sounds->intro, 50);
     round_rectangle_t *front;
     int diff_y;
 } health_bar_t;
@@ -946,6 +947,26 @@ typedef struct item_s {
     enum armor_type armor_type;
 } item_t;
 
+typedef struct sounds_s {;
+    sfMusic* sword;
+    sfMusic* arrow;
+    sfMusic* attack_fire;
+    sfMusic* attack_sword;
+    sfMusic* burn;
+    sfMusic* explosion;
+    sfMusic* hammer;
+    sfMusic* click;
+    sfMusic* death;
+    sfMusic* quest;
+    sfMusic* items;
+    sfMusic* intro;
+    sfMusic* loop;
+    sfMusic* open;
+    sfMusic* close;
+    sfMusic* attack;
+    my_clock_t *myclock;
+} sounds_t;
+
 typedef struct skill_s skill_t;
 
 typedef struct rpg_s {
@@ -982,6 +1003,7 @@ typedef struct rpg_s {
     unsigned int chests_size;
     item_t **items;
     unsigned int items_size;
+    sounds_t *sounds;
     save_t **save;
     int save_index;
     skill_t *skill_tree;
@@ -1013,4 +1035,5 @@ typedef struct rpg_s {
 #include "../src/Init/Init_Entities/Init_Archer/init_archer.h"
 #include "../src/Init/Init_Entities/Init_Common/init_common.h"
 #include "../src/Lib/Entity_Tools/entity_lib.h"
+#include "../src/Sounds/sounds.h"
 #include "singleton.h"

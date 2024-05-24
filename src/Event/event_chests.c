@@ -103,6 +103,7 @@ static void chest_is_interacted(rpg_t *rpg, entity_t *player, int i)
 {
     if (rpg->chests[i]->item_type != OTHER &&
         !rpg->chests[i]->is_interacted && !rpg->chests[i]->is_recieved) {
+        play_music(rpg->sounds->items, 25);
         quest_done_item(rpg, rpg->chests[i]->item_name);
         add_item_from_type(rpg, rpg->chests[i]->item_name,
             rpg->chests[i]->item_type);
@@ -111,8 +112,10 @@ static void chest_is_interacted(rpg_t *rpg, entity_t *player, int i)
     }
     rpg->chests[i]->is_interacted = !rpg->chests[i]->is_interacted;
     if (!rpg->chests[i]->is_interacted &&
-        rpg->interface->popup_item->display == 1)
+        rpg->interface->popup_item->display == 1) {
         rpg->interface->popup_item->display = 2;
+        play_music(rpg->sounds->close, 100);
+        }
     if (rpg->chests[i]->is_interacted)
         player->common->state = INTERACT;
     else if (!rpg->chests[i]->is_interacted &&
@@ -131,6 +134,10 @@ void event_chests(rpg_t *rpg, sfKeyCode key)
             continue;
         if (sfIntRect_intersects(&rpg->chests[i]->rect,
             &player->common->zones->hitbox_attack, NULL)) {
+            if (rpg->chests[i]->is_interacted)
+                play_music(rpg->sounds->close, 100);
+            if (rpg->chests[i]->is_interacted == false)
+                play_music(rpg->sounds->open, 100);
             return chest_is_interacted(rpg, player, i);
         }
     }

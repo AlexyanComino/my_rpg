@@ -98,4 +98,5 @@ void update(rpg_t *rpg)
     }
     if (rpg->gamestate == INVENTORY)
         anim_entity(rpg, rpg->inventory->player_status->player);
+    principal_music(rpg);
 }

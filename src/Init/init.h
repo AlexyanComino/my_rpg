@@ -60,7 +60,9 @@ chest_t **init_chests(unsigned int *size);
 // Init items tab
 item_t **init_items_tab(unsigned int *size);
 
-// Init inventory
+// Init sounds
+sounds_t *init_sounds(void);
+=======
 void init_inventory(rpg_t *rpg, int size);
 
 // save

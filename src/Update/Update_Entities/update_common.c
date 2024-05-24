@@ -50,6 +50,7 @@ static void update_fire(rpg_t *rpg, entity_t *entity)
         update_clock_seconds(entity->common->fire->fire_clock);
         if (entity->common->fire->fire_clock->seconds >=
             entity->common->fire->burn_time) {
+            sfMusic_stop(rpg->sounds->burn);
             entity->common->fire->is_on_fire = false;
             entity->common->fire->fire_mark->anim->rect.left = 0;
             entity->common->fire->fire_mark->anim->rect.top = 0;

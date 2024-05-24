@@ -62,6 +62,7 @@ static void update_restricted(rpg_t *rpg)
         restricted->danger_pos = (sfVector2f){view_center.x,
             view_center.y - rpg->win->height / 2};
     check_player_in_base(rpg, restricted);
+    attack_music(rpg);
     if ((restricted->in_base && color.a < 255) || (!restricted->in_base &&
     color.a > 0))
         restricted->animation = true;
