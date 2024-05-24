@@ -16,7 +16,13 @@ rpg_t *init_rpg(void);
 menu_t *init_menu(rpg_t *rpg);
 menu_t *init_settings(rpg_t *rpg);
 save_menu_t *init_save_menu(rpg_t *rpg);
+char **get_infos_save(int type);
+void get_entity_save(save_button_t *new, int type);
 select_menu_t *init_select_menu(rpg_t *rpg);
+select_button_t *add_select_button(
+    select_button_t *buttons, sfVector2f pos, char *txt, char **tab);
+void create_buttons_select(rpg_t *rpg, select_menu_t *menu);
+char **get_infos(char *txt);
 sfText *create_text(sfFont *font, char *str, int size, sfVector2f pos);
 
 // Init interface

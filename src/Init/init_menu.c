@@ -47,9 +47,8 @@ static void add_button(button_t **buttons, sfVector2f pos, char *txt,
         sfColor_fromRGBA(0, 0, 0, 100));
     while (tmp && tmp->next != NULL)
         tmp = tmp->next;
-    if (!tmp)
-        *buttons = new;
-    else if (tmp->next == NULL)
+    *buttons = (tmp) ? *buttons : new;
+    if (tmp && tmp->next == NULL)
         tmp->next = new;
 }
 
@@ -74,16 +73,21 @@ menu_t *init_menu(rpg_t *rpg)
     sfVector2f top_left = {rpg->win->view_pos.x - (WIDTH / 2 * rpg->win->zoom),
         rpg->win->view_pos.y - (HEIGHT / 2 * rpg->win->zoom)};
     char *buttons_names[3] = {"OPTIONS", "QUIT", "PLAY"};
-    sfColor colors[3] = {sfColor_fromRGB(220, 220, 220), sfColor_fromRGB(255, 103, 101), sfColor_fromRGB(220, 220, 220)};
+    sfColor colors[3] = {sfColor_fromRGB(220, 220, 220),
+        sfColor_fromRGB(255, 103, 101), sfColor_fromRGB(220, 220, 220)};
 
-    menu->font = sfFont_createFromFile("assets/fonts/BreatheFireIii-PKLOB.ttf");
+    menu->font = sfFont_createFromFile(
+        "assets/fonts/BreatheFireIii-PKLOB.ttf");
     menu->text = create_text(menu->font, "MY RPG", 300, (sfVector2f)
-    {top_left.x + ((WIDTH - strlen("MY RPG") / 2) * rpg->win->zoom / 2), top_left.y + 100});
+    {top_left.x + ((WIDTH - strlen("MY RPG") / 2) * rpg->win->zoom / 2),
+    top_left.y + 100});
     menu->buttons = NULL;
-
-    add_button(&menu->buttons, (sfVector2f){top_left.x + 250 * rpg->win->zoom, top_left.y + 760 * rpg->win->zoom}, buttons_names[0], colors[0]);
-    add_button(&menu->buttons, (sfVector2f){top_left.x + 1760 * rpg->win->zoom, top_left.y + 950 * rpg->win->zoom}, buttons_names[1], colors[1]);
-    add_button(&menu->buttons, (sfVector2f){top_left.x + 290 * rpg->win->zoom, top_left.y + 880 * rpg->win->zoom}, buttons_names[2], colors[2]);
+    add_button(&menu->buttons, (sfVector2f){top_left.x + 250 * rpg->win->zoom,
+        top_left.y + 760 * rpg->win->zoom}, buttons_names[0], colors[0]);
+    add_button(&menu->buttons, (sfVector2f){top_left.x + 1760 * rpg->win->zoom,
+        top_left.y + 950 * rpg->win->zoom}, buttons_names[1], colors[1]);
+    add_button(&menu->buttons, (sfVector2f){top_left.x + 290 * rpg->win->zoom,
+        top_left.y + 880 * rpg->win->zoom}, buttons_names[2], colors[2]);
     return menu;
 }
 
@@ -99,11 +103,14 @@ menu_t *init_settings(rpg_t *rpg)
     menu->myclock = NULL;
     menu->text = NULL;
     menu->buttons = NULL;
-    add_button(&menu->buttons, (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
-        top_left.y + HEIGHT / 2 - 100 * rpg->win->zoom}, buttons_names[0], color);
-    add_button(&menu->buttons, (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
-        top_left.y + HEIGHT / 2 * rpg->win->zoom}, buttons_names[1], color);
-    add_button(&menu->buttons, (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
-        top_left.y + HEIGHT / 2 + 100 * rpg->win->zoom}, buttons_names[2], color);
+    add_button(&menu->buttons, (sfVector2f){top_left.x + (WIDTH - 100) / 2 *
+        rpg->win->zoom, top_left.y + HEIGHT / 2 - 100 * rpg->win->zoom},
+        buttons_names[0], color);
+    add_button(&menu->buttons, (sfVector2f){top_left.x + (WIDTH - 100) / 2 *
+        rpg->win->zoom, top_left.y + HEIGHT / 2 * rpg->win->zoom},
+        buttons_names[1], color);
+    add_button(&menu->buttons, (sfVector2f){top_left.x + (WIDTH - 100) / 2 *
+        rpg->win->zoom, top_left.y + HEIGHT / 2 + 100 * rpg->win->zoom},
+        buttons_names[2], color);
     return menu;
 }

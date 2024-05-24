@@ -139,7 +139,6 @@ static save_t **init_saves(void)
 
 static void init_rpg2(rpg_t *rpg)
 {
-    rpg->main_menu = init_menu(rpg);
     rpg->save_menu = init_save_menu(rpg);
     rpg->settings = init_settings(rpg);
     rpg->selector = init_select_menu(rpg);
@@ -175,6 +174,7 @@ rpg_t *init_rpg(void)
     rpg->debug = false;
     rpg->text_box = init_text_box();
     rpg->save = init_saves();
+    rpg->main_menu = init_menu(rpg);
     init_rpg2(rpg);
     return rpg;
 }

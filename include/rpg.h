@@ -639,16 +639,39 @@ typedef struct menu_s {
     sfFont *font;
 } menu_t;
 
+typedef struct save_s {
+    sfVector2f pos;
+    attributes_t *attributes;
+    int type;
+    slot_t *slot;
+    slot_t *stuff;
+    all_quests_t *quests;
+} save_t;
+
 typedef struct save_button_s {
     char *name;
-    sfTexture *texture;
-    sfSprite *sprite;
+    entity_t *entity;
     sfText *text;
+    sfText *new_txt;
+    sfText *hp;
+    sfText *attack;
+    sfText *defense;
+    sfText *speed;
     sfFont *font;
+    sfTexture *pp_texture;
+    sfSprite *pp_sprite;
+    sfTexture *hp_texture;
+    sfSprite *hp_sprite;
+    sfTexture *attack_texture;
+    sfSprite *attack_sprite;
+    sfTexture *defense_texture;
+    sfSprite *defense_sprite;
+    sfTexture *speed_texture;
+    sfSprite *speed_sprite;
     sfRectangleShape *rect_shape;
     sfIntRect rect;
     button_state_t state;
-    player_status_t *player_status;
+    attributes_t *attributes;
     void (*action)(void *rpg);
     struct save_button_s *next;
 } save_button_t;
@@ -922,15 +945,6 @@ typedef struct item_s {
     int endurance;
     enum armor_type armor_type;
 } item_t;
-
-typedef struct save_s {
-    sfVector2f pos;
-    attributes_t *attributes;
-    int type;
-    slot_t *slot;
-    slot_t *stuff;
-    all_quests_t *quests;
-} save_t;
 
 typedef struct skill_s skill_t;
 

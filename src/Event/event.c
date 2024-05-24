@@ -11,6 +11,10 @@ void event_states(rpg_t *rpg)
 {
     if (rpg->gamestate == GAME)
         return event_game(rpg);
+    if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY)
+        manage_evt_inv(rpg->event, rpg);
+    if (rpg->gamestate == GAME || rpg->gamestate == SKILL_TREE)
+        manage_skill_tree(rpg);
     if (rpg->gamestate == MAP)
         return event_map(rpg);
     if (rpg->gamestate == SELECTOR)
@@ -53,14 +57,8 @@ void event(rpg_t *rpg)
             printf("Mouse pos: %f, %f\n", rpg->win->mouse_pos.x,
             rpg->win->mouse_pos.y);
         if (rpg->event.type == sfEvtClosed ||
-            rpg->event.key.code == sfKeyEscape) {
-            save(rpg, rpg->save_index + 1);
+            rpg->event.key.code == sfKeyEscape)
             sfRenderWindow_close(rpg->win->window);
-        }
-        if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY)
-            manage_evt_inv(rpg->event, rpg);
-        if (rpg->gamestate == GAME || rpg->gamestate == SKILL_TREE)
-            manage_skill_tree(rpg);
         event_states(rpg);
     }
     if (rpg->gamestate == GAME)

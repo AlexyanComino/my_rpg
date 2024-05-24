@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** my_rpg
 ** File description:
-** save_button
+** select_button
 */
 
 #include "rpg.h"

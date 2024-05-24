@@ -66,6 +66,17 @@ static void anim_entities_selector(rpg_t *rpg)
     }
 }
 
+static void anim_entities_save(rpg_t *rpg)
+{
+    save_button_t *tmp = rpg->save_menu->buttons;
+
+    while (tmp != NULL) {
+        if (tmp->entity != NULL)
+            anim_entity(rpg, tmp->entity);
+        tmp = tmp->next;
+    }
+}
+
 void update(rpg_t *rpg)
 {
     if (rpg->gamestate == MAIN_MENU || rpg->gamestate == PAUSE ||
@@ -73,6 +84,8 @@ void update(rpg_t *rpg)
         rpg->gamestate == SELECTOR) {
         if (rpg->gamestate == SELECTOR)
             anim_entities_selector(rpg);
+        if (rpg->gamestate == SAVE_MENU)
+            anim_entities_save(rpg);
         update_decors_anim(rpg);
     }
     if (rpg->gamestate == GAME) {
