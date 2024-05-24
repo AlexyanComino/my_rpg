@@ -19,3 +19,13 @@ char *my_strcatdup(char *str1, char c)
     result[i + 1] = '\0';
     return result;
 }
+
+char *my_strcatdup2(char *str1, char *str2)
+{
+    char *result = malloc(sizeof(char) * (strlen(str1) + strlen(str2) + 1));
+    char *tmp = strdup(str2);
+
+    strcpy(result, str1);
+    strcat(result, tmp);
+    return result;
+}

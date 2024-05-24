@@ -40,6 +40,28 @@ void interact_with_entity(rpg_t *rpg, entity_t *entity)
     }
 }
 
+static int check_stuff_for_quest(rpg_t *rpg, quest_t *quest)
+{
+    slot_t *tmp = rpg->inventory->player_status->stuff;
+    char *name = NULL;
+
+    for (; tmp; tmp = tmp->next) {
+        if (tmp->item == NULL)
+            continue;
+        name = (tmp->type == WEAPON) ? ((weapon_t *)tmp->item)->name :
+            ((armor_t *)tmp->item)->name;
+        if (strcmp(name, quest->objective) == 0) {
+            quest->is_done = true;
+            rpg->text_box->is_displayed = false;
+            rpg->quest_header->state = Q_END;
+            get_player(rpg)->common->state = IDLE;
+            printf("Quest done: %s\n", quest->name);
+            return 0;
+        }
+    }
+    return 1;
+}
+
 static int check_quest_already_done(rpg_t *rpg, quest_t *quest)
 {
     slot_t *tmp = rpg->inventory->slot;
@@ -57,6 +79,8 @@ static int check_quest_already_done(rpg_t *rpg, quest_t *quest)
             return 0;
         }
     }
+    if (check_stuff_for_quest(rpg, quest) == 0)
+        return 0;
     return 1;
 }
 

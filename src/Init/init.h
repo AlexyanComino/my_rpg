@@ -62,9 +62,3 @@ void save(rpg_t *rpg, int nb);
 
 // load
 save_t *load(int nb);
-
-// load_quests
-int load_quest_name(FILE *file, quest_t *tmp, char *c);
-void load_quest_description(FILE *file, quest_t *tmp, char *c);
-void load_quest_objective(FILE *file, quest_t *tmp, char *c);
-int load_proprietary(FILE *file, all_quests_t *tmp, char *c);

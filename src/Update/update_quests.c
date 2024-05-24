@@ -63,7 +63,7 @@ void update_quests(rpg_t *rpg)
 
     for (; quests; quests = quests->next) {
         tmp = quests->quest;
-        for (; tmp; tmp = tmp->next) {
+        for (; tmp && tmp->name; tmp = tmp->next) {
             update_quest_list(rpg, tmp);
         }
     }

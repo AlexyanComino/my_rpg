@@ -969,6 +969,7 @@ typedef struct rpg_s {
     item_t **items;
     unsigned int items_size;
     save_t **save;
+    int save_index;
     skill_t *skill_tree;
 } rpg_t;
 

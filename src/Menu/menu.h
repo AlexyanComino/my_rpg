@@ -34,6 +34,9 @@ void back_to_menu(rpg_t *rpg);
 
 // actions2
 void selector(rpg_t *rpg);
+void load_save1(rpg_t *rpg);
+void load_save2(rpg_t *rpg);
+void load_save3(rpg_t *rpg);
 
 // get_actions
 void *get_action(char *txt);

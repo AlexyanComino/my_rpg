@@ -44,7 +44,7 @@ static void get_entity(select_button_t *new)
 }
 
 static void get_attributes(char *txt, select_button_t *new, char **tab)
-{;
+{
     char **infos = NULL;
 
     new->attributes = malloc(sizeof(attributes_t));
