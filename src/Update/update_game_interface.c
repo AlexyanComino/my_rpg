@@ -134,7 +134,7 @@ static void update_health_bar_interface(rpg_t *rpg)
         rpg->interface->health_bar->front->r = 0;
     }
     diff_x = size.x - current_size.x;
-    transition_speed = fabs(diff_x) / 10.0f;
+    transition_speed = fabs(diff_x) / 15.0f;
     update_front_bar_interface(rpg, size, color, transition_speed);
 }
 

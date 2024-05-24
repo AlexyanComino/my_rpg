@@ -127,11 +127,12 @@ static arrows_t *get_new_arrow(rpg_t *rpg, entity_t *entity, arrow_dir_t dir)
     new->anim = init_anim("assets/Entities/Archer/Arrow.png",
         ARROW_WIDTH, ARROW_WIDTH);
     sfSprite_setRotation(new->anim->sprite, rotation);
+    sfSprite_setScale(new->anim->sprite, (sfVector2f){entity->common->scale,
+        entity->common->scale});
     new->vertices[0] = (sfVertex){.position = new->pos, .color = sfWhite};
     new->vertices[1] = (sfVertex){.position = new->end, .color = sfWhite};
     new->state = FLY_ARROW;
     new->myclock = init_my_clock();
-    new->next = NULL;
     return new;
 }
 
@@ -140,6 +141,7 @@ void shoot_arrow(rpg_t *rpg, entity_t *entity, arrow_dir_t dir)
     arrows_t *tmp = entity->spe->archer->arrows;
     arrows_t *new_arrow = get_new_arrow(rpg, entity, dir);
 
+    new->next = NULL;
     while (tmp && tmp->next != NULL)
         tmp = tmp->next;
     if (tmp == NULL) {

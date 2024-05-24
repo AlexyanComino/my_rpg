@@ -67,7 +67,9 @@ static void init_damage_text2(damage_text_t *new, damage_text_state_t state)
         "assets/Entities/Effects/crit.png";
     int width = state == BAM ? BAM_WIDTH : CRIT_WIDTH;
     int height = state == BAM ? BAM_WIDTH : CRIT_WIDTH;
+    sfFloatRect rect = sfText_getGlobalBounds(new->text);
 
+    sfText_setOrigin(new->text, (sfVector2f){rect.width / 2, rect.height / 2});
     new->state = state;
     if (state != BAM && state != CRITICAL)
         new->effect = NULL;
@@ -85,7 +87,6 @@ damage_text_t *init_damage_text(rpg_t *rpg, entity_t *entity,
 {
     char *damage_text = get_damage_text(attack, state);
     damage_text_t *new = malloc(sizeof(damage_text_t));
-    sfFloatRect rect;
     sfColor color = get_color_damage_text(rpg, entity, state);
 
     new->text = sfText_create();
@@ -94,13 +95,14 @@ damage_text_t *init_damage_text(rpg_t *rpg, entity_t *entity,
     sfText_setString(new->text, damage_text);
     sfText_setFont(new->text, new->font);
     sfText_setCharacterSize(new->text, new->size);
+    sfText_setScale(new->text, (sfVector2f){entity->common->scale,
+        entity->common->scale});
     sfText_setOutlineThickness(new->text, 2);
-    sfText_setOutlineColor(new->text, sfBlack);
+    sfText_setOutlineColor(new->text, (entity->common->color == BLACK) ?
+        sfWhite : sfBlack);
     new->pos = get_damage_text_pos(entity, state);
     sfText_setPosition(new->text, new->pos);
     sfText_setColor(new->text, color);
-    rect = sfText_getGlobalBounds(new->text);
-    sfText_setOrigin(new->text, (sfVector2f){rect.width / 2, rect.height / 2});
     init_damage_text2(new, state);
     return new;
 }

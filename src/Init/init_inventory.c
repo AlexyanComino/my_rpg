@@ -32,7 +32,8 @@ int init_inventory(rpg_t *rpg, int size)
     inv->scroll_max = 0;
     inv->sprite = init_sprite_from_file("assets/inventory/1.png");
     inv->player_status = init_player_status();
-    inv->desc = init_text((sfVector2f){0, 0}, 30, sfColor_fromRGB(135, 195, 155), "");
+    inv->desc = init_text((sfVector2f){0, 0}, 30,
+        sfColor_fromRGB(135, 195, 155), "");
     inv->desc_sprite = init_sprite_from_file("assets/inventory/desc_inv.png");
     sfSprite_setScale(inv->desc_sprite, (sfVector2f){1.3, 1.3});
     sfSprite_setScale(inv->sprite, (sfVector2f){2, 2});

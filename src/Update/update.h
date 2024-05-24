@@ -33,3 +33,18 @@ void update_chests(rpg_t *rpg);
 
 // Update popup item
 void update_popup_item(rpg_t *rpg);
+
+// Update loading
+void update_loading(rpg_t *rpg);
+
+// Update menus
+void update_shadow_buttons(button_t *buttons);
+void update_main_menu(rpg_t *rpg);
+void update_end_menu(rpg_t *rpg);
+void update_menus(rpg_t *rpg);
+
+// Update pause menu
+void update_pause_menu(rpg_t *rpg);
+
+// Update game
+void update_game(rpg_t *rpg);

@@ -11,8 +11,13 @@ static win_t *init_win(unsigned int width, unsigned int height)
 {
     win_t *win = malloc(sizeof(win_t));
     sfVideoMode mode = {width, height, 32};
+    sfImage *icon = sfImage_createFromFile("assets/Icon.png");
+    sfVector2u icon_size = sfImage_getSize(icon);
 
-    win->window = sfRenderWindow_create(mode, "My_RPG", sfDefaultStyle, NULL);
+    win->window = sfRenderWindow_create(mode, "The Blade of Eternity",
+        sfDefaultStyle, NULL);
+    sfRenderWindow_setIcon(win->window, icon_size.x, icon_size.y,
+        sfImage_getPixelsPtr(icon));
     win->view = sfView_createFromRect((sfFloatRect){0, 0, width, height});
     win->view_menu = sfView_createFromRect((sfFloatRect){0, 0, width, height});
     win->width = width;
@@ -22,10 +27,7 @@ static win_t *init_win(unsigned int width, unsigned int height)
     win->mouse_pos = (sfVector2f){0, 0};
     sfRenderWindow_setFramerateLimit(win->window, win->framerate);
     win->view_pos = (sfVector2f){5331, 8353};
-    sfView_setCenter(win->view_menu, win->view_pos);
-    sfView_zoom(win->view_menu, 2);
     win->zoom = 2;
-    sfRenderWindow_setView(win->window, win->view_menu);
     return win;
 }
 
@@ -128,6 +130,29 @@ static void init_thread(rpg_t *rpg)
         (void *)rpg->shared_data2);
 }
 
+static void pre_display_loading(rpg_t *rpg)
+{
+    sfRenderWindow_clear(rpg->win->window, sfBlack);
+    sfRenderWindow_drawSprite(rpg->win->window,
+        rpg->loading->load->sprite, NULL);
+    sfRenderWindow_drawText(rpg->win->window,
+        rpg->loading->title1->text, NULL);
+    sfRenderWindow_drawText(rpg->win->window,
+        rpg->loading->title2->text, NULL);
+    sfRenderWindow_display(rpg->win->window);
+}
+
+static modes_t *init_modes(void)
+{
+    modes_t *modes = malloc(sizeof(modes_t));
+
+    modes->plus = false;
+    modes->keynote_mode = true;
+    modes->k = false;
+    modes->debug = false;
+    return modes;
+}
+
 static void init_rpg2(rpg_t *rpg)
 {
     rpg->main_menu = init_menu(rpg);
@@ -138,7 +163,6 @@ static void init_rpg2(rpg_t *rpg)
     rpg->minimap = init_minimap(WIDTH, HEIGHT);
     rpg->collision = init_collision();
     init_all_quests(rpg);
-    rpg->plus = false;
     rpg->decors_size = 0;
     rpg->decors = init_decors(&rpg->decors_size);
     rpg->chests_size = 0;
@@ -147,9 +171,10 @@ static void init_rpg2(rpg_t *rpg)
     rpg->items = init_items_tab(&rpg->items_size);
     init_inventory(rpg, 15);
     rpg->inventory = *inventory();
-    pthread_join(rpg->thread, NULL);
-    if (rpg->shared_data->loaded)
-        rpg->map = rpg->shared_data->map;
+    rpg->transition = init_transition();
+    rpg->end_menu = init_end_menu(rpg);
+    rpg->pause_menu = init_pause_menu();
+    printf("Finished init rpg\n");
 }
 
 rpg_t *init_rpg(void)
@@ -159,10 +184,12 @@ rpg_t *init_rpg(void)
     srand(time(NULL));
     rpg->player_index = UINT_MAX;
     init_thread(rpg);
-    rpg->gamestate = MAIN_MENU;
+    rpg->gamestate = LOADING;
     rpg->win = init_win(WIDTH, HEIGHT);
+    rpg->loading = init_loading();
+    pre_display_loading(rpg);
     rpg->event = (sfEvent){0};
-    rpg->debug = false;
+    rpg->modes = init_modes();
     rpg->text_box = init_text_box();
     init_rpg2(rpg);
     return rpg;

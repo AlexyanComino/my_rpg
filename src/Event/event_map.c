@@ -44,6 +44,15 @@ static void sub_zoom_minimap(rpg_t *rpg)
         rpg->minimap->zoom /= 1.1;
 }
 
+static void move_view_minimap(rpg_t *rpg, sfVector2f diff)
+{
+    sfVector2f view_pos = sfView_getCenter(rpg->minimap->view);
+    sfVector2f new_pos = {view_pos.x + diff.x, view_pos.y + diff.y};
+
+    if (is_valid_minimap_view_pos(rpg->minimap, new_pos))
+        sfView_move(rpg->minimap->view, diff);
+}
+
 static void event_map_keypressed(rpg_t *rpg)
 {
     sfKeyCode key = rpg->event.key.code;
@@ -52,8 +61,18 @@ static void event_map_keypressed(rpg_t *rpg)
         add_zoom_minimap(rpg);
     if (key == sfKeySubtract)
         sub_zoom_minimap(rpg);
-    if (key == sfKeyT)
+    if (key == sfKeyUp)
+        move_view_minimap(rpg, (sfVector2f){0, -100});
+    if (key == sfKeyDown)
+        move_view_minimap(rpg, (sfVector2f){0, 100});
+    if (key == sfKeyLeft)
+        move_view_minimap(rpg, (sfVector2f){-100, 0});
+    if (key == sfKeyRight)
+        move_view_minimap(rpg, (sfVector2f){100, 0});
+    if (key == sfKeyT) {
         rpg->gamestate = GAME;
+        setup_command_help_in_game(rpg);
+    }
 }
 
 static bool mouse_on_minimap(rpg_t *rpg, sfVector2f mouse_pos)

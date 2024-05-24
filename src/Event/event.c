@@ -9,18 +9,24 @@
 
 void event_states(rpg_t *rpg)
 {
+    if (rpg->gamestate == LOADING)
+        return event_loading(rpg);
     if (rpg->gamestate == GAME)
         return event_game(rpg);
     if (rpg->gamestate == MAP)
         return event_map(rpg);
     if (rpg->gamestate == SELECTOR)
-        slct_button_event(rpg, rpg->selector->buttons);
+        return slct_button_event(rpg, rpg->selector->buttons);
     if (rpg->gamestate == SAVE_MENU)
-        save_button_event(rpg, rpg->save_menu->buttons);
+        return save_button_event(rpg, rpg->save_menu->buttons);
     if (rpg->gamestate == SETTINGS)
-        menu_button_event(rpg, rpg->settings->buttons);
+        return menu_button_event(rpg, rpg->settings->buttons);
     if (rpg->gamestate == MAIN_MENU)
-        menu_button_event(rpg, rpg->main_menu->buttons);
+        return menu_button_event(rpg, rpg->main_menu->buttons);
+    if (rpg->gamestate == END)
+        return menu_button_event(rpg, rpg->end_menu->buttons);
+    if (rpg->gamestate == PAUSE)
+        return menu_button_event(rpg, rpg->pause_menu->buttons);
 }
 
 void update_mouse_pos(rpg_t *rpg)
@@ -52,8 +58,7 @@ void event(rpg_t *rpg)
             rpg->event.mouseButton.button == sfMouseRight)
             printf("Mouse pos: %f, %f\n", rpg->win->mouse_pos.x,
             rpg->win->mouse_pos.y);
-        if (rpg->event.type == sfEvtClosed ||
-            rpg->event.key.code == sfKeyEscape)
+        if (rpg->event.type == sfEvtClosed)
             sfRenderWindow_close(rpg->win->window);
         if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY)
             manage_evt_inv(rpg->event, rpg);

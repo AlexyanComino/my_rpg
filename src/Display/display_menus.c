@@ -12,11 +12,11 @@ static void display_background_menus(rpg_t *rpg)
     sfRenderWindow_drawSprite(
         rpg->win->window, rpg->map->ground_sprite, NULL);
     if (!sfKeyboard_isKeyPressed(sfKeyV))
-        display_decors_ground(rpg);
+        display_decors_ground(rpg, intrect_is_in_view_menu);
     sfRenderWindow_drawSprite(
         rpg->win->window, rpg->map->high_sprite, NULL);
     if (!sfKeyboard_isKeyPressed(sfKeyV))
-        display_decors_high(rpg);
+        display_decors_high(rpg, intrect_is_in_view_menu);
 }
 
 void display_main_menu(rpg_t *rpg)
@@ -24,8 +24,10 @@ void display_main_menu(rpg_t *rpg)
     button_t *tmp = rpg->main_menu->buttons;
 
     display_background_menus(rpg);
-    sfRenderWindow_drawText(rpg->win->window, rpg->main_menu->text, NULL);
+    display_anim_text(rpg, rpg->main_menu->title1);
+    display_anim_text(rpg, rpg->main_menu->title2);
     while (tmp != NULL) {
+        sfRenderWindow_drawText(rpg->win->window, tmp->shadow, NULL);
         sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
         tmp = tmp->next;
     }
@@ -48,7 +50,7 @@ void display_save_menu(rpg_t *rpg)
 
     display_background_menus(rpg);
     while (tmp != NULL) {
-        if (strcmp(tmp->name, "BACK") != 0)
+        if (strcmp(tmp->name, "Retour") != 0)
             sfRenderWindow_drawRectangleShape(rpg->win->window,
                 tmp->rect_shape, NULL);
         sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
@@ -95,7 +97,7 @@ void display_selector(rpg_t *rpg)
 
     display_background_menus(rpg);
     for (; tmp != NULL; tmp = tmp->next) {
-        if (strcmp(tmp->name, "BACK") == 0) {
+        if (strcmp(tmp->name, "Retour") == 0) {
             sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
             continue;
         }

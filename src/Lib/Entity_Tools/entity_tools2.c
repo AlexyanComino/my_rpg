@@ -42,6 +42,8 @@ sfColor get_color_from_faction(entity_t *entity)
         return DAMAGE_COLOR_RED;
     if (faction == GOBLIN_TEAM)
         return DAMAGE_COLOR_GREEN;
+    if (faction == WITH_ALL)
+        return sfBlack;
     return sfWhite;
 }
 

@@ -22,11 +22,6 @@ static void update_front_bar(entity_t *entity, sfVector2f siz, sfColor color)
     round_rectangle_t *frt = entity->common->health_bar->front;
     float r = frt->r;
 
-    frt->pos = (sfVector2f){entity->common->pos.x -
-        entity->common->health_bar->front->size.x / 2,
-        entity->common->pos.y + entity->common->health_bar->diff_y +
-        (entity->common->health_bar->back->size.y -
-        entity->common->health_bar->front->size.y) / 2};
     sfRectangleShape_setSize(frt->rect_w, (sfVector2f){siz.x, siz.y - r * 2});
     sfRectangleShape_setSize(frt->rect_h, (sfVector2f){siz.x - r * 2, siz.y});
     sfRectangleShape_setPosition(frt->rect_w,
@@ -46,9 +41,6 @@ static void update_back_bar(entity_t *entity)
     round_rectangle_t *back = entity->common->health_bar->back;
     float r = back->r;
 
-    back->pos = (sfVector2f)
-        {entity->common->pos.x - entity->common->health_bar->back->size.x / 2,
-        entity->common->pos.y + entity->common->health_bar->diff_y};
     sfRectangleShape_setPosition(back->rect_w, (sfVector2f)
         {back->pos.x, back->pos.y + r});
     sfRectangleShape_setPosition(back->rect_h, (sfVector2f)
@@ -66,6 +58,35 @@ void update_health_bar(entity_t *entity)
 
     if (size.x < entity->common->health_bar->front->r * 2)
         entity->common->health_bar->front->r = size.x / 2;
+    entity->common->health_bar->front->pos = (sfVector2f)
+        {entity->common->pos.x - entity->common->health_bar->front->size.x / 2,
+        entity->common->pos.y + entity->common->health_bar->diff_y +
+        (entity->common->health_bar->back->size.y -
+        entity->common->health_bar->front->size.y) / 2};
     update_front_bar(entity, size, color);
+    entity->common->health_bar->back->pos = (sfVector2f)
+        {entity->common->pos.x - entity->common->health_bar->back->size.x / 2,
+        entity->common->pos.y + entity->common->health_bar->diff_y};
+    update_back_bar(entity);
+}
+
+void update_health_bar_boss(rpg_t *rpg, entity_t *entity)
+{
+    float ratio = (float)entity->common->attributes->health /
+        (float)entity->common->attributes->max_health;
+    sfVector2f size = {entity->common->health_bar->front->size.x * ratio,
+        entity->common->health_bar->front->size.y};
+    sfVector2f pos = get_player(rpg)->common->pos;
+
+    if (size.x < entity->common->health_bar->front->r * 2)
+        entity->common->health_bar->front->r = size.x / 2;
+    entity->common->health_bar->front->pos = (sfVector2f)
+        {pos.x - entity->common->health_bar->front->size.x / 2,
+        pos.y - HEIGHT / 2 + 60 + (entity->common->health_bar->back->size.y -
+        entity->common->health_bar->front->size.y) / 2};
+    update_front_bar(entity, size, sfColor_fromRGB(198, 52, 40));
+    entity->common->health_bar->back->pos = (sfVector2f)
+        {pos.x - entity->common->health_bar->back->size.x / 2,
+        pos.y - HEIGHT / 2 + 60};
     update_back_bar(entity);
 }

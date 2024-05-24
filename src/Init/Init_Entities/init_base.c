@@ -9,8 +9,8 @@
 
 static sfIntRect get_base_rect(char **infos)
 {
-    return (sfIntRect){atoi(infos[13]), atoi(infos[14]), atoi(infos[15]),
-        atoi(infos[16])};
+    return (sfIntRect){atoi(infos[16]), atoi(infos[17]), atoi(infos[18]),
+        atoi(infos[19])};
 }
 
 static sfRectangleShape *init_base_shape(base_t *base, sfColor color)
@@ -30,7 +30,7 @@ static sfRectangleShape *init_base_shape(base_t *base, sfColor color)
 static sfVector2f *get_pattern_pos(char **infos, unsigned int *max_pattern_pos)
 {
     sfVector2f *pattern_pos = malloc(sizeof(sfVector2f) * 1);
-    int i = 17;
+    int i = 20;
 
     while (infos[i] != NULL) {
         pattern_pos = realloc(pattern_pos, sizeof(sfVector2f) *
@@ -77,7 +77,7 @@ base_t *init_base(char **infos)
 {
     base_t *base = malloc(sizeof(base_t));
 
-    if (atoi(infos[12]) == 0) {
+    if (atoi(infos[15]) == 0) {
         free(base);
         return NULL;
     }

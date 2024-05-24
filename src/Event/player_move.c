@@ -9,7 +9,7 @@
 
 static float get_player_speed(rpg_t *rpg, entity_t *player)
 {
-    if (rpg->debug && sfKeyboard_isKeyPressed(sfKeyLShift))
+    if (rpg->modes->k)
         return player->common->attributes->speed * 4;
     else if (is_slow(player))
         return player->common->attributes->speed / 2;
@@ -38,9 +38,9 @@ static void update_player_x(rpg_t *rpg, entity_t *player)
     sfIntRect newHitbox;
 
     get_newpos_and_newx(rpg, player, &newPos, rpg->win->dt);
-    newHitbox = player->get_hitbox_foot(newPos);
+    newHitbox = player->get_hitbox_foot(newPos, player->common->scale);
     if (!is_entity_hitbox_collide(rpg, player, newHitbox) ||
-        (rpg->debug && player->common->state == WALK)) {
+        rpg->modes->debug) {
         player->common->pos.x = newPos.x;
     }
 }
@@ -74,9 +74,9 @@ static void update_player_y(rpg_t *rpg, entity_t *player)
     sfIntRect newHitbox;
 
     get_newpos_and_newy(rpg, player, &newPos, rpg->win->dt);
-    newHitbox = player->get_hitbox_foot(newPos);
+    newHitbox = player->get_hitbox_foot(newPos, player->common->scale);
     if (!is_entity_hitbox_collide(rpg, player, newHitbox) ||
-        (rpg->debug && player->common->state == WALK)) {
+        rpg->modes->debug) {
         player->common->pos.y = newPos.y;
     }
 }

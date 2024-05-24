@@ -69,14 +69,12 @@ static void update_pnj_torch(rpg_t *rpg, entity_t *entity)
     }
 }
 
-void update_torch(void *vrpg, entity_t *entity)
+void update_torch(rpg_t *rpg, entity_t *entity)
 {
-    rpg_t *rpg = vrpg;
-
+    update_common(rpg, entity);
     if (entity->common->state == RIEN)
         return;
-    update_common(rpg, entity);
-    anim_torch(rpg, entity);
+    entity->anim(rpg, entity);
     if (!is_player(rpg, entity) && is_alive(entity))
         update_pnj_torch(rpg, entity);
 }

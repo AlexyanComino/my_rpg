@@ -61,23 +61,50 @@ static void display_arrows_hit(rpg_t *rpg, entity_t *entity)
     }
 }
 
+static void display_effects(rpg_t *rpg, entity_t *entity)
+{
+    if (entity->common->fire->is_on_eff)
+        sfRenderWindow_drawSprite(rpg->win->window,
+            entity->common->fire->eff_mark->anim->sprite, NULL);
+    if (entity->common->poison->is_on_eff)
+        sfRenderWindow_drawSprite(rpg->win->window,
+            entity->common->poison->eff_mark->anim->sprite, NULL);
+}
+
+static void display_grade_icon(rpg_t *rpg, entity_t *entity)
+{
+    if (entity->common->grade_type != SOLDAT)
+        sfRenderWindow_drawSprite(rpg->win->window,
+            entity->common->grade_icon->sprite, NULL);
+}
+
+static void display_common2(rpg_t *rpg, entity_t *entity)
+{
+    if (!is_player(rpg, entity) && rpg->modes->plus &&
+        entity->common->grade_type != BOSS) {
+        display_health_bar(rpg, entity);
+        sfRenderWindow_drawText(rpg->win->window, entity->common->name_text,
+        NULL);
+    }
+    if (rpg->modes->debug)
+        display_debug_common(rpg, entity);
+}
+
 void display_common(rpg_t *rpg, entity_t *entity)
 {
     if (entity->common->stun->is_stunned)
         sfRenderWindow_drawSprite(rpg->win->window,
             entity->common->stun->stun_mark->anim->sprite, NULL);
-    if (entity->common->fire->is_on_fire &&
-        entity->common->fire->fire_mark->is_display == 1)
-        sfRenderWindow_drawSprite(rpg->win->window,
-            entity->common->fire->fire_mark->anim->sprite, NULL);
+    display_grade_icon(rpg, entity);
+    display_effects(rpg, entity);
     sfRenderWindow_drawSprite(rpg->win->window, entity->common->anim->sprite,
         NULL);
     display_arrows_hit(rpg, entity);
-    if (!is_player(rpg, entity) && rpg->plus) {
+    if (entity->common->grade_type == BOSS &&
+        intrect_is_in_real_view(rpg, entity->common->zones->hitbox)) {
         display_health_bar(rpg, entity);
         sfRenderWindow_drawText(rpg->win->window, entity->common->name_text,
             NULL);
     }
-    if (rpg->debug)
-        display_debug_common(rpg, entity);
+    display_common2(rpg, entity);
 }

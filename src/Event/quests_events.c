@@ -109,6 +109,8 @@ void quest_handling(rpg_t *rpg, entity_t *tmp)
 {
     if (!tmp->in_view)
         return;
+    if (is_player(rpg, tmp))
+        return;
     if (is_player_interact_entity(rpg, tmp)) {
         rpg->text_box->entity = tmp;
         if (rpg->event.key.code == sfKeyE)
@@ -122,8 +124,9 @@ void quest_handling(rpg_t *rpg, entity_t *tmp)
             rpg->event.key.code == sfKeyDown)
             && rpg->text_box->is_fully_displayed == true &&
                 rpg->text_box->dialog->next == NULL
-                && rpg->text_box->has_choice)
+                && rpg->text_box->has_choice) {
             change_choice(rpg);
+        }
     }
 }
 

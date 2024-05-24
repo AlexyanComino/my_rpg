@@ -56,11 +56,13 @@ entity_t *init_entity_warrior(char **infos)
     entity->type = WARRIOR;
     entity->common = init_common(infos, WARRIOR);
     entity->spe = init_spe_warrior(infos);
-    entity->in_view = false;
     entity->updt = &update_warrior;
     entity->disp = &display_warrior;
+    entity->destroy = &destroy_entity_warrior;
+    entity->anim = &anim_warrior;
     entity->get_hitbox = &get_hitbox_warrior;
     entity->get_hitbox_attack = &get_warrior_hitbox_attack;
     entity->get_hitbox_foot = &get_hitbox_warrior_foot;
+    entity->in_view = false;
     return entity;
 }

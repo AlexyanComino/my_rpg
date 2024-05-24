@@ -58,34 +58,39 @@ static void update_sprite_color(sfSprite *sprite, int diff)
 
 static void appear_popup_item(popup_item_t *popup)
 {
-    update_text_color(popup->item_name, 10);
+    update_text_color(popup->title->text, 10);
     update_text_color(popup->item_description, 10);
     update_text_color(popup->skip_text, 10);
     update_text_color(popup->rarity, 10);
     update_sprite_color(popup->back_sprite, 10);
-    update_sprite_color(popup->item_sprite, 10);
+    update_sprite_color(popup->item_anim->sprite, 10);
     update_sprite_color(popup->light_sprite, 10);
 }
 
 static void disappear_popup_item(popup_item_t *popup)
 {
-    update_text_color(popup->item_name, -7);
+    update_text_color(popup->title->text, -7);
     update_text_color(popup->item_description, -7);
     update_text_color(popup->skip_text, -7);
     update_text_color(popup->rarity, -7);
     update_sprite_color(popup->back_sprite, -7);
     update_sprite_color(popup->light_sprite, -7);
-    update_sprite_color(popup->item_sprite, -7);
+    update_sprite_color(popup->item_anim->sprite, -7);
+}
+
+static void destroy_anim_sprite(anim_sprite_t *anim_sprite)
+{
+    sfSprite_destroy(anim_sprite->sprite);
+    sfTexture_destroy(anim_sprite->texture);
+    free(anim_sprite);
 }
 
 static void desactive_popup_item(rpg_t *rpg, popup_item_t *popup)
 {
     popup->display = 0;
-    sfSprite_destroy(popup->item_sprite);
-    sfTexture_destroy(popup->item_texture);
-    popup->item_sprite = NULL;
-    popup->item_texture = NULL;
-    update_text_color(popup->item_name, -7);
+    destroy_anim_sprite(popup->item_anim);
+    popup->item_anim = NULL;
+    update_text_color(popup->title->text, -7);
     update_text_color(popup->item_description, -7);
     update_text_color(popup->skip_text, -7);
     update_text_color(popup->rarity, -7);
@@ -96,7 +101,7 @@ static void desactive_popup_item(rpg_t *rpg, popup_item_t *popup)
 
 static void update_popup_item_color(rpg_t *rpg, popup_item_t *popup)
 {
-    sfColor color = sfSprite_getColor(popup->item_sprite);
+    sfColor color = sfSprite_getColor(popup->item_anim->sprite);
 
     if (popup->display == 1) {
         appear_popup_item(popup);
@@ -125,6 +130,8 @@ void update_popup_item(rpg_t *rpg)
 
     if (popup->display == 0)
         return;
+    anim_text_anim(popup->title);
+    anim_sprite_anim(popup->item_anim);
     update_light_rotation(popup);
     update_popup_item_color(rpg, popup);
 }

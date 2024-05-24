@@ -64,9 +64,20 @@ static void display_chests(rpg_t *rpg)
             continue;
         sfRenderWindow_drawSprite(rpg->win->window,
             rpg->chests[i]->anim->sprite, NULL);
-        if (rpg->debug)
+        if (rpg->modes->debug)
             sfRenderWindow_drawRectangleShape(rpg->win->window,
                 rpg->chests[i]->shape, NULL);
+    }
+}
+
+static void display_pause_menu(rpg_t *rpg)
+{
+    sfRenderWindow_drawSprite(rpg->win->window, rpg->pause_menu->back_sprite,
+        NULL);
+    display_anim_text(rpg, rpg->pause_menu->title);
+    for (button_t *tmp = rpg->pause_menu->buttons; tmp; tmp = tmp->next) {
+        sfRenderWindow_drawText(rpg->win->window, tmp->shadow, NULL);
+        sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
     }
 }
 
@@ -76,13 +87,13 @@ void display_game(rpg_t *rpg)
         sfRenderWindow_setView(rpg->win->window, rpg->win->view);
     sfRenderWindow_drawSprite(rpg->win->window, rpg->map->ground_sprite,
         NULL);
-    display_decors_ground(rpg);
+    display_decors_ground(rpg, intrect_is_in_view);
     display_chests(rpg);
     display_entities(rpg);
     sfRenderWindow_drawSprite(rpg->win->window, rpg->map->high_sprite,
         NULL);
-    display_decors_high(rpg);
-    if (rpg->debug)
+    display_decors_high(rpg, intrect_is_in_view);
+    if (rpg->modes->debug)
         display_collision(rpg);
     display_game_interface(rpg);
     display_inv(rpg);
@@ -90,4 +101,6 @@ void display_game(rpg_t *rpg)
     display_quests(rpg);
     if (rpg->gamestate == MAP)
         display_minimap(rpg);
+    if (rpg->gamestate == PAUSE)
+        display_pause_menu(rpg);
 }

@@ -19,53 +19,20 @@ static void check_against_all(rpg_t *rpg, entity_t *entity)
     }
 }
 
-static void update_stun(entity_t *entity)
-{
-    if (entity->common->stun->is_stunned) {
-        update_clock_seconds(entity->common->stun->stun_clock);
-        if (entity->common->stun->stun_clock->seconds >=
-            entity->common->stun->stun_time) {
-            entity->common->stun->is_stunned = false;
-            entity->common->stun->stun_mark->anim->rect.left = 0;
-            entity->common->stun->stun_mark->anim->rect.top = 0;
-        }
-    }
-}
-
-static void update_fire_damage(rpg_t *rpg, entity_t *entity)
-{
-    update_clock_seconds(entity->common->fire->fire_damage_clock);
-    if (entity->common->fire->fire_damage_clock->seconds >= 1) {
-        entity->common->attributes->health -=
-            entity->common->fire->fire_damage;
-        add_dmg_text(rpg, entity, entity->common->fire->fire_damage,
-            FIRE_TEXT);
-        sfClock_restart(entity->common->fire->fire_damage_clock->clock);
-    }
-}
-
-static void update_fire(rpg_t *rpg, entity_t *entity)
-{
-    if (entity->common->fire->is_on_fire && is_alive(entity)) {
-        update_clock_seconds(entity->common->fire->fire_clock);
-        if (entity->common->fire->fire_clock->seconds >=
-            entity->common->fire->burn_time) {
-            entity->common->fire->is_on_fire = false;
-            entity->common->fire->fire_mark->anim->rect.left = 0;
-            entity->common->fire->fire_mark->anim->rect.top = 0;
-            sfSprite_setTextureRect(entity->common->fire->fire_mark->anim->
-                sprite, entity->common->fire->fire_mark->anim->rect);
-        }
-        update_fire_damage(rpg, entity);
-    }
-}
-
 static void update_name_text_pos(entity_t *entity)
 {
     sfVector2f pos = entity->common->pos;
 
     pos.y -= 50;
     sfText_setPosition(entity->common->name_text, pos);
+}
+
+static void update_name_text_boss_pos(rpg_t *rpg, entity_t *entity)
+{
+    sfVector2f pos = get_player(rpg)->common->pos;
+    sfVector2f pos1 = {pos.x, pos.y - HEIGHT / 2 + 110};
+
+    sfText_setPosition(entity->common->name_text, pos1);
 }
 
 static void update_list_arrows_hit(entity_t *entity)
@@ -91,19 +58,86 @@ static void update_list_arrows_hit(entity_t *entity)
     }
 }
 
+static void update_grade_icon_pos(entity_t *entity)
+{
+    sfVector2f pos = entity->common->pos;
+
+    if (entity->common->grade_type == SOLDAT)
+        return;
+    if (entity->common->grade_type == BOSS) {
+        pos.y -= 60 * entity->common->scale;
+    } else {
+        pos.y -= 80 * entity->common->scale;
+    }
+    anim_sprite_anim(entity->common->grade_icon);
+    sfSprite_setPosition(entity->common->grade_icon->sprite, pos);
+}
+
+static void check_respawn_entity(rpg_t *rpg, entity_t *entity)
+{
+    sfIntRect rect = entity->get_hitbox(entity->common->pos,
+        entity->common->scale);
+
+    update_clock_seconds(entity->common->death->anim->myclock);
+    if (entity->common->death->anim->myclock->seconds > RESPAWN_TIME &&
+        !intrect_is_in_view(rpg, rect)) {
+        entity->common->state = IDLE;
+        sfClock_restart(entity->common->death->anim->myclock->clock);
+    }
+}
+
+static void launch_end(rpg_t *rpg)
+{
+    rpg->gamestate = END;
+    rpg->win->view_pos = (sfVector2f){WIDTH / 2, HEIGHT / 2};
+    sfView_setCenter(rpg->win->view, rpg->win->view_pos);
+    sfSprite_setPosition(rpg->transition->anim->sprite, rpg->win->view_pos);
+    sfRenderWindow_setView(rpg->win->window, rpg->win->view);
+    rpg->ent[rpg->player_index]->destroy(rpg->ent[rpg->player_index]);
+    for (unsigned int i = rpg->player_index; i < rpg->ent_size - 1; i++)
+        rpg->ent[i] = rpg->ent[i + 1];
+    rpg->ent_size--;
+}
+
+static void check_player_game_over(rpg_t *rpg, entity_t *player)
+{
+    update_clock_seconds(player->common->death->anim->myclock);
+    if (player->common->death->anim->myclock->seconds > 3) {
+        sfClock_restart(player->common->death->anim->myclock->clock);
+        sfSprite_setPosition(rpg->transition->anim->sprite,
+            player->common->pos);
+        launch_transition(rpg, &launch_end);
+    }
+}
+
+static void update_common2(rpg_t *rpg, entity_t *entity)
+{
+    if (entity->common->grade_type == BOSS) {
+        update_health_bar_boss(rpg, entity);
+        update_name_text_boss_pos(rpg, entity);
+    }
+    if (rpg->modes->plus) {
+        if (entity->common->grade_type != BOSS) {
+            update_health_bar(entity);
+            update_name_text_pos(entity);
+        }
+    }
+}
+
 void update_common(rpg_t *rpg, entity_t *entity)
 {
+    if (entity->common->state == RIEN)
+        return check_respawn_entity(rpg, entity);
+    if (is_player(rpg, entity) && entity->common->state == DEAD)
+        check_player_game_over(rpg, entity);
     anim_common_effects(entity);
     check_against_all(rpg, entity);
     update_entity_sprite(entity);
     update_damage_texts(&entity->common->damage_texts);
     update_damage_text_effects(&entity->common->damage_texts);
     update_entity_detection(rpg, entity);
-    update_stun(entity);
-    update_fire(rpg, entity);
+    update_effs(rpg, entity);
     update_list_arrows_hit(entity);
-    if (rpg->plus) {
-        update_health_bar(entity);
-        update_name_text_pos(entity);
-    }
+    update_grade_icon_pos(entity);
+    update_common2(rpg, entity);
 }

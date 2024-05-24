@@ -7,11 +7,11 @@
 
 #include "rpg.h"
 
-static void entity_is_dead(entity_t *entity)
+void entity_is_dead(entity_t *entity)
 {
     printf("Entity %s is dead\n", entity->common->name);
     entity->common->state = DEAD;
-    entity->common->fire->is_on_fire = false;
+    entity->common->fire->is_on_eff = false;
     entity->common->stun->is_stunned = false;
     sfClock_restart(entity->common->death->anim->myclock->clock);
 }
@@ -28,25 +28,6 @@ static void check_special_attack(entity_t *entity, entity_t *target,
         else
             *state = CRITICAL;
     }
-}
-
-static float get_burn_time(void)
-{
-    return ((float)rand() / RAND_MAX) * (2.5) + 2.5;
-}
-
-static unsigned int get_fire_damage(unsigned int attack)
-{
-    return (attack * 0.3);
-}
-
-static void burn_entity(entity_t *target, unsigned int attack)
-{
-    target->common->fire->is_on_fire = true;
-    target->common->fire->burn_time = get_burn_time();
-    target->common->fire->fire_damage = get_fire_damage(attack);
-    sfClock_restart(target->common->fire->fire_clock->clock);
-    sfClock_restart(target->common->fire->fire_damage_clock->clock);
 }
 
 static unsigned int get_attack(entity_t *entity, entity_t *target)
@@ -82,9 +63,10 @@ void decrease_health(rpg_t *rpg, entity_t *entity, entity_t *target)
         entity->common->faction == target->common->faction)
         entity->common->faction = AGAINST_ALL;
     target->common->attributes->health -= attack;
-    if (entity->type == TORCH) {
+    if (entity->type == TORCH)
         burn_entity(target, attack);
-    }
+    if (is_player(rpg, entity) && sfKeyboard_isKeyPressed(sfKeyX))
+        poison_entity(target, attack);
     add_dmg_text(rpg, target, attack, state);
     target->common->x = get_entity_side(target, entity->common->pos);
     if (target->common->attributes->health <= 0)
@@ -99,7 +81,7 @@ static void check_miss_attack(rpg_t *rpg, entity_t *entity, entity_t *enemy)
             add_dmg_text(rpg, enemy, 0, MISS);
     } else {
         if (get_distance(entity->common->pos,
-            enemy->common->pos) <= 190)
+            enemy->common->pos) <= 190 * entity->common->scale)
             add_dmg_text(rpg, enemy, 0, MISS);
     }
 }
@@ -114,7 +96,8 @@ void entity_attack(rpg_t *rpg, entity_t *entity)
             continue;
         enemy = rpg->ent[i];
         if (!is_player(rpg, entity) &&
-            entity->common->faction == enemy->common->faction)
+            (entity->common->faction == enemy->common->faction ||
+            enemy->common->faction == WITH_ALL))
             continue;
         if (entity_can_attack_target(rpg, entity, enemy))
             decrease_health(rpg, entity, enemy);

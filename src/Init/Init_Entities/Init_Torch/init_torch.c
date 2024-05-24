@@ -45,6 +45,8 @@ entity_t *init_entity_torch(char **infos)
     entity->in_view = false;
     entity->updt = &update_torch;
     entity->disp = &display_torch;
+    entity->anim = &anim_torch;
+    entity->destroy = &destroy_entity_torch;
     entity->get_hitbox = &get_hitbox_torch;
     entity->get_hitbox_attack = &get_hitbox_attack_torch;
     entity->get_hitbox_foot = &get_hitbox_torch_foot;

@@ -17,6 +17,9 @@ static color_entity_t get_color(char *color)
         return RED;
     if (!strcmp(color, "Y"))
         return YELLOW;
+    if (!strcmp(color, "N"))
+        return BLACK;
+    fprintf(stderr, "Error: Invalid color\n");
     return -1;
 }
 
@@ -24,11 +27,11 @@ static attributes_t *get_attributes(char **infos)
 {
     attributes_t *attributes = malloc(sizeof(attributes_t));
 
-    attributes->max_health = atoi(infos[8]);
+    attributes->max_health = atoi(infos[10]);
     attributes->health = attributes->max_health;
-    attributes->attack = atoi(infos[9]);
-    attributes->defense = atoi(infos[10]);
-    attributes->speed = atoi(infos[11]);
+    attributes->attack = atoi(infos[11]);
+    attributes->defense = atoi(infos[12]);
+    attributes->speed = atoi(infos[13]);
     return attributes;
 }
 
@@ -44,6 +47,8 @@ static death_t *init_death(void)
 
 static faction_t get_faction(color_entity_t color, entity_type_t type)
 {
+    if (color == BLACK)
+        return WITH_ALL;
     if (type == TNT || type == TORCH)
         return GOBLIN_TEAM;
     if (color == BLUE)
@@ -57,14 +62,27 @@ static faction_t get_faction(color_entity_t color, entity_type_t type)
     return GOBLIN_TEAM;
 }
 
-static float get_attack_cooldown(entity_type_t type)
+static float get_attack_cooldown(float cooldown)
 {
-    if (type == TNT)
-        return (float)(1.5 + (float)rand() / RAND_MAX);
-    return (float)(rand() % 75 + 75) / 100;
+    float bonus = (float)(rand() % 250) / 1000;
+    int sign = rand() % 2;
+
+    if (sign == 0)
+        return cooldown + bonus;
+    return cooldown - bonus;
 }
 
-common_entity_t *init_common(char **infos, entity_type_t type)
+static grade_type_t get_entity_grade(char *info)
+{
+    if (!strcmp(info, "E"))
+        return ELITE;
+    if (!strcmp(info, "B"))
+        return BOSS;
+    return SOLDAT;
+}
+
+common_entity_t *init_common(char **infos,
+    entity_type_t type)
 {
     common_entity_t *common = malloc(sizeof(common_entity_t));
 
@@ -76,14 +94,14 @@ common_entity_t *init_common(char **infos, entity_type_t type)
     common->state = IDLE;
     common->x = (rand() % 2 == 0) ? RIGHT : LEFT;
     common->y = NONE;
-    common->zones = init_entity_zones(infos, common->pos, type);
+    common->grade_type = get_entity_grade(infos[5]);
+    common->scale = atof(infos[6]);
+    common->zones = init_entity_zones(infos, common->pos, type, common->scale);
     common->attributes = get_attributes(infos);
     common->death = init_death();
     common->faction = get_faction(common->color, type);
     common->faction_origin = common->faction;
-    common->clock_cooldown_attack = init_my_clock();
-    common->attack_cooldown = get_attack_cooldown(type);
-    common->damage_texts = NULL;
+    common->attack_cooldown = get_attack_cooldown(atof(infos[14]));
     init_common2(common, type);
     return common;
 }

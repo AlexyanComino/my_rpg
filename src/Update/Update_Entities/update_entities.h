@@ -15,6 +15,7 @@ void update_damage_texts(damage_text_t **damage_texts);
 void update_entities(rpg_t *rpg);
 
 // Entity attack
+void entity_is_dead(entity_t *entity);
 void decrease_health(rpg_t *rpg, entity_t *entity, entity_t *target);
 void entity_attack(rpg_t *rpg, entity_t *entity);
 
@@ -49,6 +50,14 @@ sfIntRect get_hitbox_foot(entity_t *entity, sfVector2f pos);
 void fill_round(round_rectangle_t *rect, float r, sfVector2f pos,
     sfVector2f size);
 void update_health_bar(entity_t *entity);
+void update_health_bar_boss(rpg_t *rpg, entity_t *entity);
 
 // Flee entity
 bool flee_entity(rpg_t *rpg, entity_t *entity, entity_t *enemy);
+
+// Update eff
+void update_effs(rpg_t *rpg, entity_t *entity);
+
+// Eff entity attack
+void burn_entity(entity_t *target, unsigned int attack);
+void poison_entity(entity_t *target, unsigned int attack);

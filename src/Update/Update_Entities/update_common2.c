@@ -42,16 +42,18 @@ static void update_sprite_scale(common_entity_t *common)
 {
     sfVector2f scale = sfSprite_getScale(common->anim->sprite);
 
-    if (common->x == RIGHT && scale.x != 1)
-        sfSprite_setScale(common->anim->sprite, (sfVector2f){1, 1});
-    if (common->x == LEFT && scale.x != -1)
-        sfSprite_setScale(common->anim->sprite, (sfVector2f){-1, 1});
+    if (common->x == RIGHT && scale.x != common->scale)
+        sfSprite_setScale(common->anim->sprite, (sfVector2f){common->scale,
+            common->scale});
+    if (common->x == LEFT && scale.x != -common->scale)
+        sfSprite_setScale(common->anim->sprite, (sfVector2f){-common->scale,
+            common->scale});
 }
 
 static void update_sprite_foot_hitbox(entity_t *entity)
 {
     entity->common->zones->hitbox_foot = entity->get_hitbox_foot(
-        entity->common->pos);
+        entity->common->pos, entity->common->scale);
     sfRectangleShape_setPosition(entity->common->zones->rect_hitbox_foot,
         (sfVector2f){entity->common->zones->hitbox_foot.left,
         entity->common->zones->hitbox_foot.top});
@@ -62,25 +64,22 @@ static void update_sprite_foot_hitbox(entity_t *entity)
 
 static void update_sprites_hitboxs_pos(entity_t *tmp)
 {
-    tmp->common->zones->hitbox = tmp->get_hitbox(tmp->common->pos);
-    sfRectangleShape_setPosition(tmp->common->zones->rect_hitbox,
-        (sfVector2f){tmp->common->zones->hitbox.left,
-        tmp->common->zones->hitbox.top});
-    if (sfRectangleShape_getSize(tmp->common->zones->rect_hitbox).x !=
-        tmp->common->zones->hitbox.width)
-        sfRectangleShape_setSize(tmp->common->zones->rect_hitbox,
-        (sfVector2f){tmp->common->zones->hitbox.width,
-        tmp->common->zones->hitbox.height});
-    tmp->common->zones->hitbox_attack = tmp->get_hitbox_attack(
-        tmp->common->pos, tmp->common->x, tmp->common->y);
-    sfRectangleShape_setPosition(tmp->common->zones->rect_hitbox_attack,
-        (sfVector2f){tmp->common->zones->hitbox_attack.left,
-        tmp->common->zones->hitbox_attack.top});
-    if (sfRectangleShape_getSize(tmp->common->zones->rect_hitbox_attack).x !=
-        tmp->common->zones->hitbox_attack.width)
-        sfRectangleShape_setSize(tmp->common->zones->rect_hitbox_attack,
-        (sfVector2f){tmp->common->zones->hitbox_attack.width,
-        tmp->common->zones->hitbox_attack.height});
+    zones_entity_t *z = tmp->common->zones;
+
+    z->hitbox = tmp->get_hitbox(tmp->common->pos, tmp->common->scale);
+    sfRectangleShape_setPosition(z->rect_hitbox, (sfVector2f)
+        {z->hitbox.left, z->hitbox.top});
+    if (sfRectangleShape_getSize(z->rect_hitbox).x != z->hitbox.width)
+        sfRectangleShape_setSize(z->rect_hitbox,
+        (sfVector2f){z->hitbox.width, z->hitbox.height});
+    z->hitbox_attack = tmp->get_hitbox_attack(
+        tmp->common->pos, tmp->common->x, tmp->common->y, tmp->common->scale);
+    sfRectangleShape_setPosition(z->rect_hitbox_attack,
+        (sfVector2f){z->hitbox_attack.left, z->hitbox_attack.top});
+    if (sfRectangleShape_getSize(z->rect_hitbox_attack).x !=
+        z->hitbox_attack.width)
+        sfRectangleShape_setSize(z->rect_hitbox_attack,
+        (sfVector2f){z->hitbox_attack.width, z->hitbox_attack.height});
     update_sprite_foot_hitbox(tmp);
 }
 

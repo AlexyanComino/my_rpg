@@ -20,8 +20,10 @@
 #include <sys/mman.h>
 #include <fcntl.h>
 #include <limits.h>
+#include <wchar.h>
+#include <locale.h>
 
-#define NUM_POINTS 30  // Nombre de points pour la parabole
+#define NUM_POINTS 30
 
 #define WIDTH 1920
 #define HEIGHT 1080
@@ -100,6 +102,7 @@
 #define GOB_EXCLAM_HEIGHT 3696 / 11
 
 #define FIRE_WIDTH 128
+#define POISON_WIDTH 200
 //
 
 // Cooldowns
@@ -141,11 +144,22 @@
 // Chests
 #define CHEST_WIDTH 192
 
+// Loading
+#define DOTS_WIDTH 400
+#define DOTS_HEIGHT 300
+#define TRANSI_WIDTH 1000
+#define TRANSI_HEIGHT 563
+
+#define RESPAWN_TIME 180
+
+typedef struct rpg_s rpg_t;
+typedef struct entity_s entity_t;
 typedef enum color_entity_s {
     BLUE = 0,
     PURPLE,
     RED,
     YELLOW,
+    BLACK,
 } color_entity_t;
 
 typedef enum side_x_s {
@@ -230,6 +244,7 @@ typedef enum faction {
     YELLOW_TEAM,
     GOBLIN_TEAM,
     AGAINST_ALL,
+    WITH_ALL,
 } faction_t;
 
 typedef struct base_s {
@@ -251,6 +266,7 @@ typedef enum damage_text_state {
     BAM,
     MISS,
     FIRE_TEXT,
+    POISON_TEXT,
 } damage_text_state_t;
 
 typedef struct damage_text_s {
@@ -270,15 +286,15 @@ typedef struct stun_s {
     float stun_time;
 } stun_t;
 
-typedef struct fire_s {
-    bool is_on_fire;
-    mark_t *fire_mark;
-    my_clock_t *fire_clock;
-    float burn_time;
-    float fire_time;
-    my_clock_t *fire_damage_clock;
-    int fire_damage;
-} fire_t;
+typedef struct eff_s {
+    bool is_on_eff;
+    mark_t *eff_mark;
+    my_clock_t *eff_clock;
+    float eff_duration;
+    float eff_cooldown;
+    my_clock_t *eff_damage_clock;
+    int eff_damage;
+} eff_t;
 
 typedef struct round_rectangle_t {
     sfRectangleShape *rect_w;
@@ -328,6 +344,23 @@ typedef struct arrows_s {
     struct arrows_s *next;
 } arrows_t;
 
+typedef enum grade_type_s {
+    SOLDAT_QUEST,
+    SOLDAT,
+    ELITE,
+    BOSS,
+} grade_type_t;
+
+typedef struct anim_sprite_s {
+    sfSprite *sprite;
+    sfTexture *texture;
+    float scale_min;
+    float scale_max;
+    int scale_dir;
+    float speed;
+    float init_scale;
+} anim_sprite_t;
+
 typedef struct common_entity_s {
     char *name;
     sfText *name_text;
@@ -336,6 +369,7 @@ typedef struct common_entity_s {
     sfVector2f init_pos;
     color_entity_t color;
     state_entity_t state;
+    float scale;
     side_x_t x;
     side_y_t y;
     zones_entity_t *zones;
@@ -347,10 +381,13 @@ typedef struct common_entity_s {
     float attack_cooldown;
     damage_text_t *damage_texts;
     stun_t *stun;
-    fire_t *fire;
+    eff_t *fire;
+    eff_t *poison;
     health_bar_t *health_bar;
     arrows_t *arrows_hit;
     bool is_fleeing;
+    grade_type_t grade_type;
+    anim_sprite_t *grade_icon;
 } common_entity_t;
 
 typedef struct warrior_s {
@@ -469,11 +506,14 @@ typedef struct entity_s {
     common_entity_t *common;
     entity_type_t type;
     bool in_view;
-    void (*updt)(void *rpg, struct entity_s *entity);
-    void (*disp)(void *rpg, struct entity_s *entity);
-    sfIntRect (*get_hitbox)(sfVector2f pos);
-    sfIntRect (*get_hitbox_attack)(sfVector2f pos, side_x_t x, side_y_t y);
-    sfIntRect (*get_hitbox_foot)(sfVector2f pos);
+    void (*updt)(rpg_t *rpg, entity_t *entity);
+    void (*disp)(rpg_t *rpg, entity_t *entity);
+    void (*destroy)(entity_t *entity);
+    void (*anim)(rpg_t *rpg, entity_t *entity);
+    sfIntRect (*get_hitbox)(sfVector2f pos, float scale);
+    sfIntRect (*get_hitbox_attack)(sfVector2f pos, side_x_t x, side_y_t y,
+        float scale);
+    sfIntRect (*get_hitbox_foot)(sfVector2f pos, float scale);
 } entity_t;
 
 typedef struct restricted_s {
@@ -484,6 +524,16 @@ typedef struct restricted_s {
     bool in_base;
 } restricted_t;
 
+typedef struct anim_text_s {
+    sfText *text;
+    sfText *shadow;
+    float scale_min;
+    float scale_max;
+    int scale_dir;
+    float speed;
+    bool has_shadow;
+} anim_text_t;
+
 typedef struct popup_item_s {
     sfSprite *back_sprite;
     sfTexture *back_texture;
@@ -491,9 +541,8 @@ typedef struct popup_item_s {
     sfTexture *light_texture;
     float light_angle;
     sfFont *font;
-    sfText *item_name;
-    sfSprite *item_sprite;
-    sfTexture *item_texture;
+    anim_text_t *title;
+    anim_sprite_t *item_anim;
     sfText *item_description;
     sfText *rarity;
     sfText *skip_text;
@@ -505,11 +554,19 @@ typedef struct player_infos_s {
     sfFont *font;
 } player_infos_t;
 
+typedef struct command_list_s {
+    sfText *action;
+    sfSprite *sprite;
+    sfTexture *texture;
+    struct command_list_s *next;
+} command_list_t;
+
 typedef struct interface_s {
     restricted_t *restricted;
     health_bar_t *health_bar;
     popup_item_t *popup_item;
     player_infos_t *player_infos;
+    command_list_t *command_list;
 } interface_t;
 
 typedef enum quest_type {
@@ -556,6 +613,7 @@ typedef enum {
     SELECTOR,
     INVENTORY,
     MAP,
+    LOADING,
     END
 } state_t;
 
@@ -617,7 +675,10 @@ typedef struct button_s {
     sfTexture *texture;
     sfSprite *sprite;
     sfText *text;
+    sfText *shadow;
     sfFont *font;
+    sfColor color;
+    sfColor click_color;
     sfRectangleShape *rect_shape;
     sfIntRect rect;
     button_state_t state;
@@ -627,14 +688,9 @@ typedef struct button_s {
 } button_t;
 
 typedef struct menu_s {
-    sfSprite *ground;
-    sfTexture *ground_texture;
-    sfSprite *high;
-    sfTexture *high_texture;
-    my_clock_t *myclock;
     button_t *buttons;
-    sfIntRect bg_rect;
-    sfText *text;
+    anim_text_t *title1;
+    anim_text_t *title2;
     sfFont *font;
 } menu_t;
 
@@ -653,11 +709,7 @@ typedef struct save_button_s {
 } save_button_t;
 
 typedef struct save_menu_s {
-    sfSprite *background;
-    sfTexture *background_texture;
-    my_clock_t *myclock;
     save_button_t *buttons;
-    sfIntRect bg_rect;
     sfText *text;
     sfFont *font;
 } save_menu_t;
@@ -690,11 +742,7 @@ typedef struct select_button_s {
 } select_button_t;
 
 typedef struct select_menu_s {
-    sfSprite *background;
-    sfTexture *background_texture;
-    my_clock_t *myclock;
     select_button_t *buttons;
-    sfIntRect bg_rect;
     sfText *text;
     sfFont *font;
 } select_menu_t;
@@ -922,15 +970,64 @@ typedef struct item_s {
     enum armor_type armor_type;
 } item_t;
 
+typedef struct box_s {
+    int hitbox_x;
+    int hitbox_y;
+    float scale;
+} box_t;
+
+typedef struct continue_s {
+    bool is_arrived;
+    bool move_text;
+    sfVector2f text_pos;
+    anim_text_t *anim_text;
+} continue_t;
+
+typedef struct transition_s {
+    anim_t *anim;
+    bool displayed;
+    void (*callback)(rpg_t *rpg);
+} transition_t;
+
+typedef struct loading_s {
+    anim_text_t *title1;
+    anim_text_t *title2;
+    anim_t *load;
+    int is_loaded;
+    my_clock_t *myclock;
+    continue_t *cont;
+    sfFont *font;
+} loading_t;
+
+typedef struct end_menu_s {
+    anim_text_t *title1;
+    anim_text_t *title2;
+    button_t *buttons;
+} end_menu_t;
+
+typedef struct modes_s {
+    bool debug;
+    bool keynote_mode;
+    bool k;
+    bool plus;
+} modes_t;
+
+typedef struct pause_menu_s {
+    anim_text_t *title;
+    button_t *buttons;
+    sfTexture *back_texture;
+    sfSprite *back_sprite;
+    sfFont *font;
+} pause_menu_t;
+
 typedef struct rpg_s {
     win_t *win;
     map_t *map;
     minimap_t *minimap;
     sfEvent event;
+    modes_t *modes;
     entity_t **ent;
-    entity_t *tmp_entity;
     unsigned int ent_size;
-    bool debug;
     menu_t *main_menu;
     save_menu_t *save_menu;
     menu_t *settings;
@@ -949,13 +1046,16 @@ typedef struct rpg_s {
     int shm_fd1;
     int shm_fd2;
     unsigned int player_index;
-    bool plus;
     decor_anim_t **decors;
     unsigned int decors_size;
     chest_t **chests;
     unsigned int chests_size;
     item_t **items;
     unsigned int items_size;
+    loading_t *loading;
+    transition_t *transition;
+    end_menu_t *end_menu;
+    pause_menu_t *pause_menu;
 } rpg_t;
 
 #include "../src/Init/init.h"

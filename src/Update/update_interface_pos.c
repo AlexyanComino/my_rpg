@@ -61,4 +61,5 @@ void update_interface_pos(rpg_t *rpg, entity_t *player, sfVector2f oldPos)
     sfText_setPosition(rpg->interface->player_infos->player_text,
         (sfVector2f){player->common->pos.x - WIDTH / 2 + WIDTH / 20,
         player->common->pos.y + HEIGHT / 2 - HEIGHT / 10 - 50});
+    setup_command_help_in_game(rpg);
 }

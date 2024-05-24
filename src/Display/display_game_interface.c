@@ -34,9 +34,10 @@ static void display_popup_item(rpg_t *rpg)
             NULL);
         sfRenderWindow_drawSprite(rpg->win->window, popup_item->light_sprite,
             NULL);
-        sfRenderWindow_drawSprite(rpg->win->window, popup_item->item_sprite,
-            NULL);
-        sfRenderWindow_drawText(rpg->win->window, popup_item->item_name, NULL);
+        sfRenderWindow_drawSprite(rpg->win->window,
+            popup_item->item_anim->sprite, NULL);
+        sfRenderWindow_drawText(rpg->win->window,
+            popup_item->title->text, NULL);
         sfRenderWindow_drawText(rpg->win->window, popup_item->item_description,
             NULL);
         sfRenderWindow_drawText(rpg->win->window, popup_item->rarity, NULL);
@@ -51,10 +52,22 @@ static void display_player_infos(rpg_t *rpg)
     sfRenderWindow_drawText(rpg->win->window, player_infos->player_text, NULL);
 }
 
+static void display_command_help(rpg_t *rpg)
+{
+    command_list_t *tmp = rpg->interface->command_list;
+
+    while (tmp != NULL) {
+        sfRenderWindow_drawText(rpg->win->window, tmp->action, NULL);
+        sfRenderWindow_drawSprite(rpg->win->window, tmp->sprite, NULL);
+        tmp = tmp->next;
+    }
+}
+
 void display_game_interface(rpg_t *rpg)
 {
     display_restricted_text(rpg);
     display_health_bar_interface(rpg);
     display_popup_item(rpg);
     display_player_infos(rpg);
+    display_command_help(rpg);
 }

@@ -50,6 +50,5 @@ bool is_button_released(struct button_s *button, rpg_t *rpg)
             return true;
         }
     }
-    button->state = NOTHING;
     return false;
 }

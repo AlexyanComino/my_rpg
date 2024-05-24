@@ -7,65 +7,61 @@
 
 #include "rpg.h"
 
-static button_t *new_button(char *txt)
-{
-    button_t *new = malloc(sizeof(button_t));
-
-    new->name = strdup(txt);
-    new->text = sfText_create();
-    new->font = sfFont_createFromFile("assets/fonts/Say Comic.ttf");
-    new->state = NOTHING;
-    new->action = get_action(txt);
-    new->rect_shape = sfRectangleShape_create();
-    new->rect = (sfIntRect){0, 0, BUTTON_WIDTH, BUTTON_HEIGHT};
-    sfText_setFont(new->text, new->font);
-    if (!strcmp(txt, "PLAY"))
-        sfText_setCharacterSize(new->text, 300);
-    else
-        sfText_setCharacterSize(new->text, 120);
-    new->next = NULL;
-    return new;
-}
-
-static void add_button(button_t **buttons, sfVector2f pos, char *txt,
-    sfColor color)
-{
-    button_t *new = new_button(txt);
-    button_t *tmp = *buttons;
-    sfFloatRect bounds;
-
-    sfText_setColor(new->text, color);
-    sfText_setString(new->text, txt);
-    sfText_setPosition(new->text, pos);
-    bounds = sfText_getLocalBounds(new->text);
-    sfText_setOrigin(new->text, (sfVector2f){bounds.width / 2,
-        bounds.height / 2});
-    sfRectangleShape_setSize(new->rect_shape, (sfVector2f){500, 150});
-    sfRectangleShape_setPosition(new->rect_shape,
-        (sfVector2f){pos.x - 190, pos.y});
-    sfRectangleShape_setFillColor(new->rect_shape,
-        sfColor_fromRGBA(0, 0, 0, 100));
-    while (tmp && tmp->next != NULL)
-        tmp = tmp->next;
-    if (!tmp)
-        *buttons = new;
-    else if (tmp->next == NULL)
-        tmp->next = new;
-}
-
-sfText *create_text(sfFont *font, char *str, int size, sfVector2f pos)
+static sfText *init_title_text1(loading_t *loading, sfVector2f pos)
 {
     sfText *text = sfText_create();
-    sfFloatRect bounds;
+    sfFloatRect rect;
 
-    sfText_setFont(text, font);
-    sfText_setCharacterSize(text, size);
-    sfText_setColor(text, sfWhite);
-    sfText_setString(text, str);
-    bounds = sfText_getLocalBounds(text);
-    sfText_setOrigin(text, (sfVector2f){bounds.width / 2, bounds.height / 2});
+    sfText_setFont(text, loading->font);
+    sfText_setCharacterSize(text, 430);
+    sfText_setString(text, "The Blade of");
+    rect = sfText_getGlobalBounds(text);
+    sfText_setOrigin(text, (sfVector2f){rect.width / 2, rect.height / 2});
     sfText_setPosition(text, pos);
+    sfText_setColor(text, sfWhite);
+    sfText_setOutlineColor(text, sfBlack);
+    sfText_setOutlineThickness(text, 20);
     return text;
+}
+
+static sfText *init_title_text2(loading_t *loading, sfVector2f pos)
+{
+    sfText *text = sfText_create();
+    sfFloatRect rect;
+
+    sfText_setFont(text, loading->font);
+    sfText_setCharacterSize(text, 579);
+    sfText_setString(text, "Eternity");
+    rect = sfText_getGlobalBounds(text);
+    sfText_setOrigin(text, (sfVector2f){rect.width / 2, rect.height / 2});
+    sfText_setPosition(text, pos);
+    sfText_setColor(text, sfWhite);
+    sfText_setOutlineColor(text, sfBlack);
+    sfText_setOutlineThickness(text, 20);
+    return text;
+}
+
+static void init_titles(rpg_t *rpg, menu_t *menu, sfVector2f top_left)
+{
+    sfText *text = NULL;
+    sfText *shadow = NULL;
+    sfVector2f pos1 = {top_left.x + ((WIDTH - 600) * rpg->win->zoom),
+        top_left.y + 200 * rpg->win->zoom};
+    sfVector2f pos2 = {top_left.x + ((WIDTH - 600) * rpg->win->zoom),
+        top_left.y + 328 * rpg->win->zoom};
+
+    menu->font =
+        sfFont_createFromFile("assets/fonts/BreatheFireIii-PKLOB.ttf");
+    text = init_title_text1(rpg->loading, pos1);
+    shadow = sfText_copy(text);
+    sfText_setColor(shadow, sfBlack);
+    sfText_setPosition(shadow, (sfVector2f){pos1.x + 20, pos1.y + 20});
+    menu->title1 = init_anim_text(text, 0.05, 0.0002, shadow);
+    text = init_title_text2(rpg->loading, pos2);
+    shadow = sfText_copy(text);
+    sfText_setColor(shadow, sfBlack);
+    sfText_setPosition(shadow, (sfVector2f){pos2.x + 20, pos2.y + 20});
+    menu->title2 = init_anim_text(text, 0.05, 0.0002, shadow);
 }
 
 menu_t *init_menu(rpg_t *rpg)
@@ -73,37 +69,37 @@ menu_t *init_menu(rpg_t *rpg)
     menu_t *menu = malloc(sizeof(menu_t));
     sfVector2f top_left = {rpg->win->view_pos.x - (WIDTH / 2 * rpg->win->zoom),
         rpg->win->view_pos.y - (HEIGHT / 2 * rpg->win->zoom)};
-    char *buttons_names[3] = {"OPTIONS", "QUIT", "PLAY"};
-    sfColor colors[3] = {sfColor_fromRGB(220, 220, 220), sfColor_fromRGB(255, 103, 101), sfColor_fromRGB(220, 220, 220)};
 
-    menu->font = sfFont_createFromFile("assets/fonts/BreatheFireIii-PKLOB.ttf");
-    menu->text = create_text(menu->font, "MY RPG", 300, (sfVector2f)
-    {top_left.x + ((WIDTH - strlen("MY RPG") / 2) * rpg->win->zoom / 2), top_left.y + 100});
+    init_titles(rpg, menu, top_left);
     menu->buttons = NULL;
-
-    add_button(&menu->buttons, (sfVector2f){top_left.x + 250 * rpg->win->zoom, top_left.y + 760 * rpg->win->zoom}, buttons_names[0], colors[0]);
-    add_button(&menu->buttons, (sfVector2f){top_left.x + 1760 * rpg->win->zoom, top_left.y + 950 * rpg->win->zoom}, buttons_names[1], colors[1]);
-    add_button(&menu->buttons, (sfVector2f){top_left.x + 290 * rpg->win->zoom, top_left.y + 880 * rpg->win->zoom}, buttons_names[2], colors[2]);
+    add_button(&menu->buttons, (sfVector2f){top_left.x + 260 * rpg->win->zoom,
+        top_left.y + 680 * rpg->win->zoom}, "Options");
+    add_button(&menu->buttons, (sfVector2f){top_left.x + 1700 * rpg->win->zoom,
+        top_left.y + 950 * rpg->win->zoom}, "Quitter");
+    add_button(&menu->buttons, (sfVector2f){top_left.x + 350 * rpg->win->zoom,
+        top_left.y + 850 * rpg->win->zoom}, "Jouer");
     return menu;
 }
 
 menu_t *init_settings(rpg_t *rpg)
 {
     menu_t *menu = malloc(sizeof(menu_t));
-    sfColor color = sfColor_fromRGB(220, 220, 220);
     sfVector2f top_left = {rpg->win->view_pos.x - (WIDTH / 2 * rpg->win->zoom),
         rpg->win->view_pos.y - (HEIGHT / 2 * rpg->win->zoom)};
-    char *buttons_names[3] = {"VOLUME", "FULLSCREEN", "BACK"};
 
-    menu->font = sfFont_createFromFile("assets/fonts/m6x11plus.ttf");
-    menu->myclock = NULL;
-    menu->text = NULL;
+    menu->font =
+        sfFont_createFromFile("assets/fonts/BreatheFireIii-PKLOB.ttf");
+    menu->title1 = NULL;
+    menu->title2 = NULL;
     menu->buttons = NULL;
-    add_button(&menu->buttons, (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
-        top_left.y + HEIGHT / 2 - 100 * rpg->win->zoom}, buttons_names[0], color);
-    add_button(&menu->buttons, (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
-        top_left.y + HEIGHT / 2 * rpg->win->zoom}, buttons_names[1], color);
-    add_button(&menu->buttons, (sfVector2f){top_left.x + (WIDTH - 100) / 2 * rpg->win->zoom,
-        top_left.y + HEIGHT / 2 + 100 * rpg->win->zoom}, buttons_names[2], color);
+    add_button(&menu->buttons, (sfVector2f){top_left.x +
+        (WIDTH - 100) / 2 * rpg->win->zoom,
+        top_left.y + HEIGHT / 2 - 100 * rpg->win->zoom}, "Volume");
+    add_button(&menu->buttons, (sfVector2f){top_left.x +
+        (WIDTH - 100) / 2 * rpg->win->zoom,
+        top_left.y + HEIGHT / 2 * rpg->win->zoom}, "Plein Ecran");
+    add_button(&menu->buttons, (sfVector2f){top_left.x +
+        (WIDTH - 100) / 2 * rpg->win->zoom,
+        top_left.y + HEIGHT / 2 + 100 * rpg->win->zoom}, "Retour");
     return menu;
 }
