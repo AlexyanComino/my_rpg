@@ -50,10 +50,10 @@ void *get_action(char *txt)
     if (strcmp(txt, "BACK") == 0)
         return &back_to_menu;
     if (strcmp(txt, "SAVE 1") == 0)
-        return &selector;
+        return &load_save1;
     if (strcmp(txt, "SAVE 2") == 0)
-        return &selector;
+        return &load_save2;
     if (strcmp(txt, "SAVE 3") == 0)
-        return &selector;
+        return &load_save3;
     return get_action2(txt);
 }

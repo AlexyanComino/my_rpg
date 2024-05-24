@@ -28,3 +28,7 @@ void free_array(char **array);
 // Item tools
 item_t *get_item_from_name(rpg_t *rpg, char *name, enum item_type type);
 void add_item_from_type(rpg_t *rpg, char *name, enum item_type type);
+
+// my_strcatdup
+char *my_strcatdup(char *str1, char c);
+char *my_strcatdup2(char *str1, char *str2);

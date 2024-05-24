@@ -65,12 +65,23 @@ static bool is_entity_hitbox_in_collision_with_map(rpg_t *rpg,
     return (false);
 }
 
+static bool is_entity_hitbox_collide_chest(rpg_t *rpg, sfIntRect hitbox)
+{
+    for (unsigned int i = 0; i < rpg->chests_size; i++) {
+        if (sfIntRect_intersects(&hitbox, &rpg->chests[i]->rect, NULL))
+            return (true);
+    }
+    return (false);
+}
+
 bool is_entity_hitbox_collide(rpg_t *rpg, entity_t *entity,
     sfIntRect hitbox)
 {
     if (is_entity_hitbox_collide_entity(rpg, entity, hitbox))
         return (true);
     if (is_entity_hitbox_in_collision_with_map(rpg, hitbox))
+        return (true);
+    if (is_entity_hitbox_collide_chest(rpg, hitbox))
         return (true);
     return (false);
 }

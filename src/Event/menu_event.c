@@ -39,14 +39,14 @@ void save_button_event(rpg_t *rpg, save_button_t *buttons)
         is_s_button_clicked(tmp, rpg);
         is_s_button_hovered(tmp, rpg);
         if (tmp->state == HOVERED)
-            sfText_setColor(tmp->text, sfYellow);
+            sfText_setColor(tmp->text, sfWhite);
         if (tmp->state == CLICKED) {
             tmp->rect.left = BUTTON_WIDTH;
             sfText_setColor(tmp->text, sfRed);
         }
         if (tmp->state == NOTHING) {
             tmp->rect.left = 0;
-            sfText_setColor(tmp->text, sfWhite);
+            sfText_setColor(tmp->text, sfBlack);
         }
         is_s_button_released(tmp, rpg);
         if (tmp->state == RELEASED)

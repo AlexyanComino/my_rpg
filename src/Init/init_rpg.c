@@ -128,9 +128,17 @@ static void init_thread(rpg_t *rpg)
         (void *)rpg->shared_data2);
 }
 
+static save_t **init_saves(void)
+{
+    save_t **saves = malloc(sizeof(save_t *) * 3);
+
+    for (int i = 0; i < 3; i++)
+        saves[i] = load(i + 1);
+    return saves;
+}
+
 static void init_rpg2(rpg_t *rpg)
 {
-    rpg->main_menu = init_menu(rpg);
     rpg->save_menu = init_save_menu(rpg);
     rpg->settings = init_settings(rpg);
     rpg->selector = init_select_menu(rpg);
@@ -147,6 +155,7 @@ static void init_rpg2(rpg_t *rpg)
     rpg->items = init_items_tab(&rpg->items_size);
     init_inventory(rpg, 15);
     rpg->inventory = *inventory();
+    rpg->skill_tree = init_all_skill();
     pthread_join(rpg->thread, NULL);
     if (rpg->shared_data->loaded)
         rpg->map = rpg->shared_data->map;
@@ -165,6 +174,8 @@ rpg_t *init_rpg(void)
     rpg->debug = false;
     rpg->text_box = init_text_box();
     rpg->sounds = init_sounds();
+    rpg->save = init_saves();
+    rpg->main_menu = init_menu(rpg);
     init_rpg2(rpg);
     play_music(rpg->sounds->intro, 50);
     return rpg;

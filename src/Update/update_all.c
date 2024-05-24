@@ -34,11 +34,9 @@ static void update_decors_anim(rpg_t *rpg)
     }
 }
 
-static void update_anim_inventory(rpg_t *rpg)
+static void anim_entity(rpg_t *rpg, entity_t *entity)
 {
-    entity_t *entity = rpg->inventory->player_status->player;
-
-    switch (get_player(rpg)->type) {
+    switch (entity->type) {
         case WARRIOR:
             anim_warrior(rpg, entity);
             break;
@@ -57,10 +55,37 @@ static void update_anim_inventory(rpg_t *rpg)
     }
 }
 
+static void anim_entities_selector(rpg_t *rpg)
+{
+    select_button_t *tmp = rpg->selector->buttons;
+
+    while (tmp != NULL) {
+        if (tmp->entity != NULL)
+            anim_entity(rpg, tmp->entity);
+        tmp = tmp->next;
+    }
+}
+
+static void anim_entities_save(rpg_t *rpg)
+{
+    save_button_t *tmp = rpg->save_menu->buttons;
+
+    while (tmp != NULL) {
+        if (tmp->entity != NULL)
+            anim_entity(rpg, tmp->entity);
+        tmp = tmp->next;
+    }
+}
+
 void update(rpg_t *rpg)
 {
     if (rpg->gamestate == MAIN_MENU || rpg->gamestate == PAUSE ||
-        rpg->gamestate == SETTINGS || rpg->gamestate == SAVE_MENU) {
+        rpg->gamestate == SETTINGS || rpg->gamestate == SAVE_MENU ||
+        rpg->gamestate == SELECTOR) {
+        if (rpg->gamestate == SELECTOR)
+            anim_entities_selector(rpg);
+        if (rpg->gamestate == SAVE_MENU)
+            anim_entities_save(rpg);
         update_decors_anim(rpg);
     }
     if (rpg->gamestate == GAME) {
@@ -72,6 +97,6 @@ void update(rpg_t *rpg)
         update_decors_anim(rpg);
     }
     if (rpg->gamestate == INVENTORY)
-        update_anim_inventory(rpg);
+        anim_entity(rpg, rpg->inventory->player_status->player);
     principal_music(rpg);
 }

@@ -26,6 +26,7 @@ int release_inventory(rpg_t *rpg, slot_t *tmp);
 player_status_t *init_player_status(void);
 sfSprite *init_sprite_from_file(char *texture);
 int add_stuff(void *item, int type);
+int add_stuff_from_type(rpg_t *rpg, char *name, int type);
 int draw_stuff(sfRenderWindow *window);
 int draw_item(sfRenderWindow *window, slot_t *tmp);
 
@@ -33,3 +34,5 @@ int manage_evt_inv(sfEvent event, rpg_t *rpg);
 int display_inv(rpg_t *rpg);
 int apply_stuff(rpg_t *rpg);
 int unapply_stuff(slot_t *tmp);
+void draw_desc(sfRenderWindow *window);
+int manage_slot(slot_t *tmp, void *item, int type, int *id);

@@ -77,6 +77,16 @@ int add_stuff(void *item, int type)
     return (0);
 }
 
+int add_stuff_from_type(rpg_t *rpg, char *name, int type)
+{
+    void *item = NULL;
+
+    item = (type == WEAPON) ? create_weapon(rpg, name) : item;
+    item = (type == ARMOR) ? create_armor(rpg, name) : item;
+    add_stuff(item, type);
+    return (0);
+}
+
 int draw_stuff(sfRenderWindow *window)
 {
     slot_t *tmp = (*inventory())->player_status->stuff;
