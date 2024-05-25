@@ -9,7 +9,7 @@
 
 static void *get_action4(char *txt)
 {
-    if (strcmp(txt, "Continue") == 0)
+    if (strcmp(txt, "Continuer") == 0)
         return &continue_game;
     if (strcmp(txt, "Reprendre") == 0)
         return &reprendre_game;
@@ -54,7 +54,7 @@ void *get_action(char *txt)
         return &settings;
     if (strcmp(txt, "Quitter") == 0)
         return &quit;
-    if (strcmp(txt, "Plein Écran") == 0)
+    if (strcmp(txt, "Plein Ecran") == 0)
         return &settings;
     if (strcmp(txt, "Retour") == 0 || strcmp(txt, "Retour au menu") == 0 ||
         strcmp(txt, "Menu Principal") == 0)

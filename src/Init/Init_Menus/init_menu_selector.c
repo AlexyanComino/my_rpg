@@ -169,7 +169,6 @@ static void create_buttons(rpg_t *rpg, select_menu_t *menu)
     (sfVector2f){top_left.x + (WIDTH / 2) * rpg->win->zoom, top_left.y +
         (HEIGHT / 2 - 300) * rpg->win->zoom}, "ARCHER");
     create_buttons2(rpg, menu, top_left);
-    free_array(tab);
 }
 
 select_menu_t *init_select_menu(rpg_t *rpg)
@@ -177,7 +176,6 @@ select_menu_t *init_select_menu(rpg_t *rpg)
     select_menu_t *menu = malloc(sizeof(menu_t));
 
     menu->font = sfFont_createFromFile("assets/fonts/m6x11plus.ttf");
-    menu->text = NULL;
     create_buttons(rpg, menu);
     return menu;
 }

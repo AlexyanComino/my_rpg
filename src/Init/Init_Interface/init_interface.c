@@ -20,7 +20,6 @@ static restricted_t *init_restricted(void)
     sfSprite_setOrigin(restricted->sprite,
         (sfVector2f){rect.width / 2, rect.height / 2});
     sfSprite_setColor(restricted->sprite, (sfColor){255, 255, 255, 0});
-    sfSprite_setScale(restricted->sprite, (sfVector2f){1.1, 1.1});
     restricted->in_base = false;
     restricted->animation = false;
     return restricted;

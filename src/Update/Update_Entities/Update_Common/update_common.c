@@ -106,6 +106,8 @@ static void check_player_game_over(rpg_t *rpg, entity_t *player)
         sfClock_restart(player->common->death->anim->myclock->clock);
         sfSprite_setPosition(rpg->transition->anim->sprite,
             player->common->pos);
+        rpg->interface->health_bar->front->r =
+            rpg->interface->health_bar->front->init_r;
         launch_transition(rpg, &launch_end);
     }
 }

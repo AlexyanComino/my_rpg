@@ -12,12 +12,11 @@ static win_t *init_win(unsigned int width, unsigned int height)
     win_t *win = malloc(sizeof(win_t));
     sfVideoMode mode = {width, height, 32};
     sfImage *icon = sfImage_createFromFile("assets/Icon.png");
-    sfVector2u icon_size = sfImage_getSize(icon);
+    sfVector2u i = sfImage_getSize(icon);
 
     win->window = sfRenderWindow_create(mode, "The Blade of Eternity",
         sfDefaultStyle, NULL);
-    sfRenderWindow_setIcon(win->window, icon_size.x, icon_size.y,
-        sfImage_getPixelsPtr(icon));
+    sfRenderWindow_setIcon(win->window, i.x, i.y, sfImage_getPixelsPtr(icon));
     win->view = sfView_createFromRect((sfFloatRect){0, 0, width, height});
     win->view_menu = sfView_createFromRect((sfFloatRect){0, 0, width, height});
     win->width = width;
@@ -26,8 +25,9 @@ static win_t *init_win(unsigned int width, unsigned int height)
     win->clock = sfClock_create();
     win->mouse_pos = (sfVector2f){0, 0};
     sfRenderWindow_setFramerateLimit(win->window, win->framerate);
-    win->view_pos = (sfVector2f){5331, 8353};
+    win->view_pos = (sfVector2f){4850, 8400};
     win->zoom = 2;
+    win->view_menu_move = (sfVector2f){80, 0};
     return win;
 }
 

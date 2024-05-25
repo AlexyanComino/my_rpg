@@ -17,7 +17,7 @@ static sfText *init_title_pause_text(sfFont *font)
     sfText_setString(text, "Pause");
     rect = sfText_getGlobalBounds(text);
     sfText_setOrigin(text, (sfVector2f){rect.width / 2, rect.height / 2});
-    sfText_setColor(text, sfColor_fromRGB(130, 120, 255));
+    sfText_setColor(text, sfColor_fromRGB(255, 160, 70));
     sfText_setOutlineColor(text, sfBlack);
     sfText_setOutlineThickness(text, 5);
     return text;
@@ -70,8 +70,8 @@ static button_t *new_button_pause(char *txt, sfFont *font)
     new->action = get_action(txt);
     sfText_setFont(new->text, font);
     sfText_setFont(new->shadow, font);
-    sfText_setCharacterSize(new->text, 80);
-    sfText_setCharacterSize(new->shadow, 80);
+    sfText_setCharacterSize(new->text, 95);
+    sfText_setCharacterSize(new->shadow, 95);
     new_button_pause2(new, txt);
     return new;
 }
@@ -123,11 +123,11 @@ void set_pos_buttons_pause_menu(rpg_t *rpg)
     sfText_setPosition(rpg->pause_menu->title->text, pos);
     sfText_setPosition(rpg->pause_menu->title->shadow,
         (sfVector2f){pos.x + 7, pos.y + 7});
-    pos.y += 210;
+    pos.y += 230;
     while (tmp) {
         sfText_setPosition(tmp->text, pos);
         sfText_setPosition(tmp->shadow, (sfVector2f){pos.x + 6, pos.y + 6});
-        pos.y += 110;
+        pos.y += 130;
         tmp = tmp->next;
     }
 }

@@ -7,7 +7,8 @@
 
 #include "rpg.h"
 
-static sfText *get_action_text_from_str(char *action_str, sfFont *font)
+static sfText *get_action_text_from_str(char *action_str, sfFont *font,
+    float zoom)
 {
     sfText *text = sfText_create();
     sfFloatRect rect;
@@ -20,6 +21,7 @@ static sfText *get_action_text_from_str(char *action_str, sfFont *font)
     set_string_to_text(text, action_str);
     rect = sfText_getGlobalBounds(text);
     sfText_setOrigin(text, (sfVector2f){rect.width, rect.height / 2});
+    sfText_setScale(text, (sfVector2f){zoom, zoom});
     return text;
 }
 
@@ -27,8 +29,12 @@ static char *get_texture_path_from_str2(char *action_str)
 {
     if (!strcmp(action_str, "Retour au jeu"))
         return "assets/interface/Clavier/escape_light.png";
-    if (!strcmp(action_str, "Selectionner"))
+    if (!strcmp(action_str, "Sélectionner"))
         return "assets/interface/Clavier/left_mouse_button_light.png";
+    if (!strcmp(action_str, "Zoom"))
+        return "assets/interface/Clavier/scroll_up_down_light.png";
+    if (!strcmp(action_str, "Déplacer"))
+        return "assets/interface/Clavier/mouse_light.png";
     fprintf(stderr, "Error: action not found\n");
     return NULL;
 }
@@ -43,40 +49,45 @@ static char *get_texture_path_from_str(char *action_str)
         return "assets/interface/Clavier/shift_light.png";
     if (!strcmp(action_str, "Attaquer"))
         return "assets/interface/Clavier/space_light.png";
-    if (!strcmp(action_str, "Inventaire"))
+    if (!strcmp(action_str, "Inventaire") ||
+        !strcmp(action_str, "Revenir au jeu"))
         return "assets/interface/Clavier/tab_light.png";
     if (!strcmp(action_str, "Zoom +"))
         return "assets/interface/Clavier/+_light.png";
     if (!strcmp(action_str, "Zoom -"))
         return "assets/interface/Clavier/-_light.png";
-    if (!strcmp(action_str, "Deplacement"))
+    if (!strcmp(action_str, "Déplacement"))
         return "assets/interface/Clavier/arrows.png";
+    if (!strcmp(action_str, "Supprimer"))
+        return "assets/interface/Clavier/backspace_light.png";
     return get_texture_path_from_str2(action_str);
 }
 
-static command_list_t *get_command_help(char *action_str, sfFont *font)
+static command_list_t *get_command_help(char *action_str, sfFont *font,
+    float zoom)
 {
     command_list_t *new = malloc(sizeof(command_list_t));
     char *texture_path = get_texture_path_from_str(action_str);
     sfFloatRect rect;
 
-    new->action = get_action_text_from_str(action_str, font);
+    new->action = get_action_text_from_str(action_str, font, zoom);
     new->sprite = sfSprite_create();
     new->texture = sfTexture_createFromFile(texture_path, NULL);
     sfSprite_setTexture(new->sprite, new->texture, sfTrue);
     rect = sfSprite_getGlobalBounds(new->sprite);
     sfSprite_setOrigin(new->sprite, (sfVector2f){rect.width,
         rect.height / 2});
-    if (!strcmp(action_str, "Deplacement"))
-        sfSprite_setScale(new->sprite, (sfVector2f){0.5, 0.5});
+    if (!strcmp(action_str, "Déplacement"))
+        sfSprite_setScale(new->sprite, (sfVector2f){0.5 * zoom, 0.5 * zoom});
     else
-        sfSprite_setScale(new->sprite, (sfVector2f){0.8, 0.8});
+        sfSprite_setScale(new->sprite, (sfVector2f){0.8 * zoom, 0.8 * zoom});
+    return new;
 }
 
 void add_command_help(command_list_t **command_list, char *action_str,
-    sfFont *font)
+    sfFont *font, float zoom)
 {
-    command_list_t *new = get_command_help(action_str, font);
+    command_list_t *new = get_command_help(action_str, font, zoom);
     command_list_t *tmp = *command_list;
 
     new->next = NULL;

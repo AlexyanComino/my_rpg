@@ -7,6 +7,16 @@
 
 #include "rpg.h"
 
+static void event_pause(rpg_t *rpg)
+{
+    menu_button_event(rpg, rpg->pause_menu->buttons);
+    if (rpg->event.key.type == sfEvtKeyPressed && rpg->event.key.code ==
+        sfKeyEscape) {
+        rpg->gamestate = GAME;
+        setup_command_help_in_game(rpg);
+    }
+}
+
 void event_states(rpg_t *rpg)
 {
     if (rpg->gamestate == LOADING)
@@ -26,7 +36,17 @@ void event_states(rpg_t *rpg)
     if (rpg->gamestate == END)
         return menu_button_event(rpg, rpg->end_menu->buttons);
     if (rpg->gamestate == PAUSE)
-        return menu_button_event(rpg, rpg->pause_menu->buttons);
+        return event_pause(rpg);
+}
+
+static sfVector2f get_view_pos(rpg_t *rpg)
+{
+    if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY ||
+        rpg->gamestate == MAP || rpg->gamestate == PAUSE)
+        return get_player(rpg)->common->pos;
+    else
+        return rpg->win->view_pos;
+    return (sfVector2f){0, 0};
 }
 
 void update_mouse_pos(rpg_t *rpg)
@@ -34,7 +54,7 @@ void update_mouse_pos(rpg_t *rpg)
     sfVector2f old_mouse_pos = {(float)rpg->event.mouseMove.x,
         (float)rpg->event.mouseMove.y};
     sfVector2u window_size = sfRenderWindow_getSize(rpg->win->window);
-    sfVector2f view_pos = rpg->win->view_pos;
+    sfVector2f view_pos = get_view_pos(rpg);
 
     rpg->win->mouse_pos = (sfVector2f){
         (float)view_pos.x - (float)WIDTH / 2 * rpg->win->zoom +

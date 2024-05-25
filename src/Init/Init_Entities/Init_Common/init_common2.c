@@ -114,7 +114,7 @@ static anim_sprite_t *init_grade_icon(common_entity_t *common)
 {
     char *texture = (common->grade_type == ELITE) ?
         "assets/Entities/Elite.png" : "assets/Entities/boss.png";
-    float scale = (common->grade_type == ELITE) ? 0.2 : 0.08;
+    float scale = (common->grade_type == ELITE) ? 0.25 : 0.08;
 
     scale *= common->scale;
     return init_anim_sprite(texture, 0.04, 0.00035, scale);

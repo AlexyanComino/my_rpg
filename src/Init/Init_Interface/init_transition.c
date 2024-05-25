@@ -9,7 +9,11 @@
 
 void launch_transition(rpg_t *rpg, void (*callback)(rpg_t *rpg))
 {
+    sfIntRect rect = rpg->transition->anim->rect;
+
     rpg->transition->displayed = true;
+    rpg->transition->anim->rect = (sfIntRect){TRANSI_WIDTH, TRANSI_HEIGHT * 8,
+        rect.width, rect.height};
     sfClock_restart(rpg->transition->anim->myclock->clock);
     rpg->transition->callback = callback;
 }

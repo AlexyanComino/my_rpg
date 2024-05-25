@@ -52,7 +52,7 @@ static void display_player_infos(rpg_t *rpg)
     sfRenderWindow_drawText(rpg->win->window, player_infos->player_text, NULL);
 }
 
-static void display_command_help(rpg_t *rpg)
+void display_command_help(rpg_t *rpg)
 {
     command_list_t *tmp = rpg->interface->command_list;
 

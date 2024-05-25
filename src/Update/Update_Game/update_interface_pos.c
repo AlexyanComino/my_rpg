@@ -49,9 +49,7 @@ void update_interface_pos(rpg_t *rpg, entity_t *player, sfVector2f oldPos)
     float diff_x = player->common->pos.x - oldPos.x;
     float diff_y = player->common->pos.y - oldPos.y;
 
-    rpg->win->view_pos = player->common->pos;
     sfView_setCenter(rpg->win->view, player->common->pos);
-    rpg->win->view_pos = player->common->pos;
     (*view_pos()) = player->common->pos;
     rpg->interface->restricted->danger_pos.x += diff_x;
     rpg->interface->restricted->danger_pos.y += diff_y;
@@ -61,5 +59,6 @@ void update_interface_pos(rpg_t *rpg, entity_t *player, sfVector2f oldPos)
     sfText_setPosition(rpg->interface->player_infos->player_text,
         (sfVector2f){player->common->pos.x - WIDTH / 2 + WIDTH / 20,
         player->common->pos.y + HEIGHT / 2 - HEIGHT / 10 - 50});
-    setup_command_help_in_game(rpg);
+    set_command_pos(rpg->interface->command_list, player->common->pos,
+        rpg->win->zoom);
 }

@@ -52,6 +52,8 @@ static sfColor get_color_damage_text(rpg_t *rpg, entity_t *entity,
 {
     if (state == FIRE_TEXT)
         return DAMAGE_COLOR_FIRE;
+    if (state == POISON_TEXT)
+        return DAMAGE_COLOR_POISON;
     if (is_player(rpg, entity))
         return DAMAGE_COLOR_PLAYER;
     if (state == BAM)

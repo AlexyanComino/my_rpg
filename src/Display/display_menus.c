@@ -39,9 +39,11 @@ void display_settings(rpg_t *rpg)
 
     display_background_menus(rpg);
     while (tmp != NULL) {
+        sfRenderWindow_drawText(rpg->win->window, tmp->shadow, NULL);
         sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
         tmp = tmp->next;
     }
+    display_command_help(rpg);
 }
 
 void display_save_menu(rpg_t *rpg)
@@ -56,6 +58,7 @@ void display_save_menu(rpg_t *rpg)
         sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
         tmp = tmp->next;
     }
+    display_command_help(rpg);
 }
 
 static void draw_stats(rpg_t *rpg, select_button_t *tmp)
@@ -106,4 +109,5 @@ void display_selector(rpg_t *rpg)
         draw_stats_sprites(rpg, tmp);
         draw_stats(rpg, tmp);
     }
+    display_command_help(rpg);
 }

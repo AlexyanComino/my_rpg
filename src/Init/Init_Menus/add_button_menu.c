@@ -28,6 +28,40 @@ static void new_button3(button_t *new, char *txt, sfVector2f pos)
         sfColor_fromRGBA(0, 0, 0, 100));
 }
 
+static sfColor get_but_color_from_name(char *txt)
+{
+    if (!strcmp(txt, "Options"))
+        return sfColor_fromRGB(220, 220, 220);
+    if (!strcmp(txt, "Quitter"))
+        return sfColor_fromRGB(199, 59, 47);
+    if (!strcmp(txt, "Jouer"))
+        return sfColor_fromRGB(220, 220, 220);
+    if (!strcmp(txt, "Volume"))
+        return sfColor_fromRGB(220, 220, 220);
+    if (!strcmp(txt, "Plein Ecran"))
+        return sfColor_fromRGB(220, 220, 220);
+    if (!strcmp(txt, "Retour"))
+        return sfColor_fromRGB(220, 220, 220);
+    return sfWhite;
+}
+
+static sfColor get_but_color_click_from_name(char *txt)
+{
+    if (!strcmp(txt, "Options"))
+        return sfColor_fromRGB(255, 255, 255);
+    if (!strcmp(txt, "Quitter"))
+        return sfColor_fromRGB(255, 255, 255);
+    if (!strcmp(txt, "Jouer"))
+        return sfColor_fromRGB(255, 255, 255);
+    if (!strcmp(txt, "Volume"))
+        return sfColor_fromRGB(255, 255, 255);
+    if (!strcmp(txt, "Plein Ecran"))
+        return sfColor_fromRGB(255, 255, 255);
+    if (!strcmp(txt, "Retour"))
+        return sfColor_fromRGB(255, 255, 255);
+    return sfWhite;
+}
+
 static void new_button2(button_t *new, char *txt, sfVector2f pos)
 {
     float size = 0;
@@ -68,40 +102,6 @@ static button_t *new_button(char *txt, sfVector2f pos)
     sfText_setFont(new->shadow, new->font);
     new_button2(new, txt, pos);
     return new;
-}
-
-static sfColor get_but_color_from_name(char *txt)
-{
-    if (!strcmp(txt, "Options"))
-        return sfColor_fromRGB(220, 220, 220);
-    if (!strcmp(txt, "Quitter"))
-        return sfColor_fromRGB(199, 59, 47);
-    if (!strcmp(txt, "Jouer"))
-        return sfColor_fromRGB(220, 220, 220);
-    if (!strcmp(txt, "Volume"))
-        return sfColor_fromRGB(220, 220, 220);
-    if (!strcmp(txt, "Plein Ecran"))
-        return sfColor_fromRGB(220, 220, 220);
-    if (!strcmp(txt, "Retour"))
-        return sfColor_fromRGB(220, 220, 220);
-    return sfWhite;
-}
-
-static sfColor get_but_color_click_from_name(char *txt)
-{
-    if (!strcmp(txt, "Options"))
-        return sfColor_fromRGB(255, 255, 255);
-    if (!strcmp(txt, "Quitter"))
-        return sfColor_fromRGB(255, 255, 255);
-    if (!strcmp(txt, "Jouer"))
-        return sfColor_fromRGB(255, 255, 255);
-    if (!strcmp(txt, "Volume"))
-        return sfColor_fromRGB(255, 255, 255);
-    if (!strcmp(txt, "Plein Ecran"))
-        return sfColor_fromRGB(255, 255, 255);
-    if (!strcmp(txt, "Retour"))
-        return sfColor_fromRGB(255, 255, 255);
-    return sfWhite;
 }
 
 void add_button(button_t **buttons, sfVector2f pos, char *txt)

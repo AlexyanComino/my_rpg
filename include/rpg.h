@@ -115,10 +115,11 @@
 #define DAMAGE_COLOR_RED sfColor_fromRGB(255, 88, 65)
 #define DAMAGE_COLOR_YELLOW sfColor_fromRGB(255, 215, 66)
 #define DAMAGE_COLOR_PURPLE sfColor_fromRGB(183, 133, 255)
-#define DAMAGE_COLOR_GREEN sfColor_fromRGB(59, 255, 100)
+#define DAMAGE_COLOR_GREEN sfColor_fromRGB(53, 255, 53)
 #define DAMAGE_COLOR_BAM sfWhite
 #define DAMAGE_COLOR_CRITICAL sfColor_fromRGB(255, 61, 30)
 #define DAMAGE_COLOR_FIRE sfColor_fromRGB(255, 157, 59)
+#define DAMAGE_COLOR_POISON sfColor_fromRGB(94, 209, 43)
 
 #define CRIT_WIDTH 215
 #define BAM_WIDTH 160
@@ -759,6 +760,7 @@ typedef struct win_s {
     float dt;
     int zoom;
     sfVector2f view_pos;
+    sfVector2f view_menu_move;
 } win_t;
 
 typedef struct region_s {
@@ -1061,6 +1063,7 @@ typedef struct rpg_s {
 #include "../src/Init/init.h"
 #include "../src/Display/Display_entities/display_entities.h"
 #include "../src/Display/display.h"
+#include "../src/Display/Display_Game/display_game.h"
 #include "../src/Menu/menu.h"
 #include "../src/Event/event.h"
 #include "../src/Destroy/destroy.h"
@@ -1073,7 +1076,9 @@ typedef struct rpg_s {
 #include "../src/Update/Update_Entities/Update_Torch/update_torch.h"
 #include "../src/Update/Update_Entities/Update_Tnt/update_tnt.h"
 #include "../src/Update/Update_Entities/Update_Archer/update_archer.h"
+#include "../src/Update/Update_Entities/Update_Common/update_common.h"
 #include "../src/Update/Update_Entities/update_entities.h"
+#include "../src/Update/Update_Game/update_game.h"
 
 #include "../src/Init/Init_Entities/init_entities.h"
 #include "../src/Init/Init_Entities/Init_Warrior/init_warrior.h"
@@ -1082,5 +1087,7 @@ typedef struct rpg_s {
 #include "../src/Init/Init_Entities/Init_Tnt/init_tnt.h"
 #include "../src/Init/Init_Entities/Init_Archer/init_archer.h"
 #include "../src/Init/Init_Entities/Init_Common/init_common.h"
+#include "../src/Init/Init_Menus/init_menus.h"
+#include "../src/Init/Init_Interface/init_interface.h"
 #include "../src/Lib/Entity_Tools/entity_lib.h"
 #include "singleton.h"

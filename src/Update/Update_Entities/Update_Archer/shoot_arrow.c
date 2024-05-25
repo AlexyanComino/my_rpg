@@ -141,7 +141,7 @@ void shoot_arrow(rpg_t *rpg, entity_t *entity, arrow_dir_t dir)
     arrows_t *tmp = entity->spe->archer->arrows;
     arrows_t *new_arrow = get_new_arrow(rpg, entity, dir);
 
-    new->next = NULL;
+    new_arrow->next = NULL;
     while (tmp && tmp->next != NULL)
         tmp = tmp->next;
     if (tmp == NULL) {

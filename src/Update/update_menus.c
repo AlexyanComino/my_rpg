@@ -57,7 +57,7 @@ void update_shadow_buttons(button_t *buttons)
     }
 }
 
-void update_main_menu(rpg_t *rpg)
+static void update_main_menu(rpg_t *rpg)
 {
     anim_text_anim(rpg->main_menu->title1);
     anim_text_anim(rpg->main_menu->title2);
@@ -73,9 +73,12 @@ void update_end_menu(rpg_t *rpg)
 
 void update_menus(rpg_t *rpg)
 {
+    move_view_menu(rpg);
     if (rpg->gamestate == SELECTOR)
         update_menu_selector(rpg);
     if (rpg->gamestate == MAIN_MENU)
         update_main_menu(rpg);
+    if (rpg->gamestate == SETTINGS)
+        update_shadow_buttons(rpg->settings->buttons);
     update_decors_anim(rpg, intrect_is_in_view_menu);
 }

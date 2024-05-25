@@ -14,16 +14,16 @@ static float get_fire_duration(void)
     return ((float)rand() / RAND_MAX) * (4) + 5;
 }
 
-// Flottant entre 0.4 et 0.8
+// Flottant entre 0.2 et 0.5
 static float get_fire_cooldown(void)
 {
-    return ((float)rand() / RAND_MAX) * (4) / 10 + 4 / 10;
+    return (((float)rand() / RAND_MAX) * (2) + 3) / 10;
 }
 
 // Flottant entre 0.3 et 0.45 * attack
 static unsigned int get_fire_damage(unsigned int attack)
 {
-    float mult = ((float)rand() / RAND_MAX) * (15) / 100 + 30 / 100;
+    float mult = (((float)rand() / RAND_MAX) * (15) + 30) / 100;
 
     return (attack * mult);
 }
@@ -44,16 +44,16 @@ static float get_poison_duration(void)
     return ((float)rand() / RAND_MAX) * (8) + 10;
 }
 
-// Flottant entre 1 et 2
+// Flottant entre 0.75 et 1.5
 static float get_poison_cooldown(void)
 {
-    return ((float)rand() / RAND_MAX) + 1;
+    return (((float)rand() / RAND_MAX) * (75) + 75) / 100;
 }
 
 // Flottant entre 0.15 et 0.25 * attack
 static float get_poison_damage(unsigned int attack)
 {
-    float mult = ((float)rand() / RAND_MAX) * (10) / 100 + 15 / 100;
+    float mult = (((float)rand() / RAND_MAX) * (10) + 15) / 100;
 
     return (attack * mult);
 }

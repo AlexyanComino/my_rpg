@@ -27,14 +27,14 @@ static void appear_the_text(rpg_t *rpg, restricted_t *restricted,
 {
     int alpha = color.a;
 
-    if (alpha + 12 > 255)
+    if (alpha + 9 > 255)
         color.a = 255;
     else
-        color.a += 12;
+        color.a += 9;
     sfSprite_setColor(restricted->sprite, color);
-    if (restricted->danger_pos.y + 5 < view_center.y - rpg->win->height / 2 +
-        rpg->win->height / 10) {
-        restricted->danger_pos.y += 5;
+    if (restricted->danger_pos.y + 3 < view_center.y - rpg->win->height / 2 +
+        rpg->win->height / 15) {
+        restricted->danger_pos.y += 3;
         sfSprite_setPosition(restricted->sprite, restricted->danger_pos);
     }
 }
@@ -43,12 +43,12 @@ static void disappear_the_text(restricted_t *restricted, sfColor color)
 {
     int alpha = color.a;
 
-    if (alpha - 7 < 0)
+    if (alpha - 5 < 0)
         color.a = 0;
     else
-        color.a -= 7;
+        color.a -= 5;
     sfSprite_setColor(restricted->sprite, color);
-    restricted->danger_pos.y -= 2.5;
+    restricted->danger_pos.y -= 1;
     sfSprite_setPosition(restricted->sprite, restricted->danger_pos);
 }
 
@@ -59,8 +59,8 @@ static void update_restricted(rpg_t *rpg)
     sfVector2f view_center = sfView_getCenter(rpg->win->view);
 
     if (color.a == 0)
-        restricted->danger_pos = (sfVector2f){view_center.x,
-            view_center.y - rpg->win->height / 2};
+        restricted->danger_pos = (sfVector2f){view_center.x -
+            rpg->win->width / 2 + 240, view_center.y - rpg->win->height / 2};
     check_player_in_base(rpg, restricted);
     if ((restricted->in_base && color.a < 255) || (!restricted->in_base &&
     color.a > 0))
@@ -102,6 +102,10 @@ static void update_front_bar_interface(rpg_t *rpg, sfVector2f size,
     sfVector2f current_size = sfRectangleShape_getSize(front->rect_w);
 
     size = update_size(size, current_size, transition_speed);
+    if (size.x < rpg->interface->health_bar->front->r * 2) {
+        rpg->interface->health_bar->front->r = size.x / 2;
+        r = rpg->interface->health_bar->front->r;
+    }
     sfRectangleShape_setSize(front->rect_w,
         (sfVector2f){size.x, size.y - r * 2});
     sfRectangleShape_setSize(front->rect_h,
@@ -119,20 +123,20 @@ static void update_health_bar_interface(rpg_t *rpg)
     entity_t *player = get_player(rpg);
     float ratio = (float)player->common->attributes->health /
         (float)player->common->attributes->max_health;
-    sfVector2f size = {rpg->interface->health_bar->front->size.x * ratio,
-        rpg->interface->health_bar->front->size.y};
-    sfColor color = sfColor_fromRGB(255 * (1 - ratio), 255 * ratio, 0);
+    sfVector2f size;
+    sfColor color;
     sfVector2f current_size =
         sfRectangleShape_getSize(rpg->interface->health_bar->front->rect_w);
     float diff_x;
     float transition_speed;
 
-    if (size.x < rpg->interface->health_bar->front->r * 2)
-        rpg->interface->health_bar->front->r = size.x / 2;
-    if (player->common->attributes->health <= 0) {
-        size.x = 0;
-        rpg->interface->health_bar->front->r = 0;
-    }
+    if (rpg->transition->displayed)
+        return;
+    if (ratio < 0)
+        ratio = 0;
+    size = (sfVector2f){rpg->interface->health_bar->front->size.x * ratio,
+        rpg->interface->health_bar->front->size.y};
+    color = sfColor_fromRGB(255 * (1 - ratio), 255 * ratio, 0);
     diff_x = size.x - current_size.x;
     transition_speed = fabs(diff_x) / 15.0f;
     update_front_bar_interface(rpg, size, color, transition_speed);

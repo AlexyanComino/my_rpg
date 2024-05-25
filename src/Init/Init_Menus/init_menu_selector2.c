@@ -42,7 +42,7 @@ void get_entity(select_button_t *new)
     new->entity = NULL;
 }
 
-void get_attributes_select(char *txt, select_button_t *new, char **tab)
+void get_attributes_select(char *txt, select_button_t *new)
 {
     char **infos = get_infos(txt);
 

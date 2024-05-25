@@ -16,7 +16,6 @@ bool is_select_button_clicked(struct select_button_s *button, rpg_t *rpg)
         if (sfFloatRect_contains(&rect_bounds, rpg->win->mouse_pos.x,
             rpg->win->mouse_pos.y)) {
             button->state = CLICKED;
-            printf("button name: %s\n", button->name);
             return true;
         }
     }
