@@ -37,14 +37,12 @@ static void display_alive_warrior(rpg_t *rpg, entity_t *entity)
     if (entity->spe->warrior->inter->is_display == 1)
         sfRenderWindow_drawSprite(rpg->win->window,
             entity->spe->warrior->inter->anim->sprite, NULL);
-    if (rpg->debug)
+    if (rpg->modes->debug)
         display_debug_warrior(rpg, entity);
 }
 
-void display_warrior(void *vrpg, entity_t *entity)
+void display_warrior(rpg_t *rpg, entity_t *entity)
 {
-    rpg_t *rpg = (rpg_t *)vrpg;
-
     if (entity->common->state == RIEN)
         return;
     if (entity->common->state == DEAD)

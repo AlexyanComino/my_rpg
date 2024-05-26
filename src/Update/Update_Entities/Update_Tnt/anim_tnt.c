@@ -59,8 +59,9 @@ static void animation_tnt(entity_t *entity)
         return animation_attack_tnt(entity);
 }
 
-void anim_tnt(entity_t *entity)
+void anim_tnt(rpg_t *rpg, entity_t *entity)
 {
+    (void)rpg;
     update_clock_seconds(entity->common->anim->myclock);
     if (is_dead(entity))
         animation_death(entity->common);

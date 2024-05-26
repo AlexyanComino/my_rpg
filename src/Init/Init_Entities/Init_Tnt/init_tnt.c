@@ -49,8 +49,9 @@ sfConvexShape *get_parabol_curve(sfVector2f *points, int nb_points)
 static curve_t *init_curve_tnt(entity_t *entity)
 {
     curve_t *curve = malloc(sizeof(curve_t));
+    float scale = entity->common->scale;
 
-    curve->points = get_points_parabol(3.9, 55, 4);
+    curve->points = get_points_parabol(3.9 * scale, 55, 4 * scale);
     if (entity->common->x == LEFT) {
         for (int i = 0; i < NUM_POINTS; i++) {
             curve->points[i].x *= -1;
@@ -63,25 +64,26 @@ static curve_t *init_curve_tnt(entity_t *entity)
     return curve;
 }
 
-static void init_cible(explo_t *explo)
+static void init_cible(explo_t *explo, float scale)
 {
     explo->cible = sfSprite_create();
     explo->cible_texture = sfTexture_createFromFile(
         "assets/Entities/Tnt/cible.png", NULL);
     sfSprite_setTexture(explo->cible, explo->cible_texture, sfTrue);
-    sfSprite_setScale(explo->cible, (sfVector2f){0.25, 0.25});
-    sfSprite_setColor(explo->cible, sfColor_fromRGBA(255, 255, 255, 170));
+    sfSprite_setScale(explo->cible, (sfVector2f){0.25 * scale, 0.25 * scale});
+    sfSprite_setColor(explo->cible, sfColor_fromRGBA(255, 255, 255, 140));
     sfSprite_setOrigin(explo->cible, (sfVector2f){CIBLE_WIDTH / 2,
         CIBLE_WIDTH / 2});
 }
 
-static explo_t *init_explo(void)
+static explo_t *init_explo(float scale)
 {
     explo_t *explo = malloc(sizeof(explo_t));
 
     explo->anim = init_anim("assets/Entities/Tnt/Explosions.png", EXPLO_WIDTH,
         EXPLO_WIDTH);
-    explo->radius = 50;
+    sfSprite_setScale(explo->anim->sprite, (sfVector2f){scale, scale});
+    explo->radius = 50 * scale;
     explo->boom_circle = sfCircleShape_create();
     explo->boom_center = (sfVector2f){0, 0};
     sfCircleShape_setRadius(explo->boom_circle, explo->radius);
@@ -90,16 +92,17 @@ static explo_t *init_explo(void)
     sfCircleShape_setOutlineColor(explo->boom_circle, sfRed);
     sfCircleShape_setOrigin(explo->boom_circle, (sfVector2f){explo->radius,
         explo->radius});
-    init_cible(explo);
+    init_cible(explo, scale);
     return explo;
 }
 
-static dyna_t *init_dyna(void)
+static dyna_t *init_dyna(float scale)
 {
     dyna_t *dyna = malloc(sizeof(dyna_t));
 
     dyna->anim = init_anim("assets/Entities/Tnt/Dynamite.png", DYNA_WIDTH,
         DYNA_WIDTH);
+    sfSprite_setScale(dyna->anim->sprite, (sfVector2f){scale, scale});
     dyna->pos = (sfVector2f){0, 0};
     dyna->dyna_angle = 0;
     dyna->points = malloc(sizeof(sfVector2f) * NUM_POINTS);
@@ -110,11 +113,12 @@ static dyna_t *init_dyna(void)
 static tnt_t *init_tnt(entity_t *entity, char **infos)
 {
     tnt_t *tnt = malloc(sizeof(tnt_t));
+    float scale = entity->common->scale;
 
-    tnt->dyna = init_dyna();
+    tnt->dyna = init_dyna(scale);
     tnt->curve = init_curve_tnt(entity);
     tnt->is_launched = false;
-    tnt->explo = init_explo();
+    tnt->explo = init_explo(scale);
     tnt->is_exploded = false;
     infos = infos;
     return tnt;
@@ -138,6 +142,8 @@ entity_t *init_entity_tnt(char **infos)
     entity->in_view = false;
     entity->updt = &update_tnt;
     entity->disp = &display_tnt;
+    entity->anim = &anim_tnt;
+    entity->destroy = &destroy_entity_tnt;
     entity->get_hitbox = &get_hitbox_tnt;
     entity->get_hitbox_attack = &get_hitbox_attack_tnt;
     entity->get_hitbox_foot = &get_hitbox_tnt_foot;

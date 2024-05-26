@@ -42,7 +42,16 @@ void event_map(rpg_t *rpg);
 void event_game(rpg_t *rpg);
 
 // Event chests
+anim_sprite_t *init_anim_sprite(char *texture_path, float scale_bonus,
+    float transition_speed, float init_scale);
 void event_chests(rpg_t *rpg, sfKeyCode key);
 
 // Description handling
 char *description_handling(char *description);
+
+// Event loading
+void event_loading(rpg_t *rpg);
+
+// Init menu pause
+pause_menu_t *init_pause_menu(void);
+void set_pos_buttons_pause_menu(rpg_t *rpg);

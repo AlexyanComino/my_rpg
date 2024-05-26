@@ -7,9 +7,9 @@
 
 #include "rpg.h"
 
-static void update_tnt_points_up(curve_t *curve)
+static void update_tnt_points_up(curve_t *curve, float scale)
 {
-    curve->points = get_points_parabol(4, 70, 3);
+    curve->points = get_points_parabol(4 * scale, 70, 3 * scale);
     for (int i = 20; i < curve->nb_points; i++) {
         curve->points[i] = (sfVector2f){0, 0};
     }
@@ -17,11 +17,11 @@ static void update_tnt_points_up(curve_t *curve)
     curve->nb_points = 20;
 }
 
-static void update_tnt_points_down(curve_t *curve)
+static void update_tnt_points_down(curve_t *curve, float scale)
 {
     sfVector2f diff;
 
-    curve->points = get_points_parabol(4, 70, 3);
+    curve->points = get_points_parabol(4 * scale, 70, 3 * scale);
     curve->nb_points = 20;
     diff = (sfVector2f){curve->points[0].x - curve->points[10].x,
         curve->points[0].y - curve->points[10].y};
@@ -36,15 +36,17 @@ static void update_tnt_points_down(curve_t *curve)
 
 static void update_tnt_points(entity_t *entity, curve_t *curve)
 {
+    float scale = entity->common->scale;
+
     if (entity->common->y == curve->y)
         return;
     if (entity->common->y == NONE) {
-        curve->points = get_points_parabol(3.9, 55, 4);
+        curve->points = get_points_parabol(3.9 * scale, 55, 4 * scale);
         curve->nb_points = 30;
     } else if (entity->common->y == UP)
-        update_tnt_points_up(curve);
+        update_tnt_points_up(curve, scale);
     else
-        update_tnt_points_down(curve);
+        update_tnt_points_down(curve, scale);
     curve->y = entity->common->y;
     curve->x = RIGHT;
     sfConvexShape_destroy(curve->curve_shape);
@@ -89,17 +91,15 @@ static void update_explo(entity_t *entity)
     }
 }
 
-void update_tnt(void *vrpg, entity_t *entity)
+void update_tnt(rpg_t *rpg, entity_t *entity)
 {
-    rpg_t *rpg = vrpg;
-
+    update_common(rpg, entity);
     if (entity->common->state == RIEN)
         return;
-    update_common(rpg, entity);
     if (!is_player(rpg, entity) && is_alive(entity))
         update_pnj_tnt(rpg, entity);
     update_tnt_curve(entity);
     update_dyna(rpg, entity);
     update_explo(entity);
-    anim_tnt(entity);
+    entity->anim(rpg, entity);
 }

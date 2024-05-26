@@ -15,10 +15,8 @@ static void display_alive_torch(rpg_t *rpg, entity_t *entity)
             entity->spe->torch->exclam->anim->sprite, NULL);
 }
 
-void display_torch(void *vrpg, entity_t *entity)
+void display_torch(rpg_t *rpg, entity_t *entity)
 {
-    rpg_t *rpg = (rpg_t *)vrpg;
-
     if (entity->common->state == RIEN)
         return;
     if (entity->common->state == DEAD)

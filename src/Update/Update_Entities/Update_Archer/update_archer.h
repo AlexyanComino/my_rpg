@@ -9,15 +9,16 @@
 
 // Update archer
 void remove_arrow(arrows_t **head, arrows_t *tmp, arrows_t *prev);
-void update_archer(void *vrpg, entity_t *entity);
+void update_archer(rpg_t *rpg, entity_t *entity);
 
 // Anim archer
 void anim_archer(rpg_t *rpg, entity_t *entity);
 
 // Get hitbox archer
-sfIntRect get_hitbox_archer(sfVector2f pos);
-sfIntRect get_hitbox_attack_archer(sfVector2f pos, side_x_t x, side_y_t y);
-sfIntRect get_hitbox_archer_foot(sfVector2f pos);
+sfIntRect get_hitbox_archer(sfVector2f pos, float scale);
+sfIntRect get_hitbox_attack_archer(sfVector2f pos, side_x_t x, side_y_t y,
+    float scale);
+sfIntRect get_hitbox_archer_foot(sfVector2f pos, float scale);
 
 // Shoot arrow
 void shoot_arrow(rpg_t *rpg, entity_t *entity, arrow_dir_t dir);

@@ -47,3 +47,8 @@ void start_pawn(rpg_t *rpg);
 void start_archer(rpg_t *rpg);
 void start_torch(rpg_t *rpg);
 void start_tnt(rpg_t *rpg);
+
+// Actions3
+void continue_game(rpg_t *rpg);
+void reprendre_game(rpg_t *rpg);
+void sauvegarder_game(rpg_t *rpg);

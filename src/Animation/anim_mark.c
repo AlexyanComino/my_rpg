@@ -36,3 +36,19 @@ void anim_fire_mark(mark_t *fire_mark, int width, int max_offset)
     sfSprite_setTextureRect(fire_mark->anim->sprite, fire_mark->anim->rect);
     sfClock_restart(fire_mark->anim->myclock->clock);
 }
+
+void anim_poison_mark(mark_t *poison_mark)
+{
+    if (poison_mark->anim->rect.left >= POISON_WIDTH * 3) {
+        poison_mark->anim->rect.left = 0;
+        poison_mark->anim->rect.top += POISON_WIDTH;
+    } else if (poison_mark->anim->rect.top >= POISON_WIDTH) {
+        poison_mark->anim->rect.top = 0;
+        poison_mark->anim->rect.left = 0;
+        poison_mark->is_display = 2;
+    } else
+        poison_mark->anim->rect.left += POISON_WIDTH;
+    sfSprite_setTextureRect(poison_mark->anim->sprite,
+        poison_mark->anim->rect);
+    sfClock_restart(poison_mark->anim->myclock->clock);
+}

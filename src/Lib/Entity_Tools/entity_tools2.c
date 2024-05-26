@@ -9,6 +9,8 @@
 
 bool entity_see_enemy(rpg_t *rpg, entity_t *entity, entity_t *enemy)
 {
+    if (!enemy)
+        return false;
     if (entity_look_at_enemy(entity, enemy)) {
         if (hitbox_in_detection(enemy->common->zones->hitbox,
             entity->common->zones->l_radius, entity->common->pos))
@@ -42,6 +44,8 @@ sfColor get_color_from_faction(entity_t *entity)
         return DAMAGE_COLOR_RED;
     if (faction == GOBLIN_TEAM)
         return DAMAGE_COLOR_GREEN;
+    if (faction == WITH_ALL)
+        return sfBlack;
     return sfWhite;
 }
 

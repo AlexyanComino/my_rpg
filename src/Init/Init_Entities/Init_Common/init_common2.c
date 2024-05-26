@@ -38,54 +38,33 @@ static float get_fire_scale(entity_type_t type)
     return 1;
 }
 
-static fire_t *init_fire(entity_type_t type)
+static eff_t *init_fire(entity_type_t type, float scale)
 {
-    fire_t *fire = malloc(sizeof(fire_t));
-    float scale = get_fire_scale(type);
+    eff_t *fire = malloc(sizeof(eff_t));
+    float new_scale = get_fire_scale(type) * scale;
 
-    fire->fire_mark = init_mark("assets/Entities/Effects/Fire.png",
+    fire->eff_mark = init_mark("assets/Entities/Effects/Fire.png",
         FIRE_WIDTH, FIRE_WIDTH);
-    sfSprite_setScale(fire->fire_mark->anim->sprite,
-        (sfVector2f){scale, scale});
-    fire->is_on_fire = false;
-    fire->burn_time = 2;
-    fire->fire_clock = init_my_clock();
-    fire->fire_damage_clock = init_my_clock();
-    fire->fire_damage = 1;
+    sfSprite_setScale(fire->eff_mark->anim->sprite,
+        (sfVector2f){new_scale, new_scale});
+    fire->is_on_eff = false;
+    fire->eff_duration = 3;
+    fire->eff_cooldown = 0.75;
+    fire->eff_clock = init_my_clock();
+    fire->eff_damage_clock = init_my_clock();
+    fire->eff_damage = 1;
     return fire;
 }
 
-static sfVector2f get_back_health_bar_size(entity_type_t type)
-{
-    type = type;
-    return (sfVector2f){76, 16};
-}
-
-static sfVector2f get_front_health_bar_size(entity_type_t type)
-{
-    type = type;
-    return (sfVector2f){70, 10};
-}
-
-static health_bar_t *init_health_bar(entity_type_t type)
-{
-    health_bar_t *health_bar = malloc(sizeof(health_bar_t));
-    sfVector2f back_size = get_back_health_bar_size(type);
-    sfVector2f front_size = get_front_health_bar_size(type);
-
-    health_bar->back = init_round_rectangle((sfVector2f){0, 0}, 7,
-        back_size, sfBlack);
-    health_bar->front = init_round_rectangle((sfVector2f){0, 0}, 5,
-        front_size, sfGreen);
-    health_bar->diff_y = 40;
-    return health_bar;
-}
-
-static sfText *init_name_text(char *str, int size, sfColor color)
+static sfText *init_name_text(char *str, sfColor color, bool is_boss)
 {
     sfText *text = sfText_create();
-    sfFont *font = sfFont_createFromFile("assets/fonts/Say Comic.ttf");
+    char *font_path = (is_boss) ? "assets/fonts/BreatheFireIii-PKLOB.ttf" :
+        "assets/fonts/Say Comic.ttf";
+    sfFont *font = sfFont_createFromFile(font_path);
     sfFloatRect text_rect;
+    float size = (is_boss) ? 80 : 17;
+    float outline_size = (is_boss) ? 3 : 1;
 
     sfText_setString(text, str);
     sfText_setFont(text, font);
@@ -93,7 +72,7 @@ static sfText *init_name_text(char *str, int size, sfColor color)
     text_rect = sfText_getGlobalBounds(text);
     sfText_setFillColor(text, color);
     sfText_setOutlineColor(text, sfBlack);
-    sfText_setOutlineThickness(text, 1);
+    sfText_setOutlineThickness(text, outline_size);
     sfText_setOrigin(text, (sfVector2f){text_rect.width / 2,
         text_rect.height / 2});
     return text;
@@ -114,13 +93,52 @@ static sfColor get_color_name_text(color_entity_t color, entity_type_t type)
     return sfWhite;
 }
 
+static eff_t *init_poison(float scale)
+{
+    eff_t *poison = malloc(sizeof(eff_t));
+
+    poison->eff_mark = init_mark("assets/Entities/Effects/Poison.png",
+        POISON_WIDTH, POISON_WIDTH);
+    sfSprite_setScale(poison->eff_mark->anim->sprite,
+        (sfVector2f){0.8 * scale, 0.8 * scale});
+    poison->is_on_eff = false;
+    poison->eff_duration = 5;
+    poison->eff_cooldown = 1.25;
+    poison->eff_clock = init_my_clock();
+    poison->eff_damage_clock = init_my_clock();
+    poison->eff_damage = 1;
+    return poison;
+}
+
+static anim_sprite_t *init_grade_icon(common_entity_t *common)
+{
+    char *texture = (common->grade_type == ELITE) ?
+        "assets/Entities/Elite.png" : "assets/Entities/boss.png";
+    float scale = (common->grade_type == ELITE) ? 0.25 : 0.08;
+
+    scale *= common->scale;
+    return init_anim_sprite(texture, 0.04, 0.00035, scale);
+}
+
 void init_common2(common_entity_t *common, entity_type_t type)
 {
+    common->damage_texts = NULL;
+    common->clock_cooldown_attack = init_my_clock();
     common->stun = init_stun();
-    common->fire = init_fire(type);
-    common->health_bar = init_health_bar(type);
-    common->name_text = init_name_text(common->name, 17, get_color_name_text(
-        common->color, type));
+    common->fire = init_fire(type, common->scale);
+    if (common->grade_type != BOSS) {
+        common->health_bar = init_health_bar(type, common->scale);
+        common->name_text = init_name_text(common->name,
+            get_color_name_text(common->color, type), false);
+    } else {
+        common->health_bar = init_health_bar_boss();
+        common->name_text = init_name_text(common->name, sfWhite, true);
+    }
     common->arrows_hit = NULL;
     common->is_fleeing = false;
+    common->poison = init_poison(common->scale);
+    if (common->grade_type != SOLDAT)
+        common->grade_icon = init_grade_icon(common);
+    else
+        common->grade_icon = NULL;
 }

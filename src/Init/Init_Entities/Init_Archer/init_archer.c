@@ -36,6 +36,8 @@ entity_t *init_entity_archer(char **infos)
     entity->in_view = false;
     entity->updt = &update_archer;
     entity->disp = &display_archer;
+    entity->anim = &anim_archer;
+    entity->destroy = &destroy_entity_archer;
     entity->get_hitbox = &get_hitbox_archer;
     entity->get_hitbox_attack = &get_hitbox_attack_archer;
     entity->get_hitbox_foot = &get_hitbox_archer_foot;
