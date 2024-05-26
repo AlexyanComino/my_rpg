@@ -15,6 +15,8 @@ static void *get_action4(char *txt)
         return &reprendre_game;
     if (strcmp(txt, "Sauvegarder") == 0)
         return &sauvegarder_game;
+    if (strcmp(txt, "Volume") == 0)
+        return &change_volume;
     return NULL;
 }
 
@@ -54,8 +56,9 @@ void *get_action(char *txt)
         return &settings;
     if (strcmp(txt, "Quitter") == 0)
         return &quit;
-    if (strcmp(txt, "Plein Ecran") == 0)
-        return &settings;
+    if (strcmp(txt, "FPS: 30") == 0 || strcmp(txt, "FPS: 60") == 0 ||
+        strcmp(txt, "FPS: 120") == 0)
+        return &change_fps;
     if (strcmp(txt, "Retour") == 0 || strcmp(txt, "Retour au menu") == 0 ||
         strcmp(txt, "Menu Principal") == 0)
         return &back_to_menu;

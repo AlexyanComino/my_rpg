@@ -154,3 +154,23 @@ void selector(rpg_t *rpg)
         (sfVector2f){16, 16});
     setup_command_help_menu(rpg);
 }
+
+void change_fps(rpg_t *rpg)
+{
+    char *str = malloc(sizeof(char) * 10);
+
+    switch (rpg->win->framerate) {
+    case 30:
+        rpg->win->framerate = 60;
+        break;
+    case 60:
+        rpg->win->framerate = 120;
+        break;
+    case 120:
+        rpg->win->framerate = 30;
+        break;
+    }
+    sfRenderWindow_setFramerateLimit(rpg->win->window, rpg->win->framerate);
+    sprintf(str, "FPS: %d", rpg->win->framerate);
+    sfText_setString(rpg->settings->buttons->next->text, str);
+}

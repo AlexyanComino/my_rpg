@@ -29,3 +29,9 @@ void sauvegarder_game(rpg_t *rpg)
     save(rpg, rpg->save_index + 1);
     rpg = rpg;
 }
+
+void change_volume(rpg_t *rpg)
+{
+    rpg = rpg;
+    printf("Volume changé\n");
+}
