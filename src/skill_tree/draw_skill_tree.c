@@ -21,8 +21,8 @@ int draw_ui_tree(rpg_t *rpg)
         sfText_setOrigin(title,
         (sfVector2f){sfText_getLocalBounds(title).width / 2, 0});
     }
-    sfText_setPosition(title, (sfVector2f){rpg->win->view_pos.x,
-    rpg->win->view_pos.y - 500});
+    sfText_setPosition(title, (sfVector2f){(*view_pos()).x,
+    (*view_pos()).y - 500});
     sfRenderWindow_drawText(rpg->win->window, title, NULL);
     return 1;
 }
@@ -37,8 +37,16 @@ int draw_tree(rpg_t *rpg)
         if (tmp->next == NULL)
             pos.x += 175;
         sfSprite_setPosition(tmp->background, (sfVector2f)
-        {pos.x + rpg->win->view_pos.x, pos.y + rpg->win->view_pos.y});
+        {pos.x + (*view_pos()).x, pos.y + (*view_pos()).y});
         sfRenderWindow_drawSprite(rpg->win->window, tmp->background, NULL);
+        sfSprite_setPosition(tmp->logo, (sfVector2f)
+        {pos.x + + (*view_pos()).x + 50, pos.y + (*view_pos()).y + 50});
+        sfRenderWindow_drawSprite(rpg->win->window, tmp->logo, NULL);
+        if (tmp->unlocked == 0) {
+            sfSprite_setPosition(tmp->locked, (sfVector2f)
+            {pos.x  - 10 + (*view_pos()).x, pos.y - 10 + (*view_pos()).y});
+            sfRenderWindow_drawSprite(rpg->win->window, tmp->locked, NULL);
+        }
         pos.x += 175;
         nb++;
         if (nb == 3) {
@@ -57,5 +65,6 @@ int draw_skill_tree(rpg_t *rpg)
         return 0;
     draw_ui_tree(rpg);
     draw_tree(rpg);
+    highlight_skill_tree(rpg);
     return 1;
 }
