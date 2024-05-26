@@ -45,9 +45,9 @@ static void init_detect_circles(zones_entity_t *zones)
 
 static void init_detect(char **infos, zones_entity_t *zones)
 {
-    zones->l_radius = atoi(infos[5]);
-    zones->m_radius = atoi(infos[6]);
-    zones->s_radius = atoi(infos[7]);
+    zones->l_radius = atoi(infos[7]);
+    zones->m_radius = atoi(infos[8]);
+    zones->s_radius = atoi(infos[9]);
     zones->m_detect = false;
     zones->s_detect = false;
     zones->l_circle = sfCircleShape_create();
@@ -56,47 +56,49 @@ static void init_detect(char **infos, zones_entity_t *zones)
     init_detect_circles(zones);
 }
 
-static sfIntRect get_hitbox_from_type(entity_type_t type, sfVector2f pos)
+static sfIntRect get_hitbox_from_type(entity_type_t type, sfVector2f pos,
+    float scale)
 {
     if (type == WARRIOR)
-        return get_hitbox_warrior(pos);
+        return get_hitbox_warrior(pos, scale);
     if (type == PAWN)
-        return get_hitbox_pawn(pos);
+        return get_hitbox_pawn(pos, scale);
     if (type == TORCH)
-        return get_hitbox_torch(pos);
+        return get_hitbox_torch(pos, scale);
     if (type == TNT)
-        return get_hitbox_tnt(pos);
+        return get_hitbox_tnt(pos, scale);
     if (type == ARCHER)
-        return get_hitbox_archer(pos);
+        return get_hitbox_archer(pos, scale);
     return (sfIntRect){0, 0, 0, 0};
 }
 
-static sfIntRect get_hitbox_foot_from_type(entity_type_t type, sfVector2f pos)
+static sfIntRect get_hitbox_foot_from_type(entity_type_t type, sfVector2f pos,
+    float scale)
 {
     if (type == WARRIOR)
-        return get_hitbox_warrior_foot(pos);
+        return get_hitbox_warrior_foot(pos, scale);
     if (type == PAWN)
-        return get_hitbox_pawn_foot(pos);
+        return get_hitbox_pawn_foot(pos, scale);
     if (type == TORCH)
-        return get_hitbox_torch_foot(pos);
+        return get_hitbox_torch_foot(pos, scale);
     if (type == TNT)
-        return get_hitbox_tnt_foot(pos);
+        return get_hitbox_tnt_foot(pos, scale);
     if (type == ARCHER)
-        return get_hitbox_archer_foot(pos);
+        return get_hitbox_archer_foot(pos, scale);
     return (sfIntRect){0, 0, 0, 0};
 }
 
 zones_entity_t *init_entity_zones(char **infos, sfVector2f pos,
-    entity_type_t type)
+    entity_type_t type, float scale)
 {
     zones_entity_t *zones = malloc(sizeof(zones_entity_t));
 
-    zones->hitbox = get_hitbox_from_type(type, pos);
+    zones->hitbox = get_hitbox_from_type(type, pos, scale);
     zones->rect_hitbox = init_rect_hitbox(zones->hitbox, sfBlue);
     zones->hitbox_attack = (sfIntRect){0, 0, 0, 0};
     zones->rect_hitbox_attack = init_rect_hitbox(zones->hitbox_attack,
         sfRed);
-    zones->hitbox_foot = get_hitbox_foot_from_type(type, pos);
+    zones->hitbox_foot = get_hitbox_foot_from_type(type, pos, scale);
     zones->rect_hitbox_foot = init_rect_hitbox(zones->hitbox_foot, sfGreen);
     init_detect(infos, zones);
     return zones;

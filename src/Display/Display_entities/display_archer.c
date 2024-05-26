@@ -35,7 +35,7 @@ static void display_arrows(rpg_t *rpg, entity_t *entity)
     while (tmp) {
         sfRenderWindow_drawSprite(rpg->win->window,
         tmp->anim->sprite, NULL);
-        if (rpg->debug)
+        if (rpg->modes->debug)
             sfRenderWindow_drawPrimitives(rpg->win->window,
             tmp->vertices, 2, sfLines, NULL);
         tmp = tmp->next;
@@ -52,14 +52,12 @@ static void display_alive_archer(rpg_t *rpg, entity_t *entity)
     if (entity->spe->archer->inter->is_display == 1)
         sfRenderWindow_drawSprite(rpg->win->window,
             entity->spe->archer->inter->anim->sprite, NULL);
-    if (rpg->debug)
+    if (rpg->modes->debug)
         display_debug_archer(rpg, entity);
 }
 
-void display_archer(void *vrpg, entity_t *entity)
+void display_archer(rpg_t *rpg, entity_t *entity)
 {
-    rpg_t *rpg = (rpg_t *)vrpg;
-
     if (entity->common->state == RIEN)
         return;
     if (entity->common->state == DEAD)

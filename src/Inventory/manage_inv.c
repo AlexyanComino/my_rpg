@@ -112,6 +112,10 @@ static void inv_is_open(rpg_t *rpg)
     (*inventory())->is_open = !(*inventory())->is_open;
     rpg->gamestate = ((*inventory())->is_open == 1) ? INVENTORY : GAME;
     scroll_quest(&(*inventory())->scroll, &(*inventory())->scroll_max);
+    if (rpg->gamestate == INVENTORY)
+        setup_command_help_inventory(rpg);
+    else
+        setup_command_help_in_game(rpg);
 }
 
 int manage_evt_inv(sfEvent event, rpg_t *rpg)

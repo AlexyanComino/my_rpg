@@ -30,6 +30,14 @@ void destroy_music(sounds_t *sounds)
     free(sounds);
 }
 
+static void destroy_anim_text(anim_text_t *anim_text)
+{
+    sfText_destroy(anim_text->text);
+    if (anim_text->has_shadow)
+        sfText_destroy(anim_text->shadow);
+    free(anim_text);
+}
+
 static void destroy_menu(menu_t *menu)
 {
     button_t *tmp = menu->buttons;
@@ -43,19 +51,21 @@ static void destroy_menu(menu_t *menu)
         free(tmp);
         tmp = next;
     }
-    if (menu->text != NULL)
-        sfText_destroy(menu->text);
+    if (menu->title1) {
+        destroy_anim_text(menu->title1);
+        destroy_anim_text(menu->title2);
+    }
     sfFont_destroy(menu->font);
     free(menu);
 }
 
-void destroy_menus(rpg_t *rpg)
+static void destroy_menus(rpg_t *rpg)
 {
     destroy_menu(rpg->main_menu);
     destroy_menu(rpg->settings);
 }
 
-void destroy_quests(rpg_t *rpg)
+static void destroy_quests(rpg_t *rpg)
 {
     all_quests_t *tmp = rpg->quests;
     all_quests_t *next = NULL;
@@ -83,6 +93,7 @@ void destroy(rpg_t *rpg)
     destroy_menus(rpg);
     destroy_quests(rpg);
     destroy_music(rpg->sounds);
+    destroy_ent(rpg->ent, rpg->ent_size);
     sfClock_destroy(rpg->win->clock);
     sfView_destroy(rpg->win->view);
     sfRenderWindow_destroy(rpg->win->window);

@@ -1,6 +1,6 @@
 #NPC;NAME;DESCRIPTION;DIALOG;
 Renaut;L'Ombre du Chevalier Violet;Tue le chevalier violet qui attaque le village;Aventurier, vous arrivez a point nomme. Notre royaume est menace par le Chevalier Violet, Rodrigo Violetto.Votre mission est de defendre notre camp contre ses assauts.;100;5000;K;RodrigoVioletto;false;
-Renaut;L'Ombre du Chevalier Violet;Retourne voir Renaut;Aventurier, vous avez réussi ! Grâce à vous, notre camp est sauvé et le Chevalier Violet, Rodrigo Violetto, a été repoussé. Votre bravoure et vos compétences ont permis de repousser cette menace.;100;5000;T;Renaut;true;
-Renaut;L'Epee d'Argent Oubliee;Va prendre l'epee dans le coffre;Aventurier, j'ai besoin de votre aide. Une epee en argent d'une grande valeur est cachee dans un coffre proche d'ici.Va la prendre, tu l'as bien merite;100;5000;G;Silver Sword;true;
+Renaut;L'Ombre du Chevalier Violet;Retourne voir Renaut;Aventurier, vous avez reussi ! Grace a vous, notre camp est sauve et le Chevalier Violet, Rodrigo Violetto, a ete repousse. Votre bravoure et vos competences ont permis de repousser cette menace.;100;5000;T;Renaut;true;
+Renaut;L'Epee d'Argent Oubliee;Va prendre l'epee dans le coffre;Aventurier, une epee en argent d'une grande valeur est cachee dans un coffre proche d'ici.Va la prendre, tu l'as bien merite;100;5000;G;Silver Sword;true;
 Ambre;La chasse aux trésors;Trouver le trésor caché dans la forêt de la mort;Salut Pablodrigo, il y a un chevalier violet qui attaque le village depuis plusieurs jours, peux tu l'éliminer?;500;200;G;Tresor;true;
 Sylvain;Le grand tournoi;Gagner le tournoi de mangeur de caca de Tournecoubeh;Salut Pablodrigo, il y a un chevalier violet qui attaque le village depuis plusieurs jours, peux tu l'éliminer?;50;100;G;CacaMax;true;

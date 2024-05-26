@@ -46,10 +46,8 @@ static void display_alive_pawn(rpg_t *rpg, entity_t *entity)
         display_items(rpg, entity);
 }
 
-void display_pawn(void *vrpg, entity_t *entity)
+void display_pawn(rpg_t *rpg, entity_t *entity)
 {
-    rpg_t *rpg = (rpg_t *)vrpg;
-
     if (entity->common->state == RIEN)
         return;
     if (entity->common->state == DEAD)

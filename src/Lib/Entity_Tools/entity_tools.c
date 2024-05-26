@@ -16,7 +16,9 @@ entity_t *get_nearest_entity(rpg_t *rpg, entity_t *entity, bool same_faction)
     for (unsigned int i = 0; i < rpg->ent_size; i++) {
         if (!rpg->ent[i]->in_view || !is_alive(rpg->ent[i]) ||
             rpg->ent[i] == entity || (!same_faction &&
-            entities_in_same_faction(entity, rpg->ent[i])))
+            (entities_in_same_faction(entity, rpg->ent[i]) ||
+            (!is_player(rpg, rpg->ent[i]) && rpg->ent[i]->common->faction ==
+            WITH_ALL))))
             continue;
         distance = get_distance(entity->common->pos,
             rpg->ent[i]->common->pos);

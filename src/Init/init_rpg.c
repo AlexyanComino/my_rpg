@@ -11,8 +11,12 @@ static win_t *init_win(unsigned int width, unsigned int height)
 {
     win_t *win = malloc(sizeof(win_t));
     sfVideoMode mode = {width, height, 32};
+    sfImage *icon = sfImage_createFromFile("assets/Icon.png");
+    sfVector2u i = sfImage_getSize(icon);
 
-    win->window = sfRenderWindow_create(mode, "My_RPG", sfDefaultStyle, NULL);
+    win->window = sfRenderWindow_create(mode, "The Blade of Eternity",
+        sfDefaultStyle, NULL);
+    sfRenderWindow_setIcon(win->window, i.x, i.y, sfImage_getPixelsPtr(icon));
     win->view = sfView_createFromRect((sfFloatRect){0, 0, width, height});
     win->view_menu = sfView_createFromRect((sfFloatRect){0, 0, width, height});
     win->width = width;
@@ -21,94 +25,10 @@ static win_t *init_win(unsigned int width, unsigned int height)
     win->clock = sfClock_create();
     win->mouse_pos = (sfVector2f){0, 0};
     sfRenderWindow_setFramerateLimit(win->window, win->framerate);
-    win->view_pos = (sfVector2f){5331, 8353};
-    sfView_setCenter(win->view_menu, win->view_pos);
-    sfView_zoom(win->view_menu, 2);
+    win->view_pos = (sfVector2f){4850, 8400};
     win->zoom = 2;
-    sfRenderWindow_setView(win->window, win->view_menu);
+    win->view_menu_move = (sfVector2f){80, 0};
     return win;
-}
-
-static sfVector2f *get_collisions_pos(unsigned int *size)
-{
-    sfVector2f *pos = NULL;
-    size_t len = 0;
-    char *line = NULL;
-    FILE *file = fopen("Collisions/res.coll", "r");
-
-    while (getline(&line, &len, file) != -1) {
-        pos = realloc(pos, sizeof(sfVector2f) * (*size + 1));
-        pos[*size].x = atoi(strtok(line, " ")) * TILE_SCALE + TILE_SIZE * 12 -
-            TILE_SIZE / 2;
-        pos[*size].y = atoi(strtok(NULL, " ")) * TILE_SCALE;
-        (*size)++;
-    }
-    free(line);
-    fclose(file);
-    return pos;
-}
-
-static region_t ***init_regions(unsigned int cols, unsigned int rows)
-{
-    region_t ***regions = malloc(sizeof(region_t **) * cols);
-
-    for (unsigned int i = 0; i < cols; i++) {
-        regions[i] = malloc(sizeof(region_t *) * rows);
-        for (unsigned int j = 0; j < rows; j++) {
-            regions[i][j] = malloc(sizeof(region_t));
-            regions[i][j]->size = 0;
-            regions[i][j]->pos = NULL;
-            regions[i][j]->rect = (sfIntRect){i * WIDTH, j * HEIGHT, WIDTH,
-                HEIGHT};
-        }
-    }
-    return regions;
-}
-
-static region_t ***get_regions(unsigned int cols, unsigned int rows)
-{
-    region_t ***regions = init_regions(cols, rows);
-    unsigned int size = 0;
-    sfVector2f *pos = get_collisions_pos(&size);
-    unsigned int col = 0;
-    unsigned int row = 0;
-
-    for (unsigned int i = 0; i < size; i++) {
-        col = pos[i].x / WIDTH;
-        row = pos[i].y / HEIGHT;
-        if (col >= cols || row >= rows)
-            continue;
-        regions[col][row]->pos = realloc(regions[col][row]->pos,
-            sizeof(sfVector2f) * (regions[col][row]->size + 1));
-        regions[col][row]->pos[regions[col][row]->size] = pos[i];
-        regions[col][row]->size++;
-    }
-    free(pos);
-    return regions;
-}
-
-static collision_t *init_collision(void)
-{
-    collision_t *collision = malloc(sizeof(collision_t));
-
-    collision->rect = (sfIntRect){0, 0, TILE_SIZE, TILE_SIZE};
-    collision->size = 0;
-    collision->cols = ((MAP_WIDTH + WIDTH + 1) * TILE_SCALE) / WIDTH;
-    collision->rows = ((MAP_HEIGHT + HEIGHT + 1) * TILE_SCALE) / HEIGHT;
-    collision->regions = get_regions(collision->cols, collision->rows);
-    collision->shape = sfRectangleShape_create();
-    sfRectangleShape_setFillColor(collision->shape, sfTransparent);
-    sfRectangleShape_setOutlineColor(collision->shape, sfBlack);
-    sfRectangleShape_setOutlineThickness(collision->shape, 2);
-    sfRectangleShape_setSize(collision->shape, (sfVector2f){TILE_SIZE,
-        TILE_SIZE});
-    collision->region_shape = sfRectangleShape_create();
-    sfRectangleShape_setFillColor(collision->region_shape, sfTransparent);
-    sfRectangleShape_setOutlineColor(collision->region_shape, sfRed);
-    sfRectangleShape_setOutlineThickness(collision->region_shape, 2);
-    sfRectangleShape_setSize(collision->region_shape, (sfVector2f){WIDTH,
-        HEIGHT});
-    return collision;
 }
 
 static void init_thread(rpg_t *rpg)
@@ -126,6 +46,29 @@ static void init_thread(rpg_t *rpg)
     rpg->shared_data2->loaded = 0;
     pthread_create(&rpg->thread2, NULL, load_entities,
         (void *)rpg->shared_data2);
+}
+
+static void pre_display_loading(rpg_t *rpg)
+{
+    sfRenderWindow_clear(rpg->win->window, sfBlack);
+    sfRenderWindow_drawSprite(rpg->win->window,
+        rpg->loading->load->sprite, NULL);
+    sfRenderWindow_drawText(rpg->win->window,
+        rpg->loading->title1->text, NULL);
+    sfRenderWindow_drawText(rpg->win->window,
+        rpg->loading->title2->text, NULL);
+    sfRenderWindow_display(rpg->win->window);
+}
+
+static modes_t *init_modes(void)
+{
+    modes_t *modes = malloc(sizeof(modes_t));
+
+    modes->plus = false;
+    modes->keynote_mode = true;
+    modes->k = false;
+    modes->debug = false;
+    return modes;
 }
 
 static save_t **init_saves(void)
@@ -146,7 +89,6 @@ static void init_rpg2(rpg_t *rpg)
     rpg->minimap = init_minimap(WIDTH, HEIGHT);
     rpg->collision = init_collision();
     init_all_quests(rpg);
-    rpg->plus = false;
     rpg->decors_size = 0;
     rpg->decors = init_decors(&rpg->decors_size);
     rpg->chests_size = 0;
@@ -155,10 +97,11 @@ static void init_rpg2(rpg_t *rpg)
     rpg->items = init_items_tab(&rpg->items_size);
     init_inventory(rpg, 15);
     rpg->inventory = *inventory();
+    rpg->transition = init_transition();
+    rpg->end_menu = init_end_menu(rpg);
+    rpg->pause_menu = init_pause_menu();
+    printf("Finished init rpg\n");
     rpg->skill_tree = init_all_skill();
-    pthread_join(rpg->thread, NULL);
-    if (rpg->shared_data->loaded)
-        rpg->map = rpg->shared_data->map;
 }
 
 rpg_t *init_rpg(void)
@@ -168,10 +111,12 @@ rpg_t *init_rpg(void)
     srand(time(NULL));
     rpg->player_index = UINT_MAX;
     init_thread(rpg);
-    rpg->gamestate = MAIN_MENU;
+    rpg->gamestate = LOADING;
     rpg->win = init_win(WIDTH, HEIGHT);
+    rpg->loading = init_loading();
+    pre_display_loading(rpg);
     rpg->event = (sfEvent){0};
-    rpg->debug = false;
+    rpg->modes = init_modes();
     rpg->text_box = init_text_box();
     rpg->sounds = init_sounds();
     rpg->save = init_saves();

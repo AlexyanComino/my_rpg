@@ -1,5 +1,12 @@
 #Type;TexturePath;Width;Height;Speed(float);NbCols;NbRows;Posx;PosY;Scale
+#Ground
 G;assets/Decors/anim_water.png;928;608;0.1;8;1;5780;8195;1
+G;assets/Decors/puit.png;96;182;0.2;43;1;4370;8090;1
+G;assets/Decors/puit.png;96;182;0.2;43;1;4119;14213;1
+G;assets/Decors/puit.png;96;182;0.2;43;1;16513;19322;1
+G;assets/Decors/puit.png;96;182;0.2;43;1;25815;8822;1
+
+#High
 H;assets/Decors/wind.png;312;64;0.1;48;1;6577;7809;2
 H;assets/Decors/wind.png;312;64;0.1;48;1;4881;8061;2
 H;assets/Decors/wind.png;312;64;0.1;48;1;6165;8877;2

@@ -73,19 +73,40 @@ static void event_entity(rpg_t *rpg, entity_t *player, sfKeyCode key)
     }
 }
 
+static void event_other_key2(rpg_t *rpg, entity_t *player, sfKeyCode key)
+{
+    if (key == sfKeyDown && player->common->state != INTERACT) {
+        rpg->player_index = (rpg->player_index - 1) % rpg->ent_size;
+        sfView_setCenter(rpg->win->view, player->common->pos);
+    }
+    if (key == sfKeyEscape) {
+        rpg->gamestate = PAUSE;
+        set_pos_buttons_pause_menu(rpg);
+        setup_command_help_pause(rpg);
+    }
+}
+
 static void event_other_key(rpg_t *rpg, entity_t *player, sfKeyCode key)
 {
     if (key == sfKeyP)
-        printf("Player pos: %f, %f\n", player->common->pos.x,
-            player->common->pos.y);
+        printf("Player pos: %d;%d\n", (int)player->common->pos.x,
+            (int)player->common->pos.y);
     if (key == sfKeyB)
-        rpg->plus = !rpg->plus;
+        rpg->modes->plus = !rpg->modes->plus;
     if (key == sfKeyT) {
         rpg->gamestate = MAP;
+        setup_command_help_map(rpg);
         init_map_pos(rpg);
     }
-    if (key == sfKeyRControl && sfKeyboard_isKeyPressed(sfKeyLControl))
-        rpg->debug = !rpg->debug;
+    if (key == sfKeyLAlt && sfKeyboard_isKeyPressed(sfKeyLControl))
+        rpg->modes->debug = !rpg->modes->debug;
+    if (rpg->modes->keynote_mode && key == sfKeyK)
+        rpg->modes->k = !rpg->modes->k;
+    if (key == sfKeyUp && player->common->state != INTERACT) {
+        rpg->player_index = (rpg->player_index + 1) % rpg->ent_size;
+        sfView_setCenter(rpg->win->view, player->common->pos);
+    }
+    event_other_key2(rpg, player, key);
 }
 
 void event_game(rpg_t *rpg)
@@ -96,6 +117,8 @@ void event_game(rpg_t *rpg)
     quest_event(rpg);
     if (rpg->event.type != sfEvtKeyPressed)
         return;
+    if (rpg->event.key.code == sfKeySlash)
+        get_player(rpg)->common->state = DEAD;
     event_entity(rpg, player, key);
     event_other_key(rpg, player, key);
     event_chests(rpg, key);

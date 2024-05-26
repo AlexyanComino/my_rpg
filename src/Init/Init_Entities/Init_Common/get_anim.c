@@ -9,11 +9,12 @@
 
 static char *get_warrior_texture_path(color_entity_t color)
 {
-    char *texture_paths[4] = {
+    char *texture_paths[5] = {
         "assets/Entities/Warriors/Warrior_Blue.png",
         "assets/Entities/Warriors/Warrior_Purple.png",
         "assets/Entities/Warriors/Warrior_Red.png",
         "assets/Entities/Warriors/Warrior_Yellow.png",
+        "assets/Entities/Warriors/Warrior_Black.png",
     };
     int color_index = 0;
 
@@ -25,6 +26,8 @@ static char *get_warrior_texture_path(color_entity_t color)
         color_index = 2;
     if (color == YELLOW)
         color_index = 3;
+    if (color == BLACK)
+        color_index = 4;
     return strdup(texture_paths[color_index]);
 }
 

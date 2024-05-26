@@ -17,11 +17,9 @@ void slct_button_event(rpg_t *rpg, select_button_t *buttons)
         if (tmp->state == HOVERED)
             sfText_setColor(tmp->text, sfWhite);
         if (tmp->state == CLICKED) {
-            tmp->rect.left = BUTTON_WIDTH;
             sfText_setColor(tmp->text, sfRed);
         }
         if (tmp->state == NOTHING) {
-            tmp->rect.left = 0;
             sfText_setColor(tmp->text, sfBlack);
         }
         is_select_button_released(tmp, rpg);
@@ -62,16 +60,10 @@ void menu_button_event(rpg_t *rpg, button_t *buttons)
     while (tmp) {
         is_button_clicked(tmp, rpg);
         is_button_hovered(tmp, rpg);
-        if (tmp->state == HOVERED)
-            sfText_setColor(tmp->text, sfColor_fromRGB(230, 230, 230));
-        if (tmp->state == CLICKED) {
-            tmp->rect.left = BUTTON_WIDTH;
-            sfText_setColor(tmp->text, sfWhite);
-        }
-        if (tmp->state == NOTHING) {
-            tmp->rect.left = 0;
-            sfText_setColor(tmp->text, sfColor_fromRGB(220, 220, 220));
-        }
+        if (tmp->state == CLICKED)
+            sfText_setColor(tmp->text, tmp->click_color);
+        if (tmp->state == NOTHING)
+            sfText_setColor(tmp->text, tmp->color);
         is_button_released(tmp, rpg);
         if (tmp->state == RELEASED)
             tmp->action(rpg);

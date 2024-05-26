@@ -152,4 +152,5 @@ void selector(rpg_t *rpg)
         (sfVector2f){16, 16});
     sfSprite_setOrigin(rpg->inventory->player_status->s_speed,
         (sfVector2f){16, 16});
+    setup_command_help_menu(rpg);
 }

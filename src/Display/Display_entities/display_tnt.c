@@ -21,7 +21,7 @@ static void display_alive_tnt(rpg_t *rpg, entity_t *entity)
         sfRenderWindow_drawSprite(rpg->win->window,
             entity->spe->tnt->explo->anim->sprite, NULL);
     }
-    if (rpg->debug) {
+    if (rpg->modes->debug) {
         sfRenderWindow_drawConvexShape(rpg->win->window,
             entity->spe->tnt->curve->curve_shape, NULL);
         sfRenderWindow_drawCircleShape(rpg->win->window,
@@ -29,10 +29,8 @@ static void display_alive_tnt(rpg_t *rpg, entity_t *entity)
     }
 }
 
-void display_tnt(void *vrpg, entity_t *entity)
+void display_tnt(rpg_t *rpg, entity_t *entity)
 {
-    rpg_t *rpg = (rpg_t *)vrpg;
-
     if (entity->common->state == RIEN)
         return;
     if (entity->common->state == DEAD)

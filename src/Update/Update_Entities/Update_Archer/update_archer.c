@@ -124,13 +124,11 @@ static void update_arrows(rpg_t *rpg, entity_t *entity)
     }
 }
 
-void update_archer(void *vrpg, entity_t *entity)
+void update_archer(rpg_t *rpg, entity_t *entity)
 {
-    rpg_t *rpg = vrpg;
-
+    update_common(rpg, entity);
     if (entity->common->state == RIEN)
         return;
-    update_common(rpg, entity);
     if (!is_player(rpg, entity) && is_alive(entity))
         update_pnj_archer(rpg, entity);
     update_arrows(rpg, entity);
