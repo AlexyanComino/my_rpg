@@ -34,7 +34,7 @@ static char *get_player_infos(rpg_t *rpg)
     char *str = type[rpg->save[rpg->save_index]->type];
     char *str2 = malloc(sizeof(char) * strlen(str) + 100);
 
-    sprintf(str2, "%s;%d;%d;0;0;0;%u;%u;%u;%u;", str,
+    sprintf(str2, "%s;%d;%d;S;1;0;0;0;%u;%u;%u;%u;0;", str,
         (int)rpg->save[rpg->save_index]->pos.x,
         (int)rpg->save[rpg->save_index]->pos.y,
         rpg->save[rpg->save_index]->attributes->max_health,

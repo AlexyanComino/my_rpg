@@ -122,6 +122,4 @@ void event_game(rpg_t *rpg)
     event_entity(rpg, player, key);
     event_other_key(rpg, player, key);
     event_chests(rpg, key);
-    if (rpg->event.key.code == sfKeyV)
-        save(rpg, rpg->save_index + 1);
 }

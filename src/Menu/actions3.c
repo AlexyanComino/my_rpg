@@ -26,5 +26,6 @@ void reprendre_game(rpg_t *rpg)
 void sauvegarder_game(rpg_t *rpg)
 {
     printf("Sauvegarde en cours...\n");
+    save(rpg, rpg->save_index + 1);
     rpg = rpg;
 }
