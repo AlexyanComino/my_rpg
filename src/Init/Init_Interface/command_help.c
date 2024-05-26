@@ -35,6 +35,10 @@ static char *get_texture_path_from_str2(char *action_str)
         return "assets/interface/Clavier/scroll_up_down_light.png";
     if (!strcmp(action_str, "Déplacer"))
         return "assets/interface/Clavier/mouse_light.png";
+    if (!strcmp(action_str, "Étourdir"))
+        return "assets/interface/Clavier/a_key_light.png";
+    if (!strcmp(action_str, "Émote"))
+        return "assets/interface/Clavier/r_light.png";
     fprintf(stderr, "Error: action not found\n");
     return NULL;
 }

@@ -16,7 +16,10 @@ void destroy_mark(mark_t *mark)
 
 void destroy_my_clock(my_clock_t *clock)
 {
-    sfClock_destroy(clock->clock);
+    if (clock == NULL)
+        return;
+    if (clock->clock != NULL)
+        sfClock_destroy(clock->clock);
     free(clock);
 }
 
@@ -35,7 +38,9 @@ void destroy_base(base_t *base)
 
 void destroy_ent(entity_t **ent, unsigned int size)
 {
-    for (unsigned int i = 0; i < size; i++)
+    for (unsigned int i = 0; i < size; i++) {
+        printf("Destroying entity %s\n", ent[i]->common->name);
         ent[i]->destroy(ent[i]);
+    }
     free(ent);
 }

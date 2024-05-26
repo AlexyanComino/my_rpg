@@ -29,7 +29,7 @@ static void update_eff_damage(rpg_t *rpg, entity_t *entity, eff_t *eff,
             entity->common->fire->eff_damage;
         add_dmg_text(rpg, entity, eff->eff_damage, text);
         if (entity->common->attributes->health <= 0)
-            entity_is_dead(entity);
+            entity_is_dead(rpg, entity);
         sfClock_restart(eff->eff_damage_clock->clock);
     }
 }

@@ -100,7 +100,7 @@ static void event_player_move(entity_t *player)
 
     if (in_action(player))
         return;
-    if (sfKeyboard_isKeyPressed(sfKeyLControl))
+    if (sfKeyboard_isKeyPressed(sfKeyLShift))
             is_walking = true;
     if (sfKeyboard_isKeyPressed(sfKeyZ) || sfKeyboard_isKeyPressed(sfKeyS) ||
         sfKeyboard_isKeyPressed(sfKeyQ) || sfKeyboard_isKeyPressed(sfKeyD)) {

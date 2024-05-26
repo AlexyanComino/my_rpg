@@ -34,31 +34,37 @@ static void destroy_carry(carry_t *carry)
 
     if (carry == NULL)
         return;
-    tmp = carry->item;
-    free(tmp->name);
-    sfSprite_destroy(tmp->sprite);
-    sfTexture_destroy(tmp->texture);
-    free(tmp->index_rev_scale);
-    free(tmp);
+    if (carry->item != NULL) {
+        tmp = carry->item;
+        free(tmp->name);
+        sfSprite_destroy(tmp->sprite);
+        sfTexture_destroy(tmp->texture);
+        free(tmp->index_rev_scale);
+        free(tmp);
+    }
     free(carry);
 }
 
 static void destroy_pawn(pawn_t *pawn)
 {
-    destroy_my_clock(pawn->myclock);
-    destroy_carry(pawn->carry);
+    if (pawn->job == CARRY)
+        destroy_carry(pawn->carry);
+    pawn->carry = NULL;
     free(pawn);
 }
 
 static void destroy_spe_pawn(spe_t *spe)
 {
     destroy_pawn(spe->pawn);
+    spe->pawn = NULL;
     free(spe);
 }
 
 void destroy_entity_pawn(entity_t *entity)
 {
     destroy_common(entity->common);
+    entity->common = NULL;
     destroy_spe_pawn(entity->spe);
+    entity->spe = NULL;
     free(entity);
 }
