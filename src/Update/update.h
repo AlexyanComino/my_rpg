@@ -22,3 +22,9 @@ void update_pause_menu(rpg_t *rpg);
 
 // Move view menu
 void move_view_menu(rpg_t *rpg);
+
+// Update credits
+void update_credits(rpg_t *rpg);
+
+// Update victory
+void update_victory(rpg_t *rpg);

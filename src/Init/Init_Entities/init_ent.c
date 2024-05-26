@@ -61,5 +61,6 @@ entity_t **init_ent(unsigned int *size)
         free_array(infos);
     }
     free_array(tab);
+    printf("size: %d\n", *size);
     return ent;
 }

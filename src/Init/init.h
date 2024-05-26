@@ -47,3 +47,9 @@ save_t *load(int nb);
 
 // Init collisions
 collision_t *init_collision(void);
+
+// Init victory
+vict_t *init_victory(void);
+
+// Init credits
+credits_t *init_credits(void);
