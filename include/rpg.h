@@ -648,6 +648,7 @@ typedef struct player_status_s {
     int level;
     int xp;
     int max_xp;
+    int skill_points;
     int gold;
     sfText *t_hp;
     sfText *t_attack;
@@ -1109,6 +1110,7 @@ typedef struct rpg_s {
     pause_menu_t *pause_menu;
 } rpg_t;
 
+#include "../src/xp_sys/xp.h"
 #include "../src/skill_tree/skill_tree.h"
 #include "../src/Init/init.h"
 #include "../src/Display/Display_entities/display_entities.h"

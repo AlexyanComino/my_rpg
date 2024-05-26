@@ -54,23 +54,23 @@ static int setup_logo(skill_t *skill, char *logo_path)
 static skill_t *init_skill_tree(skill_t *skill)
 {
     setup_logo(skill->next->next->next->next->next,
-    "assets/skill/skill_icon_00.png");
+    "assets/skill/skill_icon_07.png");
     skill = add_skill(skill,
     init_skill("Earth", "Shoot a earth", 10, &skill_test));
     setup_logo(skill->next->next->next->next->next->next,
-    "assets/skill/skill_icon_00.png");
+    "assets/skill/skill_icon_06.png");
     skill = add_skill(skill,
     init_skill("Water", "Shoot a water", 10, &skill_test));
     setup_logo(skill->next->next->next->next->next->next->next,
-    "assets/skill/skill_icon_00.png");
+    "assets/skill/skill_icon_05.png");
     skill = add_skill(skill,
     init_skill("Dark", "Shoot a dark", 10, &skill_test));
     setup_logo(skill->next->next->next->next->next->next->next->next,
-    "assets/skill/skill_icon_00.png");
+    "assets/skill/skill_icon_08.png");
     skill = add_skill(skill,
     init_skill("Light", "Shoot a light", 10, &skill_test));
     setup_logo(skill->next->next->next->next->next->next->next->next->next,
-    "assets/skill/skill_icon_00.png");
+    "assets/skill/skill_icon_09.png");
     return skill;
 }
 
@@ -82,17 +82,17 @@ skill_t *init_all_skill(void)
     setup_logo(skill, "assets/skill/skill_icon_00.png");
     skill = add_skill(skill,
     init_skill("Heal", "Heal yourself", 10, &skill_test));
-    setup_logo(skill->next, "assets/skill/skill_icon_00.png");
+    setup_logo(skill->next, "assets/skill/skill_icon_01.png");
     skill = add_skill(skill,
     init_skill("Lightning", "Shoot a lightning", 10, &skill_test));
-    setup_logo(skill->next->next, "assets/skill/skill_icon_00.png");
+    setup_logo(skill->next->next, "assets/skill/skill_icon_02.png");
     skill = add_skill(skill,
     init_skill("Ice", "Shoot a ice", 10, &skill_test));
-    setup_logo(skill->next->next->next, "assets/skill/skill_icon_00.png");
+    setup_logo(skill->next->next->next, "assets/skill/skill_icon_03.png");
     skill = add_skill(skill,
     init_skill("Poison", "Shoot a poison", 10, &skill_test));
     setup_logo(skill->next->next->next->next,
-    "assets/skill/skill_icon_00.png");
+    "assets/skill/skill_icon_04.png");
     skill = add_skill(skill,
     init_skill("Wind", "Shoot a wind", 10, &skill_test));
     return init_skill_tree(skill);
@@ -148,9 +148,7 @@ int highlight_skill_tree(rpg_t *rpg)
     sfVector2f mouse = rpg->win->mouse_pos;
     sfFloatRect rect = {0, 0, 0, 0};
 
-    printf("mouse x: %f\n", mouse.x);
-    printf("mouse y: %f\n", mouse.y);
-    for (; tmp; tmp = tmp->next) {  
+    for (; tmp; tmp = tmp->next) {
         rect = sfSprite_getGlobalBounds(tmp->background);
         if (sfFloatRect_contains(&rect, mouse.x, mouse.y)) {
             sfSprite_setPosition(tmp->highlight,

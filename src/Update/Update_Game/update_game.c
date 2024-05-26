@@ -9,6 +9,7 @@
 
 void update_game(rpg_t *rpg)
 {
+    apply_stats(rpg);
     update_game_interface(rpg);
     update_chests(rpg);
     update_entities(rpg);
