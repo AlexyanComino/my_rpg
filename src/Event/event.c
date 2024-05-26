@@ -51,7 +51,8 @@ static void event_states(rpg_t *rpg)
 static sfVector2f get_view_pos(rpg_t *rpg)
 {
     if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY ||
-        rpg->gamestate == MAP || rpg->gamestate == PAUSE)
+        rpg->gamestate == MAP || rpg->gamestate == PAUSE ||
+        rpg->gamestate == SKILL_TREE)
         return get_player(rpg)->common->pos;
     else
         return rpg->win->view_pos;
