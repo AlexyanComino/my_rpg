@@ -30,7 +30,7 @@ static slot_t *setup_slot(slot_t *slot, sfVector2f pos, int type, void *item)
     return slot;
 }
 
-static int manage_slot(slot_t *tmp, void *item, int type, int *id)
+int manage_slot(slot_t *tmp, void *item, int type, int *id)
 {
     slot_t *slot = malloc(sizeof(slot_t));
     static sfVector2f pos = {180, 500};
@@ -52,45 +52,6 @@ static int manage_slot(slot_t *tmp, void *item, int type, int *id)
         tmp = tmp->next;
     tmp->next = slot;
     return (1);
-}
-
-int add_item(void *item, int type, char *name)
-{
-    slot_t *tmp = (*inventory())->slot;
-    int empty_id = -1;
-    static int id = 1;
-
-    for (; tmp; tmp = tmp->next) {
-        if (tmp->is_empty == 1) {
-            empty_id = tmp->id;
-            break;
-        }
-    }
-    if (empty_id == -1 && id > (*inventory())->size)
-        return (0);
-    if (empty_id == -1)
-        if (manage_slot(tmp, item, type, &id) == 1)
-            return (0);
-    tmp->is_empty = 0;
-    tmp->type = type;
-    tmp->item = item;
-    tmp->name = strdup(name);
-    return (0);
-}
-
-int remove_item(int id, slot_t *tmp)
-{
-    while (tmp != NULL) {
-        if (tmp->id == id) {
-            tmp->is_empty = 1;
-            tmp->item = NULL;
-            tmp->type = OTHER;
-            tmp->name = NULL;
-            return (0);
-        }
-        tmp = tmp->next;
-    }
-    return (0);
 }
 
 static int draw_inventory_ui(sfRenderWindow *window, inventory_t *inv)
@@ -144,61 +105,6 @@ static void update_cursor_inv(sfRenderWindow *window)
         if (tmp->is_empty == 0 && tmp->type == ARMOR && tmp->is_moved == 1) {
             sfRenderWindow_drawSprite(window,
             (armor_t *){tmp->item}->sprite, NULL);
-        }
-    }
-}
-
-static void item_desc_inv
-    (slot_t *tmp, sfRenderWindow *window, sfVector2f pos, char *str)
-{
-    inventory_t *inv = (*inventory());
-
-    sfText_setPosition(inv->desc, (sfVector2f){pos.x + 155, pos.y + 140});
-    if (tmp->type == WEAPON) {
-        sfSprite_setPosition(inv->player_status->s_attack,
-        (sfVector2f){pos.x + 100, pos.y + 140});
-        sprintf(str, "%d", (weapon_t *){tmp->item}->damage);
-        sfText_setString(inv->desc, str);
-        sfRenderWindow_drawText(window, inv->desc, NULL);
-        sfText_setString(inv->desc, (weapon_t *){tmp->item}->name);
-        sfRenderWindow_drawSprite(window, inv->player_status->s_attack, NULL);
-    }
-    if (tmp->type == ARMOR) {
-        sfSprite_setPosition(inv->player_status->s_def,
-        (sfVector2f){pos.x + 100, pos.y + 140});
-        sprintf(str, "%d", (armor_t *){tmp->item}->defense);
-        sfText_setString(inv->desc, str);
-        sfRenderWindow_drawText(window, inv->desc, NULL);
-        sfText_setString(inv->desc, (armor_t *){tmp->item}->name);
-        sfRenderWindow_drawSprite(window, inv->player_status->s_def, NULL);
-    }
-}
-
-static void draw_desc(sfRenderWindow *window)
-{
-    sfVector2f pos = {180, 500};
-    char *str = malloc(sizeof(char) * 10);
-
-    for (slot_t *tmp = (*inventory())->slot; tmp; tmp = tmp->next) {
-        if (tmp->is_highlighted && tmp->is_empty == 0) {
-            pos = sfSprite_getPosition((*inventory())->desc_sprite);
-            sfRenderWindow_drawSprite(window, (*inventory())->desc_sprite, NULL);
-            item_desc_inv(tmp, window, pos, str);
-            sfText_setOrigin((*inventory())->desc, (sfVector2f){sfText_getGlobalBounds((*inventory())->desc).width / 2, 0});
-            sfText_setPosition((*inventory())->desc, (sfVector2f){pos.x + 145, pos.y + 80});
-            sfRenderWindow_drawText(window, (*inventory())->desc, NULL);
-            sfText_setOrigin((*inventory())->desc, (sfVector2f){0, 0});
-        }
-    }
-    for (slot_t *tmp = (*inventory())->player_status->stuff; tmp; tmp = tmp->next) {
-        if (tmp->is_highlighted && tmp->is_empty == 0) {
-            pos = sfSprite_getPosition((*inventory())->desc_sprite);
-            sfRenderWindow_drawSprite(window, (*inventory())->desc_sprite, NULL);
-            item_desc_inv(tmp, window, pos, str);
-            sfText_setOrigin((*inventory())->desc, (sfVector2f){sfText_getGlobalBounds((*inventory())->desc).width / 2, 0});
-            sfText_setPosition((*inventory())->desc, (sfVector2f){pos.x + 145, pos.y + 80});
-            sfRenderWindow_drawText(window, (*inventory())->desc, NULL);
-            sfText_setOrigin((*inventory())->desc, (sfVector2f){0, 0});
         }
     }
 }

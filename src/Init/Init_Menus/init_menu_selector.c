@@ -7,7 +7,6 @@
 
 #include "rpg.h"
 
-
 sfText *create_text(sfFont *font, char *str, int size, sfVector2f pos)
 {
     sfText *text = sfText_create();

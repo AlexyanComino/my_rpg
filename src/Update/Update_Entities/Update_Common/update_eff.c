@@ -34,6 +34,12 @@ static void update_eff_damage(rpg_t *rpg, entity_t *entity, eff_t *eff,
     }
 }
 
+static void check_is_fire(rpg_t *rpg, damage_text_state_t text)
+{
+    if (text == FIRE_TEXT)
+        sfMusic_play(rpg->sounds->burn);
+}
+
 static void update_eff(rpg_t *rpg, entity_t *entity, eff_t *eff,
     damage_text_state_t text)
 {
@@ -41,6 +47,7 @@ static void update_eff(rpg_t *rpg, entity_t *entity, eff_t *eff,
         update_clock_seconds(eff->eff_clock);
         if (eff->eff_clock->seconds >= eff->eff_duration) {
             eff->is_on_eff = false;
+            check_is_fire(rpg, text);
             eff->eff_mark->anim->rect.left = 0;
             eff->eff_mark->anim->rect.top = 0;
             sfSprite_setTextureRect(eff->eff_mark->anim->

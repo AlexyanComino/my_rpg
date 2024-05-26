@@ -17,12 +17,20 @@ static void event_pause(rpg_t *rpg)
     }
 }
 
-void event_states(rpg_t *rpg)
+static void event_states2(rpg_t *rpg)
+{
+    if (rpg->gamestate == GAME)
+        event_game(rpg);
+    if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY)
+        manage_evt_inv(rpg->event, rpg);
+    if (rpg->gamestate == GAME || rpg->gamestate == SKILL_TREE)
+        manage_skill_tree(rpg);
+}
+
+static void event_states(rpg_t *rpg)
 {
     if (rpg->gamestate == LOADING)
         return event_loading(rpg);
-    if (rpg->gamestate == GAME)
-        return event_game(rpg);
     if (rpg->gamestate == MAP)
         return event_map(rpg);
     if (rpg->gamestate == SELECTOR)
@@ -37,6 +45,7 @@ void event_states(rpg_t *rpg)
         return menu_button_event(rpg, rpg->end_menu->buttons);
     if (rpg->gamestate == PAUSE)
         return event_pause(rpg);
+    event_states2(rpg);
 }
 
 static sfVector2f get_view_pos(rpg_t *rpg)
@@ -49,7 +58,7 @@ static sfVector2f get_view_pos(rpg_t *rpg)
     return (sfVector2f){0, 0};
 }
 
-void update_mouse_pos(rpg_t *rpg)
+static void update_mouse_pos(rpg_t *rpg)
 {
     sfVector2f old_mouse_pos = {(float)rpg->event.mouseMove.x,
         (float)rpg->event.mouseMove.y};
@@ -80,8 +89,6 @@ void event(rpg_t *rpg)
             rpg->win->mouse_pos.y);
         if (rpg->event.type == sfEvtClosed)
             sfRenderWindow_close(rpg->win->window);
-        if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY)
-            manage_evt_inv(rpg->event, rpg);
         event_states(rpg);
     }
     if (rpg->gamestate == GAME)

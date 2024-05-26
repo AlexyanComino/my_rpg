@@ -34,5 +34,16 @@ chest_t **init_chests(unsigned int *size);
 // Init items tab
 item_t **init_items_tab(unsigned int *size);
 
-// Init inventory
-int init_inventory(rpg_t *rpg, int size);
+// Init sounds
+sounds_t *init_sounds(void);
+
+void init_inventory(rpg_t *rpg, int size);
+
+// save
+void save(rpg_t *rpg, int nb);
+
+// load
+save_t *load(int nb);
+
+// Init collisions
+collision_t *init_collision(void);

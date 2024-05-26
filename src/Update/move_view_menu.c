@@ -31,6 +31,7 @@ static void move_save_menu(rpg_t *rpg, sfVector2f move)
     while (tmp != NULL) {
         sfText_move(tmp->text, move);
         sfRectangleShape_move(tmp->rect_shape, move);
+        sfText_move(tmp->new_txt, move);
         tmp = tmp->next;
     }
 }

@@ -8,6 +8,7 @@
 #pragma once
 
 #include <SFML/Graphics.h>
+#include <SFML/Audio.h>
 #include <SFML/Window.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -614,6 +615,7 @@ typedef enum {
     SELECTOR,
     INVENTORY,
     MAP,
+    SKILL_TREE,
     LOADING,
     END
 } state_t;
@@ -695,16 +697,39 @@ typedef struct menu_s {
     sfFont *font;
 } menu_t;
 
+typedef struct save_s {
+    sfVector2f pos;
+    attributes_t *attributes;
+    int type;
+    slot_t *slot;
+    slot_t *stuff;
+    all_quests_t *quests;
+} save_t;
+
 typedef struct save_button_s {
     char *name;
-    sfTexture *texture;
-    sfSprite *sprite;
+    entity_t *entity;
     sfText *text;
+    sfText *new_txt;
+    sfText *hp;
+    sfText *attack;
+    sfText *defense;
+    sfText *speed;
     sfFont *font;
+    sfTexture *pp_texture;
+    sfSprite *pp_sprite;
+    sfTexture *hp_texture;
+    sfSprite *hp_sprite;
+    sfTexture *attack_texture;
+    sfSprite *attack_sprite;
+    sfTexture *defense_texture;
+    sfSprite *defense_sprite;
+    sfTexture *speed_texture;
+    sfSprite *speed_sprite;
     sfRectangleShape *rect_shape;
     sfIntRect rect;
     button_state_t state;
-    player_status_t *player_status;
+    attributes_t *attributes;
     void (*action)(void *rpg);
     struct save_button_s *next;
 } save_button_t;
@@ -970,6 +995,28 @@ typedef struct item_s {
     enum armor_type armor_type;
 } item_t;
 
+typedef struct sounds_s {
+    sfMusic* sword;
+    sfMusic* arrow;
+    sfMusic* attack_fire;
+    sfMusic* attack_sword;
+    sfMusic* burn;
+    sfMusic* explosion;
+    sfMusic* hammer;
+    sfMusic* click;
+    sfMusic* death;
+    sfMusic* quest;
+    sfMusic* items;
+    sfMusic* intro;
+    sfMusic* loop;
+    sfMusic* open;
+    sfMusic* close;
+    sfMusic* attack;
+    my_clock_t *myclock;
+} sounds_t;
+
+typedef struct skill_s skill_t;
+
 typedef struct box_s {
     int hitbox_x;
     int hitbox_y;
@@ -1052,12 +1099,17 @@ typedef struct rpg_s {
     unsigned int chests_size;
     item_t **items;
     unsigned int items_size;
+    sounds_t *sounds;
+    save_t **save;
+    int save_index;
+    skill_t *skill_tree;
     loading_t *loading;
     transition_t *transition;
     end_menu_t *end_menu;
     pause_menu_t *pause_menu;
 } rpg_t;
 
+#include "../src/skill_tree/skill_tree.h"
 #include "../src/Init/init.h"
 #include "../src/Display/Display_entities/display_entities.h"
 #include "../src/Display/display.h"
@@ -1088,4 +1140,5 @@ typedef struct rpg_s {
 #include "../src/Init/Init_Menus/init_menus.h"
 #include "../src/Init/Init_Interface/init_interface.h"
 #include "../src/Lib/Entity_Tools/entity_lib.h"
+#include "../src/Sounds/sounds.h"
 #include "singleton.h"

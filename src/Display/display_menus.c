@@ -46,17 +46,67 @@ void display_settings(rpg_t *rpg)
     display_command_help(rpg);
 }
 
+static void draw_stats_save(rpg_t *rpg, save_button_t *tmp)
+{
+    sfRenderWindow_drawSprite(rpg->win->window, tmp->entity->common->
+        anim->sprite, NULL);
+    sfRenderWindow_drawText(rpg->win->window, tmp->hp, NULL);
+    sfRenderWindow_drawText(rpg->win->window, tmp->attack, NULL);
+    sfRenderWindow_drawText(rpg->win->window, tmp->defense, NULL);
+    sfRenderWindow_drawText(rpg->win->window, tmp->speed, NULL);
+    sfRenderWindow_drawSprite(rpg->win->window,
+        rpg->inventory->player_status->s_hp, NULL);
+    sfRenderWindow_drawSprite(rpg->win->window,
+        rpg->inventory->player_status->s_attack, NULL);
+    sfRenderWindow_drawSprite(rpg->win->window,
+        rpg->inventory->player_status->s_def, NULL);
+    sfRenderWindow_drawSprite(rpg->win->window,
+        rpg->inventory->player_status->s_speed, NULL);
+}
+
+static void draw_stats_sprites_save(rpg_t *rpg, save_button_t *tmp)
+{
+    if (rpg->win->window == NULL)
+        return;
+    printf("aaaa\n");
+    if (tmp->pp_sprite == NULL) {
+        printf("pp_sprite is NULL\n");
+        return;
+    }
+    printf("bbb\n");
+    sfRenderWindow_drawSprite(rpg->win->window,
+        tmp->pp_sprite, NULL);
+    printf("ccc\n");
+    sfRenderWindow_drawSprite(rpg->win->window,
+        tmp->hp_sprite, NULL);
+    sfRenderWindow_drawSprite(rpg->win->window,
+        tmp->attack_sprite, NULL);
+    sfRenderWindow_drawSprite(rpg->win->window,
+        tmp->defense_sprite, NULL);
+    sfRenderWindow_drawSprite(rpg->win->window,
+        tmp->speed_sprite, NULL);
+}
+
 void display_save_menu(rpg_t *rpg)
 {
     save_button_t *tmp = rpg->save_menu->buttons;
+    int i = 0;
 
     display_background_menus(rpg);
-    while (tmp != NULL) {
-        if (strcmp(tmp->name, "Retour") != 0)
-            sfRenderWindow_drawRectangleShape(rpg->win->window,
-                tmp->rect_shape, NULL);
+    for (; tmp != NULL; tmp = tmp->next) {
+        if (strcmp(tmp->name, "Retour") == 0) {
+            sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
+            continue;
+        }
+        sfRenderWindow_drawRectangleShape(rpg->win->window, tmp->rect_shape,
+            NULL);
         sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
-        tmp = tmp->next;
+        if (i < 3 && rpg->save[i] != NULL) {
+            draw_stats_sprites_save(rpg, tmp);
+            draw_stats_save(rpg, tmp);
+        } else
+            sfRenderWindow_drawText(rpg->win->window, tmp->new_txt, NULL);
+        i++;
     }
     display_command_help(rpg);
 }

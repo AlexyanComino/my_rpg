@@ -7,22 +7,27 @@
 
 #include "rpg.h"
 
+static void set_pos(rpg_t *rpg, entity_t *player)
+{
+    sfText_setPosition(rpg->quest_header->text, (sfVector2f){
+        player->common->pos.x - 400, player->common->pos.y - 370});
+    sfRectangleShape_setPosition(rpg->quest_header->rect, (sfVector2f){
+        player->common->pos.x - WIDTH / 2,
+        player->common->pos.y - 400});
+    sfRectangleShape_setPosition(rpg->quest_header->rect2, (sfVector2f){
+        player->common->pos.x - WIDTH / 2,
+        player->common->pos.y - 390});
+    sfText_setPosition(rpg->quest_header->done, (sfVector2f){
+        player->common->pos.x + 200, player->common->pos.y - 250});
+}
+
 void display_quests(rpg_t *rpg)
 {
     entity_t *player = get_player(rpg);
 
     if (rpg->quest_header->state == Q_START
         || rpg->quest_header->state == Q_END) {
-        sfText_setPosition(rpg->quest_header->text, (sfVector2f){
-            player->common->pos.x - 400, player->common->pos.y - 370});
-        sfRectangleShape_setPosition(rpg->quest_header->rect, (sfVector2f){
-            player->common->pos.x - WIDTH / 2,
-            player->common->pos.y - 400});
-        sfRectangleShape_setPosition(rpg->quest_header->rect2, (sfVector2f){
-            player->common->pos.x - WIDTH / 2,
-            player->common->pos.y - 390});
-        sfText_setPosition(rpg->quest_header->done, (sfVector2f){
-            player->common->pos.x + 200, player->common->pos.y - 250});
+        set_pos(rpg, player);
         sfRenderWindow_drawRectangleShape(rpg->win->window, rpg->
             quest_header->rect, NULL);
         sfRenderWindow_drawRectangleShape(rpg->win->window, rpg->

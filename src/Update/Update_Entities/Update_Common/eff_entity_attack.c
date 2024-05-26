@@ -28,7 +28,7 @@ static unsigned int get_fire_damage(unsigned int attack)
     return (attack * mult);
 }
 
-void burn_entity(entity_t *target, unsigned int attack)
+void burn_entity(rpg_t *rpg, entity_t *target, unsigned int attack)
 {
     target->common->fire->is_on_eff = true;
     target->common->fire->eff_duration = get_fire_duration();
@@ -36,6 +36,7 @@ void burn_entity(entity_t *target, unsigned int attack)
     target->common->fire->eff_damage = get_fire_damage(attack);
     sfClock_restart(target->common->fire->eff_clock->clock);
     sfClock_restart(target->common->fire->eff_damage_clock->clock);
+    play_music(rpg->sounds->burn, 100);
 }
 
 // Flottant entre 10 et 18

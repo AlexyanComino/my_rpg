@@ -7,13 +7,14 @@
 
 #include "rpg.h"
 
-void entity_is_dead(entity_t *entity)
+void entity_is_dead(rpg_t *rpg, entity_t *entity)
 {
     printf("Entity %s is dead\n", entity->common->name);
     entity->common->state = DEAD;
     entity->common->fire->is_on_eff = false;
     entity->common->stun->is_stunned = false;
     sfClock_restart(entity->common->death->anim->myclock->clock);
+    play_music(rpg->sounds->death, 100);
 }
 
 //
@@ -64,13 +65,13 @@ void decrease_health(rpg_t *rpg, entity_t *entity, entity_t *target)
         entity->common->faction = AGAINST_ALL;
     target->common->attributes->health -= attack;
     if (entity->type == TORCH)
-        burn_entity(target, attack);
+        burn_entity(rpg, target, attack);
     if (is_player(rpg, entity) && sfKeyboard_isKeyPressed(sfKeyX))
         poison_entity(target, attack);
     add_dmg_text(rpg, target, attack, state);
     target->common->x = get_entity_side(target, entity->common->pos);
     if (target->common->attributes->health <= 0)
-        entity_is_dead(target);
+        entity_is_dead(rpg, target);
 }
 
 static void check_miss_attack(rpg_t *rpg, entity_t *entity, entity_t *enemy)
@@ -88,21 +89,21 @@ static void check_miss_attack(rpg_t *rpg, entity_t *entity, entity_t *enemy)
 
 void entity_attack(rpg_t *rpg, entity_t *entity)
 {
-    entity_t *enemy = NULL;
-
     for (unsigned int i = 0; i < rpg->ent_size; i++) {
         if (!rpg->ent[i]->in_view || rpg->ent[i]->common->state == DEAD ||
             rpg->ent[i] == entity)
             continue;
-        enemy = rpg->ent[i];
         if (!is_player(rpg, entity) &&
-            (entity->common->faction == enemy->common->faction ||
-            enemy->common->faction == WITH_ALL))
+            (entity->common->faction == rpg->ent[i]->common->faction ||
+            rpg->ent[i]->common->faction == WITH_ALL))
             continue;
-        if (entity_can_attack_target(rpg, entity, enemy))
-            decrease_health(rpg, entity, enemy);
-        else
-            check_miss_attack(rpg, entity, enemy);
+        if (entity_can_attack_target(rpg, entity, rpg->ent[i])) {
+            touch(entity, rpg);
+            decrease_health(rpg, entity, rpg->ent[i]);
+        } else {
+            which_entities(rpg, entity);
+            check_miss_attack(rpg, entity, rpg->ent[i]);
+        }
     }
     if (entity->type != TNT)
         entity->common->state = ATTACK;

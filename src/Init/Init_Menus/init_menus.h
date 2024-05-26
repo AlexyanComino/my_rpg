@@ -13,7 +13,13 @@
 // InitMenu
 menu_t *init_menu(rpg_t *rpg);
 menu_t *init_settings(rpg_t *rpg);
+
+// Init menu save
 save_menu_t *init_save_menu(rpg_t *rpg);
+
+// Init save menu 2
+void get_entity_save(save_button_t *new, int type);
+char **get_infos_save(int type);
 
 // Init menu selector
 select_menu_t *init_select_menu(rpg_t *rpg);

@@ -32,6 +32,7 @@ void display(rpg_t *rpg)
     if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY ||
         rpg->gamestate == MAP || rpg->gamestate == PAUSE)
         display_game(rpg);
+    draw_skill_tree(rpg);
     if (rpg->gamestate == END)
         display_end_menu(rpg);
     display_transition(rpg);

@@ -24,4 +24,5 @@ void update(rpg_t *rpg)
     if (rpg->gamestate == INVENTORY)
         rpg->inventory->player_status->player->anim(rpg,
             rpg->inventory->player_status->player);
+    principal_music(rpg);
 }

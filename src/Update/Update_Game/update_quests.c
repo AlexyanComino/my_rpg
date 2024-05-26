@@ -7,6 +7,19 @@
 
 #include "rpg.h"
 
+static void check_done_item(quest_t *tmp, char *item, rpg_t *rpg)
+{
+    if (tmp->type == GATHER && tmp->is_active &&
+        strcmp(tmp->objective, item) == 0) {
+        tmp->is_done = true;
+        if (tmp->is_last)
+            rpg->quest_header->state = Q_END;
+        else
+            tmp->next->is_active = true;
+        printf("Quest get done: %s\n", tmp->name);
+    }
+}
+
 void quest_done_item(rpg_t *rpg, char *item)
 {
     all_quests_t *quests = rpg->quests;
@@ -15,14 +28,7 @@ void quest_done_item(rpg_t *rpg, char *item)
     for (; quests; quests = quests->next) {
         tmp = quests->quest;
         for (; tmp; tmp = tmp->next) {
-            if (tmp->type == GATHER && tmp->is_active && strcmp(tmp->objective, item) == 0) {
-                tmp->is_done = true;
-                if (tmp->is_last)
-                    rpg->quest_header->state = Q_END;
-                else
-                    tmp->next->is_active = true;
-                printf("Quest get done: %s\n", tmp->name);
-            }
+        check_done_item(tmp, item, rpg);
         }
     }
 }
@@ -57,7 +63,7 @@ void update_quests(rpg_t *rpg)
 
     for (; quests; quests = quests->next) {
         tmp = quests->quest;
-        for (; tmp; tmp = tmp->next) {
+        for (; tmp && tmp->name; tmp = tmp->next) {
             update_quest_list(rpg, tmp);
         }
     }

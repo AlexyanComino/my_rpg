@@ -15,7 +15,7 @@ void add_dmg_text(rpg_t *rpg, entity_t *entity, int attack,
 void update_damage_texts(damage_text_t **damage_texts);
 
 // Entity attack
-void entity_is_dead(entity_t *entity);
+void entity_is_dead(rpg_t *rpg, entity_t *entity);
 void decrease_health(rpg_t *rpg, entity_t *entity, entity_t *target);
 void entity_attack(rpg_t *rpg, entity_t *entity);
 
@@ -59,5 +59,5 @@ bool flee_entity(rpg_t *rpg, entity_t *entity, entity_t *enemy);
 void update_effs(rpg_t *rpg, entity_t *entity);
 
 // Eff entity attack
-void burn_entity(entity_t *target, unsigned int attack);
+void burn_entity(rpg_t *rpg, entity_t *target, unsigned int attack);
 void poison_entity(entity_t *target, unsigned int attack);

@@ -60,10 +60,10 @@ void *get_action(char *txt)
         strcmp(txt, "Menu Principal") == 0)
         return &back_to_menu;
     if (strcmp(txt, "Sauvegarde 1") == 0)
-        return &selector;
+        return &load_save1;
     if (strcmp(txt, "Sauvegarde 2") == 0)
-        return &selector;
+        return &load_save2;
     if (strcmp(txt, "Sauvegarde 3") == 0)
-        return &selector;
+        return &load_save3;
     return get_action2(txt);
 }
