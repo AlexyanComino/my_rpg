@@ -63,17 +63,43 @@ static void init_minimap_background(minimap_t *minimap)
         (float)1260 / MINIMAP_BACK_SIZE});
 }
 
+static void get_text_size_and_thickness(char **infos, float *size,
+    float *thickness)
+{
+    if (!strcmp(infos[1], "ville")) {
+        *size = 320;
+        *thickness = 40;
+        return;
+    }
+    if (!strcmp(infos[1], "camp")) {
+        *size = 280;
+        *thickness = 30;
+        return;
+    }
+    if (!strcmp(infos[1], "foret")) {
+        *size = 320;
+        *thickness = 40;
+        return;
+    }
+    *size = 200;
+    *thickness = 20;
+}
+
 static void init_text_city(minimap_t *minimap, char **infos, int i)
 {
+    float size;
+    float thickness;
+
+    get_text_size_and_thickness(infos, &size, &thickness);
     minimap->texts[i] = sfText_create();
-    sfText_setString(minimap->texts[i], infos[0]);
     sfText_setFont(minimap->texts[i], minimap->font);
-    sfText_setCharacterSize(minimap->texts[i], minimap->texts_size);
+    set_string_to_text(minimap->texts[i], infos[0]);
+    sfText_setCharacterSize(minimap->texts[i], size);
     sfText_setPosition(minimap->texts[i],
-        (sfVector2f){atof(infos[1]), atof(infos[2])});
+        (sfVector2f){atof(infos[2]), atof(infos[3])});
     sfText_setColor(minimap->texts[i], sfWhite);
     sfText_setOutlineColor(minimap->texts[i], sfBlack);
-    sfText_setOutlineThickness(minimap->texts[i], minimap->texts_thickness);
+    sfText_setOutlineThickness(minimap->texts[i], thickness);
     sfText_setOrigin(minimap->texts[i], (sfVector2f)
         {sfText_getLocalBounds(minimap->texts[i]).width / 2,
         sfText_getLocalBounds(minimap->texts[i]).height / 2});
@@ -86,9 +112,8 @@ static void init_minimap_texts(minimap_t *minimap)
 
     minimap->texts = malloc(sizeof(sfVector2f) * tab_len(tab));
     minimap->nb_texts = tab_len(tab);
-    minimap->font = sfFont_createFromFile("assets/fonts/Say Comic.ttf");
-    minimap->texts_size = 200;
-    minimap->texts_thickness = 30;
+    minimap->font =
+        sfFont_createFromFile("assets/fonts/Burbank-Big-Condensed-Black.ttf");
     for (int i = 0; i < minimap->nb_texts; i++) {
         infos = split_string(tab[i], ";");
         init_text_city(minimap, infos, i);

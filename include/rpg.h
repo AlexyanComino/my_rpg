@@ -910,8 +910,6 @@ typedef struct minimap_s {
     sfFont *font;
     sfText **texts;
     int nb_texts;
-    float texts_size;
-    float texts_thickness;
 } minimap_t;
 
 typedef enum decor_type {

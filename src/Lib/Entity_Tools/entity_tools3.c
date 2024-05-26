@@ -53,6 +53,8 @@ entity_t *get_player(rpg_t *rpg)
 
 bool enemy_is_in_base(entity_t *entity, entity_t *enemy)
 {
+    if (!enemy)
+        return false;
     if (entity->type == WARRIOR)
         return sfIntRect_intersects(&entity->spe->warrior->base->rect,
         &enemy->common->zones->hitbox, NULL);

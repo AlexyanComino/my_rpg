@@ -89,8 +89,8 @@ static void event_other_key2(rpg_t *rpg, entity_t *player, sfKeyCode key)
 static void event_other_key(rpg_t *rpg, entity_t *player, sfKeyCode key)
 {
     if (key == sfKeyP)
-        printf("Player pos: %f, %f\n", player->common->pos.x,
-            player->common->pos.y);
+        printf("Player pos: %d;%d\n", (int)player->common->pos.x,
+            (int)player->common->pos.y);
     if (key == sfKeyB)
         rpg->modes->plus = !rpg->modes->plus;
     if (key == sfKeyT) {

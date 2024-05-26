@@ -24,7 +24,6 @@ void setup_command_help_in_game(rpg_t *rpg)
     add_command_help(&interface->command_list, "Carte",
         interface->player_infos->font, 1);
     set_command_pos(interface->command_list, get_player(rpg)->common->pos, 1);
-    // sfRenderWindow_setMouseCursorVisible(rpg->win->window, sfFalse);
 }
 
 void setup_command_help_map(rpg_t *rpg)

@@ -9,16 +9,19 @@
 
 static void update_text_cities_size(rpg_t *rpg, float zoom)
 {
-    rpg->minimap->texts_size *= zoom;
-    rpg->minimap->texts_thickness *= zoom;
+    float size;
+    float thickness;
+
     for (int i = 0; i < rpg->minimap->nb_texts; i++) {
+        size = sfText_getCharacterSize(rpg->minimap->texts[i]) * zoom;
+        thickness = sfText_getOutlineThickness(rpg->minimap->texts[i]) * zoom;
         sfText_setCharacterSize(rpg->minimap->texts[i],
-            rpg->minimap->texts_size);
+            size);
         sfText_setOrigin(rpg->minimap->texts[i], (sfVector2f)
             {sfText_getLocalBounds(rpg->minimap->texts[i]).width / 2,
             sfText_getLocalBounds(rpg->minimap->texts[i]).height / 2});
         sfText_setOutlineThickness(rpg->minimap->texts[i],
-            rpg->minimap->texts_thickness);
+            thickness);
     }
 }
 

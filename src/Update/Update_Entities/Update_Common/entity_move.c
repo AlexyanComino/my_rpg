@@ -7,11 +7,11 @@
 
 #include "rpg.h"
 
-static unsigned int get_entity_speed(entity_t *entity)
+static unsigned int get_entity_speed(rpg_t *rpg, entity_t *entity)
 {
     if (entity->common->state == WALK || entity->common->state == MOVE_CARRY)
-        return entity->common->attributes->speed / 2;
-    return entity->common->attributes->speed;
+        return entity->common->attributes->speed / 2 * rpg->win->dt;
+    return entity->common->attributes->speed * rpg->win->dt;
 }
 
 static bool pawn_is_arrived(entity_t *entity, float distance,
@@ -90,13 +90,13 @@ void entity_move(rpg_t *rpg, entity_t *entity, sfVector2f target_pos,
 {
     sfVector2f movement;
     float distance;
-    float speed = get_entity_speed(entity);
+    float speed = get_entity_speed(rpg, entity);
     sfVector2f oldPos = entity->common->pos;
     float new_distance;
 
     distance = get_distance(entity->common->pos, target_pos);
     if (distance < min_lenght) {
-        entity->common->state = IDLE;
+        entity_is_arrived(entity, distance, min_lenght);
         return;
     }
     movement = get_movement(target_pos, entity->common->pos, distance, speed);

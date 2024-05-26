@@ -9,6 +9,8 @@
 
 bool entity_see_enemy(rpg_t *rpg, entity_t *entity, entity_t *enemy)
 {
+    if (!enemy)
+        return false;
     if (entity_look_at_enemy(entity, enemy)) {
         if (hitbox_in_detection(enemy->common->zones->hitbox,
             entity->common->zones->l_radius, entity->common->pos))
