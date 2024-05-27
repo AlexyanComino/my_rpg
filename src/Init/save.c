@@ -25,6 +25,8 @@ static void write_player(rpg_t *rpg, FILE *file)
         sizeof(unsigned int), 1, file);
     fwrite(&player->common->attributes->speed,
         sizeof(unsigned int), 1, file);
+    fwrite(&player->common->attributes->level,
+        sizeof(unsigned int), 1, file);
     fwrite(&player->type, sizeof(int), 1, file);
 }
 

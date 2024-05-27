@@ -29,7 +29,7 @@ static int setup_value(player_status_t *player_status)
     player_status->max_hp = 200;
     player_status->attack = 50;
     player_status->defense = 10;
-    player_status->speed = 10;
+    player_status->speed = 300;
     player_status->skill_points = 0;
     player_status->level = 1;
     player_status->xp = 0;
@@ -100,15 +100,3 @@ player_status_t *init_player_status(void)
     return (player_status);
 }
 
-int apply_stats(rpg_t *rpg)
-{
-    attributes_t *attribute = get_player(rpg)->common->attributes;
-
-    manage_xp();
-    attribute->max_health = (*inventory())->player_status->max_hp;
-    attribute->health = (*inventory())->player_status->hp;
-    attribute->attack = (*inventory())->player_status->attack;
-    attribute->defense = (*inventory())->player_status->defense;
-    attribute->speed = (*inventory())->player_status->speed;
-    return 0;
-}

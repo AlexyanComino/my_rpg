@@ -25,8 +25,8 @@ void text_box_handling(rpg_t *rpg, all_quests_t *tmp, quest_t *quest)
         rpg->text_box->quest = quest;
         rpg->text_box->is_fully_displayed = false;
         rpg->text_box->len = 0;
-        sfText_setString(rpg->quest_header->text, quest->name);
-        sfText_setString(rpg->text_box->npc_name, tmp->proprietary);
+        set_string_to_text(rpg->quest_header->text, quest->name);
+        set_string_to_text(rpg->text_box->npc_name, tmp->proprietary);
         sfText_setOrigin(rpg->text_box->npc_name, (sfVector2f){
             sfText_getGlobalBounds(rpg->text_box->npc_name).width / 2, 0});
         rpg->text_box->dialog = quest->dialog;

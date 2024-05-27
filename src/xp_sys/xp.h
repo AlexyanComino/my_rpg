@@ -9,4 +9,4 @@
 #pragma once
 
 int add_xp(int xp);
-int manage_xp(void);
+int manage_xp(rpg_t *rpg);

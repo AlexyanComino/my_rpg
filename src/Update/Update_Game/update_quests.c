@@ -16,6 +16,7 @@ static void check_done_item(quest_t *tmp, char *item, rpg_t *rpg)
             rpg->quest_header->state = Q_END;
         else
             tmp->next->is_active = true;
+        add_xp(tmp->xp);
         printf("Quest get done: %s\n", tmp->name);
     }
 }
@@ -42,6 +43,7 @@ void quest_done_kill(rpg_t *rpg, entity_t *entity, quest_t *tmp)
             rpg->quest_header->state = Q_END;
         else
             tmp->next->is_active = true;
+        add_xp(tmp->xp);
         printf("Quest done: %s\n", tmp->name);
     }
 }

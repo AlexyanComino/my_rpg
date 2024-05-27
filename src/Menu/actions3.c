@@ -32,6 +32,11 @@ void sauvegarder_game(rpg_t *rpg)
 
 void change_volume(rpg_t *rpg)
 {
-    rpg = rpg;
+    if (rpg->volume == 1)
+        rpg->volume = 0.5;
+    else if (rpg->volume == 0.5)
+        rpg->volume = 0;
+    else
+        rpg->volume = 1;
     printf("Volume changé\n");
 }

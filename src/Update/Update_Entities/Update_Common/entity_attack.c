@@ -14,7 +14,7 @@ void entity_is_dead(rpg_t *rpg, entity_t *entity)
     entity->common->fire->is_on_eff = false;
     entity->common->stun->is_stunned = false;
     sfClock_restart(entity->common->death->anim->myclock->clock);
-    play_music(rpg->sounds->death, 100);
+    play_music(rpg->sounds->death, 100 * rpg->volume);
 }
 
 //

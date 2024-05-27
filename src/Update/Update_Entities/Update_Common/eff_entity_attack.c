@@ -36,7 +36,7 @@ void burn_entity(rpg_t *rpg, entity_t *target, unsigned int attack)
     target->common->fire->eff_damage = get_fire_damage(attack);
     sfClock_restart(target->common->fire->eff_clock->clock);
     sfClock_restart(target->common->fire->eff_damage_clock->clock);
-    play_music(rpg->sounds->burn, 100);
+    play_music(rpg->sounds->burn, 100 * rpg->volume);
 }
 
 // Flottant entre 10 et 18

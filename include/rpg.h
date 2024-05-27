@@ -196,6 +196,8 @@ typedef struct attributes_s {
     unsigned int attack;
     unsigned int defense;
     unsigned int speed;
+    unsigned int xp;
+    unsigned int level;
 } attributes_t;
 
 typedef struct my_clock_s {
@@ -1133,6 +1135,7 @@ typedef struct rpg_s {
     sounds_t *sounds;
     save_t **save;
     int save_index;
+    float volume;
     skill_t *skill_tree;
     loading_t *loading;
     transition_t *transition;

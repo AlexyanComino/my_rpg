@@ -1,6 +1,12 @@
-#NPC;NAME;DESCRIPTION;DIALOG;
-Renaut;L'Ombre du Chevalier Violet;Tue le chevalier violet qui attaque le village;Aventurier, vous arrivez a point nomme. Notre royaume est menace par le Chevalier Violet, Rodrigo Violetto.Votre mission est de defendre notre camp contre ses assauts.;100;5000;K;RodrigoVioletto;false;
-Renaut;L'Ombre du Chevalier Violet;Retourne voir Renaut;Aventurier, vous avez reussi ! Grace a vous, notre camp est sauve et le Chevalier Violet, Rodrigo Violetto, a ete repousse. Votre bravoure et vos competences ont permis de repousser cette menace.;100;5000;T;Renaut;true;
-Renaut;L'Epee d'Argent Oubliee;Va prendre l'epee dans le coffre;Aventurier, une epee en argent d'une grande valeur est cachee dans un coffre proche d'ici.Va la prendre, tu l'as bien merite;100;5000;G;Silver Sword;true;
-Ambre;La chasse aux trésors;Trouver le trésor caché dans la forêt de la mort;Salut Pablodrigo, il y a un chevalier violet qui attaque le village depuis plusieurs jours, peux tu l'éliminer?;500;200;G;Tresor;true;
-Sylvain;Le grand tournoi;Gagner le tournoi de mangeur de caca de Tournecoubeh;Salut Pablodrigo, il y a un chevalier violet qui attaque le village depuis plusieurs jours, peux tu l'éliminer?;50;100;G;CacaMax;true;
+#NPC;NAME;DESCRIPTION;DIALOG;GOLD;EXP;TYPE;OBJECTIVE;IS_LAST;
+Renaut;Le cadeau de Sylvain;Recupere la branche de Sylvain;Aventurier, mon ami Sylvain a laissé une branche dans un coffre non loin d'ici.Va la prendre, tu l'as bien meritée;50;100;G;Branche de Sylvain;true;
+Renaut;L'Ombre du Chevalier Violet;Tue le chevalier violet qui attaque le camp;Tu as récupéré la branche? Tant mieux car notre camp est menacé par un Chevalier Violet, Rodrigo Violetto.Il se trouve à l'entrée du camp, si tu pouvais l'éliminer ça nous aiderait bien.;5;15;K;RodrigoVioletto;false;
+Renaut;L'Ombre du Chevalier Violet;Retourne voir Renaut;Merci beaucoup! Je me sens beaucoup mieux maintenant que notre camp est sauvé. Va voir Gowdwin, il se trouve dans la clairière du marchand, il a quelque chose pour toi.;10;15;T;Renaut;true;
+Godwin;Le debut de l'aventure;Récupère les bottes;Salut! Il y a une paire de bottes dans le coffre pas loin d'ici, elles te seront utiles;0;0;G;Iron Boots;false;
+Godwin;Le debut de l'aventure;Retourne voir Godwin;Tu as récupéré les bottes? Parfait! Maintenant, il faut que tu ailles voir Aelfsige, il se trouve dans le village d'Astréa, il a besoin de ton aide pour une mission importante.;5;5;T;Godwin;true;
+Aelfsige;La citadelle d'amethyste;Bats le boss Violet;Salut! Je suis Aelfsige, le chef de la guilde des aventuriers. J'ai une mission pour toi. Va à la citadelle d'amethyste et bats le boss Violet.;0;0;K;Violet;false;
+Aelfsige;La citadelle d'amethyste;Retourne voir Aelfsige;Tu as battu le boss Violet? Parfait! Tu es un vrai aventurier. Va voir Leofwyn au village de Sylvestra il a besoin d'aide.;500;500;T;Aelfsige;true;
+Leofwyn;L'ancien chateau de l'ecu d'or;Bats le boss Jaune;Salut! Je suis Leofwyn, le chef de la guilde des aventuriers. J'ai une mission pour toi. Va à l'ancien chateau de l'ecu d'or et bats le boss Jaune.;0;0;K;Jaune;false;
+Leofwyn;L'ancien chateau de l'ecu d'or;Retourne voir Leofwyn;Tu as battu le boss Jaune? Parfait! Tu es un vrai aventurier. J'ai une autre mission pour toi;500;500;T;Leofwyn;false;
+Leofwyn;Le repaire du feu ardent;Élimine le boss Rouge;Salut! Je suis Leofwyn, le chef de la guilde des aventuriers. J'ai une mission pour toi. Va au repaire du feu ardent et élimine le boss Rouge.;0;0;K;Rouge;false;
+Leofwyn;Le repaire du feu ardent;Retourne voir Leofwyn;Tu as éliminé le boss Rouge? Parfait! Tu es un vrai aventurier. Va voir Renaut, il a quelque chose pour toi.;500;500;T;Leofwyn;true;

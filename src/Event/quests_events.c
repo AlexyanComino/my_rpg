@@ -55,6 +55,7 @@ static int check_stuff_for_quest(rpg_t *rpg, quest_t *quest)
             rpg->text_box->is_displayed = false;
             rpg->quest_header->state = Q_END;
             get_player(rpg)->common->state = IDLE;
+            add_xp(quest->xp);
             printf("Quest done: %s\n", quest->name);
             return 0;
         }
@@ -75,6 +76,7 @@ static int check_quest_already_done(rpg_t *rpg, quest_t *quest)
             rpg->text_box->is_displayed = false;
             rpg->quest_header->state = Q_END;
             player->common->state = IDLE;
+            add_xp(quest->xp);
             printf("Quest already done: %s\n", quest->name);
             return 0;
         }

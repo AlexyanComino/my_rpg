@@ -122,7 +122,8 @@ rpg_t *init_rpg(void)
     rpg->save = init_saves();
     rpg->main_menu = init_menu(rpg);
     rpg->save_menu = init_save_menu(rpg);
+    rpg->volume = 1;
     init_rpg2(rpg);
-    play_music(rpg->sounds->intro, 50);
+    play_music(rpg->sounds->intro, 50 * rpg->volume);
     return rpg;
 }

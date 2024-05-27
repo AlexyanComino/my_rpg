@@ -26,7 +26,7 @@ void update_game(rpg_t *rpg)
     if (rpg->vict->is_win)
         return update_victory(rpg);
     check_game_is_win(rpg);
-    apply_stats(rpg);
+    manage_xp(rpg);
     update_game_interface(rpg);
     update_chests(rpg);
     update_entities(rpg);
