@@ -37,6 +37,7 @@ void selector(rpg_t *rpg);
 void load_save1(rpg_t *rpg);
 void load_save2(rpg_t *rpg);
 void load_save3(rpg_t *rpg);
+void change_fps(rpg_t *rpg);
 
 // get_actions
 void *get_action(char *txt);
@@ -52,3 +53,4 @@ void start_tnt(rpg_t *rpg);
 void continue_game(rpg_t *rpg);
 void reprendre_game(rpg_t *rpg);
 void sauvegarder_game(rpg_t *rpg);
+void change_volume(rpg_t *rpg);

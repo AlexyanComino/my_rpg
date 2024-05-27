@@ -34,7 +34,7 @@ static char *get_player_infos(rpg_t *rpg)
     char *str = type[rpg->save[rpg->save_index]->type];
     char *str2 = malloc(sizeof(char) * strlen(str) + 100);
 
-    sprintf(str2, "%s;%d;%d;0;0;0;%u;%u;%u;%u;", str,
+    sprintf(str2, "%s;%d;%d;S;1;0;0;0;%u;%u;%u;%u;0;", str,
         (int)rpg->save[rpg->save_index]->pos.x,
         (int)rpg->save[rpg->save_index]->pos.y,
         rpg->save[rpg->save_index]->attributes->max_health,
@@ -153,4 +153,24 @@ void selector(rpg_t *rpg)
     sfSprite_setOrigin(rpg->inventory->player_status->s_speed,
         (sfVector2f){16, 16});
     setup_command_help_menu(rpg);
+}
+
+void change_fps(rpg_t *rpg)
+{
+    char *str = malloc(sizeof(char) * 10);
+
+    switch (rpg->win->framerate) {
+    case 30:
+        rpg->win->framerate = 60;
+        break;
+    case 60:
+        rpg->win->framerate = 120;
+        break;
+    case 120:
+        rpg->win->framerate = 30;
+        break;
+    }
+    sfRenderWindow_setFramerateLimit(rpg->win->window, rpg->win->framerate);
+    sprintf(str, "FPS: %d", rpg->win->framerate);
+    sfText_setString(rpg->settings->buttons->next->text, str);
 }

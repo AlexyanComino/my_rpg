@@ -97,9 +97,9 @@ menu_t *init_settings(rpg_t *rpg)
         top_left.y + HEIGHT / 2 - 100 * rpg->win->zoom}, "Volume");
     add_button(&menu->buttons, (sfVector2f){top_left.x +
         (WIDTH - 100) / 2 * rpg->win->zoom,
-        top_left.y + HEIGHT / 2 * rpg->win->zoom}, "Plein Ecran");
+        top_left.y + HEIGHT / 2 * rpg->win->zoom}, "FPS: 60");
     add_button(&menu->buttons, (sfVector2f){top_left.x +
         (WIDTH - 100) / 2 * rpg->win->zoom,
-        top_left.y + HEIGHT / 2 + 100 * rpg->win->zoom}, "Retour");
+        top_left.y + HEIGHT / 2 + 500 * rpg->win->zoom}, "Retour");
     return menu;
 }

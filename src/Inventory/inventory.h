@@ -36,3 +36,4 @@ int apply_stuff(rpg_t *rpg);
 int unapply_stuff(slot_t *tmp);
 void draw_desc(sfRenderWindow *window);
 int manage_slot(slot_t *tmp, void *item, int type, int *id);
+int apply_stats(rpg_t *rpg);
