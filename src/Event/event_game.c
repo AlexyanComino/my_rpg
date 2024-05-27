@@ -73,12 +73,8 @@ static void event_entity(rpg_t *rpg, entity_t *player, sfKeyCode key)
     }
 }
 
-static void event_other_key2(rpg_t *rpg, entity_t *player, sfKeyCode key)
+static void event_other_key2(rpg_t *rpg, sfKeyCode key)
 {
-    if (key == sfKeyDown && player->common->state != INTERACT) {
-        rpg->player_index = (rpg->player_index - 1) % rpg->ent_size;
-        sfView_setCenter(rpg->win->view, player->common->pos);
-    }
     if (key == sfKeyEscape) {
         rpg->gamestate = PAUSE;
         set_pos_buttons_pause_menu(rpg);
@@ -102,11 +98,7 @@ static void event_other_key(rpg_t *rpg, entity_t *player, sfKeyCode key)
         rpg->modes->debug = !rpg->modes->debug;
     if (rpg->modes->keynote_mode && key == sfKeyK)
         rpg->modes->k = !rpg->modes->k;
-    if (key == sfKeyUp && player->common->state != INTERACT) {
-        rpg->player_index = (rpg->player_index + 1) % rpg->ent_size;
-        sfView_setCenter(rpg->win->view, player->common->pos);
-    }
-    event_other_key2(rpg, player, key);
+    event_other_key2(rpg, key);
 }
 
 void event_game(rpg_t *rpg)
@@ -115,7 +107,7 @@ void event_game(rpg_t *rpg)
     sfKeyCode key = rpg->event.key.code;
 
     quest_event(rpg);
-    if (rpg->event.type != sfEvtKeyPressed)
+    if (rpg->event.type != sfEvtKeyPressed || rpg->vict->is_win)
         return;
     if (rpg->event.key.code == sfKeySlash)
         get_player(rpg)->common->state = DEAD;

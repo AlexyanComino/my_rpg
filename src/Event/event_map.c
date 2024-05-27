@@ -7,19 +7,20 @@
 
 #include "rpg.h"
 
-static void update_text_cities_size(rpg_t *rpg, float zoom)
+void update_text_cities_size(rpg_t *rpg, float zoom)
 {
     float size;
     float thickness;
+    sfFloatRect bounds;
 
     for (int i = 0; i < rpg->minimap->nb_texts; i++) {
         size = sfText_getCharacterSize(rpg->minimap->texts[i]) * zoom;
         thickness = sfText_getOutlineThickness(rpg->minimap->texts[i]) * zoom;
         sfText_setCharacterSize(rpg->minimap->texts[i],
             size);
+        bounds = sfText_getLocalBounds(rpg->minimap->texts[i]);
         sfText_setOrigin(rpg->minimap->texts[i], (sfVector2f)
-            {sfText_getLocalBounds(rpg->minimap->texts[i]).width / 2,
-            sfText_getLocalBounds(rpg->minimap->texts[i]).height / 2});
+            {bounds.width / 2, bounds.height / 2});
         sfText_setOutlineThickness(rpg->minimap->texts[i],
             thickness);
     }
@@ -29,22 +30,22 @@ static void add_zoom_minimap(rpg_t *rpg)
 {
     if (rpg->minimap->zoom < 5)
         return;
-    rpg->minimap->zoom *= 0.9;
-    sfView_zoom(rpg->minimap->view, 0.9);
-    update_text_cities_size(rpg, 0.9);
+    rpg->minimap->zoom *= 0.8;
+    sfView_zoom(rpg->minimap->view, 0.8);
+    update_text_cities_size(rpg, 0.8);
 }
 
 static void sub_zoom_minimap(rpg_t *rpg)
 {
     if (rpg->minimap->zoom > 500)
         return;
-    rpg->minimap->zoom *= 1.1;
+    rpg->minimap->zoom *= 1.3;
     if (is_valid_minimap_view_pos(rpg->minimap,
         sfView_getCenter(rpg->minimap->view))) {
-        sfView_zoom(rpg->minimap->view, 1.1);
-        update_text_cities_size(rpg, 1.1);
+        sfView_zoom(rpg->minimap->view, 1.3);
+        update_text_cities_size(rpg, 1.3);
     } else
-        rpg->minimap->zoom /= 1.1;
+        rpg->minimap->zoom /= 1.3;
 }
 
 static void move_view_minimap(rpg_t *rpg, sfVector2f diff)
@@ -65,13 +66,13 @@ static void event_map_keypressed(rpg_t *rpg)
     if (key == sfKeySubtract)
         sub_zoom_minimap(rpg);
     if (key == sfKeyUp)
-        move_view_minimap(rpg, (sfVector2f){0, -100});
+        move_view_minimap(rpg, (sfVector2f){0, -200});
     if (key == sfKeyDown)
-        move_view_minimap(rpg, (sfVector2f){0, 100});
+        move_view_minimap(rpg, (sfVector2f){0, 200});
     if (key == sfKeyLeft)
-        move_view_minimap(rpg, (sfVector2f){-100, 0});
+        move_view_minimap(rpg, (sfVector2f){-200, 0});
     if (key == sfKeyRight)
-        move_view_minimap(rpg, (sfVector2f){100, 0});
+        move_view_minimap(rpg, (sfVector2f){200, 0});
     if (key == sfKeyT) {
         rpg->gamestate = GAME;
         setup_command_help_in_game(rpg);
@@ -120,8 +121,8 @@ static void event_map_mousemoved(rpg_t *rpg)
     if (!mouse_on_minimap(rpg, mouse_pos) || !rpg->minimap->is_drag)
         return;
     view_pos = sfView_getCenter(minimap->view);
-    diff = (sfVector2f){(minimap->pos.x - rpg->event.mouseMove.x) * 5,
-        (minimap->pos.y - rpg->event.mouseMove.y) * 5};
+    diff = (sfVector2f){(minimap->pos.x - rpg->event.mouseMove.x) * 8,
+        (minimap->pos.y - rpg->event.mouseMove.y) * 8};
     new_pos = (sfVector2f){view_pos.x + diff.x, view_pos.y + diff.y};
     if (is_valid_minimap_view_pos(minimap, new_pos)) {
         sfView_setCenter(minimap->view, new_pos);
@@ -136,7 +137,7 @@ static void event_map_mousewheel(rpg_t *rpg)
 {
     if (rpg->event.mouseWheelScroll.delta > 0)
         add_zoom_minimap(rpg);
-    if (rpg->event.mouseWheelScroll.delta < 0)
+    else
         sub_zoom_minimap(rpg);
 }
 

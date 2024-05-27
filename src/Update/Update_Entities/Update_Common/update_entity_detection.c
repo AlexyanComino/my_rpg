@@ -29,6 +29,8 @@ static void update_small_detection(rpg_t *rpg, entity_t *entity,
 {
     if (enemy_is_in_small_detect(rpg, entity, enemy) && in_base) {
         entity->common->zones->s_detect = true;
+        if (!is_player(rpg, entity))
+            entity->common->x = get_entity_side(entity, enemy->common->pos);
     } else {
         entity->common->zones->s_detect = false;
     }
@@ -40,6 +42,8 @@ static void update_medium_detection(rpg_t *rpg, entity_t *entity,
     if (entity_see_enemy(rpg, entity, enemy) &&
         !enemy_is_in_small_detect(rpg, entity, enemy)) {
         entity->common->zones->m_detect = true;
+        if (!is_player(rpg, entity))
+            entity->common->x = get_entity_side(entity, enemy->common->pos);
     } else {
         entity->common->zones->m_detect = false;
     }

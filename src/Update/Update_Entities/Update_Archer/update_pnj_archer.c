@@ -50,6 +50,8 @@ static bool check_diagonal(entity_t *entity, entity_t *enemy)
 
 static bool archer_can_attack_target(entity_t *entity, entity_t *enemy)
 {
+    if (!enemy)
+        return false;
     if (entity->common->pos.y >= enemy->common->zones->hitbox.top &&
         entity->common->pos.y <= enemy->common->zones->hitbox.top +
         enemy->common->zones->hitbox.height) {
@@ -93,6 +95,8 @@ void update_pnj_archer(rpg_t *rpg, entity_t *entity)
         return;
     if (!is_attacking(entity))
         update_archer_pos(rpg, entity, enemy);
+    if (!enemy)
+        return;
     update_archer_marks(entity);
     if (archer_can_attack(entity, enemy)) {
         entity->common->x = get_entity_side(entity, enemy->common->pos);

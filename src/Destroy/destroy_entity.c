@@ -28,35 +28,9 @@ void destroy_entity_warrior(entity_t *entity)
     free(entity);
 }
 
-static void destroy_carry(carry_t *carry)
-{
-    item_pawn_t *tmp = NULL;
-
-    if (carry == NULL)
-        return;
-    if (carry->item != NULL) {
-        tmp = carry->item;
-        free(tmp->name);
-        sfSprite_destroy(tmp->sprite);
-        sfTexture_destroy(tmp->texture);
-        free(tmp->index_rev_scale);
-        free(tmp);
-    }
-    free(carry);
-}
-
-static void destroy_pawn(pawn_t *pawn)
-{
-    if (pawn->job == CARRY)
-        destroy_carry(pawn->carry);
-    pawn->carry = NULL;
-    free(pawn);
-}
-
 static void destroy_spe_pawn(spe_t *spe)
 {
-    destroy_pawn(spe->pawn);
-    spe->pawn = NULL;
+    free(spe->pawn);
     free(spe);
 }
 

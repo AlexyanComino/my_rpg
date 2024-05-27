@@ -38,9 +38,7 @@ void destroy_base(base_t *base)
 
 void destroy_ent(entity_t **ent, unsigned int size)
 {
-    for (unsigned int i = 0; i < size; i++) {
-        printf("Destroying entity %s\n", ent[i]->common->name);
+    for (unsigned int i = 0; i < size; i++)
         ent[i]->destroy(ent[i]);
-    }
     free(ent);
 }

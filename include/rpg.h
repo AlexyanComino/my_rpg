@@ -617,7 +617,8 @@ typedef enum {
     MAP,
     SKILL_TREE,
     LOADING,
-    END
+    END,
+    CREDITS,
 } state_t;
 
 typedef struct slot_s {
@@ -784,7 +785,7 @@ typedef struct win_s {
     unsigned int framerate;
     sfClock *clock;
     float dt;
-    int zoom;
+    float zoom;
     sfVector2f view_pos;
     sfVector2f view_menu_move;
 } win_t;
@@ -1068,6 +1069,35 @@ typedef struct pause_menu_s {
     sfFont *font;
 } pause_menu_t;
 
+typedef enum enum_vict {
+    EXTEND_VIEW,
+    WAIT_EXTEND,
+    REDUCE_VIEW,
+    WAIT_REDUCE,
+    MOVE_TEXT,
+} vict_state_t;
+
+typedef struct vict_s {
+    bool is_win;
+    vict_state_t state;
+    sfText *text;
+    sfFont *font;
+    sfVector2f text_pos;
+    float size;
+    float thickness;
+    my_clock_t *myclock;
+} vict_t;
+
+typedef struct text_list_s {
+    sfText *text;
+    sfVector2f pos;
+    struct text_list_s *next;
+} text_list_t;
+typedef struct credits_s {
+    text_list_t *texts;
+    sfFont *font;
+} credits_t;
+
 typedef struct rpg_s {
     win_t *win;
     map_t *map;
@@ -1108,6 +1138,8 @@ typedef struct rpg_s {
     transition_t *transition;
     end_menu_t *end_menu;
     pause_menu_t *pause_menu;
+    vict_t *vict;
+    credits_t *credits;
 } rpg_t;
 
 #include "../src/xp_sys/xp.h"

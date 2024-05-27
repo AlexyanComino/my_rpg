@@ -61,7 +61,8 @@ void decrease_health(rpg_t *rpg, entity_t *entity, entity_t *target)
     if (attack == 0)
         state = MISS;
     if (is_player(rpg, entity) &&
-        entity->common->faction == target->common->faction)
+        (entity->common->faction == target->common->faction ||
+        target->common->faction == WITH_ALL))
         entity->common->faction = AGAINST_ALL;
     target->common->attributes->health -= attack;
     if (entity->type == TORCH)

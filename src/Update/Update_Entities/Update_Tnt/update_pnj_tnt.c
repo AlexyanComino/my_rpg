@@ -12,7 +12,7 @@ static void update_tnt_pos(rpg_t *rpg, entity_t *entity, entity_t *enemy)
     float min_lenght = MIN_TNT_LENGTH;
     sfVector2f target_pos;
 
-    if (flee_entity(rpg, entity, enemy))
+    if (enemy && flee_entity(rpg, entity, enemy))
         return;
     if (enemy && entity->common->zones->m_detect) {
         target_pos = enemy->common->pos;
@@ -82,6 +82,8 @@ void update_pnj_tnt(rpg_t *rpg, entity_t *entity)
         update_tnt_side_y(entity, enemy);
     if (!is_attacking(entity))
         update_tnt_pos(rpg, entity, enemy);
+    if (!enemy)
+        return;
     if (tnt_can_attack(entity, enemy)) {
         entity->common->state = ST_ATT;
         init_entity_action(entity);

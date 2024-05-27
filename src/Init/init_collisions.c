@@ -19,7 +19,7 @@ static sfVector2f *get_collisions_pos(unsigned int *size)
         pos = realloc(pos, sizeof(sfVector2f) * (*size + 1));
         pos[*size].x = atoi(strtok(line, " ")) * TILE_SCALE + TILE_SIZE * 12 -
             TILE_SIZE / 2;
-        pos[*size].y = atoi(strtok(NULL, " ")) * TILE_SCALE;
+        pos[*size].y = atoi(strtok(NULL, " ")) * TILE_SCALE + TILE_SIZE / 2;
         (*size)++;
     }
     free(line);

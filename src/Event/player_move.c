@@ -138,6 +138,6 @@ void player_move_event(rpg_t *rpg)
     entity_t *player = get_player(rpg);
 
     if (!in_action(player) && is_alive(player) && !is_stunned(player) &&
-        player->common->state != INTERACT)
+        player->common->state != INTERACT && !rpg->vict->is_win)
         player_move(rpg);
 }
