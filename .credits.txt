@@ -1,42 +1,31 @@
-Crédits
+Merci d'avoir joué!
 
+|Crédits
 
 |Développement
 
-Programmeur Principal : [Votre Nom]
+Matys, Julien, Ambre et Alexyan
 
 |Graphismes
 
-Artiste Principal : [Nom de l'Artiste]
-Contributeurs : [Noms des Contributeurs]
+Ambre
 
 |Musique et Effets Sonores
 
-Compositeur : [Nom du Compositeur]
-Effets Sonores : [Nom du Contributeur pour les SFX]
+Ambre
 
 |Scénario et Conception de Jeu
 
-Scénariste : [Nom du Scénariste]
-Concepteur de Jeu : [Nom du Concepteur]
+Alexyan et Matys
 
 |Remerciements Spéciaux
 
-CSFML : Merci aux développeurs.
-Testeurs : Merci à [Noms des Testeurs].
-Communauté : Merci à tous pour votre soutien.
-
-|Outils Utilisés
-
-IDE : [Nom de l'IDE]
-Gestion de Version : [Nom du Système de Gestion de Version]
-Logiciels de Création Graphique : [Noms des Logiciels]
-Bibliothèques : CSFML, [Autres Bibliothèques Utilisées]
+Les cramptés
 
 |Soutien et Contributions
 
-Merci à tous les contributeurs et supporters.
+Merci Léo.
 
 |Copyright
 
-© [Année] [Votre Nom ou Nom de la Société]. Tous droits réservés.
+© [2024] Cramptés Corp

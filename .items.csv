@@ -2,7 +2,7 @@
 #Type;Rarity;ItemName;TexturePath;Description;Damages;
 W;U;Iron Sword;assets/item/Weapon & Tool/Iron Sword.png;Description de fou;7;
 W;R;Silver Sword;assets/item/Weapon & Tool/Silver Sword.png;Cette Épée en argent, ornée de runes mystiques, brille d'une lueur surnaturelle.\n\nElle augmente la puissance d'attaque de son porteur de 10;10;
-W;L;Lame d'Orion;assets/item/Weapon & Tool/Golden Sword.png;Cette Épée légendaire scintille comme les rayons du soleil.\n\nForgée par les dieux, elle confère à son porteur une puissance d'attaque inegalée de 50 points.;50;
+W;L;Lame d'Eternité;assets/item/Weapon & Tool/Golden Sword.png;Cette Épée légendaire scintille comme les rayons du soleil.\n\nForgée par les dieux, elle confère à son porteur une puissance d'attaque inegalée de 50 points.;50;
 W;C;Branche de Sylvain;assets/item/Weapon & Tool/Wooden Sword.png;Cette Épée en bois simple mais élégante est taillée dans le chêne sacré. Légère et maniable, elle confère à son porteur une puissance d'attaque modeste de 5 points.;5;
 W;U;Griffon d'Acier;assets/item/Weapon & Tool/Pickaxe.png;Cette pioche en fer est conçue pour une éfficacité maximale. Sa pointe affutée inflige 7 points de dégats à châque coup;7;
 

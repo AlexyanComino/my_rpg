@@ -80,6 +80,15 @@ static save_t **init_saves(void)
     return saves;
 }
 
+static comp_t *init_comp(void)
+{
+    comp_t *skill = malloc(sizeof(comp_t));
+
+    skill->fire = false;
+    skill->poison = false;
+    return skill;
+}
+
 static void init_rpg2(rpg_t *rpg)
 {
     rpg->settings = init_settings(rpg);
@@ -100,6 +109,7 @@ static void init_rpg2(rpg_t *rpg)
     rpg->skill_tree = init_all_skill();
     rpg->vict = init_victory();
     rpg->credits = init_credits();
+    rpg->comp = init_comp();
 }
 
 rpg_t *init_rpg(void)

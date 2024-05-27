@@ -34,3 +34,7 @@ int unlock_skill(skill_t *skill, char *name);
 int draw_ui_tree(rpg_t *rpg);
 int draw_skill_tree(rpg_t *rpg);
 int highlight_skill_tree(rpg_t *rpg);
+
+// Skill functions
+int skill_fire_sword(rpg_t *rpg);
+int skill_poison_sword(rpg_t *rpg);

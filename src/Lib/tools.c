@@ -44,3 +44,16 @@ void set_string_to_text(sfText *text, const char *string)
     unicode = (sfUint32 *)ws;
     sfText_setUnicodeString(text, unicode);
 }
+
+void setup_end_header(rpg_t *rpg, char *string)
+{
+    sfFloatRect rect;
+
+    if (string != NULL) {
+        set_string_to_text(rpg->quest_header->text, string);
+        rect = sfText_getGlobalBounds(rpg->quest_header->text);
+        sfText_setOrigin(rpg->quest_header->text, (sfVector2f){
+            rect.width / 2, rect.height / 2});
+    }
+    rpg->quest_header->state = Q_END;
+}

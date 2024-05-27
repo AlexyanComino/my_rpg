@@ -90,11 +90,11 @@ skill_t *init_all_skill(void)
     init_skill("Ice", "Shoot a ice", 10, &skill_test));
     setup_logo(skill->next->next->next, "assets/skill/skill_icon_03.png");
     skill = add_skill(skill,
-    init_skill("Fire sword", "Shoot a poison", 10, &skill_test));
+    init_skill("Fire sword", "Shoot a poison", 10, &skill_fire_sword));
     setup_logo(skill->next->next->next->next,
     "assets/skill/skill_icon_04.png");
     skill = add_skill(skill,
-    init_skill("poison", "Shoot a wind", 10, &skill_test));
+    init_skill("poison", "Shoot a wind", 10, &skill_poison_sword));
     return init_skill_tree(skill);
 }
 

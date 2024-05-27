@@ -134,6 +134,8 @@ void display_game(rpg_t *rpg)
     display_decors_high(rpg, intrect_is_in_real_view);
     if (!rpg->vict->is_win)
         display_normal_game(rpg);
-    else
+    else {
+        display_quests(rpg);
         display_victory(rpg);
+    }
 }

@@ -1100,6 +1100,11 @@ typedef struct credits_s {
     sfFont *font;
 } credits_t;
 
+typedef struct comp_s {
+    bool fire;
+    bool poison;
+} comp_t;
+
 typedef struct rpg_s {
     win_t *win;
     map_t *map;
@@ -1143,6 +1148,7 @@ typedef struct rpg_s {
     pause_menu_t *pause_menu;
     vict_t *vict;
     credits_t *credits;
+    comp_t *comp;
 } rpg_t;
 
 #include "../src/xp_sys/xp.h"

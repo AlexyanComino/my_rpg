@@ -25,7 +25,6 @@ void text_box_handling(rpg_t *rpg, all_quests_t *tmp, quest_t *quest)
         rpg->text_box->quest = quest;
         rpg->text_box->is_fully_displayed = false;
         rpg->text_box->len = 0;
-        set_string_to_text(rpg->quest_header->text, quest->name);
         set_string_to_text(rpg->text_box->npc_name, tmp->proprietary);
         sfText_setOrigin(rpg->text_box->npc_name, (sfVector2f){
             sfText_getGlobalBounds(rpg->text_box->npc_name).width / 2, 0});
@@ -65,7 +64,8 @@ static void end_dialog(rpg_t *rpg)
     if (rpg->text_box->quest->is_last) {
         rpg->text_box->quest->is_active = false;
         rpg->text_box->quest->is_done = true;
-        rpg->quest_header->state = Q_END;
+        rpg->text_box->entity->common->grade_type = SOLDAT;
+        setup_end_header(rpg, NULL);
     } else
         rpg->text_box->quest->next->is_active = true;
     text_is_displayed(rpg);

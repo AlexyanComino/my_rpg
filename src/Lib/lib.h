@@ -13,6 +13,7 @@ float get_distance(sfVector2f center1, sfVector2f center2);
 void update_clock_seconds(my_clock_t *myclock);
 int tab_len(char **tab);
 void set_string_to_text(sfText *text, const char *string);
+void setup_end_header(rpg_t *rpg, char *string);
 
 // My_str_to_word_array
 char **split_string(char *str, char *delim);

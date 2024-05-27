@@ -9,8 +9,12 @@
 
 static void set_pos(rpg_t *rpg, entity_t *player)
 {
+    sfFloatRect rect = sfText_getGlobalBounds(rpg->quest_header->text);
+
+    sfText_setOrigin(rpg->quest_header->text, (sfVector2f){
+        rect.width / 2, rect.height / 2});
     sfText_setPosition(rpg->quest_header->text, (sfVector2f){
-        player->common->pos.x - 400, player->common->pos.y - 370});
+        player->common->pos.x, player->common->pos.y - 340});
     sfRectangleShape_setPosition(rpg->quest_header->rect, (sfVector2f){
         player->common->pos.x - WIDTH / 2,
         player->common->pos.y - 400});

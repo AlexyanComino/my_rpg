@@ -95,9 +95,9 @@ static void check_my_clock(rpg_t *rpg)
 
     update_clock_seconds(rpg->vict->myclock);
     second = rpg->vict->myclock->seconds;
-    if (state == WAIT_EXTEND && second > 2)
+    if (state == WAIT_EXTEND && second > 6)
         rpg->vict->state = EXTEND_VIEW;
-    if (state == WAIT_REDUCE && second > 2)
+    if (state == WAIT_REDUCE && second > 3)
         rpg->vict->state = REDUCE_VIEW;
 }
 

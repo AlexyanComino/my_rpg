@@ -7,13 +7,31 @@
 
 #include "rpg.h"
 
-void entity_is_dead(rpg_t *rpg, entity_t *entity)
+int get_entity_xp(entity_t *entity)
 {
-    printf("Entity %s is dead\n", entity->common->name);
-    entity->common->state = DEAD;
-    entity->common->fire->is_on_eff = false;
-    entity->common->stun->is_stunned = false;
-    sfClock_restart(entity->common->death->anim->myclock->clock);
+    grade_type_t grade = entity->common->grade_type;
+    entity_type_t type = entity->type;
+
+    if (grade == BOSS)
+        return 300;
+    if (entity->common->grade_type == ELITE)
+        return 100;
+    if (type == WARRIOR || type == TORCH)
+        return 50;
+    if (type == PAWN || type == TNT)
+        return 25;
+    if (type == ARCHER)
+        return 40;
+    return 0;
+}
+
+void entity_is_dead(rpg_t *rpg, entity_t *target)
+{
+    printf("Entity %s is dead\n", target->common->name);
+    target->common->state = DEAD;
+    target->common->fire->is_on_eff = false;
+    target->common->stun->is_stunned = false;
+    sfClock_restart(target->common->death->anim->myclock->clock);
     play_music(rpg->sounds->death, 100 * rpg->volume);
 }
 
@@ -51,6 +69,16 @@ static unsigned int get_attack(entity_t *entity, entity_t *target)
     return attack;
 }
 
+static void decrease_health2(rpg_t *rpg, entity_t *entity, entity_t *target)
+{
+    target->common->x = get_entity_side(target, entity->common->pos);
+    if (target->common->attributes->health <= 0) {
+        if (is_player(rpg, entity))
+            add_xp(get_entity_xp(target));
+        entity_is_dead(rpg, target);
+    }
+}
+
 void decrease_health(rpg_t *rpg, entity_t *entity, entity_t *target)
 {
     unsigned int attack = get_attack(entity, target);
@@ -60,19 +88,16 @@ void decrease_health(rpg_t *rpg, entity_t *entity, entity_t *target)
         check_special_attack(entity, target, &attack, &state);
     if (attack == 0)
         state = MISS;
-    if (is_player(rpg, entity) &&
-        (entity->common->faction == target->common->faction ||
-        target->common->faction == WITH_ALL))
+    if (is_player(rpg, entity) && (entity->common->faction ==
+        target->common->faction || target->common->faction == WITH_ALL))
         entity->common->faction = AGAINST_ALL;
     target->common->attributes->health -= attack;
-    if (entity->type == TORCH)
+    if (entity->type == TORCH || (is_player(rpg, entity) && rpg->comp->fire))
         burn_entity(rpg, target, attack);
-    if (is_player(rpg, entity) && sfKeyboard_isKeyPressed(sfKeyX))
+    if (is_player(rpg, entity) && rpg->comp->poison)
         poison_entity(target, attack);
     add_dmg_text(rpg, target, attack, state);
-    target->common->x = get_entity_side(target, entity->common->pos);
-    if (target->common->attributes->health <= 0)
-        entity_is_dead(rpg, target);
+    decrease_health2(rpg, entity, target);
 }
 
 static void check_miss_attack(rpg_t *rpg, entity_t *entity, entity_t *enemy)
