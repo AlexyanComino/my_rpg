@@ -56,19 +56,19 @@ static void update_player_status(void)
     inventory_t *inv = (*inventory());
 
     sfSprite_setPosition(inv->player_status->s_attack,
-    (sfVector2f){(*view_pos()).x - 420, (*view_pos()).y - 280});
+    (sfVector2f){(*view_pos()).x - 420, (*view_pos()).y - 250});
     sfText_setPosition(inv->player_status->t_attack,
     (sfVector2f){(*view_pos()).x - 370, (*view_pos()).y - 280});
     sfSprite_setPosition(inv->player_status->s_hp,
-    (sfVector2f){(*view_pos()).x - 575, (*view_pos()).y - 280});
+    (sfVector2f){(*view_pos()).x - 575, (*view_pos()).y - 250});
     sfText_setPosition(inv->player_status->t_hp,
     (sfVector2f){(*view_pos()).x - 520, (*view_pos()).y - 280});
     sfSprite_setPosition(inv->player_status->s_speed,
-    (sfVector2f){(*view_pos()).x - 420, (*view_pos()).y - 220});
+    (sfVector2f){(*view_pos()).x - 420, (*view_pos()).y - 200});
     sfText_setPosition(inv->player_status->t_speed,
     (sfVector2f){(*view_pos()).x - 370, (*view_pos()).y - 220});
     sfSprite_setPosition(inv->player_status->s_def,
-    (sfVector2f){(*view_pos()).x - 575, (*view_pos()).y - 220});
+    (sfVector2f){(*view_pos()).x - 575, (*view_pos()).y - 200});
 }
 
 static void update_player_stat(void)
