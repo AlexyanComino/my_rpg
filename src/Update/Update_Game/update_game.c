@@ -23,6 +23,7 @@ static void check_game_is_win(rpg_t *rpg)
 
 void update_game(rpg_t *rpg)
 {
+    update_quest_header(rpg);
     if (rpg->vict->is_win)
         return update_victory(rpg);
     check_game_is_win(rpg);
@@ -30,7 +31,6 @@ void update_game(rpg_t *rpg)
     update_game_interface(rpg);
     update_chests(rpg);
     update_entities(rpg);
-    update_quest_header(rpg);
     update_quests(rpg);
     update_decors_anim(rpg, intrect_is_in_real_view);
 }

@@ -51,9 +51,10 @@ static int check_stuff_for_quest(rpg_t *rpg, quest_t *quest)
         name = (tmp->type == WEAPON) ? ((weapon_t *)tmp->item)->name :
             ((armor_t *)tmp->item)->name;
         if (strcmp(name, quest->objective) == 0) {
+            quest->is_active = false;
             quest->is_done = true;
             rpg->text_box->is_displayed = false;
-            rpg->quest_header->state = Q_END;
+            setup_end_header(rpg, quest->name);
             get_player(rpg)->common->state = IDLE;
             add_xp(quest->xp);
             printf("Quest done: %s\n", quest->name);
@@ -72,9 +73,10 @@ static int check_quest_already_done(rpg_t *rpg, quest_t *quest)
         if (tmp->item == NULL)
             continue;
         if (strcmp(tmp->name, quest->objective) == 0) {
+            quest->is_active = false;
             quest->is_done = true;
             rpg->text_box->is_displayed = false;
-            rpg->quest_header->state = Q_END;
+            setup_end_header(rpg, quest->name);
             player->common->state = IDLE;
             add_xp(quest->xp);
             printf("Quest already done: %s\n", quest->name);
@@ -99,6 +101,7 @@ static int accept_one_quest(rpg_t *rpg, all_quests_t *tmp, entity_t *player)
             return 1;
         tmp_quest->is_active = true;
         rpg->text_box->is_displayed = false;
+        set_string_to_text(rpg->quest_header->text, tmp_quest->name);
         rpg->quest_header->state = Q_START;
         player->common->state = IDLE;
         printf("Quest accepted: %s\n", tmp_quest->name);
