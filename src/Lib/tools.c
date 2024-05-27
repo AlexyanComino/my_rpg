@@ -32,14 +32,14 @@ void set_string_to_text(sfText *text, const char *string)
     size_t len = strlen(string);
     char buffer[512];
 
+    if (len > 512)
+        fprintf(stderr, "String too long\n");
     wchar_t ws[len + 1];
     strcpy(buffer, string);
-    if (setlocale(LC_CTYPE, "") == NULL) {
+    if (setlocale(LC_CTYPE, "") == NULL)
         perror("setlocale");
-    }
-    if (mbstowcs(ws, buffer, len + 1) == (size_t)-1) {
+    if (mbstowcs(ws, buffer, len + 1) == (size_t)-1)
         perror("mbstowcs");
-    }
     ws[len] = L'\0';
     unicode = (sfUint32 *)ws;
     sfText_setUnicodeString(text, unicode);

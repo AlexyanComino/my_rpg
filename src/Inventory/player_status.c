@@ -23,13 +23,13 @@ sfText *init_text(sfVector2f pos, int size, sfColor color, char *val)
     return (text);
 }
 
-static int setup_value(player_status_t *player_status)
+static int setup_value(player_status_t *player_status, attributes_t *att)
 {
-    player_status->hp = 200;
-    player_status->max_hp = 200;
-    player_status->attack = 50;
-    player_status->defense = 10;
-    player_status->speed = 300;
+    player_status->hp = att->health;
+    player_status->max_hp = att->max_health;
+    player_status->attack = att->attack;
+    player_status->defense = att->defense;
+    player_status->speed = att->speed;
     player_status->skill_points = 0;
     player_status->level = 1;
     player_status->xp = 0;
@@ -85,18 +85,21 @@ static int setup_text(player_status_t *player_status)
     return 0;
 }
 
-player_status_t *init_player_status(void)
+player_status_t *init_player_status(char **infos, attributes_t *att)
 {
     player_status_t *player_status = malloc(sizeof(player_status_t));
 
-    setup_value(player_status);
+    setup_value(player_status, att);
     setup_sprite(player_status);
     setup_text(player_status);
-    player_status->player = NULL;
+    player_status->player = init_entity(infos);
+    if (player_status->player->common->x == LEFT)
+        player_status->player->common->x = RIGHT;
+    sfSprite_setScale(player_status->player->common->
+        anim->sprite, (sfVector2f){1.7, 1.7});
     player_status->pp = init_sprite_from_file("assets/inventory/19.png");
     sfSprite_setScale(player_status->pp, (sfVector2f){2, 2});
     sfSprite_setPosition(player_status->pp, (sfVector2f){180, 410});
     player_status->stuff = NULL;
     return (player_status);
 }
-

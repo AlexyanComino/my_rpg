@@ -102,6 +102,23 @@ static void display_victory(rpg_t *rpg)
         sfRenderWindow_drawText(rpg->win->window, rpg->vict->text, NULL);
 }
 
+static void display_health_bar_boss(rpg_t *rpg)
+{
+    if (rpg->vict->is_win)
+        return;
+    for (unsigned int i = 0; i < rpg->ent_size; i++) {
+        if (rpg->ent[i]->common->grade_type != BOSS ||
+            !intrect_is_in_real_view(rpg, rpg->ent[i]->common->zones->hitbox))
+            continue;
+        display_round_rectangle(rpg->win->window,
+            rpg->ent[i]->common->health_bar->back);
+        display_round_rectangle(rpg->win->window,
+            rpg->ent[i]->common->health_bar->front);
+        sfRenderWindow_drawText(rpg->win->window,
+            rpg->ent[i]->common->name_text, NULL);
+    }
+}
+
 void display_game(rpg_t *rpg)
 {
     if (sfRenderWindow_getView(rpg->win->window) != rpg->win->view)
@@ -113,6 +130,7 @@ void display_game(rpg_t *rpg)
     display_entities(rpg);
     sfRenderWindow_drawSprite(rpg->win->window, rpg->map->high_sprite,
         NULL);
+    display_health_bar_boss(rpg);
     display_decors_high(rpg, intrect_is_in_real_view);
     if (!rpg->vict->is_win)
         display_normal_game(rpg);

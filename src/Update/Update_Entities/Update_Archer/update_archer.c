@@ -90,6 +90,8 @@ void remove_arrow(arrows_t **head, arrows_t *tmp, arrows_t *prev)
     destroy_anim(tmp->anim);
     sfClock_destroy(tmp->myclock->clock);
     free(tmp);
+    tmp = NULL;
+    tmp = prev ? prev->next : *head;
 }
 
 static void check_arrow_hit(arrows_t *arrow, arrows_t **head)

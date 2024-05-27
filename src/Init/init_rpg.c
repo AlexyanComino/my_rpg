@@ -94,8 +94,6 @@ static void init_rpg2(rpg_t *rpg)
     rpg->chests = init_chests(&rpg->chests_size);
     rpg->items_size = 0;
     rpg->items = init_items_tab(&rpg->items_size);
-    init_inventory(rpg, 15);
-    rpg->inventory = *inventory();
     rpg->transition = init_transition();
     rpg->end_menu = init_end_menu(rpg);
     rpg->pause_menu = init_pause_menu();

@@ -7,7 +7,7 @@
 
 #include "rpg.h"
 
-static void create_slot_inventory(rpg_t *rpg, int size)
+void create_slot_inventory(rpg_t *rpg, int size)
 {
     for (int i = 0; i < 4; i++)
         add_stuff(create_armor(rpg, "Iron Chestplate"), ARMOR);
@@ -25,13 +25,13 @@ void init_inventory(rpg_t *rpg, int size)
 
     inv->is_open = 0;
     inv->gold = 0;
-    inv->size = size;
     inv->slot = NULL;
+    inv->size = size;
     inv->quest = NULL;
     inv->scroll = 0;
     inv->scroll_max = 0;
     inv->sprite = init_sprite_from_file("assets/inventory/1.png");
-    inv->player_status = init_player_status();
+    inv->player_status = NULL;
     inv->desc = init_text((sfVector2f){0, 0},
     30, sfColor_fromRGB(135, 195, 155), "");
     inv->desc_sprite = init_sprite_from_file("assets/inventory/desc_inv.png");
@@ -40,5 +40,4 @@ void init_inventory(rpg_t *rpg, int size)
     sfSprite_setPosition(inv->sprite, (sfVector2f){0, 80});
     *inventory() = inv;
     (*inventory())->quest = rpg->quests;
-    create_slot_inventory(rpg, size);
 }

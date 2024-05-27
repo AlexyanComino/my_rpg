@@ -116,14 +116,6 @@ static void draw_stats(rpg_t *rpg, select_button_t *tmp)
     sfRenderWindow_drawText(rpg->win->window, tmp->attack, NULL);
     sfRenderWindow_drawText(rpg->win->window, tmp->defense, NULL);
     sfRenderWindow_drawText(rpg->win->window, tmp->speed, NULL);
-    sfRenderWindow_drawSprite(rpg->win->window,
-        rpg->inventory->player_status->s_hp, NULL);
-    sfRenderWindow_drawSprite(rpg->win->window,
-        rpg->inventory->player_status->s_attack, NULL);
-    sfRenderWindow_drawSprite(rpg->win->window,
-        rpg->inventory->player_status->s_def, NULL);
-    sfRenderWindow_drawSprite(rpg->win->window,
-        rpg->inventory->player_status->s_speed, NULL);
 }
 
 static void draw_stats_sprites(rpg_t *rpg, select_button_t *tmp)

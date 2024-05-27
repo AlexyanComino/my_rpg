@@ -13,11 +13,11 @@ static void add_player(rpg_t *rpg, char **infos)
     rpg->ent[rpg->ent_size]->common->faction = BLUE_TEAM;
     rpg->ent[rpg->ent_size]->common->faction_origin = BLUE_TEAM;
     rpg->player_index = rpg->ent_size;
-    rpg->inventory->player_status->player = init_entity(infos);
-    if (rpg->inventory->player_status->player->common->x == LEFT)
-        rpg->inventory->player_status->player->common->x = RIGHT;
-    sfSprite_setScale(rpg->inventory->player_status->player->common->
-        anim->sprite, (sfVector2f){1.7, 1.7});
+    init_inventory(rpg, 15);
+    rpg->inventory = *inventory();
+    rpg->inventory->player_status =
+        init_player_status(infos, rpg->ent[rpg->ent_size]->common->attributes);
+    create_slot_inventory(rpg, rpg->inventory->size);
     set_string_to_text(rpg->interface->player_infos->player_text,
         rpg->ent[rpg->ent_size]->common->name);
     update_interface_pos(rpg, rpg->ent[rpg->ent_size],

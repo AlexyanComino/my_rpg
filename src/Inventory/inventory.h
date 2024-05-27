@@ -23,7 +23,7 @@ int open_inventory(rpg_t *rpg);
 void highlight_inventory(rpg_t *rpg, slot_t *tmp);
 int click_inventory(rpg_t *rpg, slot_t *tmp);
 int release_inventory(rpg_t *rpg, slot_t *tmp);
-player_status_t *init_player_status(void);
+player_status_t *init_player_status(char **infos, attributes_t *attributes);
 sfSprite *init_sprite_from_file(char *texture);
 int add_stuff(void *item, int type);
 int add_stuff_from_type(rpg_t *rpg, char *name, int type);
