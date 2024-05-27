@@ -82,7 +82,6 @@ static save_t **init_saves(void)
 
 static void init_rpg2(rpg_t *rpg)
 {
-    rpg->save_menu = init_save_menu(rpg);
     rpg->settings = init_settings(rpg);
     rpg->selector = init_select_menu(rpg);
     rpg->interface = init_interface();
@@ -100,8 +99,9 @@ static void init_rpg2(rpg_t *rpg)
     rpg->transition = init_transition();
     rpg->end_menu = init_end_menu(rpg);
     rpg->pause_menu = init_pause_menu();
-    printf("Finished init rpg\n");
     rpg->skill_tree = init_all_skill();
+    rpg->vict = init_victory();
+    rpg->credits = init_credits();
 }
 
 rpg_t *init_rpg(void)
@@ -121,7 +121,9 @@ rpg_t *init_rpg(void)
     rpg->sounds = init_sounds();
     rpg->save = init_saves();
     rpg->main_menu = init_menu(rpg);
+    rpg->save_menu = init_save_menu(rpg);
+    rpg->volume = 1;
     init_rpg2(rpg);
-    play_music(rpg->sounds->intro, 50);
+    play_music(rpg->sounds->intro, 50 * rpg->volume);
     return rpg;
 }

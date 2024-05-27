@@ -35,19 +35,20 @@ static attributes_t *get_attributes(char **infos)
     return attributes;
 }
 
-static death_t *init_death(void)
+static death_t *init_death(float scale)
 {
     death_t *death = malloc(sizeof(death_t));
 
     death->anim = init_anim("assets/Entities/Effects/Dead.png", DEAD_WIDTH,
         DEAD_WIDTH);
+    sfSprite_setScale(death->anim->sprite, (sfVector2f){scale, scale});
     death->number_dead = 0;
     return death;
 }
 
 static faction_t get_faction(color_entity_t color, entity_type_t type)
 {
-    if (color == BLACK)
+    if (color == BLACK || type == PAWN)
         return WITH_ALL;
     if (type == TNT || type == TORCH)
         return GOBLIN_TEAM;
@@ -98,7 +99,7 @@ common_entity_t *init_common(char **infos,
     common->scale = atof(infos[6]);
     common->zones = init_entity_zones(infos, common->pos, type, common->scale);
     common->attributes = get_attributes(infos);
-    common->death = init_death();
+    common->death = init_death(common->scale);
     common->faction = get_faction(common->color, type);
     common->faction_origin = common->faction;
     common->attack_cooldown = get_attack_cooldown(atof(infos[14]));

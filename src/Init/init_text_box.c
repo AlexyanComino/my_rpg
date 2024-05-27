@@ -45,7 +45,7 @@ button_t *add_choice(button_t *buttons, char *txt)
     sfText_setFont(new->text, new->font);
     sfText_setCharacterSize(new->text, 25);
     sfText_setColor(new->text, sfWhite);
-    sfText_setString(new->text, txt);
+    set_string_to_text(new->text, txt);
     if (buttons == NULL)
         return new;
     while (tmp->next != NULL)

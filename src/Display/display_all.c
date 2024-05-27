@@ -16,9 +16,32 @@ static void display_transition(rpg_t *rpg)
         rpg->transition->anim->sprite, NULL);
 }
 
+static void display_credits(rpg_t *rpg)
+{
+    text_list_t *tmp = rpg->credits->texts;
+
+    if (sfRenderWindow_getView(rpg->win->window) != rpg->win->view)
+        sfRenderWindow_setView(rpg->win->window, rpg->win->view);
+    while (tmp) {
+        sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
+        tmp = tmp->next;
+    }
+}
+
+static void display2(rpg_t *rpg)
+{
+    if (rpg->gamestate == CREDITS)
+        display_credits(rpg);
+    draw_skill_tree(rpg);
+    if (rpg->gamestate == END)
+        display_end_menu(rpg);
+    display_transition(rpg);
+}
+
 void display(rpg_t *rpg)
 {
-    sfRenderWindow_clear(rpg->win->window, sfBlack);
+    sfRenderWindow_clear(rpg->win->window, (rpg->gamestate == CREDITS) ?
+        sfWhite : sfBlack);
     if (rpg->gamestate == LOADING)
         display_loading(rpg);
     if (rpg->gamestate == MAIN_MENU)
@@ -32,9 +55,6 @@ void display(rpg_t *rpg)
     if (rpg->gamestate == GAME || rpg->gamestate == INVENTORY ||
         rpg->gamestate == MAP || rpg->gamestate == PAUSE)
         display_game(rpg);
-    draw_skill_tree(rpg);
-    if (rpg->gamestate == END)
-        display_end_menu(rpg);
-    display_transition(rpg);
+    display2(rpg);
     sfRenderWindow_display(rpg->win->window);
 }

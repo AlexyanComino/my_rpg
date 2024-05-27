@@ -12,10 +12,12 @@ static void update_sprite_dead(common_entity_t *common)
     sfVector2f scale = sfSprite_getScale(common->death->anim->sprite);
     sfVector2f pos = sfSprite_getPosition(common->death->anim->sprite);
 
-    if (common->x == RIGHT && scale.x != 1)
-        sfSprite_setScale(common->death->anim->sprite, (sfVector2f){1, 1});
-    if (common->x == LEFT && scale.x != -1)
-        sfSprite_setScale(common->death->anim->sprite, (sfVector2f){-1, 1});
+    if (common->x == RIGHT && scale.x != common->scale)
+        sfSprite_setScale(common->death->anim->sprite,
+            (sfVector2f){common->scale, common->scale});
+    if (common->x == LEFT && scale.x != -common->scale)
+        sfSprite_setScale(common->death->anim->sprite,
+            (sfVector2f){-common->scale, common->scale});
     if (common->pos.x != pos.x || common->pos.y !=
         pos.y)
         sfSprite_setPosition(common->death->anim->sprite,

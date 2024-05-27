@@ -143,6 +143,7 @@ static void load_attributes(save_t *save, FILE *file)
     fread(&save->attributes->attack, sizeof(unsigned int), 1, file);
     fread(&save->attributes->defense, sizeof(unsigned int), 1, file);
     fread(&save->attributes->speed, sizeof(unsigned int), 1, file);
+    fread(&save->attributes->level, sizeof(unsigned int), 1, file);
     fread(&save->type, sizeof(int), 1, file);
 }
 

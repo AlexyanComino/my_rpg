@@ -12,7 +12,7 @@ static void add_letter(rpg_t *rpg, sfFloatRect rect, sfVector2f pos)
     rpg->text_box->displayed_str[rpg->text_box->len] =
         rpg->text_box->str[rpg->text_box->len];
     rpg->text_box->displayed_str[rpg->text_box->len + 1] = '\0';
-    sfText_setString(rpg->text_box->npc_text,
+    set_string_to_text(rpg->text_box->npc_text,
         rpg->text_box->displayed_str);
     sfText_setOrigin(rpg->text_box->npc_text,
         (sfVector2f){rect.width / 2, rect.height / 2});
@@ -38,7 +38,7 @@ static void display_text(rpg_t *rpg)
     } else
         rpg->text_box->is_fully_displayed = true;
     if (rpg->text_box->is_fully_displayed) {
-        sfText_setString(rpg->text_box->npc_text, rpg->text_box->str);
+        set_string_to_text(rpg->text_box->npc_text, rpg->text_box->str);
         sfText_setOrigin(rpg->text_box->npc_text, (sfVector2f){
             rect.width / 2, rect.height / 2});
         sfText_setPosition(rpg->text_box->npc_text, (sfVector2f){

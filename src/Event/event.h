@@ -36,6 +36,7 @@ void save_button_event(rpg_t *rpg, save_button_t *buttons);
 void slct_button_event(rpg_t *rpg, select_button_t *buttons);
 
 // Event map
+void update_text_cities_size(rpg_t *rpg, float zoom);
 void event_map(rpg_t *rpg);
 
 // Event game

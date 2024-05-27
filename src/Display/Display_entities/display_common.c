@@ -100,7 +100,7 @@ void display_common(rpg_t *rpg, entity_t *entity)
     sfRenderWindow_drawSprite(rpg->win->window, entity->common->anim->sprite,
         NULL);
     display_arrows_hit(rpg, entity);
-    if (entity->common->grade_type == BOSS &&
+    if (!rpg->vict->is_win && entity->common->grade_type == BOSS &&
         intrect_is_in_real_view(rpg, entity->common->zones->hitbox)) {
         display_health_bar(rpg, entity);
         sfRenderWindow_drawText(rpg->win->window, entity->common->name_text,

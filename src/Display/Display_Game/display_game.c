@@ -81,18 +81,8 @@ static void display_pause_menu(rpg_t *rpg)
     }
 }
 
-void display_game(rpg_t *rpg)
+static void display_normal_game(rpg_t *rpg)
 {
-    if (sfRenderWindow_getView(rpg->win->window) != rpg->win->view)
-        sfRenderWindow_setView(rpg->win->window, rpg->win->view);
-    sfRenderWindow_drawSprite(rpg->win->window, rpg->map->ground_sprite,
-        NULL);
-    display_decors_ground(rpg, intrect_is_in_view);
-    display_chests(rpg);
-    display_entities(rpg);
-    sfRenderWindow_drawSprite(rpg->win->window, rpg->map->high_sprite,
-        NULL);
-    display_decors_high(rpg, intrect_is_in_view);
     if (rpg->modes->debug)
         display_collision(rpg);
     display_game_interface(rpg);
@@ -103,4 +93,29 @@ void display_game(rpg_t *rpg)
         display_minimap(rpg);
     if (rpg->gamestate == PAUSE)
         display_pause_menu(rpg);
+}
+
+static void display_victory(rpg_t *rpg)
+{
+    if (rpg->vict->state == MOVE_TEXT || rpg->vict->state == WAIT_REDUCE ||
+        rpg->vict->state == REDUCE_VIEW)
+        sfRenderWindow_drawText(rpg->win->window, rpg->vict->text, NULL);
+}
+
+void display_game(rpg_t *rpg)
+{
+    if (sfRenderWindow_getView(rpg->win->window) != rpg->win->view)
+        sfRenderWindow_setView(rpg->win->window, rpg->win->view);
+    sfRenderWindow_drawSprite(rpg->win->window, rpg->map->ground_sprite,
+        NULL);
+    display_decors_ground(rpg, intrect_is_in_real_view);
+    display_chests(rpg);
+    display_entities(rpg);
+    sfRenderWindow_drawSprite(rpg->win->window, rpg->map->high_sprite,
+        NULL);
+    display_decors_high(rpg, intrect_is_in_real_view);
+    if (!rpg->vict->is_win)
+        display_normal_game(rpg);
+    else
+        display_victory(rpg);
 }

@@ -14,7 +14,7 @@ void entity_is_dead(rpg_t *rpg, entity_t *entity)
     entity->common->fire->is_on_eff = false;
     entity->common->stun->is_stunned = false;
     sfClock_restart(entity->common->death->anim->myclock->clock);
-    play_music(rpg->sounds->death, 100);
+    play_music(rpg->sounds->death, 100 * rpg->volume);
 }
 
 //
@@ -61,7 +61,8 @@ void decrease_health(rpg_t *rpg, entity_t *entity, entity_t *target)
     if (attack == 0)
         state = MISS;
     if (is_player(rpg, entity) &&
-        entity->common->faction == target->common->faction)
+        (entity->common->faction == target->common->faction ||
+        target->common->faction == WITH_ALL))
         entity->common->faction = AGAINST_ALL;
     target->common->attributes->health -= attack;
     if (entity->type == TORCH)

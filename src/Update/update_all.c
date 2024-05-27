@@ -21,6 +21,8 @@ void update(rpg_t *rpg)
         return update_pause_menu(rpg);
     if (rpg->gamestate == END)
         return update_end_menu(rpg);
+    if (rpg->gamestate == CREDITS)
+        return update_credits(rpg);
     if (rpg->gamestate == INVENTORY)
         rpg->inventory->player_status->player->anim(rpg,
             rpg->inventory->player_status->player);

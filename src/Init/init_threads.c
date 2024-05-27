@@ -29,7 +29,7 @@ void *load_data(void *arg)
 
     shared_data->map = init_map();
     shared_data->loaded = 1;
-    printf("Map loaded\n");
+    printf("\033[0;32mMap loaded\033[0m\n");
     pthread_exit(NULL);
 }
 
@@ -40,6 +40,6 @@ void *load_entities(void *arg)
     shared_data->nb_entities = 0;
     shared_data->entities = init_ent(&shared_data->nb_entities);
     shared_data->loaded = 1;
-    printf("Entities loaded\n");
+    printf("\033[0;31mEntities loaded\033[0m\n");
     pthread_exit(NULL);
 }

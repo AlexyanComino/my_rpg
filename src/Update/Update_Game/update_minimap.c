@@ -42,6 +42,8 @@ static void init_minimap_pos(rpg_t *rpg, entity_t *player)
     minimap_t *minimap = rpg->minimap;
 
     sfRectangleShape_setPosition(minimap->rect, player->common->pos);
+    sfView_zoom(minimap->view, 10 / minimap->zoom);
+    update_text_cities_size(rpg, 10 / minimap->zoom);
     minimap->zoom = 10;
     if (!is_valid_minimap_view_pos(minimap, player->common->pos)) {
         get_valid_minimap_view_pos(minimap, player->common->pos);

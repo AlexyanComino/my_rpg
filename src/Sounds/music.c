@@ -28,10 +28,10 @@ void attack_music(rpg_t *rpg)
     if (rpg->interface->restricted->in_base && !prev_in_base) {
         prev_in_base = 1;
         sfMusic_stop(rpg->sounds->loop);
-        play_music(rpg->sounds->attack, 65);
+        play_music(rpg->sounds->attack, 65 * rpg->volume);
     } else if (!rpg->interface->restricted->in_base && prev_in_base) {
         prev_in_base = 0;
         sfMusic_stop(rpg->sounds->attack);
-        play_music_loop(rpg->sounds->loop, 50);
+        play_music_loop(rpg->sounds->loop, 50 * rpg->volume);
     }
 }
