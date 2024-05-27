@@ -68,15 +68,12 @@ static void draw_stats_sprites_save(rpg_t *rpg, save_button_t *tmp)
 {
     if (rpg->win->window == NULL)
         return;
-    printf("aaaa\n");
     if (tmp->pp_sprite == NULL) {
         printf("pp_sprite is NULL\n");
         return;
     }
-    printf("bbb\n");
     sfRenderWindow_drawSprite(rpg->win->window,
         tmp->pp_sprite, NULL);
-    printf("ccc\n");
     sfRenderWindow_drawSprite(rpg->win->window,
         tmp->hp_sprite, NULL);
     sfRenderWindow_drawSprite(rpg->win->window,
