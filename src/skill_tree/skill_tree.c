@@ -77,24 +77,24 @@ static skill_t *init_skill_tree(skill_t *skill)
 skill_t *init_all_skill(void)
 {
     skill_t *skill = init_skill
-    ("Fireball", "Shoot a fireball", 10, &skill_test);
+    ("Damage Boost", "Shoot a fireball", 10, &skill_test);
 
     setup_logo(skill, "assets/skill/skill_icon_00.png");
     skill = add_skill(skill,
-    init_skill("Heal", "Heal yourself", 10, &skill_test));
+    init_skill("Defense Boost", "Heal yourself", 10, &skill_test));
     setup_logo(skill->next, "assets/skill/skill_icon_01.png");
     skill = add_skill(skill,
-    init_skill("Lightning", "Shoot a lightning", 10, &skill_test));
+    init_skill("strengh", "Shoot a lightning", 10, &skill_test));
     setup_logo(skill->next->next, "assets/skill/skill_icon_02.png");
     skill = add_skill(skill,
     init_skill("Ice", "Shoot a ice", 10, &skill_test));
     setup_logo(skill->next->next->next, "assets/skill/skill_icon_03.png");
     skill = add_skill(skill,
-    init_skill("Poison", "Shoot a poison", 10, &skill_test));
+    init_skill("Fire sword", "Shoot a poison", 10, &skill_test));
     setup_logo(skill->next->next->next->next,
     "assets/skill/skill_icon_04.png");
     skill = add_skill(skill,
-    init_skill("Wind", "Shoot a wind", 10, &skill_test));
+    init_skill("poison", "Shoot a wind", 10, &skill_test));
     return init_skill_tree(skill);
 }
 
