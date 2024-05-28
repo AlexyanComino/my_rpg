@@ -75,7 +75,7 @@ char *description_handling(char *description)
         if (description[desc->i] == ' ')
             desc->last_space = desc->j;
         add_char_and_count(desc, description[desc->i]);
-        if (desc->cpt == 50)
+        if (desc->cpt == 58)
             insert_newline(desc);
         desc->i++;
     }

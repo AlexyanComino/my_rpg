@@ -22,7 +22,6 @@ static stun_t *init_stun(void)
 
     stun->stun_mark = init_mark("assets/Entities/Effects/stun.png",
         STUN_WIDTH, STUN_HEIGHT);
-    sfSprite_setScale(stun->stun_mark->anim->sprite, (sfVector2f){0.4, 0.4});
     stun->is_stunned = false;
     stun->stun_time = 2;
     stun->stun_clock = init_my_clock();

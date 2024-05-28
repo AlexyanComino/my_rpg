@@ -89,7 +89,7 @@ static void event_other_key(rpg_t *rpg, entity_t *player, sfKeyCode key)
             (int)player->common->pos.y);
     if (key == sfKeyB)
         rpg->modes->plus = !rpg->modes->plus;
-    if (key == sfKeyT) {
+    if (key == sfKeyT && rpg->comp->carte) {
         rpg->gamestate = MAP;
         setup_command_help_map(rpg);
         init_map_pos(rpg);

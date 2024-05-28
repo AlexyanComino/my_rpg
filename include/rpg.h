@@ -96,8 +96,8 @@
 #define INTER_INTERVAL 3.0
 #define INTER_COOLDOWN 1.5
 
-#define STUN_WIDTH 1192 / 2
-#define STUN_HEIGHT 13776 / 41
+#define STUN_WIDTH 150
+#define STUN_HEIGHT 84.5609756098
 
 #define GOB_EXCLAM_WIDTH 1788 / 3
 #define GOB_EXCLAM_HEIGHT 3696 / 11
@@ -1109,6 +1109,7 @@ typedef struct credits_s {
 typedef struct comp_s {
     bool fire;
     bool poison;
+    bool carte;
 } comp_t;
 
 typedef struct rpg_s {

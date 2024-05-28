@@ -86,6 +86,7 @@ static comp_t *init_comp(void)
 
     skill->fire = false;
     skill->poison = false;
+    skill->carte = false;
     return skill;
 }
 

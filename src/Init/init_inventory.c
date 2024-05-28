@@ -10,11 +10,11 @@
 void create_slot_inventory(rpg_t *rpg, int size)
 {
     for (int i = 0; i < 4; i++)
-        add_stuff(create_armor(rpg, "Iron Chestplate"), ARMOR);
+        add_stuff(create_armor(rpg, "Plastron de l'Arbre Ancien"), ARMOR);
     for (int i = 0; i <= 4; i++)
         remove_item(i, (*inventory())->player_status->stuff);
     for (int i = 0; i < size; i++)
-        add_item(create_weapon(rpg, "Iron Sword"), WEAPON, "Iron Sword");
+        add_item(create_weapon(rpg, "Croc d'Acier"), WEAPON, "Croc d'Acier");
     for (int i = 0; i <= size; i++)
         remove_item(i, (*inventory())->slot);
 }

@@ -1,10 +1,8 @@
 #Type;PosX;PosY;ItemName;ItemType;
-#H;7800;5504;Iron Chestplate;ARMOR;
-#S;7525;5504;Iron Boots;ARMOR;
-#S;7271;5504;Silver Sword;WEAPON;
+S;7271;5504;Lame d'Argent Céleste;WEAPON;
 S;8632;6170;Branche de Sylvain;WEAPON;
-#H;6786;11807;Griffon d'Acier;WEAPON;
-#S;4315;7818;Lame d'Orion;WEAPON;
-#S;6794;6400;Iron Sword;WEAPON;
-S;4054;7893;Iron Boots;ARMOR;
+S;4054;7893;Bottes du Voyageur Errant;ARMOR;
 S;18004;23851;Lame d'Eternité;WEAPON;
+
+### Clairiere des goblins
+S;3166;2111;Guide des Horizons;ARMOR;

@@ -116,6 +116,10 @@ static void chest_is_interacted(rpg_t *rpg, entity_t *player, int i)
 {
     if (rpg->chests[i]->item_type != OTHER &&
         !rpg->chests[i]->is_interacted && !rpg->chests[i]->is_recieved) {
+        if (!strcmp(rpg->chests[i]->item_name, "Guide des Horizons")) {
+            rpg->comp->carte = true;
+            setup_command_help_in_game(rpg);
+        }
         play_music(rpg->sounds->items, 25 * rpg->volume);
         add_item_from_type(rpg, rpg->chests[i]->item_name,
             rpg->chests[i]->item_type);
