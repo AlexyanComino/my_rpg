@@ -33,6 +33,7 @@ void quit(rpg_t *rpg)
 
 void back_to_menu(rpg_t *rpg)
 {
+    sfView_setCenter(rpg->win->view_menu, rpg->win->view_pos);
     sfRenderWindow_setView(rpg->win->window, rpg->win->view_menu);
     rpg->gamestate = MAIN_MENU;
     rpg->win->zoom = 2;

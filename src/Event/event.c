@@ -54,6 +54,8 @@ static sfVector2f get_view_pos(rpg_t *rpg)
         rpg->gamestate == MAP || rpg->gamestate == PAUSE ||
         rpg->gamestate == SKILL_TREE)
         return get_player(rpg)->common->pos;
+    else if (rpg->gamestate == END)
+        return (sfVector2f){WIDTH / 2, HEIGHT / 2};
     else
         return rpg->win->view_pos;
     return (sfVector2f){0, 0};

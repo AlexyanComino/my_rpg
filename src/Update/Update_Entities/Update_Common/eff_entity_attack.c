@@ -20,10 +20,10 @@ static float get_fire_cooldown(void)
     return (((float)rand() / RAND_MAX) * (2) + 3) / 10;
 }
 
-// Flottant entre 0.3 et 0.45 * attack
+// Flottant entre 0.15 et 0.3 * attack
 static unsigned int get_fire_damage(unsigned int attack)
 {
-    float mult = (((float)rand() / RAND_MAX) * (15) + 30) / 100;
+    float mult = (((float)rand() / RAND_MAX) * (15) + 15) / 100;
 
     return (attack * mult);
 }

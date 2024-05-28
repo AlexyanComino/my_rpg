@@ -54,7 +54,7 @@ void update_entity_detection(rpg_t *rpg, entity_t *entity)
     entity_t *enemy = get_nearest_entity(rpg, entity, false);
     bool in_base;
 
-    if (!enemy)
+    if (!enemy || !is_alive(entity))
         return;
     in_base = entity_has_base(entity) && enemy_is_in_base(entity, enemy);
     if (!in_base && !entity_has_base(entity))

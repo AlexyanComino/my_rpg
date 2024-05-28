@@ -13,8 +13,6 @@ static void add_player(rpg_t *rpg, char **infos)
     rpg->ent[rpg->ent_size]->common->faction = BLUE_TEAM;
     rpg->ent[rpg->ent_size]->common->faction_origin = BLUE_TEAM;
     rpg->player_index = rpg->ent_size;
-    init_inventory(rpg, 15);
-    rpg->inventory = *inventory();
     rpg->inventory->player_status =
         init_player_status(infos, rpg->ent[rpg->ent_size]->common->attributes);
     create_slot_inventory(rpg, rpg->inventory->size);

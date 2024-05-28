@@ -60,9 +60,12 @@ void display_archer(rpg_t *rpg, entity_t *entity)
 {
     if (entity->common->state == RIEN)
         return;
-    if (entity->common->state == DEAD)
+    if (entity->common->state == DEAD) {
         sfRenderWindow_drawSprite(rpg->win->window,
         entity->common->death->anim->sprite, NULL);
-    else
+        if (entity->common->grade_type == SOLDAT_QUEST)
+            sfRenderWindow_drawSprite(rpg->win->window,
+            entity->common->grade_icon->sprite, NULL);
+    } else
         display_alive_archer(rpg, entity);
 }

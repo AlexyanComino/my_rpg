@@ -365,6 +365,11 @@ typedef struct anim_sprite_s {
     float init_scale;
 } anim_sprite_t;
 
+typedef struct indicator_s {
+    round_rectangle_t *rect;
+    float diff_x;
+} indicator_t;
+
 typedef struct common_entity_s {
     char *name;
     sfText *name_text;
@@ -392,6 +397,7 @@ typedef struct common_entity_s {
     bool is_fleeing;
     grade_type_t grade_type;
     anim_sprite_t *grade_icon;
+    indicator_t *indicator;
 } common_entity_t;
 
 typedef struct warrior_s {

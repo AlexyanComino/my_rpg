@@ -67,18 +67,18 @@ static void get_text_size_and_thickness(char **infos, float *size,
     float *thickness)
 {
     if (!strcmp(infos[1], "ville")) {
-        *size = 320;
-        *thickness = 40;
-        return;
-    }
-    if (!strcmp(infos[1], "camp")) {
         *size = 280;
         *thickness = 30;
         return;
     }
+    if (!strcmp(infos[1], "camp")) {
+        *size = 260;
+        *thickness = 25;
+        return;
+    }
     if (!strcmp(infos[1], "foret")) {
-        *size = 320;
-        *thickness = 40;
+        *size = 300;
+        *thickness = 35;
         return;
     }
     *size = 200;

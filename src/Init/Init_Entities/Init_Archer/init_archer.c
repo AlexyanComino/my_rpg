@@ -7,22 +7,22 @@
 
 #include "rpg.h"
 
-static archer_t *init_archer(char **infos)
+static archer_t *init_archer(char **infos, float scale)
 {
     archer_t *archer = malloc(sizeof(archer_t));
 
     archer->arrows = NULL;
     archer->base = init_base(infos);
-    archer->exclam = init_exclam(infos);
-    archer->inter = init_inter(infos);
+    archer->exclam = init_exclam(infos, scale);
+    archer->inter = init_inter(infos, scale);
     return archer;
 }
 
-static spe_t *init_spe_archer(char **infos)
+static spe_t *init_spe_archer(char **infos, float scale)
 {
     spe_t *spe = malloc(sizeof(spe_t));
 
-    spe->archer = init_archer(infos);
+    spe->archer = init_archer(infos, scale);
     return spe;
 }
 
@@ -32,7 +32,7 @@ entity_t *init_entity_archer(char **infos)
 
     entity->type = ARCHER;
     entity->common = init_common(infos, ARCHER);
-    entity->spe = init_spe_archer(infos);
+    entity->spe = init_spe_archer(infos, entity->common->scale);
     entity->in_view = false;
     entity->updt = &update_archer;
     entity->disp = &display_archer;

@@ -38,8 +38,7 @@ void set_string_to_text(sfText *text, const char *string)
     strcpy(buffer, string);
     if (setlocale(LC_CTYPE, "") == NULL)
         perror("setlocale");
-    if (mbstowcs(ws, buffer, len + 1) == (size_t)-1)
-        perror("mbstowcs");
+    mbstowcs(ws, buffer, len + 1);
     ws[len] = L'\0';
     unicode = (sfUint32 *)ws;
     sfText_setUnicodeString(text, unicode);

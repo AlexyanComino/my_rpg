@@ -16,7 +16,9 @@ void update(rpg_t *rpg)
         rpg->gamestate == SAVE_MENU || rpg->gamestate == SELECTOR)
         return update_menus(rpg);
     if (rpg->gamestate == GAME)
-        update_game(rpg);
+        return update_game(rpg);
+    if (rpg->gamestate == MAP)
+        return update_map(rpg);
     if (rpg->gamestate == PAUSE)
         return update_pause_menu(rpg);
     if (rpg->gamestate == END)

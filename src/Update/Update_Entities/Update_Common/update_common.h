@@ -23,6 +23,7 @@ void entity_attack(rpg_t *rpg, entity_t *entity);
 void update_entity_detection(rpg_t *rpg, entity_t *entity);
 
 // Update common
+void update_grade_icon_pos(entity_t *entity);
 void update_common(rpg_t *rpg, entity_t *entity);
 
 // Update common2

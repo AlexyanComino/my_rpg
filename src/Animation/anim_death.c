@@ -32,12 +32,15 @@ static void animation_dead3(common_entity_t *common, bool time_elapsed)
     } else {
         common->death->anim->rect.left += DEAD_WIDTH;
     }
+    sfClock_restart(common->death->anim->myclock->clock);
 }
 
 static void animation_dead2(common_entity_t *common)
 {
     bool time_elapsed = common->death->anim->myclock->seconds > DEAD_COOLDOWN;
 
+    if (common->death->number_dead == 1 && common->grade_type == SOLDAT_QUEST)
+        return;
     if (common->death->number_dead == 0 &&
         common->death->anim->rect.left >= DEAD_WIDTH * 6) {
         common->death->number_dead = 1;
@@ -51,7 +54,7 @@ static void animation_dead2(common_entity_t *common)
 void animation_death(common_entity_t *common)
 {
     update_clock_seconds(common->death->anim->myclock);
-    if (common->death->anim->myclock->seconds > 0.15) {
+    if (common->death->anim->myclock->seconds > 0.1) {
         animation_dead2(common);
         sfSprite_setTextureRect(common->death->anim->sprite,
             common->death->anim->rect);
