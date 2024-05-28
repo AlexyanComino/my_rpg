@@ -9,7 +9,7 @@
 
 bool is_valid_minimap_view_pos(minimap_t *minimap, sfVector2f new_pos)
 {
-    if (new_pos.x - (minimap->size / 2 * minimap->zoom) > 0 &&
+    if (new_pos.x - (minimap->size / 2 * minimap->zoom) > 11.5 * TILE_SIZE &&
         new_pos.y - (minimap->size / 2 * minimap->zoom) > 0 &&
         new_pos.x + (minimap->size / 2 * minimap->zoom) < MAP_WIDTH *
             TILE_SCALE - 11.5 * TILE_SIZE &&
@@ -22,8 +22,8 @@ bool is_valid_minimap_view_pos(minimap_t *minimap, sfVector2f new_pos)
 
 static void get_valid_minimap_view_pos(minimap_t *minimap, sfVector2f new_pos)
 {
-    if (new_pos.x - (minimap->size / 2 * minimap->zoom) < 0)
-        new_pos.x = minimap->size / 2 * minimap->zoom;
+    if (new_pos.x - (minimap->size / 2 * minimap->zoom) < 11.5 * TILE_SIZE)
+        new_pos.x = minimap->size / 2 * minimap->zoom + 11.5 * TILE_SIZE;
     if (new_pos.y - (minimap->size / 2 * minimap->zoom) < 0)
         new_pos.y = minimap->size / 2 * minimap->zoom;
     if (new_pos.x + (minimap->size / 2 * minimap->zoom) > MAP_WIDTH *
@@ -111,4 +111,16 @@ void init_map_pos(rpg_t *rpg)
 
     init_minimap_pos(rpg, player);
     init_arrow_map(rpg, player);
+}
+
+void update_map(rpg_t *rpg)
+{
+    entity_t *entity = NULL;
+
+    for (unsigned int i = 0; i < rpg->ent_size; i++) {
+        if (rpg->ent[i]->common->grade_type != SOLDAT_QUEST)
+            continue;
+        entity = rpg->ent[i];
+        update_grade_icon_pos(entity);
+    }
 }

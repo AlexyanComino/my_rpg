@@ -10,11 +10,13 @@
 static sfVector2f get_mark_pos(entity_t *entity)
 {
     if (entity->common->x == RIGHT) {
-        return (sfVector2f){entity->common->pos.x + WARRIOR_WIDTH / 4,
-            entity->common->pos.y - WARRIOR_WIDTH / 3};
+        return (sfVector2f){entity->common->pos.x + WARRIOR_WIDTH / 4 *
+            entity->common->scale,
+            entity->common->pos.y - WARRIOR_WIDTH / 3 * entity->common->scale};
     } else {
-        return (sfVector2f){entity->common->pos.x - WARRIOR_WIDTH / 4,
-            entity->common->pos.y - WARRIOR_WIDTH / 3};
+        return (sfVector2f){entity->common->pos.x - WARRIOR_WIDTH / 4 *
+            entity->common->scale,
+            entity->common->pos.y - WARRIOR_WIDTH / 3 * entity->common->scale};
     }
 }
 

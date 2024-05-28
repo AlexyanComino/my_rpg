@@ -85,6 +85,9 @@ static void move_menus(rpg_t *rpg)
 
 void move_view_menu(rpg_t *rpg)
 {
+    if (rpg->gamestate != MAIN_MENU && rpg->gamestate != SETTINGS &&
+        rpg->gamestate != SAVE_MENU && rpg->gamestate != SELECTOR)
+        return;
     rpg->win->view_pos.x += rpg->win->view_menu_move.x * rpg->win->dt;
     if (rpg->win->view_pos.x < 4300) {
         rpg->win->view_pos.x = 4300;

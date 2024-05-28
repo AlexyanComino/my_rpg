@@ -73,13 +73,6 @@ static void display_effects(rpg_t *rpg, entity_t *entity)
             entity->common->poison->eff_mark->anim->sprite, NULL);
 }
 
-static void display_grade_icon(rpg_t *rpg, entity_t *entity)
-{
-    if (entity->common->grade_type != SOLDAT)
-        sfRenderWindow_drawSprite(rpg->win->window,
-            entity->common->grade_icon->sprite, NULL);
-}
-
 static void display_common2(rpg_t *rpg, entity_t *entity)
 {
     if (!is_player(rpg, entity) && rpg->modes->plus &&
@@ -97,7 +90,6 @@ void display_common(rpg_t *rpg, entity_t *entity)
     if (entity->common->stun->is_stunned)
         sfRenderWindow_drawSprite(rpg->win->window,
             entity->common->stun->stun_mark->anim->sprite, NULL);
-    display_grade_icon(rpg, entity);
     display_effects(rpg, entity);
     sfRenderWindow_drawSprite(rpg->win->window, entity->common->anim->sprite,
         NULL);

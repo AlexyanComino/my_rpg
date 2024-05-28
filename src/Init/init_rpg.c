@@ -97,6 +97,8 @@ static void init_rpg2(rpg_t *rpg)
     rpg->minimap = init_minimap(WIDTH, HEIGHT);
     rpg->collision = init_collision();
     init_all_quests(rpg);
+    init_inventory(rpg, 15);
+    rpg->inventory = *inventory();
     rpg->decors_size = 0;
     rpg->decors = init_decors(&rpg->decors_size);
     rpg->chests_size = 0;

@@ -36,3 +36,25 @@ void display_entities(rpg_t *rpg)
         }
     }
 }
+
+static void display_grade_icon(rpg_t *rpg, entity_t *entity)
+{
+    if (entity->common->grade_type != SOLDAT)
+        sfRenderWindow_drawSprite(rpg->win->window,
+            entity->common->grade_icon->sprite, NULL);
+}
+
+void display_high_entities(rpg_t *rpg)
+{
+    entity_t *entity = NULL;
+
+    for (unsigned int i = 0; i < rpg->ent_size; i++) {
+        entity = rpg->ent[i];
+        if (!entity->in_view || !is_alive(entity))
+            continue;
+        display_grade_icon(rpg, entity);
+        if (entity->type == TORCH && entity->spe->torch->exclam->is_display == 1)
+        sfRenderWindow_drawSprite(rpg->win->window,
+            entity->spe->torch->exclam->anim->sprite, NULL);
+    }
+}

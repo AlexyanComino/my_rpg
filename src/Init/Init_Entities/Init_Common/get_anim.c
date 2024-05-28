@@ -72,11 +72,12 @@ static anim_t *get_anim_pawn(color_entity_t color)
 
 static char *get_torch_texture_path(color_entity_t color)
 {
-    char *texture_paths[4] = {
+    char *texture_paths[5] = {
         "assets/Entities/Torch/Torch_Blue.png",
         "assets/Entities/Torch/Torch_Purple.png",
         "assets/Entities/Torch/Torch_Red.png",
         "assets/Entities/Torch/Torch_Yellow.png",
+        "assets/Entities/Torch/Torch_Black.png"
     };
     int color_index = 0;
 
@@ -88,6 +89,8 @@ static char *get_torch_texture_path(color_entity_t color)
         color_index = 2;
     if (color == YELLOW)
         color_index = 3;
+    if (color == BLACK)
+        color_index = 4;
     return strdup(texture_paths[color_index]);
 }
 

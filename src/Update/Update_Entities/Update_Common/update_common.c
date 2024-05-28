@@ -11,6 +11,8 @@ static void check_against_all(rpg_t *rpg, entity_t *entity)
 {
     entity_t *other;
 
+    if (!is_alive(entity))
+        return;
     if (entity->common->faction == AGAINST_ALL) {
         other = get_nearest_entity(rpg, entity, true);
         if (!other || !hitbox_in_detection(entity->common->zones->hitbox,
@@ -58,7 +60,7 @@ static void update_list_arrows_hit(entity_t *entity)
     }
 }
 
-static void update_grade_icon_pos(entity_t *entity)
+void update_grade_icon_pos(entity_t *entity)
 {
     sfVector2f pos = entity->common->pos;
 
@@ -89,9 +91,9 @@ static void check_respawn_entity(rpg_t *rpg, entity_t *entity)
 static void launch_end(rpg_t *rpg)
 {
     rpg->gamestate = END;
-    rpg->win->view_pos = (sfVector2f){WIDTH / 2, HEIGHT / 2};
-    sfView_setCenter(rpg->win->view, rpg->win->view_pos);
-    sfSprite_setPosition(rpg->transition->anim->sprite, rpg->win->view_pos);
+    sfView_setCenter(rpg->win->view, (sfVector2f){WIDTH / 2, HEIGHT / 2});
+    sfSprite_setPosition(rpg->transition->anim->sprite,
+        (sfVector2f){WIDTH / 2, HEIGHT / 2});
     sfRenderWindow_setView(rpg->win->window, rpg->win->view);
     rpg->ent[rpg->player_index]->destroy(rpg->ent[rpg->player_index]);
     for (unsigned int i = rpg->player_index; i < rpg->ent_size - 1; i++)
@@ -132,14 +134,16 @@ void update_common(rpg_t *rpg, entity_t *entity)
         return check_respawn_entity(rpg, entity);
     if (is_player(rpg, entity) && entity->common->state == DEAD)
         check_player_game_over(rpg, entity);
-    anim_common_effects(entity);
-    check_against_all(rpg, entity);
-    update_entity_sprite(entity);
     update_damage_texts(&entity->common->damage_texts);
     update_damage_text_effects(&entity->common->damage_texts);
+    update_grade_icon_pos(entity);
+    update_entity_sprite(entity);
+    if (entity->common->state == DEAD)
+        return;
+    anim_common_effects(entity);
+    check_against_all(rpg, entity);
     update_entity_detection(rpg, entity);
     update_effs(rpg, entity);
     update_list_arrows_hit(entity);
-    update_grade_icon_pos(entity);
     update_common2(rpg, entity);
 }

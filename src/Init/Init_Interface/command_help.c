@@ -39,6 +39,10 @@ static char *get_texture_path_from_str2(char *action_str)
         return "assets/interface/Clavier/a_key_light.png";
     if (!strcmp(action_str, "Émote"))
         return "assets/interface/Clavier/r_light.png";
+    if (!strcmp(action_str, "Plus d'informations"))
+        return "assets/interface/Clavier/b_key_light.png";
+    if (!strcmp(action_str, "Arbre de Compétences"))
+        return "assets/interface/Clavier/y_key_light.png";
     fprintf(stderr, "Error: action not found\n");
     return NULL;
 }

@@ -7,12 +7,15 @@
 
 #include "rpg.h"
 
-
 void setup_command_help_in_game(rpg_t *rpg)
 {
     interface_t *interface = rpg->interface;
 
     delete_command_help(&interface->command_list);
+    add_command_help(&interface->command_list, "Arbre de Compétences",
+        interface->player_infos->font, 1);
+    add_command_help(&interface->command_list, "Plus d'informations",
+        interface->player_infos->font, 1);
     add_command_help(&interface->command_list, "Attaquer",
         interface->player_infos->font, 1);
     add_command_help(&interface->command_list, "Marcher",

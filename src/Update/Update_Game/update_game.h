@@ -18,6 +18,7 @@ void update_game_interface(rpg_t *rpg);
 // Update minimap
 bool is_valid_minimap_view_pos(minimap_t *minimap, sfVector2f new_pos);
 void init_map_pos(rpg_t *rpg);
+void update_map(rpg_t *rpg);
 
 // Update popup item
 void update_popup_item(rpg_t *rpg);

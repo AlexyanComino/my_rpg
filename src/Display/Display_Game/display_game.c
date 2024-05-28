@@ -39,6 +39,24 @@ static void display_name_cities(rpg_t *rpg)
         sfRenderWindow_drawText(rpg->win->window, minimap->texts[i], NULL);
 }
 
+static void display_quests_icons(rpg_t *rpg)
+{
+    float init_scale = 0;
+
+    for (unsigned int i = 0; i < rpg->ent_size; i++) {
+        if (rpg->ent[i]->common->grade_type != SOLDAT_QUEST)
+            continue;
+        init_scale =
+            sfSprite_getScale(rpg->ent[i]->common->grade_icon->sprite).x;
+        sfSprite_setScale(rpg->ent[i]->common->grade_icon->sprite,
+            (sfVector2f){init_scale * 8, init_scale * 8});
+        sfRenderWindow_drawSprite(rpg->win->window,
+            rpg->ent[i]->common->grade_icon->sprite, NULL);
+        sfSprite_setScale(rpg->ent[i]->common->grade_icon->sprite,
+            (sfVector2f){init_scale, init_scale});
+    }
+}
+
 static void display_minimap(rpg_t *rpg)
 {
     minimap_t *minimap = rpg->minimap;
@@ -50,6 +68,7 @@ static void display_minimap(rpg_t *rpg)
         NULL);
     sfRenderWindow_drawSprite(rpg->win->window, rpg->map->high_sprite,
         NULL);
+    display_quests_icons(rpg);
     display_name_cities(rpg);
     sfRenderWindow_drawSprite(rpg->win->window, minimap->
         arrow_sprite, NULL);
@@ -108,6 +127,7 @@ static void display_health_bar_boss(rpg_t *rpg)
         return;
     for (unsigned int i = 0; i < rpg->ent_size; i++) {
         if (rpg->ent[i]->common->grade_type != BOSS ||
+            !is_alive(rpg->ent[i]) ||
             !intrect_is_in_real_view(rpg, rpg->ent[i]->common->zones->hitbox))
             continue;
         display_round_rectangle(rpg->win->window,
@@ -132,6 +152,7 @@ void display_game(rpg_t *rpg)
         NULL);
     display_health_bar_boss(rpg);
     display_decors_high(rpg, intrect_is_in_real_view);
+    display_high_entities(rpg);
     if (!rpg->vict->is_win)
         display_normal_game(rpg);
     else {

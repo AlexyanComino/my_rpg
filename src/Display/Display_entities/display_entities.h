@@ -27,3 +27,4 @@ void display_archer(rpg_t *rpg, entity_t *entity);
 
 // Display entities
 void display_entities(rpg_t *rpg);
+void display_high_entities(rpg_t *rpg);

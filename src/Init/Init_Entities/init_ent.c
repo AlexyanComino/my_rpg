@@ -50,6 +50,7 @@ entity_t *init_entity(char **infos)
 
 entity_t **init_ent(unsigned int *size)
 {
+    clock_t start = clock();
     char **tab = file_to_array(".entities.csv");
     char **infos = NULL;
     entity_t **ent = malloc(sizeof(entity_t *) * (tab_len(tab)) - 4);
@@ -61,6 +62,9 @@ entity_t **init_ent(unsigned int *size)
         free_array(infos);
     }
     free_array(tab);
+    clock_t end = clock();
+    double execution_time = ((double)(end - start) / CLOCKS_PER_SEC);
+    printf("init_ent execution time: %.2f secondes\n", execution_time);
     printf("size: %d\n", *size);
     return ent;
 }
