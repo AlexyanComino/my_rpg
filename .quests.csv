@@ -11,3 +11,11 @@ Leofwyn;L'ancien chateau de l'ecu d'or;Retourne voir Leofwyn;Tu as battu Aureliu
 Leofwyn;Le repaire du feu ardent;Élimine Ignarion le Brûlant;Va au repaire du feu ardent et élimine Ignarion le Brulant.;0;0;K;Ignarion le Brulant;false;
 Leofwyn;Le repaire du feu ardent;Retourne voir Leofwyn;Tu as éliminé Ignarion le Brulant? Parfait! Pour libérer notre royaume, va dans la Forêt de la Malice et parle à Roland;500;500;T;Leofwyn;true;
 Roland;Le combat final;Bats Altego, chevalier des abysses;Altego, chevalier des abysses, est le dernier obstacle avant la paix dans notre royaume. Va le combattre et ramène la paix.;0;0;K;Altego, chevalier des abysses;true;
+Gawain;Assouvir sa connaissance;Récupère le livre;Salut! J'ai laissé un livre super rare dans un coffre un peu au nord d'ici, tu peux le prendre!!!;100;50;G;Simple livre;false;
+Gawain;Assouvir sa connaissance;Retourne voir Gawain;Alors? Pas mal ce livre hein!;100;50;T;Gawain;true;
+Viedrich;Le gobelin malicieux;Tue Grimgor le Tyrannique;Tue le chef des Tréfonds maudits Rouge, il fait peur à tout le village.;0;0;K;Grimgor le Tyrannique;false;
+Viedrich;Le gobelin malicieux; Retourne voir Viedrich;Merci aventurier! Tu as sauvé notre village.;100;50;T;Viedrich;true;
+William;La lame supreme;Récupère la lame d'éternité;Et psss... J'ai entendu dire qu'il y avait une épée super puissante dans un sanctuaire pas loin d'ici. Ne le répète surtout pas.;100;50;G;Lame d'Eternité;true;
+Lucke;L'enveloppe mysterieuse;Récupère la voile du mystère;HÉ!!! Y'A UNE ENVELOPPE! SUPER BIZARRE! DANS UN COFFRE! A L'OUEST D'ICI!!! SI TU LA VEUX! TU PEUX LA PRENDRE!;100;50;G;Voile du Mystère;true;
+Barnabé;Le solitaire;Reste un peu avec moi;Salut! Tu veux bien rester un peu avec moi?;0;0;T;Barnabé;true;
+Gautier;A L'AIDE;JE SUIS BLOQUE;JE SUIS BLOQUE SUR CETTE ILE;0;0;T;Gautier;true;

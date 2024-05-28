@@ -88,6 +88,15 @@ static void create_player(rpg_t *rpg, int i)
     }
 }
 
+static void join_threads(rpg_t *rpg)
+{
+    pthread_join(rpg->thread2, NULL);
+    if (rpg->shared_data2->loaded) {
+        rpg->ent = rpg->shared_data2->entities;
+        rpg->ent_size = rpg->shared_data2->nb_entities;
+    }
+}
+
 void load_save1(rpg_t *rpg)
 {
     rpg->save_index = 0;
@@ -96,11 +105,7 @@ void load_save1(rpg_t *rpg)
         return;
     }
     edit_quests_status(rpg);
-    pthread_join(rpg->thread2, NULL);
-    if (rpg->shared_data2->loaded) {
-        rpg->ent = rpg->shared_data2->entities;
-        rpg->ent_size = rpg->shared_data2->nb_entities;
-    }
+    join_threads(rpg);
     create_player(rpg, 0);
     start(rpg);
 }
@@ -113,11 +118,7 @@ void load_save2(rpg_t *rpg)
         return;
     }
     edit_quests_status(rpg);
-    pthread_join(rpg->thread2, NULL);
-    if (rpg->shared_data2->loaded) {
-        rpg->ent = rpg->shared_data2->entities;
-        rpg->ent_size = rpg->shared_data2->nb_entities;
-    }
+    join_threads(rpg);
     create_player(rpg, 1);
     start(rpg);
 }
@@ -130,11 +131,7 @@ void load_save3(rpg_t *rpg)
         return;
     }
     edit_quests_status(rpg);
-    pthread_join(rpg->thread2, NULL);
-    if (rpg->shared_data2->loaded) {
-        rpg->ent = rpg->shared_data2->entities;
-        rpg->ent_size = rpg->shared_data2->nb_entities;
-    }
+    join_threads(rpg);
     create_player(rpg, 2);
     start(rpg);
 }
