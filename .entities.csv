@@ -1,8 +1,8 @@
-W;Owen the Paladin;B;8000;5213;S;1;600;450;300;200;50;10;500;0.75;0;0;0;0;0
-P;Gawin the Devoted;B;7553;5985;S;1;500;400;300;70;30;15;500;0.75;N;0;0;R;0;0;0;
-TO;Nishix the Stranger;B;7553;5985;S;1;600;450;300;120;30;20;300;0.75;
-TN;Dard the Slayer;B;7553;5985;S;2;600;450;300;120;30;20;400;0.75;
-A;Blaive the Hawk;B;7553;5985;S;2;600;450;300;120;30;20;400;0.75;0
+W;Owen the Paladin;B;7763;5919;S;1;600;450;300;200;50;10;500;0.75;0;0;0;0;0
+P;Gawin the Devoted;B;7763;5919;S;1;500;400;300;70;30;15;500;0.75;N;0;0;R;0;0;0;
+TO;Nishix the Stranger;B;7763;5919;S;1;600;450;300;120;30;20;300;0.75;
+TN;Dard the Slayer;B;7763;5919;S;2;600;450;300;120;30;20;400;0.75;
+A;Blaive the Hawk;B;7763;5919;S;2;600;450;300;120;30;20;400;0.75;0
 
 #Warriors
 #Type;Name;Color;X;Y;Grade;Scale;MaxDetection;MediumDetection;SmallDetection;MaxHealth;Attack;Defense;Speed;Cooldown;HasBase;BLeft;BTop;BWidth;BHeight;PatternPos(...)
@@ -16,6 +16,7 @@ A;Blaive the Hawk;B;7553;5985;S;2;600;450;300;120;30;20;400;0.75;0
 #Type;Name;Color;X;Y;Grade;Scale;MaxDetection;MediumDetection;SmallDetection;MaxHealth;Attack;Defense;Speed;Cooldown;
 
 #####Camp Bleu -------------------------------------------------------------------------------------------------------------------
+P;Lord;B;7446;5919;S;1;500;400;300;70;20;10;14000;0.75;N;7446;5919;0;0;0;0;
 W;Renaut;B;7691;5213;S;1;600;450;300;150;50;20;10000;0.75;0;0;0;0;0
 W;Aymar;B;8105;6544;E;1;600;450;300;150;50;30;10000;0.6;0;0;0;0;0
 W;Blaise;B;8942;5534;S;1;600;450;300;150;30;10;10000;0.75;1;6590;4629;3437;2136;8942;5534;9834;5534;9834;6504;9540;6504;9540;6369;8932;6369

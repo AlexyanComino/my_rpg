@@ -66,7 +66,7 @@ static void end_dialog(rpg_t *rpg)
         rpg->text_box->quest->is_done = true;
         rpg->text_box->entity->common->grade_type = SOLDAT;
         setup_end_header(rpg, NULL);
-    } else
+    } else if (strcmp(rpg->text_box->quest->objective, "NONE") != 0)
         rpg->text_box->quest->next->is_active = true;
     text_is_displayed(rpg);
 }
