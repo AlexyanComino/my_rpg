@@ -14,12 +14,15 @@ static void get_credit_size_and_thickness(int type, float *size,
         *size = 100;
         *thickness = 8;
     } else if (type == 2) {
-        *size = 150;
-        *thickness = 13;
+        *size = 140;
+        *thickness = 12;
+    } else if (type == 3) {
+        *size = 180;
+        *thickness = 15;
     } else {
         *size = 60;
         *thickness = 4;
-    }
+    } 
 }
 
 static text_list_t *init_new_text_list(char *str, sfVector2f pos,
@@ -79,10 +82,13 @@ static void get_line_type(char **line, int *type, bool *first)
     if ((*line)[0] == '|') {
         *type = 1;
         (*line)++;
+    } else if ((*line)[0] == '~') {
+        *type = 2;
+        (*line)++;
     } else
         *type = 0;
     if (*first) {
-        *type = 2;
+        *type = 3;
         *first = false;
     }
 }
