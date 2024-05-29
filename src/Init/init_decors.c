@@ -29,8 +29,8 @@ static void init_decor_anim2(decor_anim_t *decor, sfVector2f scale)
 static decor_anim_t *init_decor_anim(char **infos)
 {
     decor_anim_t *decor = malloc(sizeof(decor_anim_t));
-    sfVector2f scale = {TILE_SCALE * atoi(infos[9]),
-        TILE_SCALE * atoi(infos[9])};
+    sfVector2f scale = {TILE_SCALE * atof(infos[9]),
+        TILE_SCALE * atof(infos[10])};
 
     decor->type = (!strcmp(infos[0], "G")) ? GROUND : HIGH;
     decor->anim = init_anim(infos[1], atoi(infos[2]), atoi(infos[3]));

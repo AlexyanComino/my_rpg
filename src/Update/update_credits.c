@@ -32,7 +32,7 @@ void update_credits(rpg_t *rpg)
     if (tmp == NULL)
         return back_to_menu(rpg);
     while (tmp) {
-        tmp->pos.y -= 200 * rpg->win->dt;
+        tmp->pos.y -= 100 * rpg->win->dt;
         if (sfKeyboard_isKeyPressed(sfKeySpace))
             tmp->pos.y -= 300 * rpg->win->dt;
         if (tmp->pos.y < -100) {

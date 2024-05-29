@@ -150,9 +150,9 @@ void display_game(rpg_t *rpg)
     display_entities(rpg);
     sfRenderWindow_drawSprite(rpg->win->window, rpg->map->high_sprite,
         NULL);
-    display_health_bar_boss(rpg);
     display_decors_high(rpg, intrect_is_in_real_view);
     display_high_entities(rpg);
+    display_health_bar_boss(rpg);
     if (!rpg->vict->is_win)
         display_normal_game(rpg);
     else {

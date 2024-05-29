@@ -88,8 +88,8 @@ void event(rpg_t *rpg)
             update_mouse_pos(rpg);
         if (rpg->event.type == sfEvtMouseButtonPressed &&
             rpg->event.mouseButton.button == sfMouseRight)
-            printf("Mouse pos: %f, %f\n", rpg->win->mouse_pos.x,
-            rpg->win->mouse_pos.y);
+            printf("Mouse pos: %d;%d\n", (int)rpg->win->mouse_pos.x,
+            (int)rpg->win->mouse_pos.y);
         if (rpg->event.type == sfEvtClosed)
             sfRenderWindow_close(rpg->win->window);
         event_states(rpg);

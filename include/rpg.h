@@ -412,6 +412,7 @@ typedef enum pawn_job_s {
     CUT,
     WORKING,
     CARRY,
+    EMOTE,
     NO_JOB,
 } pawn_job_t;
 

@@ -1,5 +1,6 @@
 Merci d'avoir joué!
 
+
 ~Crédits
 
 |Développement
@@ -10,11 +11,14 @@ Matys, Julien, Ambre et Alexyan
 
 Inventaire
 Arbre de compétences
+Système d'expérience
+Gestion des Équipements
 
 |Ambre
 
 Sons et musiques
 Création de la carte
+Placement des Collisions
 
 |Alexyan
 
@@ -43,7 +47,7 @@ Alexyan et Matys
 |Conceptions des développeurs:
 
 Mamans (Sarah, Audrey, Virginie, Corinne)
-Papas (NA, Alexandre, Guy, Michaël)
+Papas (Alexandre, Guy, Michaël)
 
 |Soutien et Contributions
 

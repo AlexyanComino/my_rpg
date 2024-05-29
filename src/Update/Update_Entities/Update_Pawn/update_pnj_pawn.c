@@ -115,7 +115,10 @@ static void update_no_job_pawn(rpg_t *rpg, entity_t *entity)
 
     if (get_distance(entity->common->pos,
         entity->spe->pawn->job_pos) < min_length) {
-        entity->common->state = IDLE;
+        if (entity->spe->pawn->job == EMOTE)
+            entity->common->state = IDLE_CARRY;
+        else
+            entity->common->state = IDLE;
         return;
     }
     entity->common->state = WALK;

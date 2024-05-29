@@ -27,6 +27,15 @@ int get_entity_xp(entity_t *entity)
 
 void entity_is_dead(rpg_t *rpg, entity_t *target)
 {
+    if (is_player(rpg, target) && rpg->modes->keynote_mode) {
+        target->common->attributes->health =
+            target->common->attributes->max_health;
+        rpg->interface->health_bar->front->size =
+            rpg->interface->health_bar->front->init_size;
+        rpg->interface->health_bar->front->r =
+            rpg->interface->health_bar->front->init_r;
+        return;
+    }
     printf("Entity %s is dead\n", target->common->name);
     target->common->state = DEAD;
     target->common->fire->is_on_eff = false;

@@ -15,6 +15,8 @@ static pawn_job_t get_job(char *job)
         return CARRY;
     if (!strcmp(job, "CU"))
         return CUT;
+    if (!strcmp(job, "E"))
+        return EMOTE;
     return NO_JOB;
 }
 
