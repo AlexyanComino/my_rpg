@@ -1,30 +1,54 @@
 Merci d'avoir joué!
 
-|Crédits
+~Crédits
 
 |Développement
 
 Matys, Julien, Ambre et Alexyan
 
-|Graphismes
+|Julien
 
-Ambre
+Inventaire
+Arbre de compétences
 
-|Musique et Effets Sonores
+|Ambre
 
-Ambre
+Sons et musiques
+Création de la carte
+
+|Alexyan
+
+Conception des menus
+Système de quête
+Création des quêtes
+Sauvegardes
+Dialogues
+
+|Matys
+
+Système de combat
+Gestion des Entités
+Animations
+Design des menus
+Création des quêtes
+Création des équipements
+Interface en jeu
 
 |Scénario et Conception de Jeu
 
 Alexyan et Matys
 
-|Remerciements Spéciaux
+~Remerciements Spéciaux
 
-Les cramptés
+|Conceptions des développeurs:
+
+Mamans (Sarah, Audrey, Virginie, Corinne)
+Papas (NA, Alexandre, Guy, Michaël)
 
 |Soutien et Contributions
 
-Merci Léo.
+Alexis (Musique)
+Léo (Pas tant que ça)
 
 |Copyright
 
