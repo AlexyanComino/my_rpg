@@ -64,22 +64,40 @@ static int check_stuff_for_quest(rpg_t *rpg, quest_t *quest)
     return 1;
 }
 
+static void quest_is_done(rpg_t *rpg, quest_t *quest, entity_t *player)
+{
+    rpg->text_box->entity->common->grade_type = SOLDAT;
+    quest->is_active = false;
+    quest->is_done = true;
+    rpg->text_box->is_displayed = false;
+    setup_end_header(rpg, quest->name);
+    player->common->state = IDLE;
+    add_xp(quest->xp);
+    printf("Quest already done: %s\n", quest->name);
+}
+
 static int check_quest_already_done(rpg_t *rpg, quest_t *quest)
 {
     slot_t *tmp = rpg->inventory->slot;
     entity_t *player = get_player(rpg);
 
+    if (strcmp(quest->objective, "NONE") == 0) {
+        quest_is_done(rpg, quest, player);
+        return 0;
+    }
+    if (quest->type == KILL) {
+        for (unsigned int i; i < rpg->ent_size; i++) {
+            if (!is_alive(rpg->ent[i]) && !strcmp(rpg->ent[i]->common->name,
+                quest->objective))
+                quest_is_done(rpg, quest, player);
+                
+        }
+    }
     for (; tmp && quest->type == GATHER; tmp = tmp->next) {
         if (tmp->item == NULL)
             continue;
         if (strcmp(tmp->name, quest->objective) == 0) {
-            quest->is_active = false;
-            quest->is_done = true;
-            rpg->text_box->is_displayed = false;
-            setup_end_header(rpg, quest->name);
-            player->common->state = IDLE;
-            add_xp(quest->xp);
-            printf("Quest already done: %s\n", quest->name);
+            quest_is_done(rpg, quest, player);
             return 0;
         }
     }

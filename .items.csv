@@ -36,7 +36,7 @@ A;C;Bouteille d'eau;assets/item/Potion/Water Bottle.png;La Bouteille d'Eau est u
 #A;U;Potion Rouge;assets/item/Potion/Red Potion 3.png;
 #A;U;Potion Verte;assets/item/Potion/Green Potion 3.png;
 
-#A;C;Simple livre;assets/item/Misc/Book.png;
+A;C;Simple livre;assets/item/Misc/Book.png;Un livre. Rien de plus, rien de moins.;0;0;0;1;
 A;L;Grimoire des Anciens Mages;assets/item/Misc/Book 3.png;Le Grimoire des Anciens Mages est un ouvrage mystique d'une rareté inestimable, renfermant des connaissances oubliées depuis des siècles. Ses pages jaunies par le temps et ornées de symboles ésotériques contiennent des enseignements sur les arcanes les plus puissants, les rituels les plus anciens et les mystères les plus profonds de l'univers.;0;0;0;1;
 
 A;C;Trésor Brillant;assets/item/Misc/Copper Coin.png;Une pièce d'or étincelante qui semble rayonner de sa propre lumière, évoquant les richesses inimaginables qui attendent celui qui la possède.;0;0;0;1;
