@@ -40,7 +40,10 @@ static void init_cont_loading(loading_t *loading)
     rect = sfText_getGlobalBounds(text);
     sfText_setOrigin(text, (sfVector2f){rect.width / 2, rect.height / 2});
     loading->cont->text_pos = (sfVector2f){WIDTH / 2, HEIGHT - 200};
-    sfText_setPosition(text, (sfVector2f){WIDTH / 2 - 400, HEIGHT + 100});
+    if (sfJoystick_isConnected(0))
+        sfText_setPosition(text, (sfVector2f){WIDTH / 2 - 400, HEIGHT + 100});
+    else
+        sfText_setPosition(text, (sfVector2f){WIDTH / 2, HEIGHT + 100});
     sfText_setColor(text, sfBlack);
     sfText_setOutlineColor(text, sfWhite);
     sfText_setOutlineThickness(text, 1);
@@ -59,7 +62,10 @@ static sfText *init_title_text_load1(loading_t *loading)
     sfText_setString(text, "The Blade of");
     rect = sfText_getGlobalBounds(text);
     sfText_setOrigin(text, (sfVector2f){rect.width / 2, rect.height / 2});
-    sfText_setPosition(text, (sfVector2f){WIDTH / 2 - 400, 350});
+    if (sfJoystick_isConnected(0))
+        sfText_setPosition(text, (sfVector2f){WIDTH / 2 - 400, 350});
+    else
+        sfText_setPosition(text, (sfVector2f){WIDTH / 2, 350});
     sfText_setColor(text, sfBlack);
     sfText_setOutlineColor(text, sfWhite);
     sfText_setOutlineThickness(text, 3);
@@ -76,7 +82,10 @@ static sfText *init_title_text_load2(loading_t *loading)
     sfText_setString(text, "Eternity");
     rect = sfText_getGlobalBounds(text);
     sfText_setOrigin(text, (sfVector2f){rect.width / 2, rect.height / 2});
-    sfText_setPosition(text, (sfVector2f){WIDTH / 2 - 400, 460});
+    if (sfJoystick_isConnected(0))
+        sfText_setPosition(text, (sfVector2f){WIDTH / 2 - 400, 460});
+    else
+        sfText_setPosition(text, (sfVector2f){WIDTH / 2, 460});
     sfText_setColor(text, sfBlack);
     sfText_setOutlineColor(text, sfWhite);
     sfText_setOutlineThickness(text, 3);
