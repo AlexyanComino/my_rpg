@@ -61,10 +61,10 @@ static void get_newpos_and_newy(rpg_t *rpg, entity_t *player,
         player->common->y = NONE;
         return;
     }
-    if (sfKeyboard_isKeyPressed(sfKeyZ) || Yaxis < 0) {
+    if (sfKeyboard_isKeyPressed(sfKeyZ) || Yaxis > 0) {
         player->common->y = UP;
         newPos->y -= speed * dt;
-    } else if (sfKeyboard_isKeyPressed(sfKeyS) || Yaxis > 0) {
+    } else if (sfKeyboard_isKeyPressed(sfKeyS) || Yaxis < 0) {
         player->common->y = DOWN;
         newPos->y += speed * dt;
     } else {

@@ -107,7 +107,7 @@ void event(rpg_t *rpg)
     while (sfRenderWindow_pollEvent(rpg->win->window, &rpg->event)) {
         sprintf(str, "Joystick button: %d", rpg->event.joystickButton.button);
         sfText_setString(rpg->txt, str);
-        if (rpg->event.joystickButton.button == 3)
+        if (rpg->event.joystickButton.button == 6)
             sfRenderWindow_close(rpg->win->window);
         if (rpg->event.type == sfEvtJoystickMoved)
             joystick_move(rpg);
