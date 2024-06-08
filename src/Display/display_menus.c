@@ -31,7 +31,7 @@ void display_main_menu(rpg_t *rpg)
         sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
         tmp = tmp->next;
     }
-    // sfRenderWindow_drawSprite(rpg->win->window, rpg->mouse->sprite, NULL);
+    sfRenderWindow_drawSprite(rpg->win->window, rpg->mouse->sprite, NULL);
 }
 
 void display_settings(rpg_t *rpg)

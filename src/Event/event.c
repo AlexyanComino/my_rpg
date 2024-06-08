@@ -93,6 +93,9 @@ static void joystick_move(rpg_t *rpg)
         rpg->gamestate == PAUSE || rpg->gamestate == END ||
         rpg->gamestate == INVENTORY || rpg->gamestate == SKILL_TREE) {
         move_cursor_joystick(rpg);  
+    } else {
+        rpg->win->mouse_pos = get_player(rpg)->common->pos;
+        sfSprite_setPosition(rpg->mouse->sprite, rpg->win->mouse_pos);
     }
 }
 

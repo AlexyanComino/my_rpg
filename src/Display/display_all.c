@@ -57,6 +57,5 @@ void display(rpg_t *rpg)
         display_game(rpg);
     display2(rpg);
     sfRenderWindow_drawText(rpg->win->window, rpg->txt, NULL);
-    sfRenderWindow_drawSprite(rpg->win->window, rpg->mouse->sprite, NULL);
     sfRenderWindow_display(rpg->win->window);
 }
