@@ -15,7 +15,7 @@ static win_t *init_win(unsigned int width, unsigned int height)
     sfVector2u i = sfImage_getSize(icon);
 
     win->window = sfRenderWindow_create(mode, "The Blade of Eternity",
-        sfDefaultStyle, NULL);
+        sfFullscreen, NULL);
     sfRenderWindow_setIcon(win->window, i.x, i.y, sfImage_getPixelsPtr(icon));
     win->view = sfView_createFromRect((sfFloatRect){0, 0, width, height});
     win->view_menu = sfView_createFromRect((sfFloatRect){0, 0, width, height});
