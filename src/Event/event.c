@@ -86,10 +86,6 @@ static void move_cursor_joystick(rpg_t *rpg)
     rpg->dy = Yaxis * 0.5;
 }
 
-static void move_cursor(rpg_t *rpg)
-{
-}
-
 static void joystick_move(rpg_t *rpg)
 {
     if (rpg->gamestate == MAIN_MENU || rpg->gamestate == SETTINGS ||
