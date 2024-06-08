@@ -90,12 +90,13 @@ static void next_dialog(rpg_t *rpg)
 
 void dialog_handling(rpg_t *rpg)
 {
-    if (rpg->event.key.code == sfKeySpace &&
+    if ((rpg->event.key.code == sfKeySpace || rpg->event.joystickButton.button == 2) &&
         rpg->text_box->is_fully_displayed == false) {
         rpg->event.key.code = sfKeyUnknown;
+        rpg->event.joystickButton.button = -1;
         rpg->text_box->is_fully_displayed = true;
     }
-    if (rpg->event.key.code == sfKeySpace &&
+    if ((rpg->event.key.code == sfKeySpace || rpg->event.joystickButton.button == 2) &&
     rpg->text_box->is_fully_displayed == true)
         next_dialog(rpg);
 }

@@ -136,6 +136,7 @@ int open_inventory(rpg_t *rpg)
         draw_inventory_ui(rpg->win->window, *inventory());
         draw_stuff(rpg->win->window);
         draw_slot(rpg->win->window);
+        sfRenderWindow_drawSprite(rpg->win->window, rpg->mouse->sprite, NULL);
         (*inventory())->player_status->player->disp(rpg,
             (*inventory())->player_status->player);
     }

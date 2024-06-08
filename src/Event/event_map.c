@@ -101,9 +101,9 @@ static void event_map_mousepressed_released(rpg_t *rpg)
         rpg->minimap->is_drag = false;
         return;
     }
-    if (rpg->event.type == sfEvtMouseButtonReleased)
+    if (rpg->event.type == sfEvtMouseButtonReleased || rpg->event.type == sfEvtJoystickButtonReleased)
         rpg->minimap->is_drag = false;
-    if (rpg->event.type == sfEvtMouseButtonPressed) {
+    if (rpg->event.type == sfEvtMouseButtonPressed || rpg->event.type == sfEvtJoystickButtonPressed) {
         rpg->minimap->is_drag = true;
         rpg->minimap->pos = (sfVector2f){rpg->event.mouseButton.x,
             rpg->event.mouseButton.y};
@@ -146,7 +146,9 @@ void event_map(rpg_t *rpg)
     if (rpg->event.type == sfEvtKeyPressed)
         return event_map_keypressed(rpg);
     if (rpg->event.type == sfEvtMouseButtonPressed ||
-        rpg->event.type == sfEvtMouseButtonReleased)
+        rpg->event.type == sfEvtMouseButtonReleased ||
+        rpg->event.type == sfEvtJoystickButtonPressed ||
+        rpg->event.type == sfEvtJoystickButtonReleased)
         return event_map_mousepressed_released(rpg);
     if (rpg->event.type == sfEvtMouseMoved)
         return event_map_mousemoved(rpg);

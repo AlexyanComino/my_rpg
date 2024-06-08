@@ -20,13 +20,15 @@ static void get_newpos_and_newx(rpg_t *rpg, entity_t *player,
     sfVector2f *newPos, float dt)
 {
     float speed = get_player_speed(rpg, player);
+    float Xaxis = sfJoystick_getAxisPosition(0, sfJoystickX);
+    float Yaxis = sfJoystick_getAxisPosition(0, sfJoystickY);
 
-    if (sfKeyboard_isKeyPressed(sfKeyZ) || sfKeyboard_isKeyPressed(sfKeyS))
+    if (sfKeyboard_isKeyPressed(sfKeyZ) || sfKeyboard_isKeyPressed(sfKeyS) || Yaxis != 0)
         speed /= sqrt(2.0f);
-    if (sfKeyboard_isKeyPressed(sfKeyQ)) {
+    if (sfKeyboard_isKeyPressed(sfKeyQ) || Xaxis < 0) {
         player->common->x = LEFT;
         newPos->x -= speed * dt;
-    } else if (sfKeyboard_isKeyPressed(sfKeyD)) {
+    } else if (sfKeyboard_isKeyPressed(sfKeyD) || Xaxis > 0) {
         player->common->x = RIGHT;
         newPos->x += speed * dt;
     }
@@ -50,17 +52,19 @@ static void get_newpos_and_newy(rpg_t *rpg, entity_t *player,
     sfVector2f *newPos, float dt)
 {
     float speed = get_player_speed(rpg, player);
+    float Xaxis = sfJoystick_getAxisPosition(0, sfJoystickX);
+    float Yaxis = sfJoystick_getAxisPosition(0, sfJoystickY);
 
-    if (sfKeyboard_isKeyPressed(sfKeyQ) || sfKeyboard_isKeyPressed(sfKeyD))
+    if (sfKeyboard_isKeyPressed(sfKeyQ) || sfKeyboard_isKeyPressed(sfKeyD) || Xaxis != 0)
         speed /= sqrt(2.0f);
     if (sfKeyboard_isKeyPressed(sfKeyZ) && sfKeyboard_isKeyPressed(sfKeyS)) {
         player->common->y = NONE;
         return;
     }
-    if (sfKeyboard_isKeyPressed(sfKeyZ)) {
+    if (sfKeyboard_isKeyPressed(sfKeyZ) || Yaxis < 0) {
         player->common->y = UP;
         newPos->y -= speed * dt;
-    } else if (sfKeyboard_isKeyPressed(sfKeyS)) {
+    } else if (sfKeyboard_isKeyPressed(sfKeyS) || Yaxis > 0) {
         player->common->y = DOWN;
         newPos->y += speed * dt;
     } else {
@@ -97,13 +101,16 @@ static void check_player_stun(entity_t *player, sfVector2f oldPos)
 static void event_player_move(entity_t *player)
 {
     bool is_walking = false;
+    float Xaxis = sfJoystick_getAxisPosition(0, sfJoystickX);
+    float Yaxis = sfJoystick_getAxisPosition(0, sfJoystickY);
 
     if (in_action(player))
         return;
     if (sfKeyboard_isKeyPressed(sfKeyLShift))
             is_walking = true;
     if (sfKeyboard_isKeyPressed(sfKeyZ) || sfKeyboard_isKeyPressed(sfKeyS) ||
-        sfKeyboard_isKeyPressed(sfKeyQ) || sfKeyboard_isKeyPressed(sfKeyD)) {
+        sfKeyboard_isKeyPressed(sfKeyQ) || sfKeyboard_isKeyPressed(sfKeyD) ||
+        Xaxis != 0 || Yaxis != 0) {
         if (player->type == PAWN && (player->common->state == IDLE_CARRY ||
             player->common->state == MOVE_CARRY) && is_walking)
             player->common->state = MOVE_CARRY;

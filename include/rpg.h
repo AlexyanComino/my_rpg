@@ -1113,6 +1113,12 @@ typedef struct comp_s {
     bool carte;
 } comp_t;
 
+typedef struct mouse_s {
+    sfTexture *texture;
+    sfSprite *sprite;
+} mouse_t;
+
+
 typedef struct rpg_s {
     win_t *win;
     map_t *map;
@@ -1157,6 +1163,7 @@ typedef struct rpg_s {
     vict_t *vict;
     credits_t *credits;
     comp_t *comp;
+    mouse_t *mouse;
 } rpg_t;
 
 #include "../src/xp_sys/xp.h"

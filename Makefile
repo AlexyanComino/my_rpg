@@ -16,7 +16,7 @@ SRCS_TESTS	=   $(shell find tests/ -name "*.c")
 
 OBJS	=	$(SRCS:.c=.o)
 
-CFLAGS	=	-W -Wall -Wextra -Werror -g3
+CFLAGS	=	-W -Wall -Wextra -Werror -Wno-unused-result -Ofast
 
 LDFLAGS	=	-lcsfml-graphics -lcsfml-system -lcsfml-window \
 				-lcsfml-audio -lm

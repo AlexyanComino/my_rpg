@@ -66,5 +66,6 @@ int draw_skill_tree(rpg_t *rpg)
     draw_ui_tree(rpg);
     draw_tree(rpg);
     highlight_skill_tree(rpg);
+    sfRenderWindow_drawSprite(rpg->win->window, rpg->mouse->sprite, NULL);
     return 1;
 }

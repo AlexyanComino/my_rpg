@@ -12,7 +12,7 @@ bool is_s_button_clicked(struct save_button_s *button, rpg_t *rpg)
     sfFloatRect rect_bounds = sfRectangleShape_getGlobalBounds(
         button->rect_shape);
 
-    if (rpg->event.type == sfEvtMouseButtonPressed) {
+    if (rpg->event.type == sfEvtMouseButtonPressed || rpg->event.type == sfEvtJoystickButtonPressed) {
         if (sfFloatRect_contains(&rect_bounds, rpg->win->mouse_pos.x,
             rpg->win->mouse_pos.y)) {
             play_music(rpg->sounds->click, 100 * rpg->volume);
@@ -47,7 +47,7 @@ bool is_s_button_released(struct save_button_s *button, rpg_t *rpg)
     sfFloatRect rect_bounds = sfRectangleShape_getGlobalBounds(
         button->rect_shape);
 
-    if (rpg->event.type == sfEvtMouseButtonReleased) {
+    if (rpg->event.type == sfEvtMouseButtonReleased || rpg->event.type == sfEvtJoystickButtonReleased) {
         if (sfFloatRect_contains(&rect_bounds, rpg->win->mouse_pos.x,
             rpg->win->mouse_pos.y)) {
             button->state = RELEASED;

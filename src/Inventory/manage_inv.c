@@ -126,13 +126,15 @@ int manage_evt_inv(sfEvent event, rpg_t *rpg)
         highlight_inventory(rpg, (*inventory())->slot);
         highlight_inventory(rpg, (*inventory())->player_status->stuff);
     }
-    if (event.type == sfEvtMouseButtonPressed &&
-    event.mouseButton.button == sfMouseLeft && (*inventory())->is_open) {
+    if ((event.type == sfEvtMouseButtonPressed &&
+    event.mouseButton.button == sfMouseLeft && (*inventory())->is_open) ||
+    (event.type == sfEvtJoystickButtonPressed && event.joystickButton.button == 2 && (*inventory())->is_open)) {
         click_inventory(rpg, (*inventory())->slot);
         click_inventory(rpg, (*inventory())->player_status->stuff);
     }
-    if (event.type == sfEvtMouseButtonReleased &&
-    event.mouseButton.button == sfMouseLeft && (*inventory())->is_open) {
+    if ((event.type == sfEvtMouseButtonReleased &&
+    event.mouseButton.button == sfMouseLeft && (*inventory())->is_open) ||
+    (event.type == sfEvtJoystickButtonReleased && event.joystickButton.button == 2 && (*inventory())->is_open)) {
         release_inventory(rpg, (*inventory())->slot);
         release_inventory(rpg, (*inventory())->player_status->stuff);
     }

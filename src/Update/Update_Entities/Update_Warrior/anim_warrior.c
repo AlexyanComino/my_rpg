@@ -24,7 +24,7 @@ static void animation_attack_warrior2(rpg_t *rpg, entity_t *entity)
         entity->spe->warrior->line_attack == 0) {
         if (entity->spe->warrior->line_attack <
             entity->spe->warrior->max_line_attack ||
-            (is_player(rpg, entity) && sfKeyboard_isKeyPressed(sfKeySpace))
+            (is_player(rpg, entity) && (sfKeyboard_isKeyPressed(sfKeySpace) || sfJoystick_isButtonPressed(0, 2)))
             || (!is_player(rpg, entity) &&
             entity_can_attack_enemy(rpg, entity))) {
             entity->spe->warrior->line_attack++;

@@ -33,7 +33,7 @@ void update_credits(rpg_t *rpg)
         return back_to_menu(rpg);
     while (tmp) {
         tmp->pos.y -= 100 * rpg->win->dt;
-        if (sfKeyboard_isKeyPressed(sfKeySpace))
+        if (sfKeyboard_isKeyPressed(sfKeySpace) || sfJoystick_isButtonPressed(0, 2))
             tmp->pos.y -= 300 * rpg->win->dt;
         if (tmp->pos.y < -100) {
             remove_text(&rpg->credits->texts, tmp);

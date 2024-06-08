@@ -18,7 +18,7 @@ int manage_xp(rpg_t *rpg)
 {
     attributes_t *attribute = get_player(rpg)->common->attributes;
     player_status_t *player_status = (*inventory())->player_status;
-    char *str = malloc(sizeof(char) * 10);
+    char *str = malloc(sizeof(char) * 12);
 
     if (player_status->xp >=
         player_status->max_xp) {

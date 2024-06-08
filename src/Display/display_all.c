@@ -56,5 +56,6 @@ void display(rpg_t *rpg)
         rpg->gamestate == MAP || rpg->gamestate == PAUSE)
         display_game(rpg);
     display2(rpg);
+    sfRenderWindow_drawSprite(rpg->win->window, rpg->mouse->sprite, NULL);
     sfRenderWindow_display(rpg->win->window);
 }

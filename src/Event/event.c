@@ -63,8 +63,7 @@ static sfVector2f get_view_pos(rpg_t *rpg)
 
 static void update_mouse_pos(rpg_t *rpg)
 {
-    sfVector2f old_mouse_pos = {(float)rpg->event.mouseMove.x,
-        (float)rpg->event.mouseMove.y};
+    sfVector2f old_mouse_pos = {rpg->event.mouseMove.x, rpg->event.mouseMove.y};
     sfVector2u window_size = sfRenderWindow_getSize(rpg->win->window);
     sfVector2f view_pos = get_view_pos(rpg);
 
@@ -75,6 +74,27 @@ static void update_mouse_pos(rpg_t *rpg)
         (float)view_pos.y - (float)HEIGHT / 2 * rpg->win->zoom +
             (float)old_mouse_pos.y / ((float)window_size.y /
             (float)HEIGHT) * rpg->win->zoom};
+    sfSprite_setPosition(rpg->mouse->sprite, rpg->win->mouse_pos);
+}
+
+static void move_cursor_joystick(rpg_t *rpg)
+{
+    float Xaxis = sfJoystick_getAxisPosition(0, sfJoystickX);
+    float Yaxis = sfJoystick_getAxisPosition(0, sfJoystickY);
+
+    rpg->win->mouse_pos.x += (Xaxis * 0.5);
+    rpg->win->mouse_pos.y += (Yaxis * 0.5);
+    sfSprite_setPosition(rpg->mouse->sprite, rpg->win->mouse_pos);
+}
+
+static void joystick_move(rpg_t *rpg)
+{
+    if (rpg->gamestate == MAIN_MENU || rpg->gamestate == SETTINGS ||
+        rpg->gamestate == SELECTOR || rpg->gamestate == SAVE_MENU ||
+        rpg->gamestate == PAUSE || rpg->gamestate == END ||
+        rpg->gamestate == INVENTORY || rpg->gamestate == SKILL_TREE) {
+        move_cursor_joystick(rpg);  
+    }
 }
 
 void event(rpg_t *rpg)
@@ -84,10 +104,12 @@ void event(rpg_t *rpg)
     rpg->win->dt = sfTime_asSeconds(elapsed_time);
     sfClock_restart(rpg->win->clock);
     while (sfRenderWindow_pollEvent(rpg->win->window, &rpg->event)) {
-        if (rpg->event.type == sfEvtMouseMoved)
+        if (rpg->event.type == sfEvtJoystickMoved)
+            joystick_move(rpg);
+        else if (rpg->event.type == sfEvtMouseMoved)
             update_mouse_pos(rpg);
-        if (rpg->event.type == sfEvtMouseButtonPressed &&
-            rpg->event.mouseButton.button == sfMouseRight)
+        if ((rpg->event.type == sfEvtMouseButtonPressed &&
+            rpg->event.mouseButton.button == sfMouseRight))
             printf("Mouse pos: %d;%d\n", (int)rpg->win->mouse_pos.x,
             (int)rpg->win->mouse_pos.y);
         if (rpg->event.type == sfEvtClosed)

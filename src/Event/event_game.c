@@ -9,7 +9,7 @@
 
 static void event_player_warrior(rpg_t *rpg, entity_t *player)
 {
-    if (rpg->event.key.code == sfKeySpace &&
+    if ((rpg->event.key.code == sfKeySpace || rpg->event.joystickButton.button == 2) &&
         is_attacking(player)) {
         player->spe->warrior->max_line_attack = 1;
     }
@@ -63,7 +63,7 @@ static void event_entity(rpg_t *rpg, entity_t *player, sfKeyCode key)
         event_player_warrior(rpg, player);
     if (player->type == PAWN && !in_action(player) && is_alive(player))
         event_player_pawn(rpg, player);
-    if (key == sfKeySpace && !in_action(player) &&
+    if ((key == sfKeySpace || rpg->event.joystickButton.button == 2) && !in_action(player) &&
         player->common->state != INTERACT && is_alive(player) &&
         (player->type != TNT || !player->spe->tnt->is_launched)) {
         if (player->type == ARCHER)
@@ -107,7 +107,7 @@ void event_game(rpg_t *rpg)
     sfKeyCode key = rpg->event.key.code;
 
     quest_event(rpg);
-    if (rpg->event.type != sfEvtKeyPressed || rpg->vict->is_win)
+    if ((rpg->event.type != sfEvtKeyPressed && rpg->event.type != sfEvtJoystickButtonPressed) || rpg->vict->is_win)
         return;
     if (rpg->event.key.code == sfKeySlash)
         get_player(rpg)->common->state = DEAD;

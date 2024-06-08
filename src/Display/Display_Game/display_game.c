@@ -98,6 +98,7 @@ static void display_pause_menu(rpg_t *rpg)
         sfRenderWindow_drawText(rpg->win->window, tmp->shadow, NULL);
         sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
     }
+    sfRenderWindow_drawSprite(rpg->win->window, rpg->mouse->sprite, NULL);
 }
 
 static void display_normal_game(rpg_t *rpg)

@@ -136,8 +136,10 @@ static void check_requirement(skill_t *skill)
 
 static int click_skill(rpg_t *rpg, skill_t *tmp)
 {
-    if (rpg->event.type == sfEvtMouseButtonPressed &&
-    rpg->event.mouseButton.button == sfMouseLeft)
+    if ((rpg->event.type == sfEvtMouseButtonPressed &&
+    rpg->event.mouseButton.button == sfMouseLeft) ||
+    (rpg->event.type == sfEvtJoystickButtonPressed &&
+    rpg->event.joystickButton.button == 2))
         unlock_skill(rpg->skill_tree, tmp->name);
     return 0;
 }

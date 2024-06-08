@@ -31,6 +31,7 @@ void display_main_menu(rpg_t *rpg)
         sfRenderWindow_drawText(rpg->win->window, tmp->text, NULL);
         tmp = tmp->next;
     }
+    // sfRenderWindow_drawSprite(rpg->win->window, rpg->mouse->sprite, NULL);
 }
 
 void display_settings(rpg_t *rpg)
@@ -44,6 +45,7 @@ void display_settings(rpg_t *rpg)
         tmp = tmp->next;
     }
     display_command_help(rpg);
+    sfRenderWindow_drawSprite(rpg->win->window, rpg->mouse->sprite, NULL);
 }
 
 static void draw_stats_save(rpg_t *rpg, save_button_t *tmp)
@@ -97,6 +99,7 @@ void display_save_menu(rpg_t *rpg)
         i++;
     }
     display_command_help(rpg);
+    sfRenderWindow_drawSprite(rpg->win->window, rpg->mouse->sprite, NULL);
 }
 
 static void draw_stats(rpg_t *rpg, select_button_t *tmp)
@@ -140,4 +143,5 @@ void display_selector(rpg_t *rpg)
         draw_stats(rpg, tmp);
     }
     display_command_help(rpg);
+    sfRenderWindow_drawSprite(rpg->win->window, rpg->mouse->sprite, NULL);
 }

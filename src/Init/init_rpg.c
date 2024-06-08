@@ -23,7 +23,7 @@ static win_t *init_win(unsigned int width, unsigned int height)
     win->height = height;
     win->framerate = 60;
     win->clock = sfClock_create();
-    win->mouse_pos = (sfVector2f){0, 0};
+    win->mouse_pos = (sfVector2f){500, 500};
     sfRenderWindow_setFramerateLimit(win->window, win->framerate);
     win->view_pos = (sfVector2f){4850, 8400};
     win->zoom = 2;
@@ -115,6 +115,18 @@ static void init_rpg2(rpg_t *rpg)
     rpg->comp = init_comp();
 }
 
+static mouse_t *init_mouse(void)
+{
+    mouse_t *mouse = malloc(sizeof(mouse_t));
+
+    mouse->sprite = sfSprite_create();
+    mouse->texture = sfTexture_createFromFile("assets/interface/cross.png", NULL);
+    sfSprite_setTexture(mouse->sprite, mouse->texture, sfTrue);
+    sfSprite_setOrigin(mouse->sprite, (sfVector2f){32, 32});
+    sfSprite_setPosition(mouse->sprite, (sfVector2f){0, 0});
+    return mouse;
+}
+
 rpg_t *init_rpg(void)
 {
     rpg_t *rpg = malloc(sizeof(rpg_t));
@@ -135,6 +147,8 @@ rpg_t *init_rpg(void)
     rpg->save_menu = init_save_menu(rpg);
     rpg->volume = 1;
     init_rpg2(rpg);
+    sfRenderWindow_setMouseCursorVisible(rpg->win->window, sfFalse);
+    rpg->mouse = init_mouse();
     play_music(rpg->sounds->intro, 50 * rpg->volume);
     return rpg;
 }

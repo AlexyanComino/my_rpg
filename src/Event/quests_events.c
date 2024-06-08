@@ -86,7 +86,7 @@ static int check_quest_already_done(rpg_t *rpg, quest_t *quest)
         return 0;
     }
     if (quest->type == KILL) {
-        for (unsigned int i; i < rpg->ent_size; i++) {
+        for (unsigned int i = 0; i < rpg->ent_size; i++) {
             if (!is_alive(rpg->ent[i]) && !strcmp(rpg->ent[i]->common->name,
                 quest->objective))
                 quest_is_done(rpg, quest, player);
@@ -160,32 +160,37 @@ void refuse_quest(rpg_t *rpg)
 
 void quest_handling(rpg_t *rpg, entity_t *tmp)
 {
-    if (!tmp->in_view || is_player(rpg, tmp))
+    float Xaxis = sfJoystick_getAxisPosition(0, sfJoystickX);
+    float Yaxis = sfJoystick_getAxisPosition(0, sfJoystickY);
+
+    if (!tmp->in_view || is_player(rpg, tmp) || Xaxis != 0)
         return;
     if (is_player_interact_entity(rpg, tmp)) {
         rpg->text_box->entity = tmp;
-        if (rpg->event.key.code == sfKeyE)
-            interact_with_entity(rpg, tmp);
-        if (rpg->event.key.code == sfKeyEnter &&
-        rpg->text_box->is_fully_displayed == true
-        && rpg->text_box->has_choice)
-            choice_action(rpg);
-        dialog_handling(rpg);
-        if ((rpg->event.key.code == sfKeyUp ||
+        if ((rpg->event.key.code == sfKeyUp || Yaxis != 0 ||
             rpg->event.key.code == sfKeyDown) &&
             rpg->text_box->is_fully_displayed == true &&
             rpg->text_box->dialog->next == NULL && rpg->text_box->has_choice) {
             change_choice(rpg);
+            return;
         }
+        if ((rpg->event.key.code == sfKeyEnter || rpg->event.joystickButton.button == 1) &&
+        rpg->text_box->is_fully_displayed == true
+        && rpg->text_box->has_choice && rpg->text_box->dialog->next == NULL) {
+            choice_action(rpg);
+            return;
+        }
+        if ((rpg->event.key.code == sfKeyE || rpg->event.joystickButton.button == 1))
+            interact_with_entity(rpg, tmp);
+        dialog_handling(rpg);
     }
 }
 
 void quest_event(rpg_t *rpg)
 {
-    if ((rpg->event.key.code == sfKeyE ||
-        rpg->event.key.code == sfKeyEnter ||
-        get_player(rpg)->common->state == INTERACT)
-        && rpg->event.type == sfEvtKeyReleased) {
+    if ((rpg->event.key.code == sfKeyE || rpg->event.joystickButton.button == 1 ||
+        rpg->event.key.code == sfKeyEnter || get_player(rpg)->common->state == INTERACT)
+        && (rpg->event.type == sfEvtKeyReleased || rpg->event.type == sfEvtJoystickButtonReleased || rpg->event.type == sfEvtJoystickMoved)) {
         for (unsigned int i = 0; i < rpg->ent_size; i++) {
             quest_handling(rpg, rpg->ent[i]);
         }

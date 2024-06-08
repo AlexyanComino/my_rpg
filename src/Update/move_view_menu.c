@@ -81,6 +81,8 @@ static void move_menus(rpg_t *rpg)
     move_select_menu(rpg, move);
     move_command_help(rpg, move);
     sfSprite_move(rpg->transition->anim->sprite, move);
+    sfSprite_move(rpg->mouse->sprite, move);
+    rpg->win->mouse_pos.x += move.x;
 }
 
 void move_view_menu(rpg_t *rpg)

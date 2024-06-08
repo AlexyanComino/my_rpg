@@ -152,7 +152,7 @@ void event_chests(rpg_t *rpg, sfKeyCode key)
 {
     entity_t *player = get_player(rpg);
 
-    if (rpg->gamestate != GAME || key != sfKeyE)
+    if (rpg->gamestate != GAME || (key != sfKeyE && !sfJoystick_isButtonPressed(0, 1)))
         return;
     for (unsigned int i = 0; i < rpg->chests_size; i++) {
         if (!intrect_is_in_view(rpg, rpg->chests[i]->rect))

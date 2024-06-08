@@ -50,7 +50,7 @@ void setup_command_help_map(rpg_t *rpg)
     add_command_help(&interface->command_list, "Zoom",
         interface->player_infos->font, 1);
     set_command_pos(interface->command_list, get_player(rpg)->common->pos, 1);
-    sfRenderWindow_setMouseCursorVisible(rpg->win->window, sfTrue);
+    //sfRenderWindow_setMouseCursorVisible(rpg->win->window, sfTrue);
 }
 
 void setup_command_help_pause(rpg_t *rpg)
@@ -63,7 +63,7 @@ void setup_command_help_pause(rpg_t *rpg)
     add_command_help(&interface->command_list, "Sélectionner",
         interface->player_infos->font, 1);
     set_command_pos(interface->command_list, get_player(rpg)->common->pos, 1);
-    sfRenderWindow_setMouseCursorVisible(rpg->win->window, sfTrue);
+    //sfRenderWindow_setMouseCursorVisible(rpg->win->window, sfTrue);
 }
 
 void setup_command_help_menu(rpg_t *rpg)
@@ -74,7 +74,7 @@ void setup_command_help_menu(rpg_t *rpg)
     add_command_help(&interface->command_list, "Sélectionner",
         interface->player_infos->font, 2);
     set_command_pos(interface->command_list, rpg->win->view_pos, 2);
-    sfRenderWindow_setMouseCursorVisible(rpg->win->window, sfTrue);
+    //sfRenderWindow_setMouseCursorVisible(rpg->win->window, sfTrue);
 }
 
 void setup_command_help_inventory(rpg_t *rpg)
@@ -91,5 +91,5 @@ void setup_command_help_inventory(rpg_t *rpg)
     add_command_help(&interface->command_list, "Déplacer",
         interface->player_infos->font, 1);
     set_command_pos(interface->command_list, get_player(rpg)->common->pos, 1);
-    sfRenderWindow_setMouseCursorVisible(rpg->win->window, sfTrue);
+    //sfRenderWindow_setMouseCursorVisible(rpg->win->window, sfTrue);
 }
