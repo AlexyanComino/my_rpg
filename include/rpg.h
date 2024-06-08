@@ -1164,6 +1164,7 @@ typedef struct rpg_s {
     credits_t *credits;
     comp_t *comp;
     mouse_t *mouse;
+    sfText *txt;
 } rpg_t;
 
 #include "../src/xp_sys/xp.h"

@@ -150,5 +150,10 @@ rpg_t *init_rpg(void)
     sfRenderWindow_setMouseCursorVisible(rpg->win->window, sfFalse);
     rpg->mouse = init_mouse();
     play_music(rpg->sounds->intro, 50 * rpg->volume);
+    rpg->txt = sfText_create();
+    sfText_setFont(rpg->txt, rpg->text_box->font);
+    sfText_setCharacterSize(rpg->txt, 50);
+    sfText_setColor(rpg->txt, sfWhite);
+    sfText_setPosition(rpg->txt, rpg->win->view_pos);
     return rpg;
 }

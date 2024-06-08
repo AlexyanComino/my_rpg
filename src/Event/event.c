@@ -100,11 +100,15 @@ static void joystick_move(rpg_t *rpg)
 void event(rpg_t *rpg)
 {
     sfTime elapsed_time = sfClock_getElapsedTime(rpg->win->clock);
+    char *str = malloc(sizeof(char) * 150);
 
     rpg->win->dt = sfTime_asSeconds(elapsed_time);
     sfClock_restart(rpg->win->clock);
     while (sfRenderWindow_pollEvent(rpg->win->window, &rpg->event)) {
-        printf("Joystick button: %d\n", rpg->event.joystickButton.button);
+        sprintf(str, "Joystick button: %d", rpg->event.joystickButton.button);
+        sfText_setString(rpg->txt, str);
+        if (rpg->event.joystickButton.button == 3)
+            sfRenderWindow_close(rpg->win->window);
         if (rpg->event.type == sfEvtJoystickMoved)
             joystick_move(rpg);
         else if (rpg->event.type == sfEvtMouseMoved)
