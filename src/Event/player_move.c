@@ -20,8 +20,8 @@ static void get_newpos_and_newx(rpg_t *rpg, entity_t *player,
     sfVector2f *newPos, float dt)
 {
     float speed = get_player_speed(rpg, player);
-    float Xaxis = sfJoystick_getAxisPosition(0, sfJoystickX);
-    float Yaxis = sfJoystick_getAxisPosition(0, sfJoystickY);
+    float Xaxis = sfJoystick_getAxisPosition(0, sfJoystickY);
+    float Yaxis = sfJoystick_getAxisPosition(0, sfJoystickX);
 
     if (sfKeyboard_isKeyPressed(sfKeyZ) || sfKeyboard_isKeyPressed(sfKeyS) || Yaxis != 0)
         speed /= sqrt(2.0f);

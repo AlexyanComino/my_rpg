@@ -160,8 +160,8 @@ void refuse_quest(rpg_t *rpg)
 
 void quest_handling(rpg_t *rpg, entity_t *tmp)
 {
-    float Xaxis = sfJoystick_getAxisPosition(0, sfJoystickX);
-    float Yaxis = sfJoystick_getAxisPosition(0, sfJoystickY);
+    float Xaxis = sfJoystick_getAxisPosition(0, sfJoystickY);
+    float Yaxis = sfJoystick_getAxisPosition(0, sfJoystickX);
 
     if (!tmp->in_view || is_player(rpg, tmp) || Xaxis != 0)
         return;
