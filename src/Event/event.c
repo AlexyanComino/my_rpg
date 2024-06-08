@@ -104,9 +104,6 @@ void event(rpg_t *rpg)
     rpg->win->dt = sfTime_asSeconds(elapsed_time);
     sfClock_restart(rpg->win->clock);
     while (sfRenderWindow_pollEvent(rpg->win->window, &rpg->event)) {
-        rpg->win->mouse_pos.x += rpg->dx;
-        rpg->win->mouse_pos.y -= rpg->dy;
-        sfSprite_setPosition(rpg->mouse->sprite, rpg->win->mouse_pos);
         sprintf(str, "Joystick button: %d", rpg->event.joystickButton.button);
         sfText_setString(rpg->txt, str);
         if (rpg->event.joystickButton.button == 6)
