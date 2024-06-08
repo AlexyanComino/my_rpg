@@ -120,7 +120,7 @@ static void inv_is_open(rpg_t *rpg)
 
 int manage_evt_inv(sfEvent event, rpg_t *rpg)
 {
-    if (event.type == sfEvtKeyPressed && event.key.code == sfKeyTab)
+    if ((event.type == sfEvtKeyPressed && event.key.code == sfKeyTab) || (event.type == sfEvtJoystickButtonPressed && event.joystickButton.button == 8))
         inv_is_open(rpg);
     if ((*inventory())->is_open) {
         highlight_inventory(rpg, (*inventory())->slot);
