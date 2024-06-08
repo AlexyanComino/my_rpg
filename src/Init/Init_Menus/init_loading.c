@@ -41,7 +41,7 @@ static void init_cont_loading(loading_t *loading)
     sfText_setOrigin(text, (sfVector2f){rect.width / 2, rect.height / 2});
     loading->cont->text_pos = (sfVector2f){WIDTH / 2, HEIGHT - 200};
     if (sfJoystick_isConnected(0))
-        sfText_setPosition(text, (sfVector2f){WIDTH / 2 - 370, HEIGHT + 100});
+        sfText_setPosition(text, (sfVector2f){WIDTH / 2 - 330, HEIGHT + 100});
     else
         sfText_setPosition(text, (sfVector2f){WIDTH / 2, HEIGHT + 100});
     sfText_setColor(text, sfBlack);
@@ -63,7 +63,7 @@ static sfText *init_title_text_load1(loading_t *loading)
     rect = sfText_getGlobalBounds(text);
     sfText_setOrigin(text, (sfVector2f){rect.width / 2, rect.height / 2});
     if (sfJoystick_isConnected(0))
-        sfText_setPosition(text, (sfVector2f){WIDTH / 2 - 370, 350});
+        sfText_setPosition(text, (sfVector2f){WIDTH / 2 - 330, 350});
     else
         sfText_setPosition(text, (sfVector2f){WIDTH / 2, 350});
     sfText_setColor(text, sfBlack);
@@ -83,7 +83,7 @@ static sfText *init_title_text_load2(loading_t *loading)
     rect = sfText_getGlobalBounds(text);
     sfText_setOrigin(text, (sfVector2f){rect.width / 2, rect.height / 2});
     if (sfJoystick_isConnected(0))
-        sfText_setPosition(text, (sfVector2f){WIDTH / 2 - 370, 460});
+        sfText_setPosition(text, (sfVector2f){WIDTH / 2 - 330, 460});
     else
         sfText_setPosition(text, (sfVector2f){WIDTH / 2, 460});
     sfText_setColor(text, sfBlack);
