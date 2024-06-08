@@ -1144,6 +1144,8 @@ typedef struct rpg_s {
     shared_data2_t *shared_data2;
     int shm_fd1;
     int shm_fd2;
+    float dx;
+    float dy;
     unsigned int player_index;
     decor_anim_t **decors;
     unsigned int decors_size;

@@ -81,10 +81,13 @@ static void move_cursor_joystick(rpg_t *rpg)
 {
     float Xaxis = sfJoystick_getAxisPosition(0, sfJoystickY);
     float Yaxis = sfJoystick_getAxisPosition(0, sfJoystickX);
+    printf("X: %f\n", Xaxis);
+    rpg->dx = Xaxis * 0.5;
+    rpg->dy = Yaxis * 0.5;
+}
 
-    rpg->win->mouse_pos.x += (Xaxis * 0.5);
-    rpg->win->mouse_pos.y -= (Yaxis * 0.5);
-    sfSprite_setPosition(rpg->mouse->sprite, rpg->win->mouse_pos);
+static void move_cursor(rpg_t *rpg)
+{
 }
 
 static void joystick_move(rpg_t *rpg)
@@ -105,13 +108,17 @@ void event(rpg_t *rpg)
     rpg->win->dt = sfTime_asSeconds(elapsed_time);
     sfClock_restart(rpg->win->clock);
     while (sfRenderWindow_pollEvent(rpg->win->window, &rpg->event)) {
+        rpg->win->mouse_pos.x += rpg->dx;
+        rpg->win->mouse_pos.y -= rpg->dy;
+        sfSprite_setPosition(rpg->mouse->sprite, rpg->win->mouse_pos);
         sprintf(str, "Joystick button: %d", rpg->event.joystickButton.button);
         sfText_setString(rpg->txt, str);
         if (rpg->event.joystickButton.button == 6)
             sfRenderWindow_close(rpg->win->window);
-        if (rpg->event.type == sfEvtJoystickMoved)
+        if (rpg->event.type == sfEvtJoystickMoved) {
             joystick_move(rpg);
-        else if (rpg->event.type == sfEvtMouseMoved)
+        }
+        if (rpg->event.type == sfEvtMouseMoved)
             update_mouse_pos(rpg);
         if ((rpg->event.type == sfEvtMouseButtonPressed &&
             rpg->event.mouseButton.button == sfMouseRight))
