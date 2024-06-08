@@ -82,8 +82,8 @@ static void move_cursor_joystick(rpg_t *rpg)
     float Xaxis = sfJoystick_getAxisPosition(0, sfJoystickY);
     float Yaxis = sfJoystick_getAxisPosition(0, sfJoystickX);
     printf("X: %f\n", Xaxis);
-    rpg->dx = Xaxis * 0.5;
-    rpg->dy = Yaxis * 0.5;
+    rpg->dx = Xaxis * 0.2;
+    rpg->dy = Yaxis * 0.2;
 }
 
 static void joystick_move(rpg_t *rpg)

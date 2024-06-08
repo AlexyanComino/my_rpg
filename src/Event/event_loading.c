@@ -24,7 +24,7 @@ void event_loading(rpg_t *rpg)
 {
     sfKeyCode key = rpg->event.key.code;
 
-    if (rpg->loading->is_loaded && (key == sfKeySpace || rpg->event.joystickButton.button == 2) &&
+    if (rpg->loading->is_loaded && (key == sfKeySpace || rpg->event.joystickButton.button == 4) &&
         !rpg->transition->displayed) {
         launch_transition(rpg, &launch_menu);
     }
