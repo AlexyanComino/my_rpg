@@ -104,6 +104,7 @@ void event(rpg_t *rpg)
     rpg->win->dt = sfTime_asSeconds(elapsed_time);
     sfClock_restart(rpg->win->clock);
     while (sfRenderWindow_pollEvent(rpg->win->window, &rpg->event)) {
+        printf("Joystick button: %d\n", rpg->event.joystickButton.button);
         if (rpg->event.type == sfEvtJoystickMoved)
             joystick_move(rpg);
         else if (rpg->event.type == sfEvtMouseMoved)
