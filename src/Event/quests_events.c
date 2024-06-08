@@ -174,13 +174,13 @@ void quest_handling(rpg_t *rpg, entity_t *tmp)
             change_choice(rpg);
             return;
         }
-        if ((rpg->event.key.code == sfKeyEnter || rpg->event.joystickButton.button == 0) &&
+        if ((rpg->event.key.code == sfKeyEnter || (rpg->event.joystickButton.button == 0 && rpg->event.type != sfEvtJoystickMoved)) &&
         rpg->text_box->is_fully_displayed == true
         && rpg->text_box->has_choice && rpg->text_box->dialog->next == NULL) {
             choice_action(rpg);
             return;
         }
-        if ((rpg->event.key.code == sfKeyE || rpg->event.joystickButton.button == 0))
+        if ((rpg->event.key.code == sfKeyE || (rpg->event.joystickButton.button == 0 && rpg->event.type != sfEvtJoystickMoved)))
             interact_with_entity(rpg, tmp);
         dialog_handling(rpg);
     }
@@ -188,7 +188,7 @@ void quest_handling(rpg_t *rpg, entity_t *tmp)
 
 void quest_event(rpg_t *rpg)
 {
-    if ((rpg->event.key.code == sfKeyE || rpg->event.joystickButton.button == 0 ||
+    if ((rpg->event.key.code == sfKeyE || (rpg->event.joystickButton.button == 0 && rpg->event.type != sfEvtJoystickMoved) ||
         rpg->event.key.code == sfKeyEnter || get_player(rpg)->common->state == INTERACT)
         && (rpg->event.type == sfEvtKeyReleased || rpg->event.type == sfEvtJoystickButtonReleased || rpg->event.type == sfEvtJoystickMoved)) {
         for (unsigned int i = 0; i < rpg->ent_size; i++) {
