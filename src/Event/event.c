@@ -82,7 +82,7 @@ static void move_cursor_joystick(rpg_t *rpg)
     float Xaxis = sfJoystick_getAxisPosition(0, sfJoystickY);
     float Yaxis = sfJoystick_getAxisPosition(0, sfJoystickX);
 
-    rpg->win->mouse_pos.x += (Xaxis * 0.5);
+    rpg->win->mouse_pos.x -= (Xaxis * 0.5);
     rpg->win->mouse_pos.y += (Yaxis * 0.5);
     sfSprite_setPosition(rpg->mouse->sprite, rpg->win->mouse_pos);
 }
