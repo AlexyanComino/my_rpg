@@ -15,8 +15,8 @@ anim_text_t *init_anim_text(sfText *text, float scale_bonus,
 
     anim_text->text = text;
     anim_text->scale_dir = 1;
-    anim_text->scale_max = scale_text + scale_bonus;
     anim_text->scale_min = scale_text - scale_bonus;
+    anim_text->scale_max = scale_text + scale_bonus;
     anim_text->speed = transition_speed;
     anim_text->shadow = shadow;
     if (shadow == NULL) {

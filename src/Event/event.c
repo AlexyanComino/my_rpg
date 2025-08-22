@@ -64,8 +64,8 @@ static sfVector2f get_view_pos(rpg_t *rpg)
 static void update_mouse_pos(rpg_t *rpg)
 {
     sfVector2f old_mouse_pos = {rpg->event.mouseMove.x, rpg->event.mouseMove.y};
-    sfVector2u window_size = sfRenderWindow_getSize(rpg->win->window);
     sfVector2f view_pos = get_view_pos(rpg);
+    sfVector2u window_size = sfRenderWindow_getSize(rpg->win->window);
 
     rpg->win->mouse_pos = (sfVector2f){
         (float)view_pos.x - (float)WIDTH / 2 * rpg->win->zoom +
@@ -91,7 +91,7 @@ static void joystick_move(rpg_t *rpg)
         rpg->gamestate == SELECTOR || rpg->gamestate == SAVE_MENU ||
         rpg->gamestate == PAUSE || rpg->gamestate == END ||
         rpg->gamestate == INVENTORY || rpg->gamestate == SKILL_TREE) {
-        move_cursor_joystick(rpg);  
+        move_cursor_joystick(rpg);
     } else {
         rpg->win->mouse_pos = get_player(rpg)->common->pos;
         sfSprite_setPosition(rpg->mouse->sprite, rpg->win->mouse_pos);

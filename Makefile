@@ -1,6 +1,6 @@
 ##
-## EPITECH PROJECT, 2024
-## B-CPE-200-MPL-2-1-bsrobotfactory-alexyan.comino
+## EPITECH PROJECT, 2025
+## my_rpg
 ## File description:
 ## Makefile
 ##

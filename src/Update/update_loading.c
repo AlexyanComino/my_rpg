@@ -64,8 +64,8 @@ void update_loading(rpg_t *rpg)
     if (rpg->loading->is_loaded != 2) {
         update_clock_seconds(rpg->loading->myclock);
         if (rpg->loading->myclock->seconds > 15.0) {
-            rpg->loading->is_loaded = true;
             rpg->loading->cont->move_text = true;
+            rpg->loading->is_loaded = true;
         }
         anim_dots(rpg);
         if (rpg->loading->is_loaded == 1 &&

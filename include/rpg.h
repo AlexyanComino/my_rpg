@@ -1118,7 +1118,6 @@ typedef struct mouse_s {
     sfSprite *sprite;
 } mouse_t;
 
-
 typedef struct rpg_s {
     win_t *win;
     map_t *map;

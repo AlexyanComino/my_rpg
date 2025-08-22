@@ -9,8 +9,8 @@
 
 void update(rpg_t *rpg)
 {
-    rpg->win->mouse_pos.x += rpg->dx;
     rpg->win->mouse_pos.y -= rpg->dy;
+    rpg->win->mouse_pos.x += rpg->dx;
     sfSprite_setPosition(rpg->mouse->sprite, rpg->win->mouse_pos);
     anim_transition(rpg);
     if (rpg->gamestate == LOADING)

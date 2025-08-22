@@ -1,8 +1,8 @@
 /*
-** EPITECH PROJECT, 2024
+** EPITECH PROJECT, 2025
 ** my_rpg
 ** File description:
-** displayAll
+** display_all
 */
 
 #include "rpg.h"

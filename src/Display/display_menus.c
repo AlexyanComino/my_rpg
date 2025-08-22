@@ -79,8 +79,8 @@ static void draw_stats_sprites_save(rpg_t *rpg, save_button_t *tmp)
 
 void display_save_menu(rpg_t *rpg)
 {
-    save_button_t *tmp = rpg->save_menu->buttons;
     int i = 0;
+    save_button_t *tmp = rpg->save_menu->buttons;
 
     display_background_menus(rpg);
     for (; tmp != NULL; tmp = tmp->next) {
